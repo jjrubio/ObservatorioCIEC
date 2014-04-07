@@ -1,3 +1,12 @@
 from django.db import models
 
-# Create your models here.
+class Slider(models.Model):
+    img_src = models.ImageField(upload_to='home/static/sliders/')
+
+
+class Timeline(models.Model):
+    title = models.CharField(max_length=50)
+    event = models.TextField()
+
+    def __unicode__(self):
+        return self.title
