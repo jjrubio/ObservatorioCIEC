@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for OSEE project.
 
@@ -27,9 +28,17 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+TEMPLATE_CONTEXT_PROCESSORS = TCP + (
+    'django.core.context_processors.request',
+)
+
+GRAPPELLI_ADMIN_TITLE = 'Observatorio Económico - Social del Ecuador'
+
 # Application definition
 
 INSTALLED_APPS = (
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
