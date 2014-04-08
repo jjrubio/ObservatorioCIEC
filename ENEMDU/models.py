@@ -13,7 +13,6 @@ class Data_from_2003_4(models.Model):
     AREA_CHOICES = (
         ( 'R' , 'Rural'),
         ( 'U' , 'Urbano'),
-    Type, to_field='disintegration.name'=='Genero'
     year           = models.PositiveSmallIntegerField()
     trim           = models.PositiveSmallIntegerField()
     area           = models.CharField(max_length = 1 , choices = AREA_CHOICES , default = 'Urbano')
@@ -58,7 +57,6 @@ class Data_from_2007_2(models.Model):
     AREA_CHOICES = (
         ( 'R' , 'Rural'),
         ( 'U' , 'Urbano'),
-    Type, to_field='disintegration.name'=='Genero'
     year           = models.PositiveSmallIntegerField()
     trim           = models.PositiveSmallIntegerField()
     area           = models.CharField(max_length = 1 , choices = AREA_CHOICES , default = 'Urbano')
