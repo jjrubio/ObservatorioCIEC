@@ -15,5 +15,5 @@ class Data_fromAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Variable_definition)
-admin.site.register(Data_from_2003_4, Data_fromAdmin)
+admin.site.register(Data_from_2003_4)
 admin.site.register(Data_from_2007_2, Data_fromAdmin)
