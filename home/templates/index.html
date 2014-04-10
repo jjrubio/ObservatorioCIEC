@@ -1,4 +1,5 @@
 {% load bootstrap3 %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +11,7 @@
 			img{
 				display: block;
 				width: 50px;
-				
+
 			}
 	</style>
 </head>
@@ -33,7 +34,7 @@
 							<a href="#characteristics" class="navbar-brand">Caracter&iacute;sticas</a>
 							<a href="#contacts" class="navbar-brand">Contactos</a>
 							<br><br>
-						</div>		
+						</div>
 					</div>
 				</div>
 			</div>
@@ -46,13 +47,13 @@
     						<li data-target="#myslide" data-slide-to="0" class="active"></li>
     						<li data-target="#myslide" data-slide-to="1"></li>
     						<li data-target="#myslide" data-slide-to="2"></li>
-  						</ol>				
+  						</ol>
 						<div class="carousel-inner">
 							<div class="item active">
 								{# Van las imagenes #}
 								{% if imagenes %}
 									{% for imag in imagenes %}
-											<img src="{{imag.img_src.url}}" alt="" >							
+											<img src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image"/>
 									{% endfor %}
 								{% else %}
 			    					NO HAY IMAGENES GUARDADAS.
@@ -65,7 +66,7 @@
 				</div>
 			</div>
 			<div class="row text-center">
-				<h3>BIENVIENIDO AL</h3> 
+				<h3>BIENVIENIDO AL</h3>
 				<h2>OBSERVATORIO SOCIAL-ECON&Oacute;MICO DEL ECUADOR</h2>
 			</div>
 			<!-- Seccion Grupo de Trabajo -->

@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Slider(models.Model):
-    img_src = models.ImageField(upload_to='static/sliders/')
+    img_src = models.ImageField(upload_to='sliders/')
 
 
 class Timeline(models.Model):

@@ -5,8 +5,8 @@ class Bulletin(models.Model):
     title     = models.CharField(max_length=50)
     content   = models.TextField()
     indicator = models.ForeignKey(Indicator)
-    excel_src = models.FileField(upload_to='resources/static/excels/')
-    graph_src = models.ImageField(upload_to='resources/static/graphs/')
+    excel_src = models.FileField(upload_to='excels/')
+    graph_src = models.ImageField(upload_to='graphs/')
     # pdf_src   = models.ImageField(upload_to='resources/static/pdfs/')
 
 
