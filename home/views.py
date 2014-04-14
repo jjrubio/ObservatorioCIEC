@@ -10,7 +10,7 @@ from home.models import Slider
 def home (request):
     description = Description.objects.all()
     imagenes = Slider.objects.all()
-    template = 'home.html'
+    template = 'index.html'
     return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 
