@@ -1,125 +1,143 @@
-{% load bootstrap3 %}
-{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    {# Load CSS and JavaScript #}
-    {% bootstrap_css %}
-	<style type="text/css">
-			img{
-				display: block;
-				width: 50px;
-
-			}
-	</style>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css">
+    <style>
+        body{
+            padding-top: 75px;
+            padding-bottom: 48px;
+        }
+    </style>
 </head>
+<body>
+    
+    <!-- Seccion menu principal -->
+    <div class="container">
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="#">Observatorio WebSite</a>   
+                    <div class="nav-collapse collapse">
+                        <ul class="nav" id="top-nav">
+                            <li><a href="#slider" class="navbar-brand">Inicio</a></li>
+                            <li><a href="#equipo" class="navbar-brand">Equipo de Trabajo</a></li>
+                            <li><a href="#caracteristicas" class="navbar-brand">Caracter&iacute;sticas</a></li>
+                            <li><a href="#contactos" class="navbar-brand">Contactos</a></li>
+                        </ul>
+                        <ul class="nav pull-right navbar-nav" >
+                            <li><a href="">Reg&iacute;trate</a></li>
+                            <li><a href="">Iniciar Sesi&oacute;n</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Seccion de imagenes -->
+    <div class="container" id="slider">
+        <div id="myslide" class="carousel slide" data-ride="carousel" >
+            <div class="carousel-inner">
+                {% if imagenes %}
+                    {% for imag in imagenes %}                                  
+                        {% if forloop.first %}  
+                            <div class='item active'>
+                                <img src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" />
+                            </div>
+                        {% else %}
+                            <div class='item'>
+                                <img src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" />
+                            </div>
+                        {% endif %} 
+                    {% endfor %}
+                {% else %}
+                    <div class='item active' id="noavailable">
+                        <img src="{{ STATIC_URL }}img/imgnotfound.png" alt="My image" />
+                    </div>
+                {% endif %}
+            </div>
+            <a href="#myslide" data-slide="prev" class="carousel-control left">&lsaquo;</a>
+            <a href="#myslide" data-slide="next" class="carousel-control right">&rsaquo;</a>
+        </div>
+        <div class="row text-center">
+            <h3>BIENVIENIDO AL</h3>
+            <h2>
+                <img src="{{ STATIC_URL }}img/espol.png" alt="My image" style="width:100px; height:100px;" />
+                    &nbsp;OBSERVATORIO SOCIAL-ECON&Oacute;MICO DEL ECUADOR&nbsp;
+                <img src="{{ STATIC_URL }}img/fsch.jpg" alt="My image" style="width:100px; height:100px;" />
+            </h2>
+        </div>
+    </div>          
+        
+    <!-- Seccion Grupo de Trabajo -->
+    <div class="container block" id="equipo">
+        <h2 class="page-header">Equipo de Trabajo</h2>
+        {# Van los creadores de la aplicacion #}
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+        </p>
+    </div>
 
-<html>
-<body data-spy="scroll" data-target="#scrollSpy">
-		<div class="container">
-			<!-- Menú principal -->
-			<div class="row">
-				<div class="navbar navbar-fixed-top" id="scrollSpy">
-					<div class="navbar-inner">
-						<div class="container">
-							<ul class="nav pull-right nav-tabs" data-spy="affix" data-offset-top="125">
-								<li><a href="">Reg&iacute;trate</a></li>
-								<li><a href="">Iniciar Sesi&oacute;n</a></li>
-							</ul>
-							<br><br><br>
-							<a href="#home" class="navbar-brand">Inicio</a>
-							<a href="#team" class="navbar-brand">Equipo de Trabajo</a>
-							<a href="#characteristics" class="navbar-brand">Caracter&iacute;sticas</a>
-							<a href="#contacts" class="navbar-brand">Contactos</a>
-							<br><br>
-						</div>
-					</div>
-				</div>
-			</div>
-			<br><br><br>
-			<div class="row">
-				<div class="col-md-12">&nbsp;</div>
-				<div class="col-md-12"id="home">
-					<div id="myslide" class="carousel slide" data-ride="carousel">
-						 <ol class="carousel-indicators">
-    						<li data-target="#myslide" data-slide-to="0" class="active"></li>
-    						<li data-target="#myslide" data-slide-to="1"></li>
-    						<li data-target="#myslide" data-slide-to="2"></li>
-  						</ol>
-						<div class="carousel-inner">
-							<div class="item active">
-								{# Van las imagenes #}
-								{% if imagenes %}
-									{% for imag in imagenes %}
-											<img src="{{ MEDIA_URL }}{{	 imag.img_src }}" alt="My image"/>
-									{% endfor %}
-								{% else %}
-			    					NO HAY IMAGENES GUARDADAS.
-								{% endif %}
-							</div>
-						</div>
-						<a href="#myslide" data-slide="prev" class="carousel-control left"><span>{% bootstrap_icon "chevron-left" %}</span></a>
-						<a href="#myslide" data-slide="next" class="carousel-control right"><span>{% bootstrap_icon "chevron-right" %}</span></a>
-					</div>
-				</div>
-			</div>
-			<div class="row text-center">
-				<h3>BIENVIENIDO AL</h3>
-				<h2>OBSERVATORIO SOCIAL-ECON&Oacute;MICO DEL ECUADOR</h2>
-			</div>
-			<!-- Seccion Grupo de Trabajo -->
-			<div class="row">
-				<div class="col-md-12">&nbsp;</div>
-				<div class="col-md-12" id="team">
-					<h3>Equipo de Trabajo</h3>
-					<hr>
-					{# Van los creadores de la aplicacion #}
-				</div>
-			</div>
-			<!-- Seccion Caracteristicas -->
-			<div class="row">
-				<div class="col-md-12">&nbsp;</div>
-				<div class="col-md-12" id="characteristics">
-					<h3>Caracter&iacute;sticas</h3>
-					<hr>
-					<ul class="text-justify">
-						{# Van las caracetisticas #}
-						{% if description %}
-							{% for detail in description %}
-								<li>{{detail}}</li>
-							{% endfor %}
-						{% else %}
-		    				NO HAY CARACTERISTICAS GUARDADAS.
-						{% endif %}
-					</ul>
-				</div>
-			</div>
-			<!-- Seccion Contactos -->
-			<div class="row">
-				<div class="col-md-12">&nbsp;</div>
-				<div class="col-md-12" id="contacts">
-					<h3>Contactos</h3>
-					<hr>
-					<p>Oficinas Principales</p>
-					<p>{% bootstrap_icon "earphone" %}&nbsp;Centro de Investigaciones Econ&oacute;micas - Facultad de Ciencias Sociales y Human&iacute;sticas</p>
-					<p>Campus Gustavo Galindo Velasco Km 30.5 V&iacute;a Perimetral</p>
-				</div>
-			</div>
-		</div>
-		<script type="text/javascript" src="{% bootstrap_jquery_url %}"></script>
-		<script type="text/javascript" src="{% bootstrap_javascript_url %}"></script>
-		<script type="text/javascript">
-			$().ready(function(){
-				$("#myslide").carousel({
-					interval: 5000,
-					pause: "hover",
-				});
-				setTimeout(function(){
-					$("#myslide").carousel("next");
-				}, 2000);
-			});
-		</script>
-	</body>
+    <!-- Seccion Caracteristicas -->
+    <div class="container block" id="caracteristicas">
+        <h2 class="page-header">Caracter&iacute;sticas</h2>
+        <ul class="text-justify">
+            {# Van las caracetisticas #}
+            {% if description %}
+                {% for detail in description %}
+                    <li>{{detail}}</li>
+                {% endfor %}
+            {% else %}
+                NO HAY CARACTERISTICAS GUARDADAS.
+            {% endif %}
+        </ul>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+        </p>
+    </div>
+
+    <!-- Seccion Contactos -->
+    <div class="container block" id="contactos">
+        <h2 class="page-header">Contactos</h2>
+        <p>Oficinas Principales</p>
+        <p><i class="fa fa-phone-square"></i>&nbsp;Centro de Investigaciones Econ&oacute;micas - Facultad de Ciencias Sociales y Human&iacute;sticas</p>
+        <p>Campus Gustavo Galindo Velasco Km 30.5 V&iacute;a Perimetral</p>
+    </div>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.nav.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $().ready(function(){
+            $("#myslide").carousel({
+                interval: 5000,
+                pause: "hover",
+            });
+            setTimeout(function(){
+                $("#myslide").carousel("next");
+            }, 2000);
+            $('#top-nav').onePageNav({
+                currentClass: 'active',
+                changeHash: true,
+                scrollSpeed: 750
+            });
+        });
+    </script>
+</body>
 </html>
