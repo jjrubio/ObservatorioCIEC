@@ -10,5 +10,6 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
     (r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^indicator/', 'indicators.views.calc', name='calc'),
+    url(r'^userhome/', 'home.views.userhome', name='userhome'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
