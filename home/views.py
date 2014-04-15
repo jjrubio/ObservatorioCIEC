@@ -4,7 +4,7 @@ from django.template.loader import get_template
 from django.template import Context
 from django.template.context import RequestContext
 from features.models import Description
-from home.models import Slider
+from home.models import Slider, Timeline
 
 
 def home (request):
@@ -14,7 +14,9 @@ def home (request):
     return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 
-def userhome (request):
-    template = "userhome.html"
-    return render_to_response(template, context_instance = RequestContext(request,locals()))
+def timeline (request):
+	events   = Timeline.objects.all()
+	template = 'timeline.html'
+	return render_to_response(template, context_instance = RequestContext(request,locals()))
+
 

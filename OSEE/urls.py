@@ -11,5 +11,5 @@ urlpatterns = patterns('',
     (r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^indicator/', 'indicators.views.calc', name='calc'),
-    url(r'^userhome/', 'home.views.userhome', name='userhome'),
+    url(r'^timeline/', 'home.views.timeline', name='timeline'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
