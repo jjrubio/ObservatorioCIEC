@@ -57,7 +57,6 @@ INSTALLED_APPS = (
     'resources',
     'staff',
     'viewers',
-    'bootstrap3',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -89,17 +88,6 @@ DATABASES = {
 }
 
 
-BOOTSTRAP3 = {
-    'jquery_url': '//code.jquery.com/jquery.min.js',
-    'base_url': '//netdna.bootstrapcdn.com/bootstrap/3.0.3/',
-    'css_url': None,
-    'theme_url': None,
-    'javascript_url': None,
-    'horizontal_label_class': 'col-md-2',
-    'horizontal_field_class': 'col-md-4',
-}
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
@@ -121,8 +109,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "media"),
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'static')
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL='/media/'

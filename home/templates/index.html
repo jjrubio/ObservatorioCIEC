@@ -3,54 +3,14 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+
+    <link rel="stylesheet" href="{% static "css/style.css" %}" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="{% static "css/designIndex.css" %}" />
+
     <style>
-        body{
-            padding-top: 125px;
-            padding-bottom: 48px;
-        }
-        #map-canvas{
-            width: 100%;
-            height: 420px;
-            padding:420px;
-        }
+
     </style>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-    <script type="text/javascript">
-        function initialize() {
-            var myLatlng = new google.maps.LatLng(-2.1477, -79.96606);
-            var mapOptions = {
-                zoom: 18,
-                center: myLatlng
-            };
-            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-            var contentString = 
-            '<div id="content">'+
-                '<div id="siteNotice">'+'</div>'+
-                '<h1 id="firstHeading" class="firstHeading">Contactos</h1>'+
-                '<div id="bodyContent">'+
-                    '<p>Oficinas Principales:' + '</p>' +
-                    '<p>Centro de Investigaciones Econ&oacute;micas - Facultad de Ciencias Sociales y Human&iacute;sticas'+'</p>' +
-                    '<p>(+593)-42-269097'+'&nbsp;&nbsp;&nbsp;&nbsp;'+'(+593)-42-269098'+'<p>'+
-                    '<p>Guayaquil - Ecuador'+'<p>'+
-                '</div>'+ 
-            '</div>';
-            var infowindow = new google.maps.InfoWindow({
-                content: contentString
-            });
-            var marker = new google.maps.Marker({
-                position: myLatlng,
-                map: map,
-                title: 'CIEC'
-            });
-            google.maps.event.addListener(marker, 'click', function() {
-                infowindow.open(map,marker);
-            });
-            infowindow.open(map,marker);
-          }
-          google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
 </head>
 <body>
     <!-- Seccion menu principal -->
@@ -107,7 +67,7 @@
             <h3>BIENVENIDO AL</h3>
             <h2>OBSERVATORIO SOCIAL-ECON&Oacute;MICO DEL ECUADOR</h2>
         </div>
-        <div class="col-lg-1"><img src="{{ STATIC_URL }}img/fsch.png" alt="My image" style="width:100px; height:100px;" /></div>    
+        <div class="col-lg-1"><img src="{{ STATIC_URL }}img/fsch.png" alt="My image" style="width:100px; height:100px;" /></div>
     </div>
 
     <!-- Seccion Grupo de Trabajo -->
@@ -152,10 +112,9 @@
     <!-- Seccion Contactos -->
     <div class="google-map-canvas" id="map-canvas">-</div>
 
-
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.nav.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.nav.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
     <script type="text/javascript">
         $().ready(function(){
             $("#myslide").carousel({
@@ -169,8 +128,44 @@
                 currentClass: 'active',
                 changeHash: true,
                 scrollSpeed: 750
-            }); 
+            });
         });
+    </script>
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script type="text/javascript">
+        function initialize() {
+            var myLatlng = new google.maps.LatLng(-2.1477, -79.96606);
+            var mapOptions = {
+                zoom: 18,
+                center: myLatlng
+            };
+            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            var contentString =
+            '<div id="content">'+
+                '<div id="siteNotice">'+'</div>'+
+                '<h1 id="firstHeading" class="firstHeading">Contactos</h1>'+
+                '<div id="bodyContent">'+
+                    '<p>Oficinas Principales:' + '</p>' +
+                    '<p>Centro de Investigaciones Econ&oacute;micas - Facultad de Ciencias Sociales y Human&iacute;sticas'+'</p>' +
+                    '<p>(+593)-42-269097'+'&nbsp;&nbsp;&nbsp;&nbsp;'+'(+593)-42-269098'+'<p>'+
+                    '<p>Guayaquil - Ecuador'+'<p>'+
+                '</div>'+
+            '</div>';
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: 'CIEC'
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+                infowindow.open(map,marker);
+            });
+            infowindow.open(map,marker);
+          }
+          google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 </body>
 </html>
