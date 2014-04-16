@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta charset="utf-8">
     <link rel="stylesheet" href="{% static "css/style.css" %}" />
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <link rel="stylesheet" href="{% static "css/designIndex.css" %}" />
@@ -19,12 +19,12 @@
                     <ul class="nav navbar-nav" id="top-nav">
                         <li><a href="#" class="navbar-brand">Inicio</a></li>
                         <li><a href="#equipo" class="navbar-brand">Equipo de Trabajo</a></li>
-                        <li><a href="#caracteristicas" class="navbar-brand">Caracter&iacute;sticas</a></li>
+                        <li><a href="#caracteristicas" class="navbar-brand">Características</a></li>
                         <li><a href="#map-canvas" class="navbar-brand">Contactos</a></li>
                     </ul>
                     <ul class="nav pull-right navbar-nav" id="login">
-                        <li><a href="">Reg&iacute;strate</a></li>
-                        <li><a href="">Iniciar Sesi&oacute;n</a></li>
+                        <li><a href="">Regístrate</a></li>
+                        <li><a href="">Iniciar Sesión</a></li>
                     </ul>
             </div>
         </div>
@@ -52,8 +52,8 @@
                     </div>
                 {% endif %}
             </div>
-            <a href="#myslide" data-slide="prev" class="carousel-control left">&lsaquo;</a>
-            <a href="#myslide" data-slide="next" class="carousel-control right">&rsaquo;</a>
+            <a href="#myslide" data-slide="prev" class="carousel-control left"><i class="fa fa-arrow-circle-left fa-3x arrow"></i></a>
+            <a href="#myslide" data-slide="next" class="carousel-control right"><i class="fa fa-arrow-circle-right fa-3x arrow"></i></a>
         </div>
     </div>
 
@@ -61,52 +61,40 @@
         <div class="col-lg-1"><img src="{{ STATIC_URL }}img/espol.png" alt="My image" style="width:100px; height:100px;" /></div>
         <div class="col-lg-10 text-center">
             <h3>BIENVENIDO AL</h3>
-            <h2>OBSERVATORIO SOCIAL-ECON&Oacute;MICO DEL ECUADOR</h2>
+            <h2>OBSERVATORIO SOCIAL-ECONÓMICO DEL ECUADOR</h2>
         </div>
         <div class="col-lg-1"><img src="{{ STATIC_URL }}img/fsch.png" alt="My image" style="width:100px; height:100px;" /></div>
     </div>
 
     <!-- Seccion Grupo de Trabajo -->
-    <div class="container block" id="equipo">
-        <h2 class="page-header">Equipo de Trabajo</h2>
-        {# Van los creadores de la aplicacion #}
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-        </p>
-    </div>
+    {% include "team.html" %}
 
     <!-- Seccion Caracteristicas -->
     <div class="container block" id="caracteristicas">
-        <h2 class="page-header">Caracter&iacute;sticas</h2>
+        <h2 class="page-header">Características</h2>
         <ul class="text-justify">
-            {# Van las caracetisticas #}
             {% if description %}
                 {% for detail in description %}
                     <li>{{detail}}</li>
                 {% endfor %}
             {% else %}
                 NO HAY CARACTERISTICAS GUARDADAS.
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+                </p>
             {% endif %}
         </ul>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-        </p>
+        
     </div>
 
     <!-- Seccion Contactos -->
-    <div class="google-map-canvas" id="map-canvas">-</div>
+    {% include "contact.html" %}
 
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
     <script type="text/javascript" src="{% static "js/jquery.nav.js" %}"></script>
@@ -126,42 +114,6 @@
                 scrollSpeed: 750
             });
         });
-    </script>
-
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-    <script type="text/javascript">
-        function initialize() {
-            var myLatlng = new google.maps.LatLng(-2.1477, -79.96606);
-            var mapOptions = {
-                zoom: 18,
-                center: myLatlng
-            };
-            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-            var contentString =
-            '<div id="content">'+
-                '<div id="siteNotice">'+'</div>'+
-                '<h1 id="firstHeading" class="firstHeading">Contactos</h1>'+
-                '<div id="bodyContent">'+
-                    '<p>Oficinas Principales:' + '</p>' +
-                    '<p>Centro de Investigaciones Econ&oacute;micas - Facultad de Ciencias Sociales y Human&iacute;sticas'+'</p>' +
-                    '<p>(+593)-42-269097'+'&nbsp;&nbsp;&nbsp;&nbsp;'+'(+593)-42-269098'+'<p>'+
-                    '<p>Guayaquil - Ecuador'+'<p>'+
-                '</div>'+
-            '</div>';
-            var infowindow = new google.maps.InfoWindow({
-                content: contentString
-            });
-            var marker = new google.maps.Marker({
-                position: myLatlng,
-                map: map,
-                title: 'CIEC'
-            });
-            google.maps.event.addListener(marker, 'click', function() {
-                infowindow.open(map,marker);
-            });
-            infowindow.open(map,marker);
-          }
-          google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 </body>
 </html>
