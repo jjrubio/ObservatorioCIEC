@@ -11,7 +11,14 @@ def calc(request):
 
 def indicators_list(request):
 	indicators    = Indicator.objects.all()
-	subcategories = Category.objects.all()
-	categories    = Subcategory.objects.all()
+	subcategories = Subcategory.objects.all()
+	categories    = Category.objects.all()
 	template      = "indicators_list.html"
 	return render_to_response(template, context_instance = RequestContext(request,locals()))
+
+def indicators_menu(request):
+	indicators    = Indicator.objects.all()
+	subcategories = Subcategory.objects.all()
+	categories    = Category.objects.all()
+	template      = "indicators_menu.html"
+	return render(request, template, locals())

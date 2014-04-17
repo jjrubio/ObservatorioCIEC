@@ -1,7 +1,6 @@
 from django.db import models
 from disintegrations.models import Disintegration
 
-
 class Category(models.Model):
     name = models.CharField(max_length=50)
 
@@ -16,12 +15,11 @@ class Subcategory(models.Model):
     def __unicode__(self):
         return self.name
 
-
 class Indicator(models.Model):
     name            = models.CharField(max_length=75)
     definition      = models.TextField()
     unit            = models.CharField(max_length=10)
-    formula_src     = models.ImageField(upload_to='indicators/static/formulas/')
+    formula_src     = models.ImageField(upload_to='formulas/')
     subcategory     = models.ForeignKey(Subcategory)
     disintegrations = models.ManyToManyField(Disintegration)
 

@@ -1,0 +1,31 @@
+{% load apptags %}
+
+<div id="menu">
+    <nav>
+        <h2><i class="fa fa-reorder"></i>Categorias</h2>
+        <ul>
+            {% for cat in categories %}
+            <li>
+                <a href="#"><i class="fa fa-laptop"></i>{{cat.name}}</a>
+                <h2><i class="fa fa-laptop"></i>{{cat.name}}</h2>
+                <ul>
+                    {% for sub in subcategories|in_category:cat %}
+                    <li>
+                        <a href="#"><i class="fa fa-phone"></i>{{sub.name}}</a>
+                        <h2><i class="fa fa-phone"></i>{{sub.name}}</h2>
+                        <ul>
+                            {% for ind in indicators|in_subcategory:sub %}
+                            <li>
+                                <a href="#">{{ind.name}}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+
+        </ul>
+    </nav>
+</div>
