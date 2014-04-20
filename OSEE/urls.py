@@ -13,4 +13,6 @@ urlpatterns = patterns('',
     url(r'^indicator/', 'indicators.views.calc', name='calc'),
     url(r'^historia/', 'home.views.timeline', name='timeline'),
     url(r'^lista-indicadores/', 'indicators.views.indicators_list', name='list'),
+    url(r'^registro/', 'registers.views.signup', name='registro'),
+    url(r'^UsuarioCreado/', 'registers.views.signupok', name='ok'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

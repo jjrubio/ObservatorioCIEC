@@ -1,0 +1,31 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static "css/style.css" %}" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="{% static "css/designIndex.css" %}" />
+</head>
+<body>
+    <div id="myform">
+        <h2 id="regis">Regístrate</h2>
+        <hr>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input name="" type="submit" class="btn btn-large" value="Crear" />
+        </form>
+    </div>
+
+    <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.nav.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript">
+        $('#btnSave').click(function() {
+            alert('Cambios Guardados exitosamente');
+        });
+    </script>
+</body>
+</html>

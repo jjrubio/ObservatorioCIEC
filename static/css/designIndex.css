@@ -31,3 +31,58 @@ body {
 .arrow{
   margin-top: 2.9em;
 }
+.form_login{
+  margin-bottom: 15px;
+}
+#user_remember_me{
+  float: left; 
+  margin-right: 10px;
+}
+.btn_login{
+  clear: left; 
+  width: 100%; 
+  height: 32px; 
+  font-size: 13px;
+}
+.menu{
+  padding: 15px; 
+  padding-bottom: 5px;
+}
+.form_registro{
+  margin-bottom: 15px;
+}
+#myform{
+  margin-left: 20em;
+}
+label{
+  display: block;
+  margin: 0px 0px 5px;
+}
+input{
+  border: 1px solid #DADADA;
+  /*color: #888;*/
+  height: 24px;
+  margin-bottom: 16px;
+  margin-right: 6px;
+  margin-top: 2px;
+  outline: 0 none;
+  padding: 3px 3px 3px 5px;
+  width: 26%;
+  font: normal 12px/12px Georgia, "Times New Roman", Times, serif;
+}
+#btn_submit{
+  /*background: #E48F8F;*/
+  border: none;
+  padding: 10px 25px 10px 25px;
+  /*color: #FFF;*/
+}
+#link_index{
+  padding-right: 10em;
+  padding-top: 1em;
+}
+#titulo_gracias{
+  text-align: center;
+}
+#regis{
+  margin-top: -3em;
+}

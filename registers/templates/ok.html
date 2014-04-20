@@ -1,0 +1,17 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static "css/style.css" %}" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="{% static "css/designIndex.css" %}" />
+</head>
+<body>
+	<h1 id="titulo_gracias">Gracias por subscribirte al Observatorio Social Economico del Ecuador</h1>
+    <img src="{{ STATIC_URL }}img/mountains.jpg" alt="myImage" style="width:100%; height:405px;"/>
+    <a href="/" class="pull-right" id="link_index"><strong>Volver a la página principal</strong></a>
+
+</body>
+</html>

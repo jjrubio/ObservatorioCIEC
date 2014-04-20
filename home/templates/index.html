@@ -17,19 +17,32 @@
                     <a href=#><img id="myimage" src="{{ STATIC_URL }}img/ciec.png" alt="My image" style="width:75px; height:75px;" /></a>
                 </div>
                     <ul class="nav navbar-nav" id="top-nav">
-                        <li><a href="#" class="navbar-brand">Inicio</a></li>
+                        <li class="active"><a href="#" class="navbar-brand">Inicio</a></li>
                         <li><a href="#equipo" class="navbar-brand">Equipo de Trabajo</a></li>
                         <li><a href="#caracteristicas" class="navbar-brand">Características</a></li>
                         <li><a href="#map-canvas" class="navbar-brand">Contactos</a></li>
+                        <!--li><a href="#registro" style="margin-top: -1.5em; margin-left: 1.3em;"><i class="fa fa-user"></i>&nbsp;Regístrate</a></li-->
+                        <li><a href="registro" style="margin-top: -1.5em; margin-left: 1.3em;"><i class="fa fa-user"></i>&nbsp;Regístrate</a></li>
                     </ul>
                     <ul class="nav pull-right navbar-nav" id="login">
-                        <li><a href="">Regístrate</a></li>
-                        <li><a href="">Iniciar Sesión</a></li>
+                        <!--li><a href="#registro">Regístrate</a></li-->
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Iniciar Sesión <i class="fa fa-lock"></i><strong class="caret"></strong></a>
+                            <div class="dropdown-menu menu" >
+                                <form action="" method="post" accept-charset="UTF-8">
+                                    <input class="form_login" id="user_username" type="text" name="user[username]" size="30" />
+                                    <input class="form_login" id="user_password" type="password" name="user[password]" size="30" />
+                                    <input id="user_remember_me" type="checkbox" name="user[remember_me]" value="1" />
+                                    <label class="string optional" for="user_remember_me"> Recuerdame </label>
+                                    <input class="btn btn-primary btn_login" type="submit" name="commit" value="Sign In" />
+                                </form>
+                            </div>
+                        </li>
                     </ul>
             </div>
         </div>
     </header>
-
+    <!-- Fin Seccion menu principal -->
     <!-- Seccion de imagenes -->
     <div id="slider">
         <div id="myslide" class="carousel slide" data-ride="carousel" >
@@ -56,7 +69,8 @@
             <a href="#myslide" data-slide="next" class="carousel-control right"><i class="fa fa-arrow-circle-right fa-3x arrow"></i></a>
         </div>
     </div>
-
+    <!-- Fin Seccion de imagenes -->
+    <!-- Seccion titulo y logos del sitio web -->
     <div class="row" id="mytitle">
         <div class="col-lg-1"><img src="{{ STATIC_URL }}img/espol.png" alt="My image" style="width:100px; height:100px;" /></div>
         <div class="col-lg-10 text-center">
@@ -65,10 +79,10 @@
         </div>
         <div class="col-lg-1"><img src="{{ STATIC_URL }}img/fsch.png" alt="My image" style="width:100px; height:100px;" /></div>
     </div>
-
+    <!-- Fin Seccion titulo y logos del sitio web -->
     <!-- Seccion Grupo de Trabajo -->
     {% include "team.html" %}
-
+    <!-- Fin Seccion Grupo de Trabajo -->
     <!-- Seccion Caracteristicas -->
     <div class="container block" id="caracteristicas">
         <h2 class="page-header">Características</h2>
@@ -80,22 +94,26 @@
             {% else %}
                 NO HAY CARACTERISTICAS GUARDADAS.
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
+                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
+                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
+                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
+                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
+                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
                 </p>
             {% endif %}
         </ul>
-        
     </div>
-
+    <!-- Fin Seccion Caracteristicas -->
     <!-- Seccion Contactos -->
     {% include "contact.html" %}
-
+    <!-- Fin Seccion Contactos -->
+    <!-- Seccion Registro -->
+    <!--div class="container block" id="registro">
+        <h2 class="page-header">Registro</h2>
+        {% include "signup.html" %}
+    </div-->
+    <!-- Fin Seccion Registro -->
+    <!-- Seccion Scripts -->
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
     <script type="text/javascript" src="{% static "js/jquery.nav.js" %}"></script>
     <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
@@ -114,6 +132,13 @@
                 scrollSpeed: 750
             });
         });
+        $(function() {
+            $('.dropdown-toggle').dropdown();
+            $('.dropdown input, .dropdown label').click(function(e) {
+                e.stopPropagation();
+            });
+        });
     </script>
+    <!-- Fin Seccion Scripts -->
 </body>
 </html>
