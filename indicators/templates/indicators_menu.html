@@ -6,7 +6,7 @@
         <ul>
             {% for cat in categories %}
             <li>
-                <a href="#"><i class="fa fa-laptop"></i>{{cat.name}}</a>
+                <a href="#"><i class="fa fa-bookmark"></i>{{cat.name}}</a>
                 <h2><i class="fa fa-laptop"></i>{{cat.name}}</h2>
                 <ul>
                     {% for sub in subcategories|in_category:cat %}
