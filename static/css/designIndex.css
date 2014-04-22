@@ -18,6 +18,7 @@ body {
 #myimage{
   margin-left: 4em;
   margin-top: 1em;
+  margin-bottom: 1em;
 }
 #mytitle{
   margin-top: 0.5em;
@@ -85,4 +86,98 @@ input{
 }
 #regis{
   margin-top: -3em;
+}
+.social_media{
+  width: 25px;
+  height: 25px;
+}
+#div_about{
+  width: 623px;
+  height: 257px;
+  margin-left: 16em;
+  margin-top: -18em;
+}
+
+#pic_profile{
+  position: relative;
+  width:200px; 
+  height:250px;
+  top:12em;
+}
+#div_profiles{
+  margin-left: 5em;
+  margin-top: -14em;
+}
+
+
+/* ============================================================================================================================
+== RECTANGLE-BORDER STYLE WITH CURVE
+** ============================================================================================================================ */
+
+.rectangle-speech-border {
+  position:relative;
+  padding:37px 15px;
+  margin:1em 0 18em;
+  border:5px solid #5a8f00;
+  text-align:justify;
+  color:#333;
+  background:#fff;
+  /* css3 */
+  -webkit-border-radius:20px;
+  -moz-border-radius:20px;
+  border-radius:20px;
+
+}
+
+/* creates larger curve */
+.rectangle-speech-border:before {
+  content:"";
+  position:absolute;
+  z-index:10;
+  bottom:-30px;
+  left:50px;
+  width:50px;
+  height:30px;
+  border-style:solid;
+  border-width:0 5px 5px 0;
+  border-color:#5a8f00;
+  background:transparent;
+  /* css3 */
+  -webkit-border-bottom-right-radius:80px 50px;
+  -moz-border-radius-bottomright:80px 50px;
+  border-bottom-right-radius:80px 50px;
+  /* reduce the damage in FF3.0 */
+  display:block;
+}
+
+/* creates smaller curve */
+.rectangle-speech-border:after {
+  content:"";
+  position:absolute;
+  z-index:10;
+  bottom:-30px;
+  left:59px;
+  width:20px;
+  height:30px;
+  border-style:solid;
+  border-width:0 5px 5px 0;
+  border-color:#5a8f00;
+  background:transparent;
+  /* css3 */
+  -webkit-border-bottom-right-radius:40px 50px;
+  -moz-border-radius-bottomright:40px 50px;
+  border-bottom-right-radius:40px 50px;
+  /* reduce the damage in FF3.0 */
+  display:block;
+}
+
+/* creates a white rectangle to cover part of the oval border*/
+.rectangle-speech-border > :first-child:after {
+  content:"";
+  position:absolute;
+  bottom:-10px;
+  left:75px;
+  width:24.4px;
+  height:16px;
+  background:#fff;
 }
