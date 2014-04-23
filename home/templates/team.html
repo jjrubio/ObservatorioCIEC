@@ -1,13 +1,29 @@
-<div class="container block" id="equipo">
-        <h2 class="page-header">Equipo de Trabajo</h2>
-        {# Van los creadores de la aplicacion #}
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!
-        </p>
+<div class="block" id="equipo">
+    <h2 class="page-header">Equipo de Trabajo</h2>
 </div>
+
+<div class="row" id="div_profiles">
+    {# Van los creadores de la aplicacion #}
+    {% if profile %}
+        {% for staff in profile %}
+            <div class="col-md-6">
+                <img src="{{ MEDIA_URL }}{{ staff.img_src }}" alt="My image" id="pic_profile" />
+                <div class="rectangle-speech-border" id="div_about">
+                    {{staff.name}}&nbsp;{{staff.lastname}}
+                    <p>{{staff.about}}</p>
+                    <i class="fa fa-phone-square fa-1x">&nbsp;&nbsp;{{staff.phone}}</i>
+                    <br>
+                    <img src="{{ STATIC_URL }}img/mail-icon.png" alt="email_icon" class="social_media"/>&nbsp;&nbsp;{{staff.email}}
+                    <div class="pull-right">
+                        <a href="{{staff.facebook}}"><img src="{{ STATIC_URL }}img/facebook-icon.png" alt="fb_icon" class="social_media"/></a>
+                        <a href="{{staff.twitter}}"><img src="{{ STATIC_URL }}img/twitter-icon.png" alt="twitter_icon" class="social_media"/></a>
+                        <a href="{{staff.linkedin}}"><img src="{{ STATIC_URL }}img/linkedin-icon.png" alt="linkedin_icon" class="social_media"/></a>
+                    </div>
+                </div>        
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No se ha encontrado datos!</p>
+    {% endif %}
+</div>
+

@@ -10,3 +10,4 @@ class Personal_data(models.Model):
     facebook = models.URLField()
     twitter  = models.URLField()
     linkedin = models.URLField()
+    img_src  = models.ImageField(upload_to='staff_pic/')
