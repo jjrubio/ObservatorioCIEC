@@ -16,7 +16,7 @@
                         <ul>
                             {% for ind in indicators|in_subcategory:sub %}
                             <li>
-                                <a href="#">{{ind.name}}</a>
+                                <a class="indicator" id ="{{ind.id}}" href="#">{{ind.name}}</a>
                             </li>
                             {% endfor %}
                         </ul>

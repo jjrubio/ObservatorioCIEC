@@ -31,8 +31,8 @@
                 </div>
                 <!-- /.navbar-header -->
                 <ul class="nav navbar-nav" id="tabs-menu">
-                    <li><a href="/lista-indicadores">Lista de Indicadores</a></li>
-                    <li><a href="">Cálculo del indicador</a></li>
+                    <li><a href="/lista-indicadores/">Lista de Indicadores</a></li>
+                    <li><a href="#">Cálculo del indicador</a></li>
                     <li><a href="#">Comercio Exterior</a></li>
                     <li><a href="#">Enlaces externos</a></li>
                     <li><a href="#">Equipo de trabajo</a></li>
@@ -60,10 +60,26 @@
     </header>
     {% block content %}{% endblock %}
     <!-- Core Scripts - Include with every page -->
-
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            setNavigation();
+        });
 
+        function setNavigation() {
+            var path = window.location.pathname;
+            path = path.replace(/\?$/, "");
+            path = decodeURIComponent(path);
+
+            $("#tabs-menu a").each(function () {
+                var href = $(this).attr('href');
+                if(path.substring(0,href.length) === href){
+                    $(this).closest('li').addClass('active');
+                }
+            });
+        }
+    </script>
     <!-- Page Specific Scripts -->
     {% block extraScripts %}{% endblock %}
 

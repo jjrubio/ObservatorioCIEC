@@ -6,9 +6,9 @@ body {
 
 #pushobj {
 	position: absolute;
-	top: 0px;
-	left: 300px;
-	color: #fff;
+	top: 300px;
+	left: 800px;
+	color: #000;
 	background: #F6E7D2;
 	font-family: 'Open Sans Condensed', sans-serif;
 	font-size: 2em;
