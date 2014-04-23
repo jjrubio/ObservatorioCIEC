@@ -1,13 +1,13 @@
-body {
+/*body {
   margin: 0;
   padding-top: 125px;
   padding-bottom: 48px;
-}
+}*/
 
-.block{
+/*.block{
   padding:100px;
   margin-bottom: 8em;
-}
+}*/
 #top-nav{
   margin-left: 17em;
   margin-top: -3.5em;
@@ -20,9 +20,9 @@ body {
   margin-top: 1em;
   margin-bottom: 1em;
 }
-#mytitle{
+/*#mytitle{
   margin-top: 0.5em;
-}
+}*/
 
 #map-canvas{
   width: 100%;
@@ -180,4 +180,66 @@ input{
   width:24.4px;
   height:16px;
   background:#fff;
+}
+
+/*Responsive*/
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1920px) {
+    body{
+        margin: 0;
+        padding-top: 130px;
+        padding-bottom: 50px;
+    }
+    #mytitle{
+          margin-top: 9em;
+          margin-bottom: 22em;
+    }
+}
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1280px) {
+    body{
+        margin: 0;
+        padding-top: 130px;
+        padding-bottom: 50px;
+    }
+    #mytitle{
+          margin-top: 0.5em;
+          margin-bottom: 10em;
+    }
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 980px) {
+    body{
+        margin: 0;
+        padding-top: 160px;
+        padding-bottom: 50px;
+    }
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 800px) {
+    body{
+        margin: 0;
+        padding-top: 160px;
+        padding-bottom: 50px;
+    }
+}
+
+/* Extra Small Devices, Phones */ 
+@media only screen and (max-width : 768px) {
+    body{
+        margin: 0;
+        padding-top: 160px;
+        padding-bottom: 50px;
+    }
+}
+
+/* Custom, iPhone Retina */ 
+@media only screen and (max-width : 360px) {
+    body{
+        margin: 0;
+        padding-top: 270px;
+        padding-bottom: 50px;
+    }
 }
