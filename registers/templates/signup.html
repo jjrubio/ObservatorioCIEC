@@ -10,12 +10,11 @@
 </head>
 <body>
     <div id="myform">
-        <h2 id="regis">Regístrate</h2>
-        <hr>
-        <form action="" method="post">
+        <h2 id="regis">Registro</h2>
+        <form action="" method="post" id="myform2">
             {% csrf_token %}
             {{form.as_p}}
-            <input name="" type="submit" class="btn btn-large" value="Crear" />
+            <input name="" type="submit" class="btn btn-primary btn_login" value="Crear Cuenta" style="width:130px; margin-left:30em;"/>
         </form>
     </div>
 

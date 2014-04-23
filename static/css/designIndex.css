@@ -1,13 +1,3 @@
-/*body {
-  margin: 0;
-  padding-top: 125px;
-  padding-bottom: 48px;
-}*/
-
-/*.block{
-  padding:100px;
-  margin-bottom: 8em;
-}*/
 #top-nav{
   margin-left: 17em;
   margin-top: -3.5em;
@@ -20,10 +10,6 @@
   margin-top: 1em;
   margin-bottom: 1em;
 }
-/*#mytitle{
-  margin-top: 0.5em;
-}*/
-
 #map-canvas{
   width: 100%;
   height: 420px;
@@ -53,7 +39,28 @@
   margin-bottom: 15px;
 }
 #myform{
+  margin-left: 10em;
+  margin-right: -15em;
+  width: 84%;
+  padding: 3em;
+  padding-right: 12em;
+}
+#myform2{
   margin-left: 20em;
+  margin-right: -15em;
+  margin-top: 3em;
+  width: 84%;
+  padding: 3em;
+  padding-right: 12em;
+  border: 3px solid #3399FF;
+  background-color: #FFFFFF;
+  /* css3 */
+  -webkit-border-radius:20px;
+  -moz-border-radius:20px;
+  border-radius:20px;
+}
+p{
+  margin-left: 17em;
 }
 label{
   display: block;
@@ -86,6 +93,7 @@ input{
 }
 #regis{
   margin-top: -3em;
+  margin-left: 25em;
 }
 .social_media{
   width: 25px;
@@ -186,13 +194,20 @@ input{
 /* Large Devices, Wide Screens */
 @media only screen and (max-width : 1920px) {
     body{
-        margin: 0;
-        padding-top: 130px;
-        padding-bottom: 50px;
+      margin: 0;
+      padding-top: 130px;
+      padding-bottom: 50px;
     }
     #mytitle{
-          margin-top: 9em;
-          margin-bottom: 22em;
+      margin-top: 9em;
+      margin-bottom: 22em;
+    }
+    .block{
+      padding:100px;
+      padding-bottom: 18em;
+    }
+    .google-map-canvas{
+      margin-top: 14em;
     }
 }
 /* Large Devices, Wide Screens */
@@ -214,6 +229,10 @@ input{
         margin: 0;
         padding-top: 160px;
         padding-bottom: 50px;
+    }
+    #mytitle{
+          margin-top: 0.5em;
+          margin-bottom: 30em;
     }
 }
 

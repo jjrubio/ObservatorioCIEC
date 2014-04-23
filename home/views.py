@@ -6,12 +6,20 @@ from django.template.context import RequestContext
 from features.models import Description
 from home.models import Slider, Timeline
 from staff.models import Personal_data
+from registers.forms import UserAuthenticationForm
+from django.contrib.auth import login
 
 def home (request):
     description = Description.objects.all()
     imagenes = Slider.objects.all()
     profile = Personal_data.objects.all()
+    signin = UserAuthenticationForm(request.POST or None)
+    if signin.is_valid():
+    	login(request, signin.get_user())
+
+
     template = 'index.html'
+
     return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 
