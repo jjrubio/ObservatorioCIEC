@@ -3931,15 +3931,15 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-default {
-  background-color: #88725b;
-  border-color: #74614e;
+  background-color: #333333;
+  border-color: #222222;
 }
 .navbar-default .navbar-brand {
-  color: #b7ca79;
+  color: #1db0d2;
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
-  color: #b7ca79;
+  color: #1db0d2;
   background-color: transparent;
 }
 .navbar-default .navbar-text {
@@ -3977,7 +3977,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
-  border-color: #74614e;
+  border-color: #222222;
 }
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,

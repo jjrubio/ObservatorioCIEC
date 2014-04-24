@@ -53,17 +53,17 @@
                     {% for imag in imagenes %}
                         {% if forloop.first %}
                             <div class='item active'>
-                                <img src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" style="width:100%; height:405px;"/>
+                                <img src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" style="width:100%; height:575px;"/>
                             </div>
                         {% else %}
                             <div class='item'>
-                                <img src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" style="width:100%; height:405px;"/>
+                                <img src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" style="width:100%; height:575px;"/>
                             </div>
                         {% endif %}
                     {% endfor %}
                 {% else %}
                     <div class='item active' id="noavailable">
-                        <img src="{{ STATIC_URL }}img/imgnotfound.png" alt="My image" style="width:100%; height:405px;"/>
+                        <img src="{{ STATIC_URL }}img/imgnotfound.png" alt="My image" style="width:100%; height:575px;"/>
                     </div>
                 {% endif %}
             </div>
@@ -91,9 +91,9 @@
         <ul class="text-justify">
             {% if description %}
                 {% for detail in description %}
-                    <li>{{detail}}</li>
+                    <li>{{detail}} </li> <br>
                 {% endfor %}
-            {% else %}
+            {% else %}<br>
                 NO HAY CARACTERISTICAS GUARDADAS.
                 <p>
                     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>

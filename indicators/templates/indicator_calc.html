@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% load apptags %}
+
+{% load static from staticfiles %}
+
+{% block title %}Cálculo indicador{% endblock %}
+
+{% block extraCSS %}
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700&subset=latin,cyrillic-ext,latin-ext,cyrillic' rel='stylesheet' type='text/css'>
+    <link href="{% static "css/jquery.multilevelpushmenu.css" %}" rel="stylesheet"  />
+    <link href="{% static "css/basichtml.css" %}" rel="stylesheet"  />
+    <link href="{% static "css/bs-wizard.css" %}" rel="stylesheet"  />
+{% endblock %}
+
+{% block content %}
+    {% include 'indicators_menu.html' %}
+    <div id="pushobj">
+         <div class="container bs-wizard">
+            <div class="col-lg-3">
+            <ol class="bs-wizard-sidebar">
+            <li class="bs-wizard-todo bs-wizard-active"><a href="javascript:void(0)">Desagregaciones</a></li>
+            <li class="bs-wizard-todo"><a href="javascript:void(0)">Otros parámetros</a></li>
+            <li class="bs-wizard-todo"><a href="javascript:void(0)">Resultados</a></li>
+            </ol>
+            </div>
+
+            <div class="col-lg-9">
+            <form method="get" action="" accept-charset="UTF-8">
+            <fieldset>
+            <div class="bs-step inv">
+            <legend>Desagregaciones</legend>
+            <div class="bs-step-inner">
+                <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> Región natural
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> Cinco ciudades más importantes del país + Resto del país
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> Genero
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> Grupo de edad
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> Nivel de instrucción
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> Afiliación al seguro
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> Grupo de ocupación
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> Actividad laboral (5 desagregaciones)
+                    </label>
+                </div>
+                <br>
+            </div>
+
+            <div class="form-group" hidden="hidden">
+            <label for="field_2">Field 2</label>
+            <input type="text" class="form-control" value="" size="30" name="field_2" id="field_2">
+            </div>
+            </div>
+            </div>
+
+            <div class="bs-step inv">
+            <legend>Otros parámetros</legend>
+            <div class="bs-step-inner">
+            <div class="form-group">
+            <label for="field_3" style="font-size:20px">Representatividad: </label>
+            <select style="width:250px" class="form-control">
+              <option>Nacional</option>
+              <option>Urbano</option>
+              <option>Rural</option>
+            </select>
+            </div>
+
+            <div class="form-group">
+            <label for="field_3" style="font-size:20px">Metodología: </label>
+            <select style="width:250px" class="form-control">
+              <option>2003-4 a 2007-1</option>
+              <option>2007-2 en adelante</option>
+            </select>
+            </div>
+            <div class="form-group" hidden="hidden">
+            <label for="field_3">Field 3</label>
+            <input type="text" class="form-control" value="" size="30" name="field_3" id="field_3">
+            </div>
+
+            <div class="form-group">
+            <label for="field_5" style="font-size:20px">Fecha inicial: </label>
+            <label for="field_5" style="font-size:15px">12/05/2007</label>
+            <br>
+            <label for="field_5" style="font-size:20px">Fecha final: </label>
+            <label for="field_5" style="font-size:15px">20/08/2012</label>
+            </div>
+
+            <div class="form-group" hidden="hidden">
+            <label for="field_3">Field 3</label>
+            <input type="text" class="form-control" value="" size="30" name="field_3" id="field_3">
+            </div>
+
+
+            <div class="form-group" hidden="hidden">
+            <label for="field_4">Field 4</label>
+            <input type="text" class="form-control" value="" size="30" name="field_4" id="field_4">
+            </div>
+            </div>
+            </div>
+
+            <div class="bs-step inv">
+            <legend>Resultados</legend>
+            <div class="bs-step-inner">
+            <div class="form-group">
+            <label for="field_5">Tabla de resultados</label>
+            </div>
+
+
+
+            <button class="btn btn-default" type="reset" id="last-back">Atrás</button>
+            <input class="btn btn-primary submit-btn" type="submit" value="Descargar Excel" />
+            </div>
+            </div>
+            </fieldset>
+            </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extraScripts %}
+    <script src="http://oss.maxcdn.com/libs/modernizr/2.6.2/modernizr.min.js" type="text/javascript"></script>
+    <script src="{% static "js/jquery.multilevelpushmenu.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/basichtml.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/bs-wizard-min.js" %}" type="text/javascript"></script>
+    <script>
+        $(function() {
+            $(".bs-wizard").bs_wizard();
+        });
+    </script>
+{% endblock %}
