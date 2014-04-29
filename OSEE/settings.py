@@ -57,6 +57,7 @@ INSTALLED_APPS = (
     'resources',
     'staff',
     'viewers',
+    'import_export',
 )
 
 MIDDLEWARE_CLASSES = (

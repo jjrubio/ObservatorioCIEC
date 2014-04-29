@@ -1,8 +1,10 @@
 from django.contrib import admin
 from models import Variable_definition, Data_from_2003_4, Data_from_2007_2
+from resources import Data_from_year_trimResource
+from import_export.admin import ImportExportModelAdmin
 
 
-class Data_fromAdmin(admin.ModelAdmin):
+class Data_from_year_trimAdmin(ImportExportModelAdmin):
     list_display = (
         'year', 'trim', 'area', 'region_natural', 'ciudad_ind',
         'fexp', 'genero', 'edad', 'etnia', 'edad_group', 'nivinst',
@@ -12,8 +14,9 @@ class Data_fromAdmin(admin.ModelAdmin):
         'sect_srvdom', 'sect_agricola', 'sub_inv', 'sub_informa',
         'ingrl', 'rama_act_1', 'rama_act_2', 'group_ocup_1', 'seguro',
         'migracion', )
-
+    resource_class = Data_from_year_trimResource
+    pass
 
 admin.site.register(Variable_definition)
-admin.site.register(Data_from_2003_4, Data_fromAdmin)
-admin.site.register(Data_from_2007_2, Data_fromAdmin)
+admin.site.register(Data_from_2003_4, Data_from_year_trimAdmin)
+admin.site.register(Data_from_2007_2, Data_from_year_trimAdmin)

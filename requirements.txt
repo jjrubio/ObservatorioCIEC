@@ -1,4 +1,9 @@
 Django==1.6.2
 MySQL-python==1.2.5
 Pillow==2.4.0
+argparse==1.2.1
+diff-match-patch==20110725.1
 django-grappelli==2.5.2
+django-import-export==0.2.2
+tablib==0.9.11
+wsgiref==0.1.2
