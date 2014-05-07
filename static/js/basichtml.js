@@ -1,6 +1,13 @@
 $(document).ready(function(){
-	// HTML markup implementation, overlap mode
-	$( '#menu' ).multilevelpushmenu({
-		containersToPush: [$( '#pushobj' )]
-	});
+
+    $( '#menu' ).multilevelpushmenu({
+        containersToPush: [$( '#pushobj' )],
+        menuWidth: '20%',
+        backText: 'Atrás',
+
+    });
+
+    $( window ).resize(function() {
+        $( '#menu' ).multilevelpushmenu( 'redraw' );
+    });
 });

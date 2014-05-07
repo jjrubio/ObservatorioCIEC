@@ -30,9 +30,10 @@ ALLOWED_HOSTS = []
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
-    'django.core.context_processors.request',
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.media',
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.request",
+    "django.core.context_processors.i18n",
+    'django.contrib.messages.context_processors.messages',
 )
 
 GRAPPELLI_ADMIN_TITLE = 'Observatorio Económico - Social del Ecuador'
@@ -40,7 +41,7 @@ GRAPPELLI_ADMIN_TITLE = 'Observatorio Económico - Social del Ecuador'
 # Application definition
 
 INSTALLED_APPS = (
-    'grappelli',
+    # 'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

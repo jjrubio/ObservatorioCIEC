@@ -18,9 +18,9 @@
         <div class="panel">
             <div class="panel-heading" >
                 <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-globe"></i> Migración</a></li>
-                    <li><a href="#"><i class="fa fa-plane"></i> Migración internacional</a></li>
-                    <li><i class="fa fa-users"></i> Tasa de migrantes de otros países</li>
+                    <li><a href="#"><i class="fa fa-globe"></i> <span> Migracion</span></a></li>
+                    <li><a href="#"><i class="fa fa-plane"></i> <span> Migración internacional</span></a></li>
+                    <li><i class="fa fa-plane"></i><span> Promedio de horas de participación de jefes en quehaceres del hogar</span></li>
                 </ol>
             </div>
             <div class="panel-body">
@@ -28,9 +28,9 @@
                     "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                 </p>
                 <br><br>
-                <div class="text-center"><img class="text-center" src="{{ MEDIA_URL }}formulas/tc.png" alt="formula"></div>
+                <div class="text-center"><img  src="{{ MEDIA_URL }}formulas/tc.png" alt="formula"></div>
             </div>
-            <div class="panel-footer pull-right"><b>Unidad:</b> Porcentaje</div>
+            <div class="panel-footer pull-right"><b>Unidad:</b> <span>Porcentaje</span></div>
         </div>
 
     </div>
@@ -38,7 +38,38 @@
 {% endblock %}
 
 {% block extraScripts %}
+    <script>
+
+    $(document).ready( function() {
+
+        $('.indicator').click( function(){
+
+            $.get('/detalle-indicador/'+$(this).attr('id')+'/', function(data) {
+
+                $(".breadcrumb li:first-child i").attr('class', 'fa '+data.category_icon);
+                $(".breadcrumb li:first-child span").text(" "+data.ind_category);
+
+                $(".breadcrumb li:nth-last-child(2) i").attr('class', 'fa '+data.subcategory_icon);
+                $(".breadcrumb li:nth-last-child(2) span").text(" "+data.ind_subcategory);
+
+                $(".breadcrumb li:last-child i").attr('class', 'fa '+data.ind_icon);
+                $(".breadcrumb li:last-child span").text(" "+data.ind_name);
+
+                $(".panel-body p").text(data.ind_definition);
+
+                $(".panel-body div img").attr('src','{{ MEDIA_URL }}'+data.ind_formula);
+
+                $(".panel-footer span").text(data.ind_unit);
+
+            });
+
+        });
+
+    });
+
+    </script>
     <script src="http://oss.maxcdn.com/libs/modernizr/2.6.2/modernizr.min.js" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
     <script src="{% static "js/jquery.multilevelpushmenu.min.js" %}" type="text/javascript"></script>
     <script src="{% static "js/basichtml.js" %}" type="text/javascript"></script>
 
