@@ -16,4 +16,5 @@ urlpatterns = patterns('',
     url(r'^calculo-indicador/', 'indicators.views.indicator_calc', name='calc'),
     url(r'^registro/', 'registers.views.signup', name='registro'),
     url(r'^UsuarioCreado/', 'registers.views.signupok', name='ok'),
+    url(r'^list_denied', 'indicators.views.list_by_no_denied', name='list_denied'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
