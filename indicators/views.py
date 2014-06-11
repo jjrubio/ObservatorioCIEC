@@ -38,3 +38,48 @@ def indicator_calc(request):
 	template      = "indicator_calc.html"
 	return render_to_response(template, context_instance = RequestContext(request,locals()))
 
+def list_by_no_denied(request):
+	id_desagre = request.GET['id_desagregacion']
+	print id_desagre
+	
+	if id_desagre == '1' or id_desagre == '3':
+		disintegrations = Disintegration.objects.all()
+		data = serializers.serialize('json', disintegrations)
+	elif id_desagre == '2':
+		disintegrations = Disintegration.objects.exclude(id__in=[10,4,5,6,8])
+		data = serializers.serialize('json', disintegrations)
+	elif id_desagre == '4':
+		disintegrations = Disintegration.objects.exclude(id__in=[10,2,5,6,8])
+		data = serializers.serialize('json', disintegrations)
+	elif id_desagre == '5':
+		disintegrations = Disintegration.objects.exclude(id__in=[10,2,4,6,8,9])
+		data = serializers.serialize('json', disintegrations)
+	elif id_desagre == '6':
+		disintegrations = Disintegration.objects.exclude(id__in=[10,2,4,5,8,9])
+		data = serializers.serialize('json', disintegrations)
+	elif id_desagre == '7':
+		disintegrations = Disintegration.objects.exclude(id__in=[8])
+		data = serializers.serialize('json', disintegrations)
+	elif id_desagre == '8':
+		disintegrations = Disintegration.objects.exclude(id__in=[10,2,4,5,6,7,9])
+		data = serializers.serialize('json', disintegrations)
+	elif id_desagre == '9':
+		disintegrations = Disintegration.objects.exclude(id__in=[10,5,6,8])
+		data = serializers.serialize('json', disintegrations)
+	elif id_desagre == '10':
+		disintegrations = Disintegration.objects.exclude(id__in=[2,4,5,6,8,9])
+		data = serializers.serialize('json', disintegrations)
+	elif id_desagre == '11':
+		disintegrations = Disintegration.objects.exclude(id__in=[12,13])
+		data = serializers.serialize('json', disintegrations)
+	elif id_desagre == '12':
+		disintegrations = Disintegration.objects.exclude(id__in=[11,13])
+		data = serializers.serialize('json', disintegrations)
+	elif id_desagre == '13':
+		disintegrations = Disintegration.objects.exclude(id__in=[11,12])
+		data = serializers.serialize('json', disintegrations)
+
+	#print data
+	lista = data
+	print lista
+	return HttpResponse(data, mimetype='application/json')
