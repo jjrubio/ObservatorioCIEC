@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Bulletin, Link, Download
+from models import *
 
 
 class BulletinAdmin(admin.ModelAdmin):
@@ -7,7 +7,11 @@ class BulletinAdmin(admin.ModelAdmin):
 
 
 class LinkAdmin(admin.ModelAdmin):
-    list_display = ('title', 'url', )
+    list_display = ('title','category','url', )
+
+
+class LinkCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', )
 
 
 class DownloadAdmin(admin.ModelAdmin):
@@ -16,4 +20,5 @@ class DownloadAdmin(admin.ModelAdmin):
 
 admin.site.register(Bulletin, BulletinAdmin)
 admin.site.register(Link, LinkAdmin)
+admin.site.register(LinkCategory, LinkCategoryAdmin)
 admin.site.register(Download, DownloadAdmin)

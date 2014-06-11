@@ -30,15 +30,8 @@
             <fieldset>
             <div class="bs-step inv">
             <legend>Desagregaciones</legend>
-            <div class="bs-step-inner" id="ckb">
-                {% for desag in disintegrations %}
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" value="{{ desag.id }}" > {{ desag.name }}
-                        </label>
-                    </div>
-                {% endfor %}
-                <!--div class="checkbox">
+            <div class="bs-step-inner">
+                <div class="checkbox">
                     <label>
                       <input type="checkbox"> Región natural
                     </label>
@@ -77,7 +70,7 @@
                     <label>
                       <input type="checkbox"> Actividad laboral (5 desagregaciones)
                     </label>
-                </div-->
+                </div>
                 <br>
             </div>
 
@@ -163,34 +156,5 @@
         $(function() {
             $(".bs-wizard").bs_wizard();
         });
-    </script>
-    <script type="text/javascript">
-        var limit = 2;
-        var count = 0;
-        $('input').on('change', filtro);
-        function filtro(){
-            var id_desagregacion = $(this).val();
-            if (count < limit){
-                $('#ckb').children().remove();
-                $.getJSON('/list_denied/', {'id_desagregacion': id_desagregacion},
-                    function(data){
-                        console.log(data);
-                        $.each(data, function(index, item){
-                            div ='<div class=\'bs-step-inner\' id=\'ckb\'>'+
-                                    '<div class=\'checkbox\'>'+
-                                        '<label>'+
-                                            '<input type=\'checkbox\' value=\'item.fields.id\'>'+item.fields.name+
-                                        '</label>'+
-                                    '</div>'
-                                '</div>'
-                            $('#ckb').append(div);
-                        });
-                    });
-                count++;
-            }else{
-                alert("Solo puede escoger dos descagregaciones.");
-                $(this).prop("checked", "");
-            }
-        }
     </script>
 {% endblock %}

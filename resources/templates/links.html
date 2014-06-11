@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load apptags %}
+
 {% load static from staticfiles %}
 
 {% block title %}Enlaces externos{% endblock %}
@@ -12,9 +14,19 @@
     <div>
         <h2>Enlaces Externos</h2>
     </div>
+    <div>
+        {% for cat in categories %}
+            <div>
+                    <h3>{{cat.name}}</h3>
+                    <ul>
+            {% for link in links|in_category:cat  %}
+                    <li><a target="_blank" href="{{link.url}}">{{link.title}}</a></li>
+            {% endfor %}
+                    </ul>
+            </div>
+        {% endfor %}
 
 {% endblock %}
 
 {% block extraScripts %}
-
 {% endblock %}
