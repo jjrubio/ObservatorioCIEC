@@ -5837,13 +5837,3 @@ body header .navbar .navbar-nav#user_data-menu #name-user span,
 body header .navbar .navbar-nav#user_data-menu #name-user .caret {
   color: #003A6F;
 }
-body #tab_name-menu {
-  margin-top: 40px;
-  color: #e1f6fa;
-  border-bottom-width: 4px;
-  border-bottom-style: solid;
-  border-bottom-color: #e1f6fa;
-}
-body #economy-info {
-  margin-top: 10em;
-}

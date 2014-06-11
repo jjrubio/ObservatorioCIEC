@@ -10,8 +10,13 @@ class Bulletin(models.Model):
     # pdf_src   = models.ImageField(upload_to='resources/static/pdfs/')
 
 
+class LinkCategory(models.Model):
+    name = models.CharField(max_length=50)
+
+
 class Link(models.Model):
     title = models.CharField(max_length=100)
+    category = models.ForeignKey(LinkCategory)
     url   = models.URLField()
 
 

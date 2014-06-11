@@ -15,5 +15,6 @@ urlpatterns = patterns('',
     url(r'^detalle-indicador/(?P<indicator_id>\d+)/$', 'indicators.views.indicators_detail', name='detail'),
     url(r'^calculo-indicador/', 'indicators.views.indicator_calc', name='calc'),
     url(r'^registro/', 'registers.views.signup', name='registro'),
+    url(r'^enlaces-externos/', 'resources.views.links', name='links'),
     url(r'^UsuarioCreado/', 'registers.views.signupok', name='ok'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
