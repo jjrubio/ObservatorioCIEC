@@ -79,7 +79,6 @@ def list_by_no_denied(request):
 		disintegrations = Disintegration.objects.exclude(id__in=[11,12])
 		data = serializers.serialize('json', disintegrations)
 
-	#print data
-	lista = data
-	print lista
+	print data
+	
 	return HttpResponse(data, mimetype='application/json')
