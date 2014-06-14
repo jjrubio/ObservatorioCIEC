@@ -1,69 +1,87 @@
-@import url(http://fonts.googleapis.com/css?family=Dosis:600,700,800);
-@import url(http://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic,900);
 @import "less/bootstrap.less";
 
 body{
-
-
+	font-family: Verdana;
+	font-size: 12px;
 
 	header{
 
-		.navbar{
-			margin-bottom: 0px;
+		#nav-logo{
+			font-family: "Times new Roman";
+			height: 110px;
 			border-radius: 0px;
-			border-bottom-style: solid;
-			border-bottom-width: 5px;
-			border-bottom-color: #02bdd9;
-			font-family: "Dosis";
-			font-size: 20px;
+			margin-bottom: 0px;
 
-			&#nav-menu{
-				height: 6em;
+			.navbar-header{
+				img{
+					width: 75px;
+					margin: 17px;
+				}
+
+				a{
+					margin-top: 10px;
+					font-size: 27px;
+					line-height: 27px;
+				}
+
+				i{
+					margin-left: 15px;
+					font-size: 16px;
+					color: #FFF;
+				}
 			}
 
-			.navbar-brand{
-				font-size: 27px;
-				line-height: 27px;
-			}
+			#user_data-menu{
+				margin: 82px 0px 0px 0px;
 
-			.navbar-nav{
+				#name-user{
+					font-size: 13px;
 
-				&#tabs-menu{
-
-					margin: 65px 0px 0px 0px;
-
-					li > a{
-						border-top-left-radius: 15px;
-						border-top-right-radius: 15px;
+					span,
+					.caret{
+						color: #003A6F;
 					}
-
 				}
-
-				&#user_data-menu{
-
-					margin: 82px 0px 0px 0px;
-
-					#name-user{
-						font-family: "Lato";
-						font-size: 13px;
-
-						span,
-						.caret{
-							color: #003A6F;
-						}
-
-		        	}
-
-		        	#option-user{
-
-		        	}
-
-				}
-
 			}
-
 		}
 
 	}
 
+	.core{
+	    border-style: solid;
+	    border-width: 1px;
+	    border-color: #bebebe;
+	}
+
+	#nav-menu{
+		border-style: none;
+		height: 32px;
+
+		#tabs-menu {
+			li a{
+				font-weight: bold;
+				font-size: 14px;
+			}
+		}
+	}
+
+	footer{
+
+		.core{
+			padding: 10px;
+
+			a{
+				color: #777;
+			}
+
+			a:first-child{
+				color: #F8B100;
+			}
+		}
+
+		.core:nth-child(2){
+			background-color: #777;
+			color: #FFF;
+		}
+	}
 }

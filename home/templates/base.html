@@ -20,68 +20,77 @@
 </head>
 
 <body>
-    <header role="banner">
-        <div class="navbar navbar-default navbar-fixed-top" id="nav-menu" role="navigation">
-            <div class="contain">
-                <div class="navbar-header pull-left">
-                    <i class="fa pull-left"></i>
-                    <a href="/historia" class="navbar-brand">Observatorio <br> Social - Económico del Ecuador</a>
+    <div class="container">
+        <header role="banner">
+            <div class="navbar navbar-inverse" id="nav-logo" role="navigation">
+                <div class="navbar-header">
+                    <img src="{{STATIC_URL}}img/ciec.png" class="pull-left img-nav-header" alt="ciec">
+                    <a href="/historia" class="navbar-brand">Observatorio Social - Económico del Ecuador</a>
+                    <i>"servir como base para investigaciones socioeconómicas"</i>
                 </div>
-                <!-- /.navbar-header -->
-                <ul class="nav navbar-nav" id="tabs-menu">
-                    <li><a href="/lista-indicadores/">Lista de Indicadores</a></li>
-                    <li><a href="/calculo-indicador/">Cálculo del indicador</a></li>
-                    <li><a href="#">Comercio Exterior</a></li>
-                    <li><a href="#">Boletines</a></li>
-                    <li><a href="/enlaces-externos/">Enlaces Externos</a></li>
-                    <li><a href="#">Equipo de trabajo</a></li>
-                    <li><a href="#">Contactos</a></li>
-                </ul>
-                <!-- /#tabs-menu -->
-                <ul class="nav navbar-nav pull-right" id="user_data-menu">
+                <!-- <ul class="nav navbar-nav pull-right" id="user_data-menu">
                     <li>
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
                             <i class="fa fa-user"> Bienvenido, </i><br>
                             <span><strong>Jefferson Rubio</strong></span>
                             <b class="caret"></b>
                         </a>
-                        <!-- /#name-user -->
                         <ul class="dropdown-menu" id="option-user">
                             <li><a href="#"><i class="fa fa-cog">  Mi cuenta</i></a></li>
                             <li><a href="#"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
                         </ul>
-                        <!-- /#option-user -->
                     </li>
-                </ul>
-                <!-- /#user_data-menu -->
+                </ul> -->
             </div>
+        </header>
+        <div class="core">
+            <div class="navbar navbar-default" id="nav-menu" role="navigation">
+                <ul class="nav navbar-nav pull-right" id="tabs-menu">
+                    <li><a href="/lista-indicadores/">LISTA DE INDICADORES</a></li>
+                    <li><a href="/calculo-indicador/">CÁLCULO DEL INDICADOR</a></li>
+                    <li><a href="#">COMERCIO EXTERIOR</a></li>
+                    <li><a href="#">RECURSOS</a></li>
+                </ul>
+            </div>
+        {% block content %}{% endblock %}
         </div>
-    </header>
-    {% block content %}{% endblock %}
-    <!-- Core Scripts - Include with every page -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-    <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script>
-        $(function(){
-            setNavigation();
-        });
+        <footer>
+            <div class="core text-center">
+                <a href=""> Website de Ciec </a>|
+                <a href=""> Contáctenos </a>|
+                <a href=""> Mapa del Sitio </a>|
+                <a href=""> Sugerencias </a>|
+                <a href=""> Acerca de </a>
+            </div>
+            <div class="core text-center">
+                <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
+            </div>
+        </footer>
+    </div>
 
-        function setNavigation() {
-            var path = window.location.pathname;
-            path = path.replace(/\?$/, "");
-            path = decodeURIComponent(path);
-
-            $("#tabs-menu a").each(function () {
-                var href = $(this).attr('href');
-                if(path.substring(0,href.length) === href){
-                    $(this).closest('li').addClass('active');
-                }
+        <!-- Core Scripts - Include with every page -->
+        <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+        <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script>
+            $(function(){
+                setNavigation();
             });
-        }
-    </script>
-    <!-- Page Specific Scripts -->
-    {% block extraScripts %}{% endblock %}
 
+            function setNavigation() {
+                var path = window.location.pathname;
+                path = path.replace(/\?$/, "");
+                path = decodeURIComponent(path);
+
+                $("#tabs-menu a").each(function () {
+                    var href = $(this).attr('href');
+                    if(path.substring(0,href.length) === href){
+                        $(this).closest('li').addClass('active');
+                    }
+                });
+            }
+        </script>
+        <!-- Page Specific Scripts -->
+        {% block extraScripts %}{% endblock %}
 </body>
 
 </html>
