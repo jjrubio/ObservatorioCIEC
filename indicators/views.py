@@ -3,6 +3,7 @@ from django.template.context import RequestContext
 from models import *
 from django.utils import simplejson
 from django.shortcuts import get_object_or_404
+from django.core import serializers
 
 
 def indicators_list(request):
@@ -35,6 +36,7 @@ def indicator_calc(request):
 	indicators    = Indicator.objects.all()
 	subcategories = Subcategory.objects.all()
 	categories    = Category.objects.all()
+	disintegrations = Disintegration.objects.all()
 	template      = "indicator_calc.html"
 	return render_to_response(template, context_instance = RequestContext(request,locals()))
 
