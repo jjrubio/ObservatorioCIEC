@@ -1,32 +1,21 @@
-{% extends "base.html" %}
+{% extends "resources.html" %}
 
 {% load apptags %}
 
-{% load static from staticfiles %}
+{% block arrow_bulletin %}<i class="fa fa-chevron-left pull-right"></i>{% endblock %}
+{% block arrow_link %}<i class="fa fa-chevron-right pull-right"></i>{% endblock %}
 
-{% block title %}Enlaces externos{% endblock %}
-
-{% block extraCSS %}
-    <link href="{% static "css/resources.css" %}" rel="stylesheet"  />
-{% endblock %}
-
-{% block content %}
-    <div>
-        <h2>Enlaces Externos</h2>
-    </div>
-    <div>
+{% block resource %}
+        <b id="title-content-page">Enlaces externos</b>
+        <hr class="pull-left" id="separator-content-page">
         {% for cat in categories %}
-            <div>
-                    <h3>{{cat.name}}</h3>
-                    <ul>
-            {% for link in links|in_category:cat  %}
-                    <li><a target="_blank" href="{{link.url}}">{{link.title}}</a></li>
-            {% endfor %}
-                    </ul>
-            </div>
+        <div class="external-link">
+            <b>{{cat.name}}</b>
+            <ul>
+                {% for link in links|in_category:cat  %}
+                <li><a target="_blank" href="{{link.url}}">{{link.title}} <i class="fa fa-external-link"></i></a></li>
+                {% endfor %}
+            </ul>
+        </div>
         {% endfor %}
-
-{% endblock %}
-
-{% block extraScripts %}
 {% endblock %}

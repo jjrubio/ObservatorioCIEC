@@ -5826,14 +5826,15 @@ body header #nav-logo .navbar-header i {
   color: #FFF;
 }
 body header #nav-logo #user_data-menu {
-  margin: 82px 0px 0px 0px;
+  margin: 70px 5px 0px 0px;
 }
 body header #nav-logo #user_data-menu #name-user {
   font-size: 13px;
+  color: #FFF;
+  text-decoration: none;
 }
-body header #nav-logo #user_data-menu #name-user span,
 body header #nav-logo #user_data-menu #name-user .caret {
-  color: #003A6F;
+  color: #FFF;
 }
 body .core {
   border-style: solid;
@@ -5860,4 +5861,52 @@ body footer .core a:first-child {
 body footer .core:nth-child(2) {
   background-color: #777;
   color: #FFF;
+}
+body .page {
+  margin-bottom: 40px;
+}
+body .submenu {
+  padding-right: 50px;
+  text-align: left;
+}
+body .submenu .label {
+  display: inline-block;
+  width: 220px;
+  text-align: left;
+  font-size: 14px;
+  background-color: #001c43;
+}
+body .submenu .option-submenu {
+  margin: 20px 0px 20px 20px;
+  padding: 0px 0px 10px 0px;
+  border-bottom-color: #bebebe;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+body .submenu .option-submenu a {
+  color: #777;
+  text-decoration: none;
+}
+body .submenu .option-submenu a:hover {
+  color: #333;
+}
+body .submenu .option-submenu i {
+  color: #F8B100;
+}
+body .content-page {
+  padding-left: 50px;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: #bebebe;
+}
+body .content-page #title-content-page {
+  color: #003A6F;
+  font-size: 18px;
+  margin: 10px 0 0 0;
+}
+body .content-page hr#separator-content-page {
+  border-width: 2px;
+  border-style: solid;
+  border-color: #0cb3ac;
+  width: 97%;
 }

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Recursos{% endblock %}
+
+{% block extraCSS %}
+    <link href="{% static "css/resources.css" %}" rel="stylesheet"  />
+{% endblock %}
+
+{% block content %}
+    <div class="container page">
+        <div class="submenu col-lg-3 pull-left">
+            <span class="label">RECURSOS</span>
+            <div class="option-submenu">
+                <a href="/recursos/boletines/">Boletines</a>
+                {% block arrow_bulletin %}{% endblock %}
+            </div>
+            <div class="option-submenu">
+                <a href="/recursos/enlaces-externos/">Enlaces externos</a>
+                {% block arrow_link %}{% endblock %}
+            </div>
+        </div>
+        <div class="content-page col-lg-8 pull-left">
+            {% block resource %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

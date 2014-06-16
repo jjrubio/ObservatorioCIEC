@@ -32,14 +32,15 @@ body{
 			}
 
 			#user_data-menu{
-				margin: 82px 0px 0px 0px;
+				margin: 70px 5px 0px 0px;
 
 				#name-user{
 					font-size: 13px;
+					color: #FFF;
+					text-decoration: none;
 
-					span,
 					.caret{
-						color: #003A6F;
+						color: #FFF;
 					}
 				}
 			}
@@ -84,4 +85,64 @@ body{
 			color: #FFF;
 		}
 	}
+
+	.page{
+		margin-bottom: 40px;
+	}
+
+	.submenu{
+		padding-right: 50px;
+		text-align: left;
+
+		.label{
+		  	display: inline-block;
+    			width: 220px;
+    			text-align: left;
+			font-size: 14px;
+			background-color: #001c43;
+		}
+
+		.option-submenu{
+			margin: 20px 0px 20px 20px;
+			padding: 0px 0px 10px 0px;
+			border-bottom-color: #bebebe;
+			border-bottom-style: solid;
+		    	border-bottom-width: 1px;
+
+		    	a{
+			    	color: #777;
+			    	text-decoration: none;
+
+			    	&:hover{
+			    		color: #333;
+			    	}
+		    	}
+
+		    	i{
+		    		color: #F8B100;
+		    	}
+		}
+
+	}
+
+	.content-page{
+		padding-left: 50px;
+		border-left-style: solid;
+		border-left-width: 1px;
+		border-left-color: #bebebe;
+
+		#title-content-page{
+		    color: #003A6F;
+		    font-size: 18px;
+		    margin: 10px 0 0 0;
+		}
+
+		hr#separator-content-page{
+		    border-width: 2px;
+		    border-style: solid;
+		    border-color: #0cb3ac;
+		    width: 97%;
+		}
+	}
+
 }

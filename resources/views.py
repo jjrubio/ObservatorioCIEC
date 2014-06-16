@@ -10,3 +10,9 @@ def links(request):
     categories = LinkCategory.objects.all()
     template = "links.html"
     return render_to_response(template, context_instance = RequestContext(request,locals()))
+
+def bulletins(request):
+    links = Link.objects.all()
+    categories = LinkCategory.objects.all()
+    template = "bulletins.html"
+    return render_to_response(template, context_instance = RequestContext(request,locals()))

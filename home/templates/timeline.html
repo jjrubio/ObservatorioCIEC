@@ -10,9 +10,9 @@
 
 {% block content %}
 
-            <div class="container">
-                <h3 id="timeline">Historia</h3>
-                <hr class="pull-left" id="separator-timeline">
+            <div class="container content-page">
+                <b id="title-content-page">Historia</b>
+                <hr class="pull-left" id="separator-content-page">
                 <ul class="timeline">
                         {% for ev in events %}
                         <li class="{% if forloop.counter|divisibleby:2 %} timeline-inverted {% endif %}">
