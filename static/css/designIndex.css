@@ -3,7 +3,7 @@
   font-size: 18px;
 }
 
-#titulo-secundario{
+.titulo-secundario{
   font-family: "Verdana";
   font-size: 16px;
 }
@@ -20,7 +20,7 @@
   margin-top: 2.5em;
 }
 .form_login{
-  margin-bottom: 15px;
+  margin-bottom: ;
 }
 #user_remember_me{
   float: left;
@@ -33,28 +33,7 @@
   font-size: 13px;
 }
 .form_registro{
-  margin-bottom: 15px;
-}
-#myform{
-  margin-left: 10em;
-  margin-right: -15em;
-  width: 84%;
-  padding: 3em;
-  padding-right: 12em;
-}
-#myform2{
-  margin-left: 20em;
-  margin-right: -15em;
-  margin-top: 3em;
-  width: 84%;
-  padding: 3em;
-  padding-right: 12em;
-  border: 3px solid #3399FF;
-  background-color: #FFFFFF;
-  /* css3 */
-  -webkit-border-radius:20px;
-  -moz-border-radius:20px;
-  border-radius:20px;
+  margin-bottom: ;
 }
 p{
   margin-left: 17em;
@@ -200,6 +179,9 @@ input{
       width:75px; 
       height:75px;
       margin-left: -2em;
+    }
+    .block_content{
+      margin-top: 8em;
     }
 }
 @media only screen and (max-width : 1024px), screen and (max-height: 768px) {

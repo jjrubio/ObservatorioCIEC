@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="{% static "css/designIndex.css" %}" />
 </head>
 <body>
-    <!-- Seccion menu principal -->
     <header>
         <div class="container">
             <div class="col-md-12">
@@ -18,16 +17,34 @@
                         <a href='/'><img id="myimage" src="{{ STATIC_URL }}img/ciec.png" alt="My image" /></a>
                     </div>
                     <ul class="nav navbar-nav pull-left" id="top-nav">
-                        <li class="active"><a href="#" class="navbar-brand">Inicio</a></li>
-                        <li><a href="#equipo" class="navbar-brand">Equipo de Trabajo</a></li>
-                        <li><a href="#caracteristicas" class="navbar-brand">Características</a></li>
-                        <li><a href="historia" class="navbar-brand">Ingresa al Sitio</a></li>
+                        <li class="active"><a href="/slider" class="navbar-brand">Inicio</a></li>
+                        <li><a href="/team" class="navbar-brand">Equipo de Trabajo</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Información del Proyecto<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/features">Características</a></li>
+                                <li><a href="/historia">Reseña</a></li>
+                            </ul>
+                        </li>
                     </ul>
                     <ul class="nav pull-right navbar-nav" id="login">
-                        <li><a href="registro"><i class="fa fa-user"></i>Regístrate</a></li>
+                        <li><a href="/registro"><i class="fa fa-user"></i>Regístrate</a></li>
+                        <li><a href="#"><i class="fa fa-user"></i>Login</a></li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">Iniciar Sesión <i class="fa fa-lock"></i><strong class="caret"></strong></a>
                             <div class="dropdown-menu menu" >
+                                <section>
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        <label class="string optional" for="id_username"> Usuario </label>
+                                        <input class="form-control" id="id_username" type="text" name="username" size="30" />
+                                        <label class="string optional" for="id_password"> Contraseña </label>
+                                        <input class="form-control" id="id_password" type="password" name="password" size="30" />
+                                        <input class="btn btn-primary btn_login" type="submit" value="Ingresar">
+                                    </form>
+                                </section>
+                            </div>
+                            <!--div class="dropdown-menu menu" >
                                 <form action="" method="post" accept-charset="UTF-8">
                                     <label class="string optional" for="user_remember_me"> Usuario </label>
                                     <input class="form-control" id="user_username" type="text" name="user[username]" size="30" />
@@ -36,61 +53,22 @@
                                     <input id="user_remember_me" type="checkbox" name="user[remember_me]" value="1" />
                                     <label class="string optional" for="user_remember_me"> Recuerdame </label>
                                     <!--input class="btn btn-primary btn_login" type="submit" name="commit" value="Sign In" /-->
-                                    <input class="btn btn-primary btn_login" type="submit" value="Ingresar">
+                                    <!--input class="btn btn-primary btn_login" type="submit" value="Ingresar">
                                 </form>
-                            </div>
+                            </div-->
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
     </header>
-    <div class="container">
-        <hr>
-        <div id="myslide" class="carousel slide" data-ride="carousel" >
-            <div class="carousel-inner">
-                {% if imagenes %}
-                    {% for imag in imagenes %}
-                        {% if forloop.first %}
-                            <div class='item active'>
-                                <img src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" style="width:100%; height:350px;"/>
-                            </div>
-                        {% else %}
-                            <div class='item'>
-                                <img src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" style="width:100%; height:350px;"/>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                    <div class='item active' id="noavailable">
-                        <img src="{{ STATIC_URL }}img/imgnotfound.png" alt="My image" style="width:100%; height:350px;"/>
-                    </div>
-                {% endif %}
-            </div>
-            <a href="#myslide" data-slide="prev" class="carousel-control left"><i class="fa fa-arrow-circle-left fa-3x arrow"></i></a>
-            <a href="#myslide" data-slide="next" class="carousel-control right"><i class="fa fa-arrow-circle-right fa-3x arrow"></i></a>
-        </div>
-        <div id="titulo-footer">
-            <div class="col-lg-1 col-xs-2">
-                <img src="{{ STATIC_URL }}img/espol.png" alt="My image" class="imagen-logo"/>
-            </div>
-            <div class="col-lg-6 col-xs-7 text-center">
-                <h2 class="titulo">BIENVENIDO AL</h2>
-                <h2 class="titulo">OBSERVATORIO SOCIAL-ECONÓMICO DEL ECUADOR</h2>
-            </div>
-            <div class="col-lg-1 col-xs-1">
-                <img src="{{ STATIC_URL }}img/fsch.png" alt="My image" class="imagen-logo"/>
-            </div>
-        </div>
-        
-    </div>
-    <div id="contenido"></div>
+    {% block content %}{% endblock %}
     <div class="container" id="footer-responsive">
         <footer>
             <div class="core text-center">
                 <a href=""> Website de Ciec </a>|
                 <a href=""> Contáctenos </a>|
-                <a href=""> Mapa del Sitio </a>|
+                <a href="/map"> Mapa del Sitio </a>|
                 <a href=""> Sugerencias </a>|
                 <a href=""> Acerca de </a>
             </div>
@@ -100,7 +78,6 @@
         </footer>
     </div>
     
-    <!-- Seccion Scripts -->
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
     <script type="text/javascript" src="{% static "js/jquery.nav.js" %}"></script>
     <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>

@@ -1,30 +1,22 @@
-{% load static from staticfiles %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="{% static "css/style.css" %}" />
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-    <link rel="stylesheet" href="{% static "css/designIndex.css" %}" />
-</head>
-<body>
-    <div id="myform">
-        <h2 id="regis">Registro</h2>
-        <form action="" method="post" id="myform2">
-            {% csrf_token %}
-            {{form.as_p}}
-            <input name="" type="submit" class="btn btn-primary btn_login" value="Crear Cuenta" style="width:130px; margin-left:30em;"/>
-        </form>
-    </div>
+{% extends "index.html" %}
 
-    <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/jquery.nav.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
-    <script type="text/javascript">
-        $('#btnSave').click(function() {
-            alert('Cambios Guardados exitosamente');
-        });
-    </script>
-</body>
-</html>
+{% load static from staticfiles %}
+
+{% block title %}Registro{% endblock %}
+
+{% block extraCSS %}
+{% endblock %}
+
+{% block content %}
+    <div class="container block_content" >
+        <div>
+            <h1 class="titulo-secundario">Formulario para registro</h1>
+            <hr>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input name="" type="submit" class="btn btn-primary btn_login" value="Crear Cuenta" style="width:130px; margin-left:30em;"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}
