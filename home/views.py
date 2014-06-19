@@ -6,7 +6,6 @@ from django.template.context import RequestContext
 from features.models import Description
 from home.models import Slider, Timeline
 from staff.models import Personal_data
-from registers.forms import UserAuthenticationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 

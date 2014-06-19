@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Inicias Sesion{% endblock %}
+
+{% block extraCSS %}
+{% endblock %}
+
+{% block content %}
+	<div class="container block_content">
+		<h1 class="titulo-secundario" >Login</h1>
+		<hr>
+	    <form id="login_form" method="post" action="/login">
+            {% csrf_token %}
+            Usuario: <input type="text" name="username" value="" size="50" />
+            <br />
+            Contraseña: <input type="password" name="password" value="" size="50" />
+            <br />
+            <input type="submit" class="btn btn-primary btn_login" name="submit" value="Submit" style="width:130px; margin-left:30em;" />
+        </form>
+	</div>
+{% endblock %}
