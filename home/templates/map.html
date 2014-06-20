@@ -1,9 +1,22 @@
-<div class="google-map-canvas" id="map-canvas">-</div>
+{% extends "index.html" %}
 
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+{% load static from staticfiles %}
+
+{% block title %}Mapa del Sitio{% endblock %}
+
+{% block content %}
+    <div class="container block_content" >
+        <h2 class="titulo-secundario">Mapa de Sitio</h2>
+        <hr>
+        <div class="google-map-canvas" id="map-canvas">-</div>
+    </div>
+{% endblock %}
+
+{% block extraScripts %}
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     <script type="text/javascript">
         function initialize() {
-            var myLatlng = new google.maps.LatLng(-2.1477, -79.96606);//
+            var myLatlng = new google.maps.LatLng(-2.1477, -79.96606);
             var mapOptions = {
                 zoom: 18,
                 center: myLatlng
@@ -35,3 +48,4 @@
           }
           google.maps.event.addDomListener(window, 'load', initialize);
     </script>
+{% endblock %}

@@ -9,113 +9,49 @@
     <link rel="stylesheet" href="{% static "css/designIndex.css" %}" />
 </head>
 <body>
-    <!-- Seccion menu principal -->
     <header>
         <div class="container">
-            <div class="navbar navbar-inverse navbar-fixed-top" id="menu">
-                <div class="container navbar-header pull-left">
-                    <a href=#><img id="myimage" src="{{ STATIC_URL }}img/ciec.png" alt="My image" style="width:75px; height:75px;" /></a>
-                </div>
-                    <ul class="nav navbar-nav" id="top-nav">
-                        <li class="active"><a href="#" class="navbar-brand">Inicio</a></li>
-                        <li><a href="#equipo" class="navbar-brand">Equipo de Trabajo</a></li>
-                        <li><a href="#caracteristicas" class="navbar-brand">Características</a></li>
-                        <li><a href="#map-canvas" class="navbar-brand">Contactos</a></li>
-                    </ul>
-                    <ul class="nav pull-right navbar-nav" id="login">
-                        <li><a href="historia">Ingresa al Sitio</a></li>
-                        <li><a href="registro"><i class="fa fa-user"></i>Regístrate</a></li>
+            <div class="col-md-12">
+                <div class="navbar navbar-inverse navbar-fixed-top">
+                    <div class="navbar-header pull-left" id="menu">
+                        <a href='/'><img id="myimage" src="{{ STATIC_URL }}img/ciec.png" alt="My image" /></a>
+                    </div>
+                    <ul class="nav navbar-nav pull-left" id="top-nav">
+                        <li class="active"><a href="/" class="navbar-brand">Inicio</a></li>
+                        <li><a href="/team" class="navbar-brand">Equipo de Trabajo</a></li>
                         <li class="dropdown">
-                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Iniciar Sesión <i class="fa fa-lock"></i><strong class="caret"></strong></a>
-                            <div class="dropdown-menu menu" >
-                                <form action="" method="post" accept-charset="UTF-8">
-                                    <label class="string optional" for="user_remember_me"> Usuario </label>
-                                    <input class="form-control" id="user_username" type="text" name="user[username]" size="30" />
-                                    <label class="string optional" for="user_remember_me"> Contraseña </label>
-                                    <input class="form-control" id="user_password" type="password" name="user[password]" size="30" />
-                                    <input id="user_remember_me" type="checkbox" name="user[remember_me]" value="1" />
-                                    <label class="string optional" for="user_remember_me"> Recuerdame </label>
-                                    <!--input class="btn btn-primary btn_login" type="submit" name="commit" value="Sign In" /-->
-                                    <input class="btn btn-primary btn_login" type="submit" value="Ingresar">
-                                </form>
-                            </div>
+                            <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Información del Proyecto<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/features">Características</a></li>
+                                <li><a href="/historia">Reseña</a></li>
+                            </ul>
                         </li>
                     </ul>
+                    <ul class="nav pull-right navbar-nav" id="login">
+                        <!--li><a href="/registro"><i class="fa fa-user"></i>Regístrate</a></li-->
+                        <li><a href="/register"><i class="fa fa-user"></i>Regístrate</a></li>
+                        <li><a href="/login"><i class="fa fa-user"></i>Login</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </header>
-    <!-- Fin Seccion menu principal -->
-    <!-- Seccion de imagenes -->
-    <div id="slider">
-        <div id="myslide" class="carousel slide" data-ride="carousel" >
-            <div class="carousel-inner">
-                {% if imagenes %}
-                    {% for imag in imagenes %}
-                        {% if forloop.first %}
-                            <div class='item active'>
-                                <img src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" style="width:100%; height:575px;"/>
-                            </div>
-                        {% else %}
-                            <div class='item'>
-                                <img src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" style="width:100%; height:575px;"/>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                    <div class='item active' id="noavailable">
-                        <img src="{{ STATIC_URL }}img/imgnotfound.png" alt="My image" style="width:100%; height:575px;"/>
-                    </div>
-                {% endif %}
+    {% block content %}{% endblock %}
+    <div class="container" id="footer-responsive">
+        <footer>
+            <div class="core text-center">
+                <a href=""> Website de Ciec </a>|
+                <a href=""> Contáctenos </a>|
+                <a href="/map"> Mapa del Sitio </a>|
+                <a href=""> Sugerencias </a>|
+                <a href=""> Acerca de </a>
             </div>
-            <a href="#myslide" data-slide="prev" class="carousel-control left"><i class="fa fa-arrow-circle-left fa-3x arrow"></i></a>
-            <a href="#myslide" data-slide="next" class="carousel-control right"><i class="fa fa-arrow-circle-right fa-3x arrow"></i></a>
-        </div>
+            <div class="core text-center">
+                <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
+            </div>
+        </footer>
     </div>
-    <!-- Fin Seccion de imagenes -->
-    <!-- Seccion titulo y logos del sitio web -->
-    <div class="row" id="mytitle">
-        <div class="col-lg-1"><img src="{{ STATIC_URL }}img/espol.png" alt="My image" style="width:100px; height:100px;" /></div>
-        <div class="col-lg-10 text-center">
-            <h3>BIENVENIDO AL</h3>
-            <h2>OBSERVATORIO SOCIAL-ECONÓMICO DEL ECUADOR</h2>
-        </div>
-        <div class="col-lg-1"><img src="{{ STATIC_URL }}img/fsch.png" alt="My image" style="width:100px; height:100px;" /></div>
-    </div>
-    <!-- Fin Seccion titulo y logos del sitio web -->
-    <!-- Seccion Grupo de Trabajo -->
-    {% include "team.html" %}
-    <!-- Fin Seccion Grupo de Trabajo -->
-    <!-- Seccion Caracteristicas -->
-    <div class="container block" id="caracteristicas">
-        <h2 class="page-header">Características</h2>
-        <ul class="text-justify">
-            {% if description %}
-                {% for detail in description %}
-                    <li>{{detail}} </li> <br>
-                {% endfor %}
-            {% else %}<br>
-                NO HAY CARACTERISTICAS GUARDADAS.
-                <p>
-                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
-                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
-                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
-                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
-                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
-                </p>
-            {% endif %}
-        </ul>
-    </div>
-    <!-- Fin Seccion Caracteristicas -->
-    <!-- Seccion Contactos -->
-    {% include "contact.html" %}
-    <!-- Fin Seccion Contactos -->
-    <!-- Seccion Registro -->
-    <!--div class="container block" id="registro">
-        <h2 class="page-header">Registro</h2>
-        {% include "signup.html" %}
-    </div-->
-    <!-- Fin Seccion Registro -->
-    <!-- Seccion Scripts -->
+    
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
     <script type="text/javascript" src="{% static "js/jquery.nav.js" %}"></script>
     <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
@@ -128,19 +64,7 @@
             setTimeout(function(){
                 $("#myslide").carousel("next");
             }, 2000);
-            $('#top-nav').onePageNav({
-                currentClass: 'active',
-                changeHash: true,
-                scrollSpeed: 750
-            });
-        });
-        $(function() {
-            $('.dropdown-toggle').dropdown();
-            $('.dropdown input, .dropdown label').click(function(e) {
-                e.stopPropagation();
-            });
         });
     </script>
-    <!-- Fin Seccion Scripts -->
 </body>
 </html>

@@ -6,6 +6,11 @@
 {% block arrow_link %}<i class="fa fa-chevron-left pull-right"></i>{% endblock %}
 
 {% block resource %}
+	{% if user.is_authenticated %}
         <b id="title-content-page">Boletines</b>
         <hr class="pull-left" id="separator-content-page">
+    {%else%}
+    	<p>Para visualizar o descargar los boletines, por favor <a href="/login">Inicie Sesión</a> o
+    	<a href="/register">Regístrese</a></p>
+    {%endif%}
 {% endblock %}

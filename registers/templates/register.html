@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Registro{% endblock %}
+
+{% block extraCSS %}
+{% endblock %}
+
+{% block content %}
+	<div class="container block_content">
+		<h1 class="titulo-secundario" >Formulario de Registro</h1>
+		<hr>
+	    {% if registered %}
+	    	<p>Gracias por registrarte en el Observartorio Social Económico del Ecuador</p>
+	    	<p>Con tu registro puedes acceder a bla bla...</p>
+	    	<a href="/">Ir a Home</a><br />
+	    {% else %}
+	        <form id="user_form" method="post" action="/register" >
+	            {% csrf_token %}
+	            {{ user_form.as_p }}
+	            {{ profile_form.as_p }}
+	            <input type="submit" class="btn btn-primary btn_login" name="submit" value="Submit" style="width:130px; margin-left:30em;" />
+	        </form>
+	    {% endif %}
+	</div>
+{% endblock %}

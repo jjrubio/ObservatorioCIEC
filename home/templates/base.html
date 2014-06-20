@@ -25,22 +25,28 @@
             <div class="navbar navbar-inverse" id="nav-logo" role="navigation">
                 <div class="navbar-header">
                     <img src="{{STATIC_URL}}img/ciec.png" class="pull-left img-nav-header" alt="ciec">
-                    <a href="/historia" class="navbar-brand">Observatorio Social - Económico del Ecuador</a>
+                    <a href="/historia" class="navbar-brand">Observatorio Económico - Social del Ecuador</a>
                     <i>"servir como base para investigaciones socioeconómicas"</i>
                 </div>
-                <ul class="pull-right" id="user_data-menu">
-                    <li>
-                        <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
-                            <i class="fa fa-user"> Bienvenido, </i><br>
-                            <span><strong>Jefferson Rubio</strong></span>
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="pull-right dropdown-menu" id="option-user">
-                            <li><a href="#"><i class="fa fa-cog">  Mi cuenta</i></a></li>
-                            <li><a href="#"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
-                        </ul>
-                    </li>
-                </ul>
+                {% if user.is_authenticated %}
+                    <ul class="pull-right" id="user_data-menu">
+                        <li>
+                            <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
+                                <i class="fa fa-user"> Bienvenido, </i><br>
+                                <!--span><strong>Jefferson Rubio</strong></span-->
+                                <span><strong>{{user.first_name}}</strong></span>
+                                <span><strong>{{user.last_name}}</strong></span>
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="pull-right dropdown-menu" id="option-user">
+                                <li><a href="#"><i class="fa fa-cog">  Mi cuenta</i></a></li>
+                                <li><a href="/logout"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                {% else %}
+                    <p>Iniciar Sesion</p>
+                {% endif %}
             </div>
         </header>
         <div class="core">
