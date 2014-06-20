@@ -15,4 +15,4 @@ class UserProfile(models.Model):
 	contador_visita = models.IntegerField(default=0)
 
 	def __unicode__(self):
-		return self.user.username
+		return u'%s %s - %s' % (self.user.first_name, self.user.last_name, self.user.username)
