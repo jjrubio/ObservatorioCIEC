@@ -1,3 +1,9 @@
+.panel {
+  margin: 10px;
+  border-color: #bebebe;
+  border-style: solid;
+  border-width: 1px;
+}
 #pushobj {
   position: absolute;
   margin-right: 100px;
