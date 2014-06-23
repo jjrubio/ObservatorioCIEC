@@ -84,3 +84,9 @@ def list_by_no_denied(request):
 	print data
 	
 	return HttpResponse(data, mimetype='application/json')
+
+def list_desagregation(request):
+	disintegrations = Disintegration.objects.all()
+	data = serializers.serialize('json', disintegrations)
+	print data
+	return HttpResponse(data, mimetype='application/json')
