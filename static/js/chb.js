@@ -47,26 +47,22 @@ $(document).ready( function() {
         $(":checkbox").click(function(){
             var id_2 = $(this).attr('id');
             var isChecked_2 = $(this).attr('checked');
-            if(id_2 == id_1){
-                count--;
-                loadCheckbox();
+            console.log("Id del segundo checkbox: ", id_2);
+            
+            if(count<limit){
+                if(id_2 == id_1){
+                    count--;
+                    loadCheckbox();
+                    console.log("id_2 == id_1, count: ", count);
+                }else{
+                    count++;
+                    console.log("id_2 != id_1, count: ", count);
+                }
             }
             else{
-                count++;
-            }
-            if(id_2 == id_2){
-                count--;
-            }else{
-                count++;
-            }
-            if(count < limit){
-                count++;
-                console.log("Id del segundo checkbox: ", id_2);
-            }else{
                 alert("Solo se puede escoger dos desagregaciones.")
                 $(this).prop("checked", false);
             }
-            
         });
     }
 });
