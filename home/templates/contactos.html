@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Mapa del Sitio{% endblock %}
+
+{% block content %}
+    <div class="container block_content" >
+    	<h1 class="titulo">Contactos</h1>
+    	<hr class="myhr">
+    	<!--ul class="text-justify">
+    		<p>Oficinas Principales: </p>
+	    	<p>Centro de Investigaciones Económicas - Facultad de Economía y Negocios</p>
+	    	<p>Campus Gustavo Galindo Velasco</p>
+	    	<p>Km 30.5 Via Perimetral</p>
+	    	<p>(+593)-42-269097</p>
+	    	<p>(+593)-42-269098</p>
+	    	<p>Guayaquil - Ecuador</p>
+    	</ul-->
+        <div class="google-map-canvas" id="map-canvas">-</div>
+    </div>
+{% endblock %}

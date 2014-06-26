@@ -6,8 +6,8 @@
 
 {% block content %}
     <div class="container block_content" >
-        <h2 class="titulo-secundario">Características</h2>
-        <hr>
+        <h2 class="titulo">Características</h2>
+        <hr class="myhr">
         <ul class="text-justify">
             {% if description %}
                 {% for detail in description %}
@@ -24,5 +24,6 @@
                 </p>
             {% endif %}
         </ul>
+        <div class="separador"></div>
     </div>
 {% endblock %}

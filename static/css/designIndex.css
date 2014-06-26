@@ -1,11 +1,24 @@
+.myhr{
+  border-width: 2px;
+  border-style: solid;
+  border-color: #0cb3ac;
+  width: 99.9%;
+}
+
 .titulo{
   font-family: "Verdana";
   font-size: 18px;
+  color: #001c43;
+  font-weight: bold;
 }
-
+.active{
+    background-color:black;
+}
 .titulo-secundario{
   font-family: "Verdana";
   font-size: 16px;
+  color: #001c43;
+  font-weight: bold;
 }
 #map-canvas{
   width: 100%;
@@ -34,9 +47,6 @@
 }
 .form_registro{
   margin-bottom: ;
-}
-p{
-  margin-left: 17em;
 }
 label{
   display: block;
@@ -92,7 +102,15 @@ input{
   margin-left: 5em;
   margin-top: -14em;
 }
-
+#menu-izquierdo{
+  float: left;
+  margin-top: 3em;
+  margin-right: 2em;
+  margin-bottom: 20em;
+}
+#drop{
+  margin-right: 5em;
+}
 /*Responsive*/
 /* Large Devices, Wide Screens */
 @media only screen and (max-width : 1920px), screen and (max-height: 1080px){
@@ -129,6 +147,9 @@ input{
     #myslide{
       margin-top: 7em;
     }
+    .separador{
+      margin-bottom: 32em;
+    }
 }
 /* Large Devices, Wide Screens */
 @media only screen and (max-width : 1280px), screen and (max-height: 1080px) {
@@ -158,8 +179,12 @@ input{
   body{
         padding-top: 1em;
     }
+    #menu{
+      margin-right: 2em;
+      margin-left: 22em
+    }
     #login{
-      margin-right: 9em;
+      margin-right: 7em;
     }
     #myimage{
       margin-left: -3em;
@@ -186,7 +211,7 @@ input{
 }
 @media only screen and (max-width : 1024px), screen and (max-height: 768px) {
   #login{
-    margin-right: 3em;
+    margin-right: 1em;
   }
   #myimage{
     margin-left: -13em;
@@ -194,7 +219,8 @@ input{
     height:50px;
   }
   #menu{
-    margin-right: 4em;
+    margin-right: 2em;
+    margin-left: 17em;
   }
   #top-nav{
     margin-left: -11em;
@@ -204,6 +230,8 @@ input{
   }
   #titulo-footer{
     margin-top: 4em;
+    margin-right: 4em;
+    margin-left: 14em;
   }
   #footer-responsive{
     margin-top: 2em;
@@ -211,7 +239,7 @@ input{
 }
 @media only screen and (max-width : 1280px), screen and (max-height: 800px) {
   #login{
-    margin-right: 3em;
+    margin-right: 5em;
   }
   #myimage{
     margin-left: -13em;
@@ -220,6 +248,7 @@ input{
   }
   #menu{
     margin-right: 4em;
+    margin-left: 19em;
   }
   #top-nav{
     margin-left: -11em;
