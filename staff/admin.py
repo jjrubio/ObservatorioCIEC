@@ -3,7 +3,7 @@ from models import Personal_data
 
 
 class Personal_dataAdmin(admin.ModelAdmin):
-    list_display = ('name', 'lastname', 'about', 'phone', 'email', 'facebook', 'twitter', 'linkedin', 'img_src')
+    list_display = ('grado_academico', 'nombre', 'apellido', 'correo', 'resumen', )
 
 
 admin.site.register(Personal_data, Personal_dataAdmin)

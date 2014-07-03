@@ -18,12 +18,8 @@ def map(request):
     template = 'map.html'
     return render_to_response(template, context_instance = RequestContext(request,locals()))    
 
-def home (request):
-    signin = UserAuthenticationForm(request.POST or None)
-    if signin.is_valid():
-        login(request, signin.get_user())
-
-    template = 'index.html'
+def contactos (request):
+    template = 'contactos.html'
     return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 def timeline (request):

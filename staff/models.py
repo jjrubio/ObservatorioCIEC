@@ -1,13 +1,15 @@
 from django.db import models
 
-
 class Personal_data(models.Model):
-    name     = models.CharField(max_length=50)
-    lastname = models.CharField(max_length=50)
-    about    = models.TextField()
-    phone    = models.CharField(max_length=15)
-    email    = models.EmailField()
-    facebook = models.URLField()
-    twitter  = models.URLField()
-    linkedin = models.URLField()
-    img_src  = models.ImageField(upload_to='staff_pic/')
+	GRADO_ACADEMICO_CHOOSE  =  (
+		( 'Ing.' ,   'Ingeniero'),
+    	( 'MSc.' ,   'Master'	),
+    	( 'PhD.' ,   'Doctor'),
+    	( 'Econ.' ,  'Economista'),
+    )
+    
+	nombre = models.CharField(max_length=50)
+	apellido = models.CharField(max_length=50)
+	grado_academico = models.CharField(max_length=5, choices = GRADO_ACADEMICO_CHOOSE , default = 'Economista')
+	correo = models.EmailField()
+	resumen = models.TextField()

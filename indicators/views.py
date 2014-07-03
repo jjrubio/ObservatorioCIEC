@@ -105,7 +105,11 @@ def list_by_no_denied(request):
 	elif id_desagre == '13':
 		disintegrations = Disintegration.objects.exclude(id__in=[11,12])
 		data = serializers.serialize('json', disintegrations)
-
 	print data
+	return HttpResponse(data, mimetype='application/json')
 
+def list_desagregation(request):
+	disintegrations = Disintegration.objects.all()
+	data = serializers.serialize('json', disintegrations)
+	print data
 	return HttpResponse(data, mimetype='application/json')

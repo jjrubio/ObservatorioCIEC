@@ -1,11 +1,24 @@
+.myhr{
+  border-width: 2px;
+  border-style: solid;
+  border-color: #0cb3ac;
+  width: 99.9%;
+}
+
 .titulo{
   font-family: "Verdana";
   font-size: 18px;
+  color: #001c43;
+  font-weight: bold;
 }
-
+.active{
+    background-color:black;
+}
 .titulo-secundario{
   font-family: "Verdana";
   font-size: 16px;
+  color: #001c43;
+  font-weight: bold;
 }
 #map-canvas{
   width: 100%;
@@ -35,6 +48,7 @@
 .form_registro{
   margin-bottom: ;
 }
+
 label{
   display: block;
   margin: 0px 0px 5px;
@@ -42,10 +56,10 @@ label{
 input{
   border: 1px solid #DADADA;
   /*color: #888;*/
-  height: 24px;
-  margin-bottom: 16px;
-  margin-right: 6px;
-  margin-top: 2px;
+  height: 2em;
+  margin-bottom: 1em;
+  margin-right: 3em;
+  margin-top: 1em;
   outline: 0 none;
   padding: 3px 3px 3px 5px;
   width: 26%;
@@ -68,27 +82,30 @@ input{
   margin-top: -3em;
   margin-left: 25em;
 }
-.social_media{
-  width: 25px;
-  height: 25px;
+#drop{
+  margin-right: 5em;
 }
-#div_about{
-  width: 623px;
-  height: 257px;
-  margin-left: 16em;
-  margin-top: -18em;
+.text-profile{
+  text-align: justify;
+  margin-right: 20%;
+  margin-left: 20%;
+}
+.text-login{
+  margin-top: 15em;
+  margin-left: 35em;
+}
+#input_user{
+  margin-left: 2.8em;
+}
+#btn-login{
+  width:130px;
+  margin-left:40em;
+  margin-bottom: 15em;
+}
+#user_form{
+  margin-left: 3em;
 }
 
-#pic_profile{
-  position: relative;
-  width:200px;
-  height:250px;
-  top:12em;
-}
-#div_profiles{
-  margin-left: 5em;
-  margin-top: -14em;
-}
 
 /*Pruebas personales: Jeff*/
 
@@ -121,6 +138,7 @@ body{
   margin-left: 22em;
   margin-bottom: 14em;
 }
+
 /*Responsive*/
 /* Large Devices, Wide Screens */
 /* @media only screen and (max-width : 1920px), screen and (max-height: 1080px){
@@ -157,6 +175,9 @@ body{
     #myslide{
       margin-top: 7em;
     }
+    .separador{
+      margin-bottom: 32em;
+    }
 }
 @media only screen and (max-width : 1280px), screen and (max-height: 1080px) {
     body{
@@ -185,8 +206,12 @@ body{
   body{
         padding-top: 1em;
     }
+    #menu{
+      margin-right: 2em;
+      margin-left: 22em
+    }
     #login{
-      margin-right: 9em;
+      margin-right: 7em;
     }
     #myimage{
       margin-left: -3em;
@@ -213,7 +238,7 @@ body{
 }
 @media only screen and (max-width : 1024px), screen and (max-height: 768px) {
   #login{
-    margin-right: 3em;
+    margin-right: 1em;
   }
   #myimage{
     margin-left: -13em;
@@ -221,7 +246,8 @@ body{
     height:50px;
   }
   #menu{
-    margin-right: 4em;
+    margin-right: 2em;
+    margin-left: 17em;
   }
   #top-nav{
     margin-left: -11em;
@@ -231,6 +257,8 @@ body{
   }
   #titulo-footer{
     margin-top: 4em;
+    margin-right: 4em;
+    margin-left: 14em;
   }
   #footer-responsive{
     margin-top: 2em;
@@ -238,7 +266,7 @@ body{
 }
 @media only screen and (max-width : 1280px), screen and (max-height: 800px) {
   #login{
-    margin-right: 3em;
+    margin-right: 5em;
   }
   #myimage{
     margin-left: -13em;
@@ -247,6 +275,7 @@ body{
   }
   #menu{
     margin-right: 4em;
+    margin-left: 19em;
   }
   #top-nav{
     margin-left: -11em;

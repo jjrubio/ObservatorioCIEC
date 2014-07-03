@@ -8,11 +8,22 @@
 {% endblock %}
 
 {% block content %}
-	<!-- <div class="container block_content" >
-	    <h1 class="titulo-secundario">Equipo de Trabajo</h1>
-	    <hr> -->
     	<div class="content-page-2" >
-	        <b id="title-content-page">Equipo de Trabajo</b>
-	        <hr class="pull-left" id="separator-content-page">
+	    <b id="title-content-page">Equipo de Trabajo</b>
+	    <hr class="pull-left" id="separator-content-page">
+	    <br>
+	    {% if profile %}
+	    	{% for i in profile%}
+	    		<div class="text-profile">
+	    			<p><strong>{{i.grado_academico}} {{i.nombre}} {{i.apellido}}</strong></p>
+		    		<p><strong>{{i.correo}}</strong></p>
+		    		<p>{{i.resumen}}</p>
+		    		<br>
+	    		</div>
+	    	{%  endfor %}
+	    {% else %}
+	    	<p>No hay datos a mostrar</p>
+	    {%  endif %}
+	    <div id="datos"></div>
 	</div>
 {% endblock %}

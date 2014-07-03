@@ -19,20 +19,46 @@
                         <a href='/'><img id="myimage" src="{{ STATIC_URL }}img/ciec.png" alt="My image" /></a>
                     </div>
                     <ul class="nav navbar-nav pull-left" id="top-nav">
-                        <li class="active"><a href="/" class="navbar-brand">Inicio</a></li>
-                        <li><a href="/team" class="navbar-brand">Equipo de Trabajo</a></li>
+                        <li><a href="/" class="navbar-brand">Inicio</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Información del Proyecto<b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="/features">Características</a></li>
                                 <li><a href="/historia">Reseña</a></li>
+                                <li><a href="/features">Características</a></li>
                             </ul>
                         </li>
+                        {% if user.is_authenticated %}
+                            <li><a href="/calculo-indicador" class="navbar-brand">Ingresa al Sitio</a></li>
+                        {% else %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Ingresa al Sitio<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/definicion-indicador/">Sin registro</a></li>
+                                    <li><a href="/login/">Con registro</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                        <li><a href="/team" class="navbar-brand">Equipo de Trabajo</a></li>
                     </ul>
                     <ul class="nav pull-right navbar-nav" id="login">
-                        <!--li><a href="/registro"><i class="fa fa-user"></i>Regístrate</a></li-->
-                        <li><a href="/register"><i class="fa fa-user"></i>Regístrate</a></li>
-                        <li><a href="/login"><i class="fa fa-user"></i>Login</a></li>
+                        {% if user.is_authenticated %}
+                            <ul class="pull-right" id="user_data-menu">
+                                <li>
+                                    <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
+                                        <i class="fa fa-user"> Bienvenido, </i><br>
+                                        <span><strong>{{user.first_name}}</strong></span>
+                                        <span><strong>{{user.last_name}}</strong></span>
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="pull-right dropdown-menu" id="option-user">
+                                        <li><a href="#"><i class="fa fa-cog">  Mi cuenta</i></a></li>
+                                        <li><a href="/logout"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        {% else %}
+                            <li><a href="/register"><i class="fa fa-user"></i>Regístrate</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -43,11 +69,9 @@
         {% block content %}{% endblock %}
             <footer>
                 <div class="contour-footer text-center">
-                    <a href=""> Website de Ciec </a>|
-                    <a href=""> Contáctenos </a>|
-                    <a href="/map"> Mapa del Sitio </a>|
-                    <a href=""> Sugerencias </a>|
-                    <a href=""> Acerca de </a>
+                    <a target="_blank" href="http://www.ciec.espol.edu.ec/"> Website de Ciec </a>|
+                    <a href="/contactos"> Contáctenos </a>|
+                    <a href="#"> Sugerencias </a>|
                 </div>
                 <div class="box-footer text-center">
                     <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
@@ -59,16 +83,50 @@
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script type="text/javascript" src="{% static "js/team.js" %}"></script>
     <script type="text/javascript">
         $().ready(function(){
             $("#myslide").carousel({
-                interval: 5000,
+                interval: 7000,
                 pause: "hover",
             });
             setTimeout(function(){
                 $("#myslide").carousel("next");
             }, 2000);
         });
+        //Google Maps script
+        function initialize() {
+            var myLatlng = new google.maps.LatLng(-2.1477, -79.96606);
+            var mapOptions = {
+                zoom: 18,
+                center: myLatlng
+            };
+            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            var contentString =
+            '<div id="content">'+
+                '<div id="siteNotice">'+'</div>'+
+                '<h2 id="firstHeading" class="firstHeading">Oficinas Principales</h2>'+
+                '<div id="bodyContent">'+
+                    '<p>Centro de Investigaciones Econ&oacute;micas - Facultad de Ciencias Sociales y Human&iacute;sticas'+'</p>' +
+                    '<p>(+593)-42-269097'+'&nbsp;&nbsp;&nbsp;&nbsp;'+'(+593)-42-269098'+'<p>'+
+                    '<p>Guayaquil - Ecuador'+'<p>'+
+                '</div>'+
+            '</div>';
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: 'CIEC'
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+                infowindow.open(map,marker);
+            });
+            infowindow.open(map,marker);
+          }
+        google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 </body>
 </html>

@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Credenciales Invalidas{% endblock %}
+
+{% block extraCSS %}
+{% endblock %}
+
+{% block content %}
+	<div class="container block_content">
+		<h1 class="titulo-secundario">Credenciales Inválidas</h1>
+		<hr class="myhr">
+		<p>El usuario o contraseña ingresada son inválidas </p>
+		<p><a href="/login/">Iniciar Sesión</a> </p>
+	</div>
+{% endblock %}
