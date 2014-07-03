@@ -5,20 +5,43 @@ body{
 	font-size: 12px;
 
 	header{
+		#login{
+			#user_data-menu{
+				margin: 30px 5px 0px 0px;
+
+				#name-user{
+					font-size: 13px;
+					color: #FFF;
+					text-decoration: none;
+
+					.caret{
+						color: #FFF;
+					}
+				}
+
+				#option-user{
+					margin-right: 360px;
+				}
+			}
+
+			.open > a {
+				background-color: #001c43;
+			}
+
+		}
 
 		#nav-logo{
-			font-family: "Times new Roman";
 			height: 110px;
 			border-radius: 0px;
 			margin-bottom: 0px;
 
 			.navbar-header{
-				img{
+
+				a:first-child img{
 					width: 75px;
 					margin: 17px;
 				}
-
-				a{
+				a:nth-child(2){
 					margin-top: 10px;
 					font-size: 27px;
 					line-height: 27px;
@@ -32,7 +55,7 @@ body{
 			}
 
 			#user_data-menu{
-				margin: -40px 5px 0px 0px;
+				margin: 70px 5px 0px 0px;
 
 				#name-user{
 					font-size: 13px;
@@ -165,7 +188,7 @@ body{
 		}
 
 		hr#separator-content-page{
-		    margin: 0 0 0 10px;
+		    margin: 0 0 20px 10px;
 		    border-width: 2px;
 		    border-style: solid;
 		    border-color: #0cb3ac;

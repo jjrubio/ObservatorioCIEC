@@ -18,7 +18,7 @@ def register(request):
 		profile_form = UserProfileForm(data=request.POST)
 
 		if user_form.is_valid() and profile_form.is_valid():
-			
+
 			first_name = user_form.cleaned_data['first_name']
 			last_name = user_form.cleaned_data['last_name']
 			email = user_form.cleaned_data['email']
@@ -60,7 +60,7 @@ def user_login(request):
 				suma += 1
 				user_by_id = UserProfile.objects.filter(user_id=user.id).update(contador_visita = suma)
 
-				return HttpResponseRedirect('/lista-indicadores/')
+				return HttpResponseRedirect('/definicion-indicador/')
 			else:
 				#return HttpResponse("Cuenta deshabilitada, por favor comuniquese con...")
 				return HttpResponseRedirect('/access_denied/')
