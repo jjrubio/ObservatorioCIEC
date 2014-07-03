@@ -1,6 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.context import RequestContext
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserForm, UserProfileForm
 from django.contrib.auth.decorators import login_required
@@ -17,17 +18,23 @@ def register(request):
 		profile_form = UserProfileForm(data=request.POST)
 
 		if user_form.is_valid() and profile_form.is_valid():
-			user = user_form.save()
-			user.set_password(user.password)
-			user.save()
+			
+			first_name = user_form.cleaned_data['first_name']
+			last_name = user_form.cleaned_data['last_name']
+			email = user_form.cleaned_data['email']
+			password_one = user_form.cleaned_data['password_one']
+			password_two = user_form.cleaned_data['password_two']
+			u = User.objects.create_user(username=email, password=password_one, first_name=first_name, last_name=last_name)
+			u.save()
 
 			profile = profile_form.save(commit=False)
-			profile.user = user
+			profile.user = u
 			profile.save()
 
 			registered = True
 		else:
 			print user_form.errors, profile_form.errors
+
 	else:
 		user_form = UserForm()
 		profile_form = UserProfileForm()
@@ -37,6 +44,7 @@ def register(request):
 def user_login(request):
 	context = RequestContext(request)
 	template = "login.html"
+	template2 = "login_error.html"
 
 	if request.method == 'POST':
 		username = request.POST['username']
@@ -46,6 +54,7 @@ def user_login(request):
 		if user:
 			if user.is_active:
 				login(request, user)
+
 				counter = UserProfile.objects.filter(user_id=user.id)
 				suma = counter[0].contador_visita
 				suma += 1

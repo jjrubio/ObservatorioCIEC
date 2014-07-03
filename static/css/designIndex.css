@@ -48,6 +48,7 @@
 .form_registro{
   margin-bottom: ;
 }
+
 label{
   display: block;
   margin: 0px 0px 5px;
@@ -55,10 +56,10 @@ label{
 input{
   border: 1px solid #DADADA;
   /*color: #888;*/
-  height: 24px;
-  margin-bottom: 16px;
-  margin-right: 6px;
-  margin-top: 2px;
+  height: 2em;
+  margin-bottom: 1em;
+  margin-right: 3em;
+  margin-top: 1em;
   outline: 0 none;
   padding: 3px 3px 3px 5px;
   width: 26%;
@@ -81,35 +82,28 @@ input{
   margin-top: -3em;
   margin-left: 25em;
 }
-.social_media{
-  width: 25px;
-  height: 25px;
-}
-#div_about{
-  width: 623px;
-  height: 257px;
-  margin-left: 16em;
-  margin-top: -18em;
-}
-
-#pic_profile{
-  position: relative;
-  width:200px;
-  height:250px;
-  top:12em;
-}
-#div_profiles{
-  margin-left: 5em;
-  margin-top: -14em;
-}
-#menu-izquierdo{
-  float: left;
-  margin-top: 3em;
-  margin-right: 2em;
-  margin-bottom: 20em;
-}
 #drop{
   margin-right: 5em;
+}
+.text-profile{
+  text-align: justify;
+  margin-right: 20%;
+  margin-left: 20%;
+}
+.text-login{
+  margin-top: 15em;
+  margin-left: 35em;
+}
+#input_user{
+  margin-left: 2.8em;
+}
+#btn-login{
+  width:130px; 
+  margin-left:40em;
+  margin-bottom: 15em;
+}
+#user_form{
+  margin-left: 3em;
 }
 /*Responsive*/
 /* Large Devices, Wide Screens */

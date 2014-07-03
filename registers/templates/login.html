@@ -13,12 +13,11 @@
         <hr class="myhr">
         <form id="login_form" method="post" action="/login">
             {% csrf_token %}
-            Usuario: <input type="text" name="username" value="" size="50" />
+            Correo: <input type="text" name="username" value="" size="50" id="input_user" />
             <br />
             Contraseña: <input type="password" name="password" value="" size="50" />
             <br />
-            <input type="submit" class="btn btn-primary btn_login" name="submit" value="Submit" style="width:130px; margin-left:30em;" />
+            <input type="submit" class="btn btn-primary btn_login" name="submit" value="Iniciar Sesion" id="btn-login" />
         </form>
-        <div class="separador"></div>
     </div>
 {% endblock %}

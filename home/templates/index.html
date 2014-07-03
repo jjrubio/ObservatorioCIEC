@@ -17,25 +17,46 @@
                         <a href='/'><img id="myimage" src="{{ STATIC_URL }}img/ciec.png" alt="My image" /></a>
                     </div>
                     <ul class="nav navbar-nav pull-left" id="top-nav">
-                        <li class="active"><a href="/" class="navbar-brand">Inicio</a></li>
-                        <li><a href="/team" class="navbar-brand">Equipo de Trabajo</a></li>
+                        <li><a href="/" class="navbar-brand">Inicio</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Información del Proyecto<b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="/features">Características</a></li>
                                 <li><a href="/historia">Reseña</a></li>
+                                <li><a href="/features">Características</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Ingresa al Sitio<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/historia">Sin registro</a></li>
-                                <li><a href="/login">Con registro</a></li>
-                            </ul>
-                        </li>
+                        {% if user.is_authenticated %}
+                            <li><a href="/calculo-indicador" class="navbar-brand">Ingresa al Sitio</a></li>
+                        {% else %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Ingresa al Sitio<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/historia">Sin registro</a></li>
+                                    <li><a href="/login">Con registro</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                        <li><a href="/team" class="navbar-brand">Equipo de Trabajo</a></li>
                     </ul>
                     <ul class="nav pull-right navbar-nav" id="login">
-                        <li><a href="/register"><i class="fa fa-user"></i>Regístrate</a></li>
+                        {% if user.is_authenticated %}
+                            <ul class="pull-right" id="user_data-menu">
+                                <li>
+                                    <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
+                                        <i class="fa fa-user"> Bienvenido, </i><br>
+                                        <span><strong>{{user.first_name}}</strong></span>
+                                        <span><strong>{{user.last_name}}</strong></span>
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="pull-right dropdown-menu" id="option-user">
+                                        <li><a href="#"><i class="fa fa-cog">  Mi cuenta</i></a></li>
+                                        <li><a href="/logout"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        {% else %}
+                            <li><a href="/register"><i class="fa fa-user"></i>Regístrate</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -63,7 +84,7 @@
     <script type="text/javascript">
         $().ready(function(){
             $("#myslide").carousel({
-                interval: 5000,
+                interval: 7000,
                 pause: "hover",
             });
             setTimeout(function(){

@@ -24,7 +24,7 @@
         <header role="banner">
             <div class="navbar navbar-inverse" id="nav-logo" role="navigation">
                 <div class="navbar-header">
-                    <img src="{{STATIC_URL}}img/ciec.png" class="pull-left img-nav-header" alt="ciec">
+                    <a href="/"><img src="{{STATIC_URL}}img/ciec.png" class="pull-left img-nav-header" alt="ciec"></a>
                     <a href="/historia" class="navbar-brand">Observatorio Económico - Social del Ecuador</a>
                     <i>"servir como base para investigaciones socioeconómicas"</i>
                 </div>
@@ -33,7 +33,6 @@
                         <li>
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
                                 <i class="fa fa-user"> Bienvenido, </i><br>
-                                <!--span><strong>Jefferson Rubio</strong></span-->
                                 <span><strong>{{user.first_name}}</strong></span>
                                 <span><strong>{{user.last_name}}</strong></span>
                                 <b class="caret"></b>

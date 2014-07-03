@@ -12,23 +12,19 @@
 	    <h1 class="titulo">Equipo de Trabajo</h1>
 	    <hr class="myhr">
 	    <h1 class="titulo-secundario">Curriculum Vitae</h1>
-	    <div id="menu-izquierdo">
-	    	<ul>
-	    		<li>
-	    			<a href="#" value="1">Economista Gabriel Villa Cox</a>
-	    		</li>
-	    		<li>
-	    			<a href="#" value="2">Economista Ramón Villa Cox</a>
-    			</li>
-	    		<li>
-	    			<a href="#" value="3">Economista Rossana Valencia Marín</a>
-		    	</li>
-		    	<li>
-		    		<a href="#" value="4">Economista María Fernanda Loor Martínez</a>
-		    	</li>
-	    	</ul>
-	    </div>
-
+	    <br>
+	    {% if profile %}
+	    	{% for i in profile%}
+	    		<div class="text-profile">
+	    			<p><strong>{{i.grado_academico}} {{i.nombre}} {{i.apellido}}</strong></p>
+		    		<p><strong>{{i.correo}}</strong></p>
+		    		<p>{{i.resumen}}</p>
+		    		<br>
+	    		</div>
+	    	{%  endfor %}
+	    {% else %}
+	    	<p>No hay datos a mostrar</p>
+	    {%  endif %}
 	    <div id="datos"></div>
 	</div>
 {% endblock %}
