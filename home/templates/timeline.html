@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "index.html" %}
 
 {% load static from staticfiles %}
 
@@ -10,24 +10,26 @@
 
 {% block content %}
 
-            <div class="container content-page">
+            <div class="content-page-2">
                 <b id="title-content-page">Historia</b>
                 <hr class="pull-left" id="separator-content-page">
-                <ul class="timeline">
-                        {% for ev in events %}
-                        <li class="{% if forloop.counter|divisibleby:2 %} timeline-inverted {% endif %}">
-                            <div class="timeline-badge {{ev.icon_color}}"><i class="fa {{ev.icon}}"></i></div>
-                            <div class="timeline-panel">
-                                <div class="timeline-heading">
-                                    <h4 class="timeline-title">{{ev.title}}</h4><hr>
+                <div class="container">
+                    <ul class="timeline">
+                            {% for ev in events %}
+                            <li class="{% if forloop.counter|divisibleby:2 %} timeline-inverted {% endif %}">
+                                <div class="timeline-badge {{ev.icon_color}}"><i class="fa {{ev.icon}}"></i></div>
+                                <div class="timeline-panel">
+                                    <div class="timeline-heading">
+                                        <h4 class="timeline-title">{{ev.title}}</h4><hr>
+                                    </div>
+                                    <div class="timeline-body text-justify">
+                                        <p>{{ev.event}}</p>
+                                    </div>
                                 </div>
-                                <div class="timeline-body text-justify">
-                                    <p>{{ev.event}}</p>
-                                </div>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
 
 {% endblock %}

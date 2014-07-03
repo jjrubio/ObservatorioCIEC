@@ -1,36 +1,61 @@
 from django.shortcuts import HttpResponse, render, render_to_response, HttpResponseRedirect
 from django.template.context import RequestContext
 from models import *
-from django.utils import simplejson
+import json
 from django.shortcuts import get_object_or_404
 from django.core import serializers
 
 
-def indicators_list(request):
+def indicator_def(request):
 	indicators    = Indicator.objects.all()
 	subcategories = Subcategory.objects.all()
 	categories    = Category.objects.all()
-	template      = "indicators_list.html"
+	template      = "indicator_def.html"
 	return render_to_response(template, context_instance = RequestContext(request,locals()))
 
-def indicators_detail(request, indicator_id):
-	message = {"ind_name": "", "ind_definition": "", "ind_unit": "", "ind_formula": "", "ind_icon": "", "ind_subcategory": "", "subcategory_icon": "", "ind_category": "", "category_icon": "", }
-	if request.is_ajax():
-		indicator = get_object_or_404(Indicator, id=indicator_id)
+def indicators_detail(request, cat_id, subcat_id, ind_id):
+	message = []
+	subcategoriesArray =[]
+	indicatorsArray =[]
+	indicatorSelectArray = []
 
-		message['ind_name'] = indicator.name
-		message['ind_definition'] = indicator.definition
-		message['ind_unit'] = indicator.unit
-		message['ind_formula'] = "/%s" % indicator.formula_src
-		message['ind_icon'] = indicator.icon
-		message['ind_subcategory'] = indicator.subcategory.name
-		message['subcategory_icon'] = indicator.subcategory.icon
-		message['ind_category'] = indicator.subcategory.category.name
-		message['category_icon'] = indicator.subcategory.category.icon
+	posSubcat = int('0' + subcat_id)
+	posInd = int('0' + ind_id)
+
+	if request.is_ajax():
+		subcategories = Subcategory.objects.filter(category_id = cat_id)
+		indicators = Indicator.objects.filter(subcategory_id = subcategories[posSubcat].id)
+		indicatorSelect = Indicator.objects.get(id = indicators[posInd].id)
+
+		for subcat in subcategories:
+			dict_subcat = {}
+			dict_subcat['id'] = subcat.id
+			dict_subcat['name'] = subcat.name
+			dict_subcat['icon'] = subcat.icon
+			subcategoriesArray.append(dict_subcat)
+
+		for ind in indicators:
+			dict_ind = {}
+			dict_ind['id'] = ind.id
+			dict_ind['name'] = ind.name
+			dict_ind['icon'] = ind.icon
+			indicatorsArray.append(dict_ind)
+
+		dict_indSelect = {}
+		dict_indSelect['id'] = indicatorSelect.id
+		dict_indSelect['name'] = indicatorSelect.name
+		dict_indSelect['definition'] = indicatorSelect.definition
+		dict_indSelect['unit'] = indicatorSelect.unit
+		dict_indSelect['formula'] = "/%s" % indicatorSelect.formula_src
+		indicatorSelectArray.append(dict_indSelect)
+
+		message.append(subcategoriesArray)
+		message.append(indicatorsArray)
+		message.append(indicatorSelectArray)
 	else:
 		return HttpResponseRedirect("/")
-	json = simplejson.dumps(message)
-	return HttpResponse(json, mimetype='application/json')
+	data = json.dumps(message)
+	return HttpResponse(data, content_type='application/json')
 
 def indicator_calc(request):
 	indicators    = Indicator.objects.all()
@@ -43,7 +68,7 @@ def indicator_calc(request):
 def list_by_no_denied(request):
 	id_desagre = request.GET['id_desagregacion']
 	print id_desagre
-	
+
 	if id_desagre == '1' or id_desagre == '3':
 		disintegrations = Disintegration.objects.all()
 		data = serializers.serialize('json', disintegrations)
@@ -82,5 +107,5 @@ def list_by_no_denied(request):
 		data = serializers.serialize('json', disintegrations)
 
 	print data
-	
+
 	return HttpResponse(data, mimetype='application/json')

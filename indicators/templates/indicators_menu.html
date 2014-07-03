@@ -1,31 +1,32 @@
 {% load apptags %}
 
-<div id="menu">
-    <nav>
-        <h2><i class="fa fa-reorder"></i>Categorias</h2>
-        <ul>
-            {% for cat in categories %}
-            <li>
-                <a href="#"><i class="fa fa-bookmark"></i>{{cat.name}}</a>
-                <h2><i class="fa fa-laptop"></i>{{cat.name}}</h2>
-                <ul>
-                    {% for sub in subcategories|in_category:cat %}
-                    <li>
-                        <a href="#"><i class="fa fa-phone"></i>{{sub.name}}</a>
-                        <h2><i class="fa fa-phone"></i>{{sub.name}}</h2>
-                        <ul>
-                            {% for ind in indicators|in_subcategory:sub %}
-                            <li>
-                                <a class="indicator" id ="{{ind.id}}" href="#">{{ind.name}}</a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </li>
-            {% endfor %}
+{% load static from staticfiles %}
 
-        </ul>
-    </nav>
+<div class="row">
+    <div class="opcion-menu pull-left">
+        <b>Categoria</b>
+        <br>
+        <select id ="category" class="selectpicker show-menu-arrow span2"   data-live-search="true" >
+            {% for cat in categories %}
+                <option value="{{forloop.counter}}" data-icon="fa {{cat.icon}}">{{cat.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="opcion-menu pull-left">
+        <b>Subcategoria</b>
+        <br>
+        <select id="subcategory" class="selectpicker show-menu-arrow span2"  data-live-search="true" >
+        </select>
+    </div>
+    <div class="opcion-menu pull-left">
+        <b>Indicador</b>
+        <br>
+        <select id="indicator" class="selectpicker show-menu-arrow span2"  data-live-search="true" >
+        </select>
+    </div>
 </div>
+
+{% block extraScripts %}
+{% endblock %}
+
+

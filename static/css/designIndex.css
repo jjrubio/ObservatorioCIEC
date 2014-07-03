@@ -13,7 +13,7 @@
   padding:299px;/*420px*/
 }
 .imagen-logo{
-  width:75px; 
+  width:75px;
   height:75px;
 }
 .arrow{
@@ -34,9 +34,6 @@
 }
 .form_registro{
   margin-bottom: ;
-}
-p{
-  margin-left: 17em;
 }
 label{
   display: block;
@@ -93,9 +90,40 @@ input{
   margin-top: -14em;
 }
 
+/*Pruebas personales: Jeff*/
+
+body{
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+#menu{
+  margin-right: 2em;
+  margin-left: 26em;
+}
+#top-nav{
+  margin-top: 0.5em;
+}
+#login{
+  margin-top: -0.4em;
+  margin-right: 30em;
+}
+#myimage{
+  margin-left: 4em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+#myslide{
+  margin-top: 7em;
+}
+
+#titulo-footer{
+  margin-top: 3em;/*7em*/
+  margin-left: 22em;
+  margin-bottom: 14em;
+}
 /*Responsive*/
 /* Large Devices, Wide Screens */
-@media only screen and (max-width : 1920px), screen and (max-height: 1080px){
+/* @media only screen and (max-width : 1920px), screen and (max-height: 1080px){
     body{
       padding-top: 60px;
       padding-bottom: 50px;
@@ -115,7 +143,7 @@ input{
       margin-left: 4em;
       margin-top: 0.5em;
       margin-bottom: 0.5em;
-      width:50px; 
+      width:50px;
       height:50px;
     }
     #titulo-footer{
@@ -130,7 +158,6 @@ input{
       margin-top: 7em;
     }
 }
-/* Large Devices, Wide Screens */
 @media only screen and (max-width : 1280px), screen and (max-height: 1080px) {
     body{
       padding-top: 130px;
@@ -144,7 +171,7 @@ input{
     }
     #myimage{
       margin-left: -16em;
-      width:50px; 
+      width:50px;
       height:50px;
     }
     #titulo-footer{
@@ -163,7 +190,7 @@ input{
     }
     #myimage{
       margin-left: -3em;
-      width:50px; 
+      width:50px;
       height:50px;
     }
     #titulo-footer{
@@ -176,7 +203,7 @@ input{
       margin-top: 7em;
     }
     .imagen-logo{
-      width:75px; 
+      width:75px;
       height:75px;
       margin-left: -2em;
     }
@@ -190,7 +217,7 @@ input{
   }
   #myimage{
     margin-left: -13em;
-    width:50px; 
+    width:50px;
     height:50px;
   }
   #menu{
@@ -215,7 +242,7 @@ input{
   }
   #myimage{
     margin-left: -13em;
-    width:50px; 
+    width:50px;
     height:50px;
   }
   #menu{
@@ -235,4 +262,4 @@ input{
   #footer-responsive{
     margin-top: 2em;
   }
-}
+} */

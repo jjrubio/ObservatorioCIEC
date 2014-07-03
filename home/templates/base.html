@@ -1,4 +1,4 @@
-{% load static from staticfiles %}
+    {% load static from staticfiles %}
 <!DOCTYPE html>
 
 <head>
@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>OSEE - {% block title %}{% endblock %}</title>
+    <title>OESE - {% block title %}{% endblock %}</title>
 
     <!-- Core CSS - Include with every page -->
     <link href="{% static "css/style.css" %}" rel="stylesheet" />
@@ -49,36 +49,36 @@
                 {% endif %}
             </div>
         </header>
-        <div class="core">
+        <div class="contour-main">
             <div class="navbar navbar-default" id="nav-menu" role="navigation">
                 <ul class="nav navbar-nav pull-right" id="tabs-menu">
-                    <li><a href="/lista-indicadores/">LISTA DE INDICADORES</a></li>
+                    <li><a href="/definicion-indicador/">DEFINICIÓN DEL INDICADOR</a></li>
                     <li><a href="/calculo-indicador/">CÁLCULO DEL INDICADOR</a></li>
-                    <li><a href="#">COMERCIO EXTERIOR</a></li>
+                    <!-- <li><a href="#">COMERCIO EXTERIOR</a></li> -->
                     <li><a href="/recursos/boletines">RECURSOS</a></li>
                 </ul>
             </div>
-        {% block content %}{% endblock %}
+            {% block content %}{% endblock %}
+
+            <footer>
+                <div class="contour-footer text-center">
+                    <a target="_blank" href="http://www.ciec.espol.edu.ec/"> Website de Ciec </a>|
+                    <a href=""> Contáctenos </a>|
+                    <a href=""> Mapa del Sitio </a>|
+                    <a href=""> Sugerencias </a>|
+                    <a href=""> Acerca de </a>
+                </div>
+                <div class="box-footer text-center">
+                    <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
+                </div>
+            </footer>
         </div>
-        <footer>
-            <div class="core text-center">
-                <a target="_blank" href="http://www.ciec.espol.edu.ec/"> Website de Ciec </a>|
-                <a href=""> Contáctenos </a>|
-                <a href=""> Mapa del Sitio </a>|
-                <a href=""> Sugerencias </a>|
-                <a href=""> Acerca de </a>
-            </div>
-            <div class="core text-center">
-                <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
-            </div>
-        </footer>
     </div>
     </header>
 
         <!-- Core Scripts - Include with every page -->
         <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-        <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-        <script src="{% static "js/chb.js" %}" type="text/javascript"></script>
+        <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         <script>
             $(function(){
                 setNavigation();
@@ -86,7 +86,7 @@
 
             function setNavigation() {
                 var path = window.location.pathname;
-                path = path.replace(/\?$/, "");
+                path = path.replace(/\?#$/, "");
                 path = decodeURIComponent(path);
 
                 $("#tabs-menu a").each(function () {

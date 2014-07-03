@@ -5836,8 +5836,14 @@ body header #nav-logo #user_data-menu #name-user {
 body header #nav-logo #user_data-menu #name-user .caret {
   color: #FFF;
 }
-body .core {
+body .contour-main {
   border-style: solid;
+  border-width: 1px;
+  border-color: #bebebe;
+}
+body .contour-footer {
+  border-top-style: solid;
+  border-bottom-style: solid;
   border-width: 1px;
   border-color: #bebebe;
 }
@@ -5849,21 +5855,23 @@ body #nav-menu #tabs-menu li a {
   font-weight: bold;
   font-size: 14px;
 }
-body footer .core {
+body footer .contour-footer {
   padding: 10px;
 }
-body footer .core a {
+body footer .contour-footer a {
   color: #777;
 }
-body footer .core a:first-child {
+body footer .contour-footer a:first-child {
   color: #F8B100;
 }
-body footer .core:nth-child(2) {
+body footer .box-footer {
+  padding: 10px;
   background-color: #777;
   color: #FFF;
 }
 body .page {
   margin-bottom: 40px;
+  margin-top: 50px;
 }
 body .submenu {
   padding-right: 50px;
@@ -5909,4 +5917,19 @@ body .content-page hr#separator-content-page {
   border-style: solid;
   border-color: #0cb3ac;
   width: 97%;
+}
+body .content-page-2 {
+  margin: 50px 0 0 0;
+}
+body .content-page-2 #title-content-page {
+  color: #003A6F;
+  font-size: 18px;
+  margin: 0 0 0 10px;
+}
+body .content-page-2 hr#separator-content-page {
+  margin: 0 0 0 10px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #0cb3ac;
+  width: 98%;
 }

@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" href="{% static "css/style.css" %}" />
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
     <link rel="stylesheet" href="{% static "css/designIndex.css" %}" />
+    <!-- Page Specific CSS -->
+    {% block extraCSS %}{% endblock %}
 </head>
 <body>
     <header>
         <div class="container">
-            <div class="col-md-12">
+            <div>
                 <div class="navbar navbar-inverse navbar-fixed-top">
                     <div class="navbar-header pull-left" id="menu">
                         <a href='/'><img id="myimage" src="{{ STATIC_URL }}img/ciec.png" alt="My image" /></a>
@@ -36,25 +38,27 @@
             </div>
         </div>
     </header>
-    {% block content %}{% endblock %}
-    <div class="container" id="footer-responsive">
-        <footer>
-            <div class="core text-center">
-                <a href=""> Website de Ciec </a>|
-                <a href=""> Contáctenos </a>|
-                <a href="/map"> Mapa del Sitio </a>|
-                <a href=""> Sugerencias </a>|
-                <a href=""> Acerca de </a>
-            </div>
-            <div class="core text-center">
-                <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
-            </div>
-        </footer>
+    <div class="container">
+        <div class="contour-main">
+        {% block content %}{% endblock %}
+            <footer>
+                <div class="contour-footer text-center">
+                    <a href=""> Website de Ciec </a>|
+                    <a href=""> Contáctenos </a>|
+                    <a href="/map"> Mapa del Sitio </a>|
+                    <a href=""> Sugerencias </a>|
+                    <a href=""> Acerca de </a>
+                </div>
+                <div class="box-footer text-center">
+                    <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
+                </div>
+            </footer>
+        <div>
     </div>
-    
-    <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/jquery.nav.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         $().ready(function(){
             $("#myslide").carousel({

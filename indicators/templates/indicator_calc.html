@@ -4,166 +4,184 @@
 
 {% load static from staticfiles %}
 
-{% block title %}Cálculo indicador{% endblock %}
+{% block title %}Cálculo Indicador{% endblock %}
 
 {% block extraCSS %}
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700&subset=latin,cyrillic-ext,latin-ext,cyrillic' rel='stylesheet' type='text/css'>
-    <link href="{% static "css/jquery.multilevelpushmenu.css" %}" rel="stylesheet"  />
     <link href="{% static "css/indicator.css" %}" rel="stylesheet"  />
-    <link href="{% static "css/bs-wizard.css" %}" rel="stylesheet"  />
+    <link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
+    <link href="{% static "css/datepicker3.css" %}" rel="stylesheet"  />
+
+
 {% endblock %}
 
 {% block content %}
-    {% include 'indicators_menu.html' %}
-    <div id="pushobj">
-         <div class="container bs-wizard">
-            <div class="col-lg-3">
-            <ol class="bs-wizard-sidebar">
-            <li class="bs-wizard-todo bs-wizard-active"><a href="javascript:void(0)">Desagregaciones</a></li>
-            <li class="bs-wizard-todo"><a href="javascript:void(0)">Otros parámetros</a></li>
-            <li class="bs-wizard-todo"><a href="javascript:void(0)">Resultados</a></li>
-            </ol>
+        <div class="content-page-2">
+        <b id="title-content-page">Cálculo del indicador</b>
+        <hr class="pull-left" id="separator-content-page">
+        <div id="main-panel" class="panel panel-default">
+           <div class="panel-heading" >
+                {% include "indicators_menu.html" %}
             </div>
+            <div class="panel-body">
 
-            <div class="col-lg-9">
-            <form method="get" action="" accept-charset="UTF-8">
-            <fieldset>
-            <div class="bs-step inv">
-            <legend>Desagregaciones</legend>
-            <div class="bs-step-inner" id="ckb">
-                {% for desag in disintegrations %}
-                    <div class="checkbox">
+
+
+              <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#parametros">
+                        Parámetros iniciales
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="parametros" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                      <form action="" method="post" class="form-css">
                         <label>
-                            <input type="checkbox" id="{{ desag.id }}" > {{ desag.name }}
+                            <span>Representatividad :</span><br><br>
+                            <select id="represent" class="selectpicker show-menu-arrow" data-width="100%">
+                              <option value="1">Nacional</option>
+                              <option value="2">Urbano</option>
+                              <option value="3">Rural</option>
+                            </select>
                         </label>
+
+                        <label>
+                            <span>Metodología :</span><br><br>
+                              <select id="method" class="selectpicker show-menu-arrow"  data-width="100%">
+                                <option value="1">2003-4 hasta 2007-1 </option>
+                                <option value="2">2007-2 hasta la actualidad</option>
+                              </select>
+                        </label>
+
+                        <label>
+                            <span>Fecha Inicial :</span><br><br>
+                            <div class="input-group date" >
+                              <input id="dateStart" type="text" class="form-control" readonly><span class="input-group-addon">
+                              <i class="glyphicon glyphicon-th"></i></span>
+                            </div>
+                        </label>
+                         <label>
+                            <span>Fecha Final :</span><br><br>
+                            <div class="input-group date" >
+                              <input id="dateEnd" type="text" class="form-control" readonly><span class="input-group-addon">
+                              <i class="glyphicon glyphicon-th"></i></span>
+                            </div><br>
+                        </label>
+                         <label>
+                            <span>&nbsp;</span>
+                            <button type="button" class="btn btn-next" data-toggle="collapse" data-target="#desagregaciones">
+                              Siguiente
+                            </button>
+                        </label>
+                      </form>
                     </div>
-                {% endfor %}
-            </div>
-            <!--div class="bs-step-inner">
-                <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Región natural
-                    </label>
+                  </div>
                 </div>
-                <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Cinco ciudades más importantes del país + Resto del país
-                    </label>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#desagregaciones">
+                        Desagregaciones
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="desagregaciones" class="panel-collapse collapse">
+                    <div class="panel-body">
+                      <form action="">
+                        <div class="buttons">
+                            <button type="button" class="btn btn-back" data-toggle="collapse" data-target="#parametros">
+                              Atrás
+                            </button>
+                            <button type="button" class="btn btn-calc" data-toggle="collapse" data-target="#resultado">
+                              Calcular
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                  </div>
                 </div>
-                <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Genero
-                    </label>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#resultado">
+                        Resultados
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="resultado" class="panel-collapse collapse">
+                    <div class="panel-body">
+                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    </div>
+                  </div>
                 </div>
-                <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Grupo de edad
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Nivel de instrucción
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Afiliación al seguro
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Grupo de ocupación
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Actividad laboral (5 desagregaciones)
-                    </label>
-                </div>
-                <br>
-            </div-->
+              </div>
 
-            <div class="form-group" hidden="hidden">
-            <label for="field_2">Field 2</label>
-            <input type="text" class="form-control" value="" size="30" name="field_2" id="field_2">
             </div>
-            </div>
-            </div>
+            <div class="panel-footer">
 
-            <div class="bs-step inv">
-            <legend>Otros parámetros</legend>
-            <div class="bs-step-inner">
-            <div class="form-group">
-            <label for="field_3" style="font-size:20px">Representatividad: </label>
-            <select style="width:250px" class="form-control">
-              <option>Nacional</option>
-              <option>Urbano</option>
-              <option>Rural</option>
-            </select>
-            </div>
-
-            <div class="form-group">
-            <label for="field_3" style="font-size:20px">Metodología: </label>
-            <select style="width:250px" class="form-control">
-              <option>2003-4 a 2007-1</option>
-              <option>2007-2 en adelante</option>
-            </select>
-            </div>
-            <div class="form-group" hidden="hidden">
-            <label for="field_3">Field 3</label>
-            <input type="text" class="form-control" value="" size="30" name="field_3" id="field_3">
-            </div>
-
-            <div class="form-group">
-            <label for="field_5" style="font-size:20px">Fecha inicial: </label>
-            <label for="field_5" style="font-size:15px">12/05/2007</label>
-            <br>
-            <label for="field_5" style="font-size:20px">Fecha final: </label>
-            <label for="field_5" style="font-size:15px">20/08/2012</label>
-            </div>
-
-            <div class="form-group" hidden="hidden">
-            <label for="field_3">Field 3</label>
-            <input type="text" class="form-control" value="" size="30" name="field_3" id="field_3">
-            </div>
-
-
-            <div class="form-group" hidden="hidden">
-            <label for="field_4">Field 4</label>
-            <input type="text" class="form-control" value="" size="30" name="field_4" id="field_4">
-            </div>
-            </div>
-            </div>
-
-            <div class="bs-step inv">
-            <legend>Resultados</legend>
-            <div class="bs-step-inner">
-            <div class="form-group">
-            <label for="field_5">Tabla de resultados</label>
-            </div>
-
-
-
-            <button class="btn btn-default" type="reset" id="last-back">Atrás</button>
-            <input class="btn btn-primary submit-btn" type="submit" value="Descargar Excel" />
-            </div>
-            </div>
-            </fieldset>
-            </form>
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block extraScripts %}
-    <script src="http://oss.maxcdn.com/libs/modernizr/2.6.2/modernizr.min.js" type="text/javascript"></script>
-    <script src="{% static "js/jquery.multilevelpushmenu.min.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/basichtml.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/bs-wizard-min.js" %}" type="text/javascript"></script>
-    <script>
-        $(function() {
-            $(".bs-wizard").bs_wizard();
+    <script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/indicator.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/chb.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/bootstrap-datepicker.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/bootstrap-datepicker.es.js" %}" charset = "UTF-8" type="text/javascript"></script>
+    <script type="text/javascript">
+        var MEDIA_URL = {{MEDIA_URL}};
+
+        $('.selectpicker').selectpicker();
+
+        $('#dateStart, #dateEnd').datepicker({
+            format: "dd/mm/yyyy",
+            startDate: "01/10/2003",
+            endDate: "31/03/2007",
+            todayBtn: true,
+            language: "es",
+            autoclose: true,
+            todayHighlight: true,
         });
+
+        $('#method').change(function(){
+
+          if(this.value == 1){
+            $('#dateStart').datepicker('update', null);
+            $('#dateEnd').datepicker('update', null);
+            $('#dateStart').datepicker('format', "dd/mm/yyyy");
+            $('#dateStart').datepicker('setStartDate', "01/10/2003");
+            $('#dateStart').datepicker('setEndDate', "31/03/2007");
+          }else{
+            $('#dateStart').datepicker('update', null);
+            $('#dateEnd').datepicker('update', null);
+            $('#dateEnd').datepicker('format', "dd/mm/yyyy");
+            $('#dateStart').datepicker('setStartDate', "01/04/2007");
+            $('#dateStart').datepicker('setEndDate', new Date());
+          }
+
+        });
+
+        $('#dateEnd').datepicker()
+        .on('show', function(e){
+
+         if(dateStart != null){
+            var newDateEnd = $('#dateStart').datepicker('getDate');
+            $('#dateEnd').datepicker('setStartDate', newDateEnd);
+
+            if($('#method').value == 1){
+              $('#dateEnd').datepicker('setEndDate', "31/03/2007");
+            }else{
+              $('#dateEnd').datepicker('setEndDate', new Date());
+            }
+          }
+
+        });
+
+
     </script>
 {% endblock %}
+

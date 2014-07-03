@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load apptags %}
+
+{% load static from staticfiles %}
+
+{% block title %}Definición indicador{% endblock %}
+
+{% block extraCSS %}
+    <link href="{% static "css/indicator.css" %}" rel="stylesheet"  />
+    <link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
+{% endblock %}
+
+{% block content %}
+        <div class="content-page-2">
+            <b id="title-content-page">Definición del indicador</b>
+            <hr class="pull-left" id="separator-content-page">
+            <div id="main-panel" class="panel panel-default">
+               <div class="panel-heading" >
+                    {% include "indicators_menu.html" %}
+                </div>
+                <div class="panel-body text-center">
+                    <b></b>
+                    <p class="text-justify">
+                        <b>Definición.- </b><span></span>
+                    </p>
+                    <img src="{{MEDIA_URL}}formulas/tc.png" alt="">
+
+                </div>
+                <div class="panel-footer">
+                    <div class=" pull-left"><a href="#"><i class="fa fa-edit"></i>Calcular indicador</a></div>
+                    <div class=" pull-right"><b>Unidad:</b> <span>Porcentaje{{indicatorOne.unit}}</span></div>
+
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block extraScripts %}
+    <script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/indicator.js" %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        var MEDIA_URL = {{MEDIA_URL}};
+        $('.selectpicker').selectpicker();
+    </script>
+{% endblock %}
+
