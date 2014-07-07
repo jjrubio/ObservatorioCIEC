@@ -50,6 +50,8 @@ function initialize(){
         getMenu($("#category").val(), 0, 0);
 }
 
+
+
 $('.btn-next').click( function(){
     $('#parametros').removeClass( "in" );
 });

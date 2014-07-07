@@ -9,8 +9,6 @@
 {% block extraCSS %}
     <link href="{% static "css/indicator.css" %}" rel="stylesheet"  />
     <link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
-    <link href="{% static "css/datepicker3.css" %}" rel="stylesheet"  />
-
 
 {% endblock %}
 
@@ -39,7 +37,7 @@
                     <div class="panel-body">
                       <form action="" method="post" class="form-css">
                         <label>
-                            <span>Representatividad :</span><br><br>
+                            <span>Representatividad   </span><br><br>
                             <select id="represent" class="selectpicker show-menu-arrow" data-width="100%">
                               <option value="1">Nacional</option>
                               <option value="2">Urbano</option>
@@ -48,7 +46,7 @@
                         </label>
 
                         <label>
-                            <span>Metodología :</span><br><br>
+                            <span>Metodología </span><br><br>
                               <select id="method" class="selectpicker show-menu-arrow"  data-width="100%">
                                 <option value="1">2003-4 hasta 2007-1 </option>
                                 <option value="2">2007-2 hasta la actualidad</option>
@@ -56,20 +54,38 @@
                         </label>
 
                         <label>
-                            <span>Fecha Inicial :</span><br><br>
-                            <div class="input-group date" >
-                              <input id="dateStart" type="text" class="form-control" readonly><span class="input-group-addon">
-                              <i class="glyphicon glyphicon-th"></i></span>
-                            </div>
+                          <span>Período Inicial </span><br><br>
+                          <span>Año: </span>
+                          <select id="yearStart" class="selectpicker show-menu-arrow pull-left" data-size="5"  data-width="30%" >
+                            <option value="1">2003</option>
+                            <option value="2">2004</option>
+                            <option value="3">2005</option>
+                            <option value="4">2006</option>
+                            <option value="5">2007</option>
+                          </select>
+                          <span>Trimestre: </span>
+                          <select id="trimStart" class="selectpicker show-menu-arrow" data-width="30%">
+                            <option value="1">4</option>
+                          </select>
                         </label>
-                         <label>
-                            <span>Fecha Final :</span><br><br>
-                            <div class="input-group date" >
-                              <input id="dateEnd" type="text" class="form-control" readonly><span class="input-group-addon">
-                              <i class="glyphicon glyphicon-th"></i></span>
-                            </div><br>
+
+                        <label>
+                          <span>Período Final </span><br><br>
+                          <span>Año: </span>
+                          <select id="yearStart" class="selectpicker show-menu-arrow pull-left" data-size="5" data-width="30%" >
+                            <option value="1">2003</option>
+                            <option value="2">2004</option>
+                            <option value="3">2005</option>
+                            <option value="4">2006</option>
+                            <option value="5" selected="selected">2007</option>
+                          </select>
+                          <span>Trimestre: </span>
+                          <select id="trimStart" class="selectpicker show-menu-arrow"  data-width="30%">
+                            <option value="1">1</option>
+                          </select>
                         </label>
-                         <label>
+
+                         <label class="text-center">
                             <span>&nbsp;</span>
                             <button type="button" class="btn btn-next" data-toggle="collapse" data-target="#desagregaciones">
                               Siguiente
@@ -79,6 +95,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="panel panel-default">
                   <div class="panel-heading">
                     <h4 class="panel-title">
@@ -102,6 +119,7 @@
                       </form>
                   </div>
                 </div>
+
                 <div class="panel panel-default">
                   <div class="panel-heading">
                     <h4 class="panel-title">
@@ -112,7 +130,7 @@
                   </div>
                   <div id="resultado" class="panel-collapse collapse">
                     <div class="panel-body">
-                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+
                     </div>
                   </div>
                 </div>
@@ -130,56 +148,10 @@
     <script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
     <script src="{% static "js/indicator.js" %}" type="text/javascript"></script>
     <script src="{% static "js/chb.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/bootstrap-datepicker.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/bootstrap-datepicker.es.js" %}" charset = "UTF-8" type="text/javascript"></script>
     <script type="text/javascript">
         var MEDIA_URL = {{MEDIA_URL}};
 
         $('.selectpicker').selectpicker();
-
-        $('#dateStart, #dateEnd').datepicker({
-            format: "dd/mm/yyyy",
-            startDate: "01/10/2003",
-            endDate: "31/03/2007",
-            todayBtn: true,
-            language: "es",
-            autoclose: true,
-            todayHighlight: true,
-        });
-
-        $('#method').change(function(){
-
-          if(this.value == 1){
-            $('#dateStart').datepicker('update', null);
-            $('#dateEnd').datepicker('update', null);
-            $('#dateStart').datepicker('format', "dd/mm/yyyy");
-            $('#dateStart').datepicker('setStartDate', "01/10/2003");
-            $('#dateStart').datepicker('setEndDate', "31/03/2007");
-          }else{
-            $('#dateStart').datepicker('update', null);
-            $('#dateEnd').datepicker('update', null);
-            $('#dateEnd').datepicker('format', "dd/mm/yyyy");
-            $('#dateStart').datepicker('setStartDate', "01/04/2007");
-            $('#dateStart').datepicker('setEndDate', new Date());
-          }
-
-        });
-
-        $('#dateEnd').datepicker()
-        .on('show', function(e){
-
-         if(dateStart != null){
-            var newDateEnd = $('#dateStart').datepicker('getDate');
-            $('#dateEnd').datepicker('setStartDate', newDateEnd);
-
-            if($('#method').value == 1){
-              $('#dateEnd').datepicker('setEndDate', "31/03/2007");
-            }else{
-              $('#dateEnd').datepicker('setEndDate', new Date());
-            }
-          }
-
-        });
 
 
     </script>

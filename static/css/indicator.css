@@ -26,8 +26,17 @@
 #main-panel .panel-body .panel-group .panel-body {
   padding: 30px 0 30px 0;
 }
+#main-panel .panel-body .panel-group .panel-body form label span:nth-child(4) {
+  margin-right: 10px;
+}
+#main-panel .panel-body .panel-group .panel-body form label span:nth-last-child(3) {
+  margin-left: 39px;
+  margin-right: 10px;
+}
 #main-panel .panel-body .panel-group .btn-next,
 #main-panel .panel-body .panel-group .btn-calc {
+  margin-top: 30px;
+  margin-bottom: 30px;
   background-color: #428bca;
   border-color: #357ebd;
   color: #fff;
@@ -59,17 +68,4 @@
 .form-css label > span {
   float: left;
   margin-top: 10px;
-}
-.form-css .button {
-  background-color: #9DC45F;
-  border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-border-radius: 5px;
-  border: none;
-  padding: 10px 25px 10px 25px;
-  color: #FFF;
-  text-shadow: 1px 1px 1px #949494;
-}
-.form-css .button:hover {
-  background-color: #80A24A;
 }
