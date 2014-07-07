@@ -106,7 +106,21 @@
                   </div>
                   <div id="desagregaciones" class="panel-collapse collapse">
                     <div class="panel-body">
-                      <form action="">
+                      <form action="" method="post" if="formID">
+                        <p>Nota: Solo se pueden escoger dos desagregaciones.</p>
+                        <div id="ckb">
+                          {% if disintegrations %}
+                            {% for desag in disintegrations %}
+                              <div class="checkbox">
+                                  <label>
+                                      <input type="checkbox" id="{{ desag.id }}" > {{ desag.name }}
+                                  </label>
+                              </div>
+                            {% endfor %}
+                          {%else%}
+                            <p>No se han agregado desagregaciones.</p>
+                          {%endif%}
+                        </div>
                         <div class="buttons">
                             <button type="button" class="btn btn-back" data-toggle="collapse" data-target="#parametros">
                               Atrás

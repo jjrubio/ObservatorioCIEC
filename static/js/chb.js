@@ -32,8 +32,6 @@ $(document).ready( function() {
                         $('#ckb').append(tmpHTML);
                     }
                 });
-                //count ++;
-                console.log("Id del primer checkbox: ", id_1);
                 validCheckbox(id_1);
             });
         });
@@ -46,9 +44,7 @@ $(document).ready( function() {
                 var id_2 = $(this).attr('id');
                 if($(this).is(':checked')){
                     var id_dentro = $(this).attr('id');
-                    console.log("Clic DENTRO: ", id_dentro);
                     count++;
-                    console.log("valor del count es: ", count);
                     Validos.push($(this).attr('id'));
                 }else{
                     var id_afuera = $(this).attr('id');
@@ -57,17 +53,11 @@ $(document).ready( function() {
                     }else{
                         //No hagas nada
                     }
-                    console.log("Clic afuera: ", id_afuera);
                 }
             });
-            console.log("Validos: ", Validos);
             if(count>limit){
-                console.log("Stop");
                 $(this).prop('checked', false);
-                alert("Ha escogido mas de dos desagregaciones.");
-                console.log("Dentro del if, valor del count es: ", count);
             }else{
-                console.log("Continue");
                 count = 0;
             }
         });

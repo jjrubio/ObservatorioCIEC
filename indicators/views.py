@@ -111,5 +111,20 @@ def list_by_no_denied(request):
 def list_desagregation(request):
 	disintegrations = Disintegration.objects.all()
 	data = serializers.serialize('json', disintegrations)
-	print data
+	#print data
+	return HttpResponse(data, mimetype='application/json')
+
+def valid(request):
+	id_desagre = request.GET.getlist('id_desagregacions[]')
+	id_desagre_size = len(id_desagre)
+	if id_desagre_size == 0:
+		data = "no hay datos"
+		print data
+	elif id_desagre_size == 1:
+		data = "hay un dato"
+		print data
+	elif id_desagre_size == 2:
+		data = "hay dos datos"
+		print data
+	#print id_desagre
 	return HttpResponse(data, mimetype='application/json')
