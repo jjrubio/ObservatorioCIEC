@@ -57,30 +57,30 @@
                           <span>Período Inicial </span><br><br>
                           <span>Año: </span>
                           <select id="yearStart" class="selectpicker show-menu-arrow pull-left" data-size="5"  data-width="30%" >
-                            <option value="1">2003</option>
-                            <option value="2">2004</option>
-                            <option value="3">2005</option>
-                            <option value="4">2006</option>
-                            <option value="5">2007</option>
+                            <option value="2003">2003</option>
+                            <option value="2004">2004</option>
+                            <option value="2005">2005</option>
+                            <option value="2006">2006</option>
+                            <option value="2007">2007</option>
                           </select>
                           <span>Trimestre: </span>
                           <select id="trimStart" class="selectpicker show-menu-arrow" data-width="30%">
-                            <option value="1">4</option>
+                            <option value="4">4</option>
                           </select>
                         </label>
 
                         <label>
                           <span>Período Final </span><br><br>
                           <span>Año: </span>
-                          <select id="yearStart" class="selectpicker show-menu-arrow pull-left" data-size="5" data-width="30%" >
-                            <option value="1">2003</option>
-                            <option value="2">2004</option>
-                            <option value="3">2005</option>
-                            <option value="4">2006</option>
-                            <option value="5" selected="selected">2007</option>
+                          <select id="yearEnd" class="selectpicker show-menu-arrow pull-left" data-size="5" data-width="30%" >
+                            <option value="2003">2003</option>
+                            <option value="2004">2004</option>
+                            <option value="2005">2005</option>
+                            <option value="2006">2006</option>
+                            <option value="2007" selected="selected">2007</option>
                           </select>
                           <span>Trimestre: </span>
-                          <select id="trimStart" class="selectpicker show-menu-arrow"  data-width="30%">
+                          <select id="trimEnd" class="selectpicker show-menu-arrow"  data-width="30%">
                             <option value="1">1</option>
                           </select>
                         </label>
@@ -152,8 +152,6 @@
         var MEDIA_URL = {{MEDIA_URL}};
 
         $('.selectpicker').selectpicker();
-
-
     </script>
 {% endblock %}
 
