@@ -166,3 +166,18 @@ function modificarPeriodo(variable, start, end){
     $(variable).append($("<option></option>").attr("value",i).text(i));
   }
 }
+
+
+var selected = new Array();
+$('input:checkbox').each(function(){
+    if($(this).is(':checked')){
+        selected.push($(this).attr('id'));
+    }
+});
+
+$.getJSON('/valid_desa/', {'id_desagregacions[]': selected},
+function(data){
+    console.log(data);
+});
+//console.log(selected);
+
