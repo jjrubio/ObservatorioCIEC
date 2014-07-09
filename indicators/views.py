@@ -6,7 +6,8 @@ from django.shortcuts import get_object_or_404
 from django.core import serializers
 
 
-def indicator_def(request):
+def indicator_def(request,cat_id, subcat_id, ind_id):
+	json = indicators_detail(cat_id, subcat_id, ind_id)
 	indicators    = Indicator.objects.all()
 	subcategories = Subcategory.objects.all()
 	categories    = Category.objects.all()
@@ -47,6 +48,7 @@ def indicators_detail(cat_id, subcat_id, ind_id):
 	dict_indSelect['definition'] = indicatorSelect.definition
 	dict_indSelect['unit'] = indicatorSelect.unit
 	dict_indSelect['formula'] = "/%s" % indicatorSelect.formula_src
+	dict_indSelect['subcategory'] = ind.subcategory
 	dict_indSelect['category'] = ind.subcategory.category
 	indicatorSelectArray.append(dict_indSelect)
 

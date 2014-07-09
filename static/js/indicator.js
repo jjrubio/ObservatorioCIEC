@@ -1,64 +1,36 @@
-$(document).ready( function() {
-    initialize();
-});
 
 function getMenu(cat, subcat, ind){
-    // $.get('/detalle-indicador/'+cat+'/'+subcat+'/'+ind+'/', function(data) {
-        // $('#category').empty();
-        $('#subcategory').empty();
-        $('#indicator').empty();
+        var url = location.href;
+        var arrayURL = location.href.split('/');
 
-        history.pushState(null, "", "/calculo-indicador/"+cat+"/"+subcat+"/"+ind+"/");
-
-        // $.each(data, function(key, value) {
-        //     $.each(data[key], function(key2, value2) {
-        //         if(key==0){
-        //             $('#subcategory').append($("<option></option>").attr("value",key2).text(value2.name));
-        //             $('#subcategory option[value='+key2+']').attr("data-icon","fa "+value2.icon);
-        //         }
-        //         if(key==1){
-        //             $('#indicator').append($("<option></option>").attr("value",key2).text(value2.name));
-        //             $('#indicator option[value='+key2+']').attr("data-icon","fa "+value2.icon);
-        //         }
-        //     });
-        // });
-
-        $('#subcategory option[value='+subcat+']').attr("selected","selected");
-        $('#indicator option[value='+ind+']').attr("selected","selected");
-
+        if(arrayURL[3] == 'calculo-indicador'){
+          history.pushState(null, "", "/calculo-indicador/"+cat+"/"+subcat+"/"+ind+"/");
+        }else{
+          history.pushState(null, "", "/definicion-indicador/"+cat+"/"+subcat+"/"+ind+"/");
+        }
         window.location.reload();
-        // $('.panel-body b:first'). text(data[2][0].name.toUpperCase());
-        // $('.panel-body p span'). text(data[2][0].definition);
-        // $('.panel-body img').attr("src",MEDIA_URL+data[2][0].formula);
-        // $('.panel-footer .pull-right span'). text(data[2][0].unit);
-
-        // $('.selectpicker').selectpicker('refresh');
-
-
-    // });
 }
 
+$(window).bind("popstate", function(e) {
+        window.location.reload();
+});
+
+$('#linkToCalc').click(function(){
+      history.pushState(null, "", "/calculo-indicador/"+$("#category").val()+"/"+$("#subcategory").val()+"/"+$("#indicator").val()+"/");
+      window.location.reload();
+});
 
 $('#category').change( function() {
       getMenu($(this).val(), 1, 1);
-       // history.pushState(null, "", "/calculo-indicador/"+$(this).val()+"/"+1+"/"+1+"/");
-       // location.reload();
-    // }
-    // history.replaceState(null, null, "/calculo-indicador/"+$(this).val()+"/"+1+"/"+1+"/");
 });
 
 $('#subcategory').change( function() {
-    // getMenu($("#category").val(), $(this).val(), 0);
+    getMenu($("#category").val(), $(this).val(), 1);
 });
 
 $('#indicator').change( function() {
-    // getMenu($("#category").val(), $("#subcategory").val(), $(this).val());
+    getMenu($("#category").val(), $("#subcategory").val(), $(this).val());
 });
-
-function initialize(){
-    // getMenu($("#category").val(), 0, 0);
-
-}
 
 
 $('.btn-next').click( function(){
