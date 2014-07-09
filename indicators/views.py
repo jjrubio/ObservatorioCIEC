@@ -47,6 +47,7 @@ def indicators_detail(cat_id, subcat_id, ind_id):
 	dict_indSelect['definition'] = indicatorSelect.definition
 	dict_indSelect['unit'] = indicatorSelect.unit
 	dict_indSelect['formula'] = "/%s" % indicatorSelect.formula_src
+	dict_indSelect['category'] = ind.subcategory.category
 	indicatorSelectArray.append(dict_indSelect)
 
 	message.append(subcategoriesArray)
