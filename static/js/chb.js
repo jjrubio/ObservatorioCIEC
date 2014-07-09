@@ -1,7 +1,7 @@
 $(document).ready( function() {
     var limit = 2;
     var count = 0;
-    
+
     filter();
 
     function loadCheckbox(){
@@ -55,10 +55,8 @@ $(document).ready( function() {
                     }
                 }
             });
-            if(count>limit){
-                $(this).prop('checked', false);
-            }else{
-                count = 0;
+            if(Validos.length == 3){
+                $(this).prop('checked',false);
             }
         });
     }

@@ -144,6 +144,17 @@
                     <div id="resultado" class="panel-collapse collapse">
                       <div class="panel-body">
                         <form action="">
+                          <p>Subcategorias: </p>{{json.0}} <br>
+                          <p>Indicadores: </p>{{json.1}} <br>
+                          <p>Indicador: </p>{{json.2}} <br>
+                          <!-- <p>Subcategoria: </p>{{json.2}} <br> -->
+                          {%for j in json.2 %}
+                              <p>c: </p>{{j.name}} <br>
+                            {%for jota in j %}
+                                <p>a: </p>{{jota.name}} <br>
+
+                            {% endfor %}
+                          {% endfor %}
                         </form>
                       </div>
                     </div>

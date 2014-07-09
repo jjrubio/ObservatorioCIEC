@@ -16,12 +16,18 @@
         <b>Subcategoria</b>
         <br>
         <select id="subcategory" class="selectpicker show-menu-arrow span2"  data-live-search="true" >
+            {% for subcat in json.0 %}
+                <option value="{{forloop.counter}}" data-icon="fa {{subcat.icon}}">{{subcat.name}}</option>
+            {% endfor %}
         </select>
     </div>
     <div class="opcion-menu pull-left">
         <b>Indicador</b>
         <br>
         <select id="indicator" class="selectpicker show-menu-arrow span2"  data-live-search="true" >
+            {% for subcat in json.1 %}
+                <option value="{{forloop.counter}}" data-icon="fa {{subcat.icon}}">{{subcat.name}}</option>
+            {% endfor %}
         </select>
     </div>
 </div>
