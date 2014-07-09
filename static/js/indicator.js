@@ -23,11 +23,10 @@ function getMenu(cat, subcat, ind){
         //     });
         // });
 
-        $('#category option[value='+2+']').attr("selected","selected");
         $('#subcategory option[value='+subcat+']').attr("selected","selected");
         $('#indicator option[value='+ind+']').attr("selected","selected");
 
-        location.reload();
+        window.location.reload();
         // $('.panel-body b:first'). text(data[2][0].name.toUpperCase());
         // $('.panel-body p span'). text(data[2][0].definition);
         // $('.panel-body img').attr("src",MEDIA_URL+data[2][0].formula);

@@ -8,9 +8,10 @@
         <br>
         <select id ="category" class="selectpicker show-menu-arrow span2"   data-live-search="true" >
             {% for cat in categories %}
-                {%if cat == json.2.0.category%}
+                {% if cat.id == json.2.0.category.id %}
                     <option value="{{forloop.counter}}" selected="selected" data-icon="fa {{cat.icon}}">{{cat.name}}</option>
                  {% else %}
+                    <!-- <option value="">{{forloop.counter}}</option> -->
                     <option value="{{forloop.counter}}" data-icon="fa {{cat.icon}}">{{cat.name}}</option>
                 {% endif %}
             {% endfor %}
