@@ -160,8 +160,6 @@ $.getJSON('/valid_desa/', {'id_desagregacions[]': selected},
 function(data){
     console.log(data);
 });
-//console.log(selected);
-
 
 $('#meaning-parameters').hide();
 
