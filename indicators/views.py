@@ -131,7 +131,6 @@ def list_desagregation(request):
 
 
 def valid(request):
-<<<<<<< HEAD
     id_desagre = request.GET.getlist('id_desagregacions[]')
     id_desagre_size = len(id_desagre)
     if id_desagre_size == 0:
@@ -145,25 +144,11 @@ def valid(request):
         print data
     # print id_desagre
     return HttpResponse(data, content_type='application/json')
-=======
-	id_desagre = request.GET.getlist('id_desagregacions[]')
-	id_desagre_size = len(id_desagre)
-	if id_desagre_size == 0:
-		data = "no hay datos"
-		print data
-	elif id_desagre_size == 1:
-		data = "hay un dato"
-		print data
-	elif id_desagre_size == 2:
-		data = "hay dos datos"
-		print data
-	#print id_desagre
-	return HttpResponse(data, mimetype='application/json')
+
 
 def test(request):
-	test = request.GET['test']
-	#data = [['2003','2004','2005'],['4.5','3.9','9.1']]
-	data = ['2003', '2004', '2005']
-	dato = json.dumps(data)
-	return HttpResponse(dato, content_type='application/json')
->>>>>>> b6a2cf301ea6dcd70f86d7539b58cadcb164cbb4
+    test = request.GET['test']
+    #data = [['2003','2004','2005'],['4.5','3.9','9.1']]
+    data = ['2003', '2004', '2005']
+    dato = json.dumps(data)
+    return HttpResponse(dato, content_type='application/json')

@@ -27,4 +27,5 @@ urlpatterns = patterns('',
     url(r'^recursos/enlaces-externos/', 'resources.views.links', name='links'),
     url(r'^list_denied', 'indicators.views.list_by_no_denied', name='list_denied'),
     url(r'^list/', 'indicators.views.list_desagregation', name='list_desagregation'),
+    url(r'^test/', 'indicators.views.test', name='test'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
