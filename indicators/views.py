@@ -75,8 +75,7 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
 
 def list_by_no_denied(request):
     id_desagre = request.GET['id_desagregacion']
-    print id_desagre
-#
+
     if id_desagre == '1' or id_desagre == '3':
         disintegrations = Disintegration.objects.all()
         data = serializers.serialize('json', disintegrations)
@@ -119,14 +118,14 @@ def list_by_no_denied(request):
     elif id_desagre == '13':
         disintegrations = Disintegration.objects.exclude(id__in=[11, 12])
         data = serializers.serialize('json', disintegrations)
-    print data
+
     return HttpResponse(data, content_type='application/json')
 
 
 def list_desagregation(request):
     disintegrations = Disintegration.objects.all()
     data = serializers.serialize('json', disintegrations)
-    # print data
+
     return HttpResponse(data, content_type='application/json')
 
 
@@ -134,15 +133,15 @@ def valid(request):
     id_desagre = request.GET.getlist('id_desagregacions[]')
     id_desagre_size = len(id_desagre)
     if id_desagre_size == 0:
-        data = "no hay datos"
+        data = "No se escogieron desagregaciones"
         print data
     elif id_desagre_size == 1:
-        data = "hay un dato"
+        data = "Se escogio una desagregacion"
         print data
     elif id_desagre_size == 2:
-        data = "hay dos datos"
+        data = "Se escogieron dos desagregaciones"
         print data
-    # print id_desagre
+
     return HttpResponse(data, content_type='application/json')
 
 
