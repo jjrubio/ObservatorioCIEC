@@ -135,3 +135,10 @@ def valid(request):
 		print data
 	#print id_desagre
 	return HttpResponse(data, mimetype='application/json')
+
+def test(request):
+	test = request.GET['test']
+	#data = [['2003','2004','2005'],['4.5','3.9','9.1']]
+	data = ['2003', '2004', '2005']
+	dato = json.dumps(data)
+	return HttpResponse(dato, content_type='application/json')
