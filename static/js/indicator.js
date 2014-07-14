@@ -43,6 +43,15 @@ $('.btn-back').click( function(){
 
 $('.btn-calc').click( function(){
     $('#desagregaciones').removeClass( "in" );
+    var selected = new Array();
+    $('input:checkbox').each(function(){
+        if($(this).is(':checked')){
+            selected.push($(this).attr('id'));
+        }
+    });
+    $.getJSON('/valid_desa/', {'id_desagregacions[]': selected},
+    function(data){
+    });
 });
 
 
@@ -148,6 +157,7 @@ function modificarPeriodo(variable, start, end){
   }
 }
 
+<<<<<<< HEAD
 
 var selected = new Array();
 $('input:checkbox').each(function(){
@@ -161,6 +171,8 @@ function(data){
     console.log(data);
 });
 
+=======
+>>>>>>> e4725b9e8609a07f272fc6365e614f3ac3955913
 $('#meaning-parameters').hide();
 
 $('#info-represent').hover(function(){
