@@ -32,28 +32,34 @@
                   </div>
                   <div id="parametros" class="panel-collapse collapse in">
                     <div class="panel-body">
+                      <div class="col-lg-4"></div>
+                      <div class="col-lg-4">
+
                       <form action="" method="post" class="form-css">
                         <label>
                             <span>Representatividad   </span><br><br>
-                            <select id="represent" class="selectpicker show-menu-arrow" data-width="100%">
+                            <select id="represent" class="selectpicker show-menu-arrow" data-width="93%">
                               <option value="1">Nacional</option>
-                              <option value="2">Urbano</option>
+                              <option value="2">Urbana</option>
                               <option value="3">Rural</option>
                             </select>
+                            <i id="info-represent" class="fa fa-info-circle fa-lg pull-right"></i>
+
                         </label>
 
                         <label>
-                            <span>Metodología </span><br><br>
-                              <select id="method" class="selectpicker show-menu-arrow"  data-width="100%">
-                                <option value="1">2003-4 hasta 2007-1 </option>
-                                <option value="2">2007-2 hasta la actualidad</option>
-                              </select>
+                                <span>Metodología </span><br><br>
+                                <select id="method" class="selectpicker show-menu-arrow"  data-width="93%">
+                                    <option value="1">2003-4 hasta 2007-1 </option>
+                                    <option value="2">2007-2 hasta la actualidad</option>
+                                </select>
+                                <i id="info-method" class="fa fa-info-circle fa-lg pull-right"></i>
                         </label>
 
                         <label>
                           <span>Período Inicial </span><br><br>
                           <span>Año: </span>
-                          <select id="yearStart" class="selectpicker show-menu-arrow pull-left" data-size="5"  data-width="30%" >
+                          <select id="yearStart" class="selectpicker show-menu-arrow pull-left" data-size="5"  data-width="25%" >
                             <option value="2003">2003</option>
                             <option value="2004">2004</option>
                             <option value="2005">2005</option>
@@ -61,7 +67,7 @@
                             <option value="2007">2007</option>
                           </select>
                           <span>Trimestre: </span>
-                          <select id="trimStart" class="selectpicker show-menu-arrow" data-width="30%">
+                          <select id="trimStart" class="selectpicker show-menu-arrow" data-width="25%">
                             <option value="4">4</option>
                           </select>
                         </label>
@@ -69,7 +75,7 @@
                         <label>
                           <span>Período Final </span><br><br>
                           <span>Año: </span>
-                          <select id="yearEnd" class="selectpicker show-menu-arrow pull-left" data-size="5" data-width="30%" >
+                          <select id="yearEnd" class="selectpicker show-menu-arrow pull-left" data-size="5" data-width="25%" >
                             <option value="2003">2003</option>
                             <option value="2004">2004</option>
                             <option value="2005">2005</option>
@@ -77,7 +83,7 @@
                             <option value="2007" selected="selected">2007</option>
                           </select>
                           <span>Trimestre: </span>
-                          <select id="trimEnd" class="selectpicker show-menu-arrow"  data-width="30%">
+                          <select id="trimEnd" class="selectpicker show-menu-arrow"  data-width="25%">
                             <option value="1">1</option>
                           </select>
                         </label>
@@ -90,75 +96,83 @@
                           </label>
                         </form>
                       </div>
-                    </div>
-                  </div>
-
-                  <div class="panel panel-default">
-                    <div class="panel-heading">
-                      <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#desagregaciones">
-                          Desagregaciones
-                        </a>
-                      </h4>
-                    </div>
-                    <div id="desagregaciones" class="panel-collapse collapse">
-                      <div class="panel-body">
-                        <form action="" method="post" if="formID" class="form-css">
-                          <label><i class="fa fa-warning"></i> Solo se pueden escoger hasta dos desagregaciones</label>
-                          <div id="ckb">
-                            {% if disintegrations %}
-                              {% for desag in disintegrations %}
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" id="{{ desag.id }}" > {{ desag.name }}
-                                    </label>
-                                </div>
-                              {% endfor %}
-                            {%else%}
-                              <p>No se han agregado desagregaciones.</p>
-                            {%endif%}
-                          </div>
-                          <label class="text-center">
-                            <div class="buttons">
-                              <button type="button" class="btn btn-back" data-toggle="collapse" data-target="#parametros">
-                                Atrás
-                              </button>
-                              <button type="button" class="btn btn-calc" data-toggle="collapse" data-target="#resultado">
-                                Calcular
-                              </button>
+                      <div class="col-lg-4">
+                          <div id="meaning-parameters" class="panel panel-default">
+                              <div class="panel-heading">
+                                <h3 class="panel-title"></h3>
+                              </div>
+                              <div class="panel-body text-justify">
+                              </div>
                             </div>
-                          </label>
-                        </form>
+                      </div>
+
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div class="panel panel-default">
-                    <div class="panel-heading">
-                      <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#resultado">
-                          Resultados
-                        </a>
-                      </h4>
-                    </div>
-                    <div id="resultado" class="panel-collapse collapse">
-                      <div class="panel-body">
-                        <form action="">
-                          <p>Subcategorias: </p>{{json.0}} <br>
-                          <p>Indicadores: </p>{{json.1}} <br>
-                          <p>Indicador: </p>{{json.2}} <br>
-                          <!-- <p>Subcategoria: </p>{{json.2}} <br> -->
-                          {%for j in json.2 %}
-                              <p>c: </p>{{j.name}} <br>
-                            {%for jota in j %}
-                                <p>a: </p>{{jota.name}} <br>
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a data-toggle="collapse" data-parent="#accordion" href="#desagregaciones">
+                            Desagregaciones
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="desagregaciones" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          <div class="col-lg-4"></div>
+                          <div class="col-lg-4">
 
-                            {% endfor %}
-                          {% endfor %}
-                        </form>
+                          <form action="" method="post" if="formID" class="form-css">
+                            <label><i class="fa fa-warning fa-lg"></i> Puede escoger hasta dos desagregaciones</label>
+                            <div id="ckb">
+                              {% if disintegrations %}
+                                {% for desag in disintegrations %}
+                                  <div class="checkbox">
+                                      <label>
+                                          <input type="checkbox" id="{{ desag.id }}" > {{ desag.name }}
+                                      </label>
+                                  </div>
+                                {% endfor %}
+                              {%else%}
+                                <p>No se han agregado desagregaciones.</p>
+                              {%endif%}
+                            </div>
+                            <label class="text-center">
+                              <div class="buttons">
+                                <button type="button" class="btn btn-back" data-toggle="collapse" data-target="#parametros">
+                                  Atrás
+                                </button>
+                                <button type="button" class="btn btn-calc" data-toggle="collapse" data-target="#resultado">
+                                  Calcular
+                                </button>
+                              </div>
+                            </label>
+                          </form>
+                          </div>
+                          <div class="col-lg-4"></div>
+
+                        </div>
                       </div>
                     </div>
-                  </div>
+
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a data-toggle="collapse" data-parent="#accordion" href="#resultado">
+                            Resultados
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="resultado" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          <form action="">
+
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                   </div>
                 </div>
             </div>
           </div>
@@ -173,6 +187,8 @@
         var MEDIA_URL = {{MEDIA_URL}};
 
         $('.selectpicker').selectpicker();
+
+        $('.fa-info-circle').tooltip();
     </script>
 {% endblock %}
 

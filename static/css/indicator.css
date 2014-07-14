@@ -21,31 +21,41 @@
   margin-bottom: 30px;
 }
 #main-panel .panel-body .panel-group {
-  margin-top: -20px;
+  margin-bottom: 0px;
 }
-#main-panel .panel-body .panel-group .panel-body {
+#main-panel .panel-body .panel-group .panel {
+  margin-bottom: 10px;
+}
+#main-panel .panel-body .panel-group .panel .panel-body {
   padding: 30px 0 30px 0;
 }
-#main-panel .panel-body .panel-group .panel-body form label span:nth-child(4) {
+#main-panel .panel-body .panel-group .panel .panel-body form label span:nth-child(4) {
   margin-right: 10px;
 }
-#main-panel .panel-body .panel-group .panel-body form label span:nth-last-child(3) {
-  margin-left: 39px;
+#main-panel .panel-body .panel-group .panel .panel-body form label span:nth-last-child(3) {
+  margin-left: 44px;
   margin-right: 10px;
 }
-#main-panel .panel-body .panel-group .btn-next,
-#main-panel .panel-body .panel-group .btn-calc {
+#main-panel .panel-body #meaning-parameters {
+  margin-top: 30px;
+}
+#main-panel .panel-body #meaning-parameters .panel-body {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+#main-panel .panel-body .btn-next,
+#main-panel .panel-body .btn-calc {
   margin-top: 30px;
   margin-bottom: 30px;
   background-color: #428bca;
   border-color: #357ebd;
   color: #fff;
 }
-#main-panel .panel-body .panel-group .btn-next:hover,
-#main-panel .panel-body .panel-group .btn-calc:hover {
+#main-panel .panel-body .btn-next:hover,
+#main-panel .panel-body .btn-calc:hover {
   background-color: #426bca;
 }
-#main-panel .panel-body .panel-group .btn-back {
+#main-panel .panel-body .btn-back {
   background-color: #ebebeb;
   border-color: #adadad;
   color: #333;
@@ -55,11 +65,6 @@
 }
 #main-panel .panel-footer .pull-left a {
   color: #0cb3ac;
-}
-.form-css {
-  width: 400px;
-  margin-right: auto;
-  margin-left: auto;
 }
 .form-css label {
   display: block;
@@ -71,4 +76,7 @@
 }
 .fa-warning {
   color: #f0ad4e;
+}
+.fa-info-circle {
+  margin-top: 10px;
 }

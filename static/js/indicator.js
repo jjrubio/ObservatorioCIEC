@@ -162,3 +162,41 @@ function(data){
 });
 //console.log(selected);
 
+
+$('#meaning-parameters').hide();
+
+$('#info-represent').hover(function(){
+    $('#meaning-parameters').show();
+    $('#meaning-parameters .panel-body').empty();
+    $('#meaning-parameters .panel-heading h3').empty();
+    $('#meaning-parameters .panel-heading h3').text('Representatividad');
+    $('#meaning-parameters .panel-body').html('<b>Nacional.-</b> Se define como el área total comprendida\
+                                                                            por las zonas urbanas y zonas rurales. <br><br>\
+                                                                            <b>Urbana.-</b> Se define como zona urbana como "ciudad" a\
+                                                                            aquellos asentamientos de 2.000 o más habitantes. <br><br>\
+                                                                            <b>Rural.-</b> Se define como zona "rural" o "campo" a las\
+                                                                            zonas que se encuentren en las periferias de las ciudades\
+                                                                            que tengan menos de 2.000 habitantes.');
+}, function(){
+    $('#meaning-parameters').hide();
+})
+
+$('#info-method').hover(function(){
+    $('#meaning-parameters').show();
+    $('#meaning-parameters .panel-body').empty();
+    $('#meaning-parameters .panel-heading h3').empty();
+    $('#meaning-parameters .panel-heading h3').text('Metodología');
+    $('#meaning-parameters .panel-body').html('<b>2003-4 a 2007-1.-</b> Antes de esta fecha solo la población\
+                                                                            urbana era analizada. A partir de esta fecha la definición de lo que\
+                                                                            constituye un centro urbano fue cambiada también. <br><br>\
+                                                                            <b>2007-2 a la actualidad.-</b> Se definen modificaciones en las\
+                                                                            definiciones y clasificaciones utilizadas para el mercado laboral. Estas\
+                                                                            son: definición de área urbana y rural, periodicidad de la encuesta,\
+                                                                            PEA según mercado laboral, el periodo de referencia para la búsqueda\
+                                                                            de empleo y el desempleo. ');
+}, function(){
+    $('#meaning-parameters').hide();
+})
+
+
+
