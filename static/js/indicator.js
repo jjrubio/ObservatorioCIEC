@@ -50,9 +50,6 @@ $('.btn-calc').click( function(){
             selected.push($(this).attr('id'));
         }
     });
-    $.getJSON('/valid_desa/', {'id_desagregacions[]': selected},
-    function(data){
-    });
 
     var indicator = $('#indicator option:selected').attr('id');
     var represent = $('#represent').val();

@@ -128,22 +128,6 @@ def list_desagregation(request):
 
     return HttpResponse(data, content_type='application/json')
 
-
-def valid(request):
-    id_desagre = request.GET.getlist('id_desagregacions[]')
-    id_desagre_size = len(id_desagre)
-    if id_desagre_size == 0:
-        data = "No se escogieron desagregaciones"
-        print data
-    elif id_desagre_size == 1:
-        data = "Se escogio una desagregacion"
-        print data
-    elif id_desagre_size == 2:
-        data = "Se escogieron dos desagregaciones"
-        print data
-
-    return HttpResponse(data, content_type='application/json')
-
 def test(request):
     test = request.GET['test']
     #data = [['2003','2004','2005'],['4.5','3.9','9.1']]
@@ -160,6 +144,59 @@ def calc_result(request):
     yearEnd = request.GET['yearEnd']
     trimEnd = request.GET['trimEnd']
     disintegrations = request.GET.getlist('disintegrations[]')
+
+    disintegrations_size = len(disintegrations)
+    if disintegrations_size == 0:
+        pass
+    elif disintegrations_size == 1:
+        pass
+    elif disintegrations_size == 2:
+        #Desagregaciones (Etnia, Genero,...)
+        disintegrations_name_opcion_one = by_list(disintegrations[0])
+        disintegrations_name_opcion_two = by_list(disintegrations[1])
+        #Desagregaciones por tipo (['Blanco','Mestizo'],['Hombre','Mujer'],...)
+        disintegrations_type_opcion_one = Type.objects.filter(disintegration = disintegrations[0])
+        disintegrations_type_opcion_two = Type.objects.filter(disintegration = disintegrations[1])
+        disintegrations_opcion_one_size = len(disintegrations_opcion_one)
+        disintegrations_opcion_two_size = len(disintegrations_opcion_two)
+
+        #for i in range(0,disintegrations_opcion_one_size):
+            #for y in range(0,disintegrations_opcion_two_size):
+                #first query
+                #SELECT pea, fexp  FROM Enemdu_2003_4 WHERE trim(genero)='Hombre' AND trim(etnia)='Blanco' AND trim(area) IN ('Urbano')
+                #result = Data_from_2003_4.objects.filter(
+                    #area = represent, **{disintegrations_name_opcion_one:disintegrations_type_opcion_one[y].pk, 
+                    #disintegrations_name_opcion_two:disintegrations_type_opcion_two[y].pk}
+
     data = [indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, disintegrations]
     message = json.dumps(data)
     return HttpResponse(message, content_type='application/json')
+
+def by_list(id_desagregation):
+    if id_desagregation == 1:
+        result = 'region_natural'
+    elif id_desagregation == 2:
+        result = 'ciudad_ind'
+    elif id_desagregation == 3:
+        result = 'genero'
+    elif id_desagregation == 4:
+        result = 'etnia'
+    elif id_desagregation == 5:
+        result = 'edad_grupo'
+    elif id_desagregation == 6:
+        result = 'nivinst'
+    elif id_desagregation == 7:
+        result = 'seguro'
+    elif id_desagregation == 8:
+        result = 'grupo_ocup_1'
+    elif id_desagregation == 9:
+        result = 'rama_act_2'
+    elif id_desagregation == 10:
+        result = 'categ_ocupa'
+    elif id_desagregation == 11:
+        result = 'condact'
+    elif id_desagregation == 12:
+        result = 'tipo_ocupa'
+    elif id_desagregation == 13:
+        result = 'tipo_deso'
+    return result
