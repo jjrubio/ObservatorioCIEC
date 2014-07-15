@@ -48,7 +48,7 @@ class Data_from_2003_4(models.Model):
     ingrl = models.PositiveIntegerField()
     rama_act_1 = models.CharField(max_length=75)
     rama_act_2 = models.CharField(max_length=75)
-    group_ocup_1 = models.CharField(max_length=75)
+    grupo_ocup_1 = models.CharField(max_length=75)
     seguro = models.CharField(max_length=50)
     migracion = models.BooleanField()
 
@@ -90,6 +90,6 @@ class Data_from_2007_2(models.Model):
     ingrl = models.PositiveIntegerField()
     rama_act_1 = models.CharField(max_length=75)
     rama_act_2 = models.CharField(max_length=75)
-    group_ocup_1 = models.CharField(max_length=75)
+    grupo_ocup_1 = models.CharField(max_length=75)
     seguro = models.CharField(max_length=50)
     migracion = models.BooleanField()
