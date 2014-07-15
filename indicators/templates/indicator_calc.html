@@ -35,7 +35,8 @@
                       <div class="col-lg-4"></div>
                       <div class="col-lg-4">
 
-                      <form action="" method="post" class="form-css">
+                      <form id="form-parameters" method="post" class="form-css">
+                        {% csrf_token %}
                         <label>
                             <span>Representatividad   </span><br><br>
                             <select id="represent" class="selectpicker show-menu-arrow" data-width="93%">
@@ -123,7 +124,8 @@
                           <div class="col-lg-4"></div>
                           <div class="col-lg-4">
 
-                          <form action="" method="post" if="formID" class="form-css">
+                          <form id="form-disintegrations" method="post" class="form-css">
+                            {% csrf_token %}
                             <label><i class="fa fa-warning fa-lg"></i> Puede escoger hasta dos desagregaciones</label>
                             <div id="ckb">
                               {% if disintegrations %}

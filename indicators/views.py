@@ -144,10 +144,22 @@ def valid(request):
 
     return HttpResponse(data, content_type='application/json')
 
-
 def test(request):
     test = request.GET['test']
     #data = [['2003','2004','2005'],['4.5','3.9','9.1']]
     data = ['2003', '2004', '2005']
     dato = json.dumps(data)
     return HttpResponse(dato, content_type='application/json')
+
+def calc_result(request):
+    indicator = request.GET['indicator']
+    represent = request.GET['represent']
+    method = request.GET['method']
+    yearStart = request.GET['yearStart']
+    trimStart = request.GET['trimStart']
+    yearEnd = request.GET['yearEnd']
+    trimEnd = request.GET['trimEnd']
+    disintegrations = request.GET.getlist('disintegrations[]')
+    data = [indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, disintegrations]
+    message = json.dumps(data)
+    return HttpResponse(message, content_type='application/json')

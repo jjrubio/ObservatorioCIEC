@@ -35,9 +35,9 @@
         <select id="indicator" class="selectpicker show-menu-arrow span2"  data-live-search="true" >
             {%  for ind in json.1 %}
                 {% if ind.id == json.2.0.id %}
-                    <option value="{{forloop.counter}}" selected="selected" data-icon="fa {{ind.icon}}">{{ind.name}}</option>
+                    <option id="{{ind.id}}" value="{{forloop.counter}}" selected="selected" data-icon="fa {{ind.icon}}">{{ind.name}}</option>
                 {% else %}
-                    <option value="{{forloop.counter}}" data-icon="fa {{ind.icon}}">{{ind.name}}</option>
+                    <option id="{{ind.id}}" value="{{forloop.counter}}" data-icon="fa {{ind.icon}}">{{ind.name}}</option>
                 {% endif %}
             {% endfor %}
         </select>

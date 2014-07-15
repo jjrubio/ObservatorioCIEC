@@ -43,6 +43,7 @@ $('.btn-back').click( function(){
 
 $('.btn-calc').click( function(){
     $('#desagregaciones').removeClass( "in" );
+
     var selected = new Array();
     $('input:checkbox').each(function(){
         if($(this).is(':checked')){
@@ -51,6 +52,20 @@ $('.btn-calc').click( function(){
     });
     $.getJSON('/valid_desa/', {'id_desagregacions[]': selected},
     function(data){
+    });
+
+    var indicator = $('#indicator option:selected').attr('id');
+    var represent = $('#represent').val();
+    var method = $('#method').val();
+    var yearStart = $('#yearStart').val();
+    var trimStart = $('#trimStart').val();
+    var yearEnd = $('#yearEnd').val();
+    var trimEnd = $('#trimEnd').val();
+    console.log(represent);
+    $.getJSON('/result/', {'indicator': indicator, 'represent': represent, 'method': method, 'yearStart': yearStart,
+                                      'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd, 'disintegrations[]': selected},
+    function(data){
+        console.log(data);
     });
 });
 
