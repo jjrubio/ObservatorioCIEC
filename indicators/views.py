@@ -137,7 +137,6 @@ def test(request):
     return HttpResponse(dato, content_type='application/json')
 
 def calc_result(request):
-    resultado = []
     indicator = request.GET['indicator']
     represent = request.GET['represent']
     method = request.GET['method']
@@ -147,56 +146,210 @@ def calc_result(request):
     trimEnd = request.GET['trimEnd']
     disintegrations = request.GET.getlist('disintegrations[]')
 
-    opcion1 = int(disintegrations[0])
-    opcion2 = int(disintegrations[1])
-
     indicator_int = int(indicator)
     method_int = int(method)
+    yearStart_int = int(yearStart)
+    trimStart_int = int(trimStart)
+    yearEnd_int = int(yearEnd)
+    trimEnd_int = int(trimEnd)
 
     represent_int = int(represent)
-
+    
     disintegrations_size = len(disintegrations)
 
     if disintegrations_size == 0:
-        pass
+        opcion1 = 0
+        opcion2 = 0
+        respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
     elif disintegrations_size == 1:
-        disintegrations_name_opcion_one = by_list(opcion1)
-        disintegrations_type_opcion_one = Type.objects.filter(disintegration__id = opcion1)
-        disintegrations_opcion_one_size = len(disintegrations_type_opcion_one)
-        pass
-    elif disintegrations_size == 2:
-        #Desagregaciones (Etnia, Genero,...)
-        disintegrations_name_opcion_one = by_list(opcion1)
-        disintegrations_name_opcion_two = by_list(opcion2)
-        #Desagregaciones por tipo (['Blanco','Mestizo'],['Hombre','Mujer'],...)
-        disintegrations_type_opcion_one = Type.objects.filter(disintegration__id = opcion1)
-        disintegrations_type_opcion_two = Type.objects.filter(disintegration__id = opcion2)
-        disintegrations_opcion_one_size = len(disintegrations_type_opcion_one)
-        disintegrations_opcion_two_size = len(disintegrations_type_opcion_two)
-
-        if represent_int == 1:
-            #Se escogen las areas Rural y Urbano
-            for i in range(0,disintegrations_opcion_one_size):
-                for y in range(0,disintegrations_opcion_two_size):
-                    if(indicator_int == 1 and method_int == 1 ):
-                        resultado.append(Data_from_2003_4.objects.filter(**{disintegrations_name_opcion_one:disintegrations_type_opcion_one[i].name, disintegrations_name_opcion_two:disintegrations_type_opcion_two[y].name}))
-                    else:
-                        pass
-
-        elif represent_int == 2:
-            #Solo Urbana
-            area = 'Urbano'
-            res = Data_from_2003_4.objects.filter(area=area,**{disintegrations_name_opcion_one:disintegrations_type_opcion_one[0].name, disintegrations_name_opcion_two:disintegrations_type_opcion_two[0].name})
-        elif represent_int == 3:
-            #Solo Rural
-            area = 'Rural'
-            res = Data_from_2003_4.objects.filter(area=area,**{disintegrations_name_opcion_one:disintegrations_type_opcion_one[0].name, disintegrations_name_opcion_two:disintegrations_type_opcion_two[0].name})
-
-        print resultado
+        opcion1 = int(disintegrations[0])
+        opcion2 = 0
+        respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
+    elif disintegrations_size == 2: 
+        opcion1 = int(disintegrations[0])
+        opcion2 = int(disintegrations[1])
+        respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
 
     data = [indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, disintegrations]
     message = json.dumps(data)
     return HttpResponse(message, content_type='application/json')
+
+def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, opcion1, opcion2):
+
+    #Validacion para Desagregaciones
+    if opcion1 == 0 and opcion2 == 0:
+        arreglo = 'Opcion 1 y Opcion 2 son Zero'
+    elif opcion1 > 0:
+        if opcion2 == 0:
+            disintegrations_name_opcion_one = by_list(opcion1)
+            disintegrations_type_opcion_one = Type.objects.filter(disintegration__id = opcion1)
+            disintegrations_opcion_one_size = len(disintegrations_type_opcion_one)
+
+            arreglo = 'Solo opcion2 es zero'
+
+        else:
+            disintegrations_name_opcion_one = by_list(opcion1)
+            disintegrations_name_opcion_two = by_list(opcion2)
+            disintegrations_type_opcion_one = Type.objects.filter(disintegration__id = opcion1)
+            disintegrations_type_opcion_two = Type.objects.filter(disintegration__id = opcion2)
+            disintegrations_opcion_one_size = len(disintegrations_type_opcion_one)
+            disintegrations_opcion_two_size = len(disintegrations_type_opcion_two)
+
+            arreglo = 'Ninguno es Zero'
+    
+    #Validacion por area o representatividad
+    if represent == 1:
+        print "Nacional"
+    elif represent == 2:
+        print "Urbano"
+    elif represent == 3:
+        print "Rural"
+
+    #Validacion por cada indicador ya que tiene su propio query
+    if method == 1:
+        #Data_from_2003_4
+        if indicator == 1:
+            print "Indicator 1"
+        elif indicator == 2:
+            print "Indicator 2"
+        elif indicator == 3:
+            print "Indicator 3"
+        elif indicator == 4:
+            print "Indicator 4"
+        elif indicator == 5:
+            print "Indicator 5"
+        elif indicator == 6:
+            print "Indicator 6"
+        elif indicator == 7:
+            print "Indicator 7"
+        elif indicator == 9:
+            print "Indicator 9"
+        elif indicator == 10:
+            print "Indicator 10"
+        elif indicator == 11:
+            print "Indicator 11"
+        elif indicator == 12:
+            print "Indicator 12"
+        elif indicator == 14:
+            print "Indicator 14"
+        elif indicator == 15:
+            print "Indicator 15"
+        elif indicator == 16:
+            print "Indicator 16"
+        elif indicator == 17:
+            print "Indicator 17"
+        elif indicator == 18:
+            print "Indicator 18"
+        elif indicator == 19:
+            print "Indicator 19"
+        elif indicator == 22:
+            print "Indicator 22"
+        elif indicator == 23:
+            print "Indicator 23"
+        elif indicator == 24:
+            print "Indicator 24"
+        elif indicator == 25:
+            print "Indicator 25"
+        elif indicator == 26:
+            print "Indicator 26"
+        elif indicator == 28:
+            print "Indicator 28"
+        elif indicator == 29:
+            print "Indicator 29"
+        elif indicator == 30:
+            print "Indicator 30"
+        elif indicator == 31:
+            print "Indicator 31"
+        elif indicator == 32:
+            print "Indicator 32"
+        elif indicator == 33:
+            print "Indicator 33"
+        elif indicator == 34:
+            print "Indicator 34"
+        elif indicator == 35:
+            print "Indicator 35"
+        elif indicator == 36:
+            print "Indicator 36"
+        elif indicator == 37:
+            print "Indicator 37"
+    else:
+        #Data_from_2007_2
+        if indicator == 1:
+            print "Indicator 1"
+        elif indicator == 2:
+            print "Indicator 2"
+        elif indicator == 3:
+            print "Indicator 3"
+        elif indicator == 4:
+            print "Indicator 4"
+        elif indicator == 5:
+            print "Indicator 5"
+        elif indicator == 6:
+            print "Indicator 6"
+        elif indicator == 7:
+            print "Indicator 7"
+        elif indicator == 8:
+            print "Indicator 8"
+        elif indicator == 9:
+            print "Indicator 9"
+        elif indicator == 10:
+            print "Indicator 10"
+        elif indicator == 11:
+            print "Indicator 11"
+        elif indicator == 12:
+            print "Indicator 12"
+        elif indicator == 13:
+            print "Indicator 13"
+        elif indicator == 19:
+            print "Indicator 19"
+        elif indicator == 20:
+            print "Indicator 20"
+        elif indicator == 21:
+            print "Indicator 21"
+        elif indicator == 22:
+            print "Indicator 22"
+        elif indicator == 23:
+            print "Indicator 23"
+        elif indicator == 24:
+            print "Indicator 24"
+        elif indicator == 25:
+            print "Indicator 25"
+        elif indicator == 26:
+            print "Indicator 26"
+        elif indicator == 27:
+            print "Indicator 27"
+        elif indicator == 28:
+            print "Indicator 28"
+        elif indicator == 29:
+            print "Indicator 29"
+        elif indicator == 30:
+            print "Indicator 30"
+        elif indicator == 31:
+            print "Indicator 31"
+        elif indicator == 32:
+            print "Indicator 32"
+        elif indicator == 33:
+            print "Indicator 33"
+        elif indicator == 34:
+            print "Indicator 34"
+        elif indicator == 35:
+            print "Indicator 35"
+        elif indicator == 36:
+            print "Indicator 36"
+        elif indicator == 37:
+            print "Indicator 37"
+        elif indicator == 38:
+            print "Indicator 38"
+        elif indicator == 39:
+            print "Indicator 39"
+        elif indicator == 40:
+            print "Indicator 40"
+        elif indicator == 41:
+            print "Indicator 41"
+        elif indicator == 42:
+            print "Indicator 42"
+    
+    return arreglo
 
 def by_list(id_desagregation):
     if id_desagregation == 1:
