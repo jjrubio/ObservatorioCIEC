@@ -25,7 +25,7 @@
             <div class="navbar navbar-inverse" id="nav-logo" role="navigation">
                 <div class="navbar-header">
                     <a href="/"><img src="{{STATIC_URL}}img/ciec.png" class="pull-left img-nav-header" alt="ciec"></a>
-                    <a href="/historia" class="navbar-brand">Observatorio Económico - Social del Ecuador</a><br>
+                    <a href="/" class="navbar-brand">Observatorio Económico - Social del Ecuador</a><br>
                     <i>"servir como base para investigaciones socioeconómicas"</i>
                 </div>
                 {% if user.is_authenticated %}
@@ -51,8 +51,9 @@
         <div class="contour-main">
             <div class="navbar navbar-default" id="nav-menu" role="navigation">
                 <ul class="nav navbar-nav pull-right" id="tabs-menu">
-                    <li><a href="/definicion-indicador/1/1/1">DEFINICIÓN DEL INDICADOR</a></li>
-                    <li><a href="/calculo-indicador/1/1/1">CÁLCULO DEL INDICADOR</a></li>
+                    <li><a href="/inicio/">INICIO</a></li>
+                    <li><a href="/definicion-indicador/">DEFINICIÓN DEL INDICADOR</a></li>
+                    <li><a href="/calculo-indicador/">CÁLCULO DEL INDICADOR</a></li>
                     <!-- <li><a href="#">COMERCIO EXTERIOR</a></li> -->
                     <li><a href="/recursos/boletines">RECURSOS</a></li>
                 </ul>

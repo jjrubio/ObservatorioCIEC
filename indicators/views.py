@@ -1,6 +1,7 @@
 from django.shortcuts import HttpResponse, render, render_to_response, HttpResponseRedirect
 from django.template.context import RequestContext
 from models import *
+from disintegrations.models import *
 import json
 from django.shortcuts import get_object_or_404
 from django.core import serializers
@@ -136,6 +137,7 @@ def test(request):
     return HttpResponse(dato, content_type='application/json')
 
 def calc_result(request):
+    resultado = []
     indicator = request.GET['indicator']
     represent = request.GET['represent']
     method = request.GET['method']
@@ -145,6 +147,12 @@ def calc_result(request):
     trimEnd = request.GET['trimEnd']
     disintegrations = request.GET.getlist('disintegrations[]')
 
+    opcion1 = int(disintegrations[0])
+    opcion2 = int(disintegrations[1])
+
+    indicator_int = int(indicator)
+    method_int = int(method)
+
     disintegrations_size = len(disintegrations)
     if disintegrations_size == 0:
         pass
@@ -152,21 +160,29 @@ def calc_result(request):
         pass
     elif disintegrations_size == 2:
         #Desagregaciones (Etnia, Genero,...)
-        disintegrations_name_opcion_one = by_list(disintegrations[0])
-        disintegrations_name_opcion_two = by_list(disintegrations[1])
+        disintegrations_name_opcion_one = by_list(opcion1)
+        disintegrations_name_opcion_two = by_list(opcion2)
         #Desagregaciones por tipo (['Blanco','Mestizo'],['Hombre','Mujer'],...)
-        disintegrations_type_opcion_one = Type.objects.filter(disintegration = disintegrations[0])
-        disintegrations_type_opcion_two = Type.objects.filter(disintegration = disintegrations[1])
-        disintegrations_opcion_one_size = len(disintegrations_opcion_one)
-        disintegrations_opcion_two_size = len(disintegrations_opcion_two)
+        print type(opcion1)
+        print type(opcion2)
+        type1 = Type.objects.filter(disintegration__id = 3)
+        print type1
+        # type2 = Type.objects.filter(disintegration__id = 4)
+        # print disintegrations_type_opcion_one
+        # print disintegrations_type_opcion_two
+        #disintegrations_opcion_one_size = len(disintegrations_type_opcion_one)
+        #disintegrations_opcion_two_size = len(disintegrations_type_opcion_two)
 
         #for i in range(0,disintegrations_opcion_one_size):
             #for y in range(0,disintegrations_opcion_two_size):
                 #first query
-                #SELECT pea, fexp  FROM Enemdu_2003_4 WHERE trim(genero)='Hombre' AND trim(etnia)='Blanco' AND trim(area) IN ('Urbano')
-                #result = Data_from_2003_4.objects.filter(
-                    #area = represent, **{disintegrations_name_opcion_one:disintegrations_type_opcion_one[y].pk, 
-                    #disintegrations_name_opcion_two:disintegrations_type_opcion_two[y].pk}
+                #if(indicator_int == 1 and method_int == 1 ):
+                    #print "Despues del if"
+                    #resultado.append(Data_from_2003_4.objects.filter(area = represent, **{disintegrations_name_opcion_one:disintegrations_type_opcion_one[i].pk, disintegrations_name_opcion_two:disintegrations_type_opcion_two[y].pk}))
+                    #print resultado
+                #else:
+                    #Por falso
+                    #print "Fallo"
 
     data = [indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, disintegrations]
     message = json.dumps(data)
