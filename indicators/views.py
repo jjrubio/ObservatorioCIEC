@@ -153,36 +153,46 @@ def calc_result(request):
     indicator_int = int(indicator)
     method_int = int(method)
 
+    represent_int = int(represent)
+
     disintegrations_size = len(disintegrations)
+
     if disintegrations_size == 0:
         pass
     elif disintegrations_size == 1:
+        disintegrations_name_opcion_one = by_list(opcion1)
+        disintegrations_type_opcion_one = Type.objects.filter(disintegration__id = opcion1)
+        disintegrations_opcion_one_size = len(disintegrations_type_opcion_one)
         pass
     elif disintegrations_size == 2:
         #Desagregaciones (Etnia, Genero,...)
         disintegrations_name_opcion_one = by_list(opcion1)
         disintegrations_name_opcion_two = by_list(opcion2)
         #Desagregaciones por tipo (['Blanco','Mestizo'],['Hombre','Mujer'],...)
-        print type(opcion1)
-        print type(opcion2)
-        type1 = Type.objects.filter(disintegration__id = 3)
-        print type1
-        # type2 = Type.objects.filter(disintegration__id = 4)
-        # print disintegrations_type_opcion_one
-        # print disintegrations_type_opcion_two
-        #disintegrations_opcion_one_size = len(disintegrations_type_opcion_one)
-        #disintegrations_opcion_two_size = len(disintegrations_type_opcion_two)
+        disintegrations_type_opcion_one = Type.objects.filter(disintegration__id = opcion1)
+        disintegrations_type_opcion_two = Type.objects.filter(disintegration__id = opcion2)
+        disintegrations_opcion_one_size = len(disintegrations_type_opcion_one)
+        disintegrations_opcion_two_size = len(disintegrations_type_opcion_two)
 
-        #for i in range(0,disintegrations_opcion_one_size):
-            #for y in range(0,disintegrations_opcion_two_size):
-                #first query
-                #if(indicator_int == 1 and method_int == 1 ):
-                    #print "Despues del if"
-                    #resultado.append(Data_from_2003_4.objects.filter(area = represent, **{disintegrations_name_opcion_one:disintegrations_type_opcion_one[i].pk, disintegrations_name_opcion_two:disintegrations_type_opcion_two[y].pk}))
-                    #print resultado
-                #else:
-                    #Por falso
-                    #print "Fallo"
+        if represent_int == 1:
+            #Se escogen las areas Rural y Urbano
+            for i in range(0,disintegrations_opcion_one_size):
+                for y in range(0,disintegrations_opcion_two_size):
+                    if(indicator_int == 1 and method_int == 1 ):
+                        resultado.append(Data_from_2003_4.objects.filter(**{disintegrations_name_opcion_one:disintegrations_type_opcion_one[i].name, disintegrations_name_opcion_two:disintegrations_type_opcion_two[y].name}))
+                    else:
+                        pass
+
+        elif represent_int == 2:
+            #Solo Urbana
+            area = 'Urbano'
+            res = Data_from_2003_4.objects.filter(area=area,**{disintegrations_name_opcion_one:disintegrations_type_opcion_one[0].name, disintegrations_name_opcion_two:disintegrations_type_opcion_two[0].name})
+        elif represent_int == 3:
+            #Solo Rural
+            area = 'Rural'
+            res = Data_from_2003_4.objects.filter(area=area,**{disintegrations_name_opcion_one:disintegrations_type_opcion_one[0].name, disintegrations_name_opcion_two:disintegrations_type_opcion_two[0].name})
+
+        print resultado
 
     data = [indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, disintegrations]
     message = json.dumps(data)
