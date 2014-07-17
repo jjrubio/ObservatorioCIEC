@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.context import RequestContext
 from staff.models import Personal_data
 
-# Create your views here.
+
 def team_group(request):
 	profile = Personal_data.objects.all()
 	template = 'team.html'

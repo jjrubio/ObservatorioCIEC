@@ -178,7 +178,7 @@ $('#info-represent').hover(function(){
     $('#meaning-parameters .panel-heading h3').text('Representatividad');
     $('#meaning-parameters .panel-body').html('<b>Nacional.-</b> Se define como el área total comprendida\
                                                                             por las zonas urbanas y zonas rurales. <br><br>\
-                                                                            <b>Urbana.-</b> Se define como zona urbana como "ciudad" a\
+                                                                            <b>Urbano.-</b> Se define como zona urbana como "ciudad" a\
                                                                             aquellos asentamientos de 2.000 o más habitantes. <br><br>\
                                                                             <b>Rural.-</b> Se define como zona "rural" o "campo" a las\
                                                                             zonas que se encuentren en las periferias de las ciudades\

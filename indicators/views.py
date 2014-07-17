@@ -25,7 +25,6 @@ def indicators_detail(cat_id, subcat_id, ind_id):
     posSubcat = int(subcat_id)
     posInd = int(ind_id)
 
-    # if not request.is_ajax():
     subcategories = Subcategory.objects.filter(category_id=cat_id)
     indicators = Indicator.objects.filter(subcategory_id=subcategories[posSubcat - 1].id)
     indicatorSelect = Indicator.objects.get(id=indicators[posInd - 1].id)
@@ -62,10 +61,6 @@ def indicators_detail(cat_id, subcat_id, ind_id):
 
 def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     json = indicators_detail(cat_id, subcat_id, ind_id)
-    # print request
-    print cat_id
-    print subcat_id
-    print ind_id
     indicators = Indicator.objects.all()
     subcategories = Subcategory.objects.all()
     categories = Category.objects.all()
@@ -131,7 +126,6 @@ def list_desagregation(request):
 
 def test(request):
     test = request.GET['test']
-    #data = [['2003','2004','2005'],['4.5','3.9','9.1']]
     data = ['2003', '2004', '2005']
     dato = json.dumps(data)
     return HttpResponse(dato, content_type='application/json')

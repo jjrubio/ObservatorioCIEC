@@ -7,7 +7,7 @@ from .forms import UserForm, UserProfileForm
 from django.contrib.auth.decorators import login_required
 from registers.models import UserProfile
 
-# Create your views here.
+
 def register(request):
 	context = RequestContext(request)
 	registered = False
@@ -33,7 +33,8 @@ def register(request):
 
 			registered = True
 		else:
-			print user_form.errors, profile_form.errors
+			user_form = UserForm()
+			profile_form = UserProfileForm()
 
 	else:
 		user_form = UserForm()
@@ -62,11 +63,8 @@ def user_login(request):
 
 				return HttpResponseRedirect('/definicion-indicador/')
 			else:
-				#return HttpResponse("Cuenta deshabilitada, por favor comuniquese con...")
 				return HttpResponseRedirect('/access_denied/')
 		else:
-			print "Credenciales no validas: {0} {1}".format(username,password)
-			#return HttpResponse("Credenciales invalidas")
 			return HttpResponseRedirect('/error_login/')
 	else:
 		return render_to_response(template, {}, context)

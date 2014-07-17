@@ -5,16 +5,17 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
 	AREA_CHOICES  =  (
         ( 'Est' ,   	 'Estudiante' ),
-        ( 'Ing.' ,   'Ingeniero'),
-        ( 'MSc.' ,   'Master'	),
-        ( 'PhD.' ,   'Doctor'   ),
         ( 'Lic.' ,   'Licenciado'),
+        ( 'Ing.' ,   'Ingeniero'),
+        ( 'MSc.' ,   'Master'),
+        ( 'PhD.' ,   'Doctor'),
+
     )
-	user 			= models.OneToOneField(User)
-	institution 	= models.CharField(max_length=50, null=False)
+	user = models.OneToOneField(User)
+	institution = models.CharField(max_length=50, null=False)
 	grado_academico = models.CharField(max_length=4, choices = AREA_CHOICES , default = 'Estudiante')
 	contador_visita = models.IntegerField(default=0)
-	telefono = models.IntegerField(null=False)
+	telefono = models.CharField(max_length=20, null=False)
 	direccion = models.CharField(max_length=100, null=False)
 
 

@@ -7,7 +7,7 @@
 
 .titulo{
   font-family: "Verdana";
-  font-size: 18px;
+  font-size: 2px;
   color: #001c43;
   font-weight: bold;
 }
@@ -106,8 +106,21 @@ input{
   margin-left: 3em;
 }
 
+.carousel{
+  width: 550px;
+}
 
-/*Pruebas personales: Jeff*/
+#text-home-1 .pull-left{
+  width: 45%;
+}
+#text-home-1 .pull-right{
+  margin-left: 45px;
+}
+
+#text-home-2{
+  margin-left: 35px;
+  margin-right: 45px;
+}
 
 body{
   margin-top: 50px;
@@ -115,14 +128,27 @@ body{
 }
 #menu{
   margin-right: 2em;
-  margin-left: 26em;
+  display: inline-block;
+  float: none;
 }
+
+#menu img{
+  vertical-align: initial;
+
+}
+
+.navbar  .navbar-nav {
+  display: inline-block;
+  float: none;
+}
+
 #top-nav{
   margin-top: 0.5em;
 }
 #login{
+  position:absolute;
   margin-top: -0.4em;
-  margin-right: 30em;
+  margin-left: 3%;
 }
 #myimage{
   margin-left: 4em;
@@ -130,165 +156,67 @@ body{
   margin-bottom: 0.5em;
 }
 #myslide{
-  margin-top: 7em;
+  /*margin-top: 7em;*/
 }
 
 #titulo-footer{
   margin-top: 3em;/*7em*/
-  margin-left: 22em;
+  margin-left: 20%;
+  margin-right: 20%;
   margin-bottom: 14em;
 }
 
-/*Responsive*/
-/* Large Devices, Wide Screens */
-/* @media only screen and (max-width : 1920px), screen and (max-height: 1080px){
-    body{
-      padding-top: 60px;
-      padding-bottom: 50px;
-    }
-    #menu{
-      margin-right: 2em;
-      margin-left: 47em;
-    }
-    #top-nav{
-      margin-top: 0.5em;
-    }
-    #login{
-      margin-top: -0.4em;
-      margin-right: 20em;
-    }
-    #myimage{
-      margin-left: 4em;
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
-      width:50px;
-      height:50px;
-    }
-    #titulo-footer{
-      margin-top: 7em;
-      margin-left: 22em;
-      margin-bottom: 14em;
-    }
-    #footer-responsive{
-      margin-top: 6em;
-    }
-    #myslide{
-      margin-top: 7em;
-    }
-    .separador{
-      margin-bottom: 32em;
-    }
-}
-@media only screen and (max-width : 1280px), screen and (max-height: 1080px) {
-    body{
-      padding-top: 130px;
-      padding-bottom: 50px;
-    }
-    #top-nav{
-      margin-left: -12em;
-    }
-    #login{
-      margin-right: 30em;
-    }
-    #myimage{
-      margin-left: -16em;
-      width:50px;
-      height:50px;
-    }
-    #titulo-footer{
-      margin-left: 22em;
-    }
-    #footer-responsive{
-      margin-top: 5em;
-    }
-}
-@media only screen and (max-width : 1366px), screen and (max-height: 768px) {
-  body{
-        padding-top: 1em;
-    }
-    #menu{
-      margin-right: 2em;
-      margin-left: 22em
-    }
-    #login{
-      margin-right: 7em;
-    }
-    #myimage{
-      margin-left: -3em;
-      width:50px;
-      height:50px;
-    }
-    #titulo-footer{
-      margin-top: 5em;
-    }
-    #footer-responsive{
-      margin-top: 6em;
-    }
-    #myslide{
-      margin-top: 7em;
-    }
-    .imagen-logo{
-      width:75px;
-      height:75px;
-      margin-left: -2em;
-    }
-    .block_content{
-      margin-top: 8em;
-    }
-}
-@media only screen and (max-width : 1024px), screen and (max-height: 768px) {
-  #login{
-    margin-right: 1em;
+
+@media only screen and (min-width : 1361px){
+  #user_data-menu{
+    margin: 35px 0px 0px -5px;
   }
-  #myimage{
-    margin-left: -13em;
-    width:50px;
-    height:50px;
-  }
+
   #menu{
-    margin-right: 2em;
-    margin-left: 17em;
+    margin-left: -500px;
   }
-  #top-nav{
-    margin-left: -11em;
+
+  #login{
+    margin-left: 300px;
   }
-  #myslide{
-    margin-top: 7em;
-  }
-  #titulo-footer{
-    margin-top: 4em;
-    margin-right: 4em;
-    margin-left: 14em;
-  }
-  #footer-responsive{
-    margin-top: 2em;
+
+  #text-home-1{
+    margin-left: 60px;
   }
 }
-@media only screen and (max-width : 1280px), screen and (max-height: 800px) {
+
+@media only screen and (min-width : 1025px) and (max-width : 1360px){
+  #user_data-menu{
+    margin: 35px 0px 0px  10px;
+  }
+
+   #menu{
+    margin-left: -500px;
+  }
+
   #login{
-    margin-right: 5em;
+    margin-left: 290px;
   }
-  #myimage{
-    margin-left: -13em;
-    width:50px;
-    height:50px;
+
+  #text-home-1{
+    margin-left: 60px;
   }
+}
+
+@media only screen and (max-width : 1024px){
+  #user_data-menu{
+    margin: 35px 0px 0px  -40px;
+  }
+
   #menu{
-    margin-right: 4em;
-    margin-left: 19em;
+    margin-left: -300px;
   }
-  #top-nav{
-    margin-left: -11em;
+
+  #login{
+    margin-left: 140px;
   }
-  #myslide{
-    margin-top: 7em;
+
+  #text-home-1{
+    margin-left: 30px;
   }
-  #titulo-footer{
-    margin-top: 4em;
-    margin-right: 4em;
-    margin-left: 27em;
-  }
-  #footer-responsive{
-    margin-top: 2em;
-  }
-} */
+}

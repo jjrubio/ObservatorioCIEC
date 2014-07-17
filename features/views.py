@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.context import RequestContext
 from features.models import Description
 
-# Create your views here.
+
 def features(request):
     description = Description.objects.all()
     template = 'features.html'

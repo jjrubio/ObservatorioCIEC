@@ -9,20 +9,9 @@
         <b id="title-content-page">Características</b>
         <hr class="pull-left" id="separator-content-page">
         <ul class="text-justify">
-            {% if description %}
-                {% for detail in description %}
-                    <li>{{detail}} </li> <br>
-                {% endfor %}
-            {% else %}<br>
-                NO HAY CARACTERISTICAS GUARDADAS.
-                <p>
-                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
-                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
-                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
-                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
-                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, odio, iste, fugit nostrum doloribus earum optio numquam eos voluptates repudiandae ducimus cum vel amet ea ullam minus minima. Culpa, eius!</li>
-                </p>
-            {% endif %}
+            {% for detail in description %}
+                <li>{{detail}} </li> <br>
+            {% endfor %}
         </ul>
         <div class="separador"></div>
     </div>

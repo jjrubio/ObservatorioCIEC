@@ -9,6 +9,7 @@ from staff.models import Personal_data
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 
+
 def slider(request):
     imagenes = Slider.objects.all()
     template = 'slider.html'
@@ -16,7 +17,7 @@ def slider(request):
 
 def map(request):
     template = 'map.html'
-    return render_to_response(template, context_instance = RequestContext(request,locals()))    
+    return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 def contactos (request):
     template = 'contactos.html'

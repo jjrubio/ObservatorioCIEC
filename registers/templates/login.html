@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 {% extends "index.html" %}
 
 {% load static from staticfiles %}
@@ -8,16 +11,16 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container block_content">
-        <h1 class="titulo-secundario" >Login</h1>
-        <hr class="myhr">
+    <div class="content-page-2" >
+        <b id="title-content-page">Iniciar Sesión</b>
+        <hr class="pull-left" id="separator-content-page">
         <form id="login_form" method="post" action="/login">
             {% csrf_token %}
             Correo: <input type="text" name="username" value="" size="50" id="input_user" />
             <br />
             Contraseña: <input type="password" name="password" value="" size="50" />
             <br />
-            <input type="submit" class="btn btn-primary btn_login" name="submit" value="Iniciar Sesion" id="btn-login" />
+            <input type="submit" class="btn btn-primary btn_login" name="submit" value="Iniciar Sesión" id="btn-login" />
         </form>
     </div>
 {% endblock %}

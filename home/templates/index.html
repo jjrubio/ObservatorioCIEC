@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{% static "css/style.css" %}" />
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
     <link rel="stylesheet" href="{% static "css/designIndex.css" %}" />
+    <link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"/>
     <!-- Page Specific CSS -->
     {% block extraCSS %}{% endblock %}
 </head>
@@ -14,35 +15,35 @@
     <header>
         <div class="container">
             <div>
-                <div class="navbar navbar-inverse navbar-fixed-top">
-                    <div class="navbar-header pull-left" id="menu">
+                <div class="navbar navbar-inverse navbar-fixed-top text-center">
+                    <div class="navbar-header" id="menu">
                         <a href='/'><img id="myimage" src="{{ STATIC_URL }}img/ciec.png" alt="My image" /></a>
                     </div>
-                    <ul class="nav navbar-nav pull-left" id="top-nav">
+                    <ul class="nav navbar-nav" id="top-nav">
                         <li><a href="/" class="navbar-brand">Inicio</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Información del Proyecto<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/historia">Reseña</a></li>
-                                <li><a href="/features">Características</a></li>
+                            <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Información<b class="caret"></b></a>
+                            <ul class="dropdown-menu text-left">
+                                <li><a href="/historia">Reseña del Observatorio</a></li>
+                                <li><a href="/features">Características del Observatorio</a></li>
                             </ul>
                         </li>
                         {% if user.is_authenticated %}
-                            <li><a href="/definicion-indicador/1/1/1" class="navbar-brand">Ingresa al Sitio</a></li>
+                            <li><a href="/definicion-indicador/" class="navbar-brand">Ingresa al Sitio</a></li>
                         {% else %}
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Ingresa al Sitio<b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="/definicion-indicador/1/1/1">Sin registro</a></li>
+                                <ul class="dropdown-menu text-left">
+                                    <li><a href="/definicion-indicador/">Sin registro</a></li>
                                     <li><a href="/login/">Con registro</a></li>
                                 </ul>
                             </li>
                         {% endif %}
                         <li><a href="/team" class="navbar-brand">Equipo de Trabajo</a></li>
                     </ul>
-                    <ul class="nav pull-right navbar-nav" id="login">
+                    <ul class="nav navbar-nav" id="login">
                         {% if user.is_authenticated %}
-                            <ul class="pull-right" id="user_data-menu">
+                            <ul class="pull-right text-left" id="user_data-menu">
                                 <li>
                                     <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
                                         <i class="fa fa-user"> Bienvenido, </i><br>
@@ -51,7 +52,6 @@
                                         <b class="caret"></b>
                                     </a>
                                     <ul class="pull-right dropdown-menu" id="option-user">
-                                        <li><a href="#"><i class="fa fa-cog">  Mi cuenta</i></a></li>
                                         <li><a href="/logout"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
                                     </ul>
                                 </li>
@@ -67,6 +67,7 @@
     <div class="container">
         <div class="contour-main">
         {% block content %}{% endblock %}
+
             <footer>
                 <div class="contour-footer text-center">
                     <a target="_blank" href="http://www.ciec.espol.edu.ec/"> Website de Ciec </a>|
@@ -83,7 +84,10 @@
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
     <script type="text/javascript">
+        $('.selectpicker').selectpicker();
+
         $().ready(function(){
             $("#myslide").carousel({
                 interval: 7000,

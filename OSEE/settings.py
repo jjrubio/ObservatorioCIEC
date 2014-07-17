@@ -53,11 +53,9 @@ INSTALLED_APPS = (
     'features',
     'home',
     'indicators',
-    'procedures',
     'registers',
     'resources',
     'staff',
-    'viewers',
     'import_export',
 )
 
