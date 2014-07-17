@@ -175,17 +175,16 @@ def calc_result(request):
     return HttpResponse(message, content_type='application/json')
 
 def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, opcion1, opcion2):
-
+    resultado = []
+    subquery = []
     #Validacion para Desagregaciones
     if opcion1 == 0 and opcion2 == 0:
-        arreglo = 'Opcion 1 y Opcion 2 son Zero'
+        pass
     elif opcion1 > 0:
         if opcion2 == 0:
             disintegrations_name_opcion_one = by_list(opcion1)
             disintegrations_type_opcion_one = Type.objects.filter(disintegration__id = opcion1)
             disintegrations_opcion_one_size = len(disintegrations_type_opcion_one)
-
-            arreglo = 'Solo opcion2 es zero'
 
         else:
             disintegrations_name_opcion_one = by_list(opcion1)
@@ -195,21 +194,25 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
             disintegrations_opcion_one_size = len(disintegrations_type_opcion_one)
             disintegrations_opcion_two_size = len(disintegrations_type_opcion_two)
 
-            arreglo = 'Ninguno es Zero'
+            for i in range(0,disintegrations_opcion_one_size):
+                for j in range(0,disintegrations_opcion_two_size):
+                    subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i],disintegrations_name_opcion_two:disintegrations_type_opcion_two[j]})
+
+    print subquery
     
     #Validacion por area o representatividad
     if represent == 1:
-        print "Nacional"
+        pass
     elif represent == 2:
-        print "Urbano"
+        where = {'area': 'Urbano'}
     elif represent == 3:
-        print "Rural"
+        where = {'area': 'Rural'}
 
     #Validacion por cada indicador ya que tiene su propio query
     if method == 1:
         #Data_from_2003_4
         if indicator == 1:
-            print "Indicator 1"
+            resultado.append(Data_from_2003_4.objects.filter(**subquery))
         elif indicator == 2:
             print "Indicator 2"
         elif indicator == 3:
