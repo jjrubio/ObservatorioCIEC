@@ -17,14 +17,14 @@
             <div>
                 <div class="navbar navbar-inverse navbar-fixed-top text-center">
                     <div class="navbar-header" id="menu">
-                        <a href='/'><img id="logo-navbar" src="{{ STATIC_URL }}img/logo-ciec.png" alt="My image" /></a>
+                        <a href='/inicio/'><img id="logo-navbar" src="{{ STATIC_URL }}img/logo-ciec.png" alt="My image" /></a>
                     </div>
                     <ul class="nav navbar-nav" id="top-nav">
-                        <li><a href="/" class="navbar-brand">Inicio</a></li>
+                        <li><a href="/inicio/" class="navbar-brand">Inicio</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Información<b class="caret"></b></a>
                             <ul class="dropdown-menu text-left">
-                                <li><a href="/historia">Reseña del Observatorio</a></li>
+                                <li><a href="/historia/">Reseña del Observatorio</a></li>
                                 <li><a href="/caracteristicas/">Características del Observatorio</a></li>
                             </ul>
                         </li>
@@ -66,7 +66,7 @@
     </header>
     <div class="container">
         <div class="contour-main">
-        {% block content %}{% endblock %}
+            {% block content %}{% endblock %}
 
             <footer>
                 <div class="contour-footer text-center">
@@ -77,7 +77,7 @@
                     <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
                 </div>
             </footer>
-        <div>
+        </div>
     </div>
 
 
@@ -96,6 +96,23 @@
                 $("#myslide").carousel("next");
             }, 2000);
         });
+
+        $(function(){
+            setNavigation();
+        });
+
+        function setNavigation() {
+            var path = window.location.pathname;
+            path = path.replace(/\?#$/, "");
+            path = decodeURIComponent(path);
+
+            $("#top-nav a").each(function () {
+                var href = $(this).attr('href');
+                if(path.substring(0,href.length) === href){
+                    $(this).closest('li').addClass('active');
+                }
+            });
+        }
     </script>
     {% block extraScripts %}{% endblock %}
 </body>
