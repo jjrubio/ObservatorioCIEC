@@ -2,6 +2,7 @@ from django.shortcuts import HttpResponse, render, render_to_response, HttpRespo
 from django.template.context import RequestContext
 from models import *
 from disintegrations.models import *
+from ENEMDU.models import *
 import json
 from django.shortcuts import get_object_or_404
 from django.core import serializers
@@ -171,6 +172,20 @@ def calc_result(request):
 def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, opcion1, opcion2):
     resultado = []
     subquery = []
+
+    #Validacion por area o representatividad
+    if represent == 1:
+        pass
+    elif represent == 2:
+        where = {'area': 'Urbano'}
+    elif represent == 3:
+        where = {'area': 'Rural'}
+
+    pet = {'pet':1}
+    pea = {'pea':1}
+    ocupa = {'ocupa':1}
+    rela_jef = {'rela_jef':1}
+
     #Validacion para Desagregaciones
     if opcion1 == 0 and opcion2 == 0:
         pass
@@ -182,6 +197,15 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
 
             for i in range(0,disintegrations_opcion_one_size):
                 subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i]})
+                subquery.append(where)
+                if indicator == 3 or indicator == 4 or indicator == 5:
+                    subquery.append(pet)
+                elif indicator == 6 or indicator == 7 or indicator == 9 or indicator == 10 or indicator == 11 or indicator == 12 or indicator == 13 or indicator == 14 or indicator == 15 or indicator == 16 or indicator == 17 or indicator == 18 or indicator == 19 or indicator == 20 or indicator == 21 or indicator == 22 or indicator == 23:
+                    subquery.append(pea)
+                elif indicator == 24 or indicator == 25 or indicator == 26 or indicator == 27 or indicator == 38 or indicator == 39 or indicator == 40 or indicator == 41 or indicator == 42:
+                    subquery.append(ocupa)
+                elif indicator == 32 or indicator == 33 or indicator == 34 or indicator == 35:
+                    subquery.append(rela_jef)
 
         else:
             disintegrations_name_opcion_one = by_list(opcion1)
@@ -194,22 +218,16 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
             for i in range(0,disintegrations_opcion_one_size):
                 for j in range(0,disintegrations_opcion_two_size):
                     subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i],disintegrations_name_opcion_two:disintegrations_type_opcion_two[j]})
-   
-    #Validacion por area o representatividad
-    if represent == 1:
-        pass
-    elif represent == 2:
-        where = {'area': 'Urbano'}
-    elif represent == 3:
-        where = {'area': 'Rural'}
+                    subquery.append(where)
 
-    subquery.append(where)
-    print subquery
-
-    pet = {'pet':1}
-    pea = {'pea':1}
-    ocupa = {'ocupa':1}
-    rela_jef = {'rela_jef':1}
+                    if indicator == 3 or indicator == 4 or indicator == 5:
+                        subquery.append(pet)
+                    elif indicator == 6 or indicator == 7 or indicator == 9 or indicator == 10 or indicator == 11 or indicator == 12 or indicator == 13 or indicator == 14 or indicator == 15 or indicator == 16 or indicator == 17 or indicator == 18 or indicator == 19 or indicator == 20 or indicator == 21 or indicator == 22 or indicator == 23:
+                        subquery.append(pea)
+                    elif indicator == 24 or indicator == 25 or indicator == 26 or indicator == 27 or indicator == 38 or indicator == 39 or indicator == 40 or indicator == 41 or indicator == 42:
+                        subquery.append(ocupa)
+                    elif indicator == 32 or indicator == 33 or indicator == 34 or indicator == 35:
+                        subquery.append(rela_jef)
 
     #Validacion por cada indicador ya que tiene su propio query
     if method == 1:
@@ -221,93 +239,73 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 3:
-            subquery.append(pet)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 4:
-            subquery.append(pet)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 5:
-            subquery.append(pet)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 6:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 7:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 9:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 10:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 11:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 12:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 14:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 15:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 16:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 17:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 18:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 19:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 22:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 23:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 24:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 25:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 26:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2003_4.objects.filter(**subquery[x]).exclude(ingrl__isnull=True))
                 #Exclude ingrl IS NULL
         elif indicator == 28:
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2003_4.objects.filter(**subquery[x]).exclude(anosaprob__isnull=True))
                 #Exlude anosaprob IS NULL
         elif indicator == 29:
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2003_4.objects.filter(**subquery[x]).exclude(experiencia__isnull=True))
                 #Exlude experiencia IS NULL
         elif indicator == 30:
             for x in range(0,len(subquery)):
@@ -316,19 +314,15 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 32:
-            subquery.append(rela_jef)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 33:
-            subquery.append(rela_jef)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 34:
-            subquery.append(rela_jef)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 35:
-            subquery.append(rela_jef)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2003_4.objects.filter(**subquery[x]))
         elif indicator == 36:
@@ -346,94 +340,74 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 3:
-            subquery.append(pet)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 4:
-            subquery.append(pet)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 5:
-            subquery.append(pet)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 6:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 7:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 8:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 9:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 10:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 11:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 12:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 13:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 19:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 20:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 21:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 22:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 23:
-            subquery.append(pea)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 24:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 25:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 26:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]).exclude(ingrl__isnull=True))
                 #Exclude ingrl IS NULL
         elif indicator == 27:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]).exclude(satis_laboral__isnull=True))
                 #Exclude satis_laboral IS NULL
         elif indicator == 28:
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]).exclude(anosaprob__isnull=True))
                 #Exclude anosaprob IS NULL
         elif indicator == 29:
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]).exclude(experiencia__isnull=True))
                 #Exclude experiencia IS NULL
         elif indicator == 30:
             for x in range(0,len(subquery)):
@@ -442,19 +416,15 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 32:
-            subquery.append(rela_jef)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 33:
-            subquery.append(rela_jef)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 34:
-            subquery.append(rela_jef)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 35:
-            subquery.append(rela_jef)
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 36:
@@ -464,29 +434,24 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
         elif indicator == 38:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]).exclude(descon_bajos_ingresos__isnull=True))
                 #Exclude descon_bajos_ingresos IS NULL
         elif indicator == 39:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]).exclude(descon_horarios__isnull=True))
                 #Exclude descon_horarios IS NULL
         elif indicator == 40:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]).exclude(descon_estabil__isnull=True))
                 #Exclude descon_estabil IS NULL
         elif indicator == 41:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]).exclude(descon_amb_laboral__isnull=True))
                 #Exclude descon_amb_laboral IS NULL
         elif indicator == 42:
-            subquery.append(ocupa)
             for x in range(0,len(subquery)):
-                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]))
+                resultado.append(Data_from_2007_2.objects.filter(**subquery[x]).exclude(descon_activ__isnull=True))
                 #Exclude descon_activ IS NULL
     
     return resultado
