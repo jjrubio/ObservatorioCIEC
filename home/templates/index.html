@@ -17,7 +17,7 @@
             <div>
                 <div class="navbar navbar-inverse navbar-fixed-top text-center">
                     <div class="navbar-header" id="menu">
-                        <a href='/'><img id="myimage" src="{{ STATIC_URL }}img/ciec.png" alt="My image" /></a>
+                        <a href='/'><img id="logo-navbar" src="{{ STATIC_URL }}img/logo-ciec.png" alt="My image" /></a>
                     </div>
                     <ul class="nav navbar-nav" id="top-nav">
                         <li><a href="/" class="navbar-brand">Inicio</a></li>
@@ -25,7 +25,7 @@
                             <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Información<b class="caret"></b></a>
                             <ul class="dropdown-menu text-left">
                                 <li><a href="/historia">Reseña del Observatorio</a></li>
-                                <li><a href="/features">Características del Observatorio</a></li>
+                                <li><a href="/caracteristicas/">Características del Observatorio</a></li>
                             </ul>
                         </li>
                         {% if user.is_authenticated %}
@@ -39,27 +39,27 @@
                                 </ul>
                             </li>
                         {% endif %}
-                        <li><a href="/team" class="navbar-brand">Equipo de Trabajo</a></li>
+                        <li><a href="/equipo-trabajo/" class="navbar-brand">Equipo de Trabajo</a></li>
                     </ul>
-                    <ul class="nav navbar-nav" id="login">
-                        {% if user.is_authenticated %}
-                            <ul class="pull-right text-left" id="user_data-menu">
-                                <li>
-                                    <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
-                                        <i class="fa fa-user"> Bienvenido, </i><br>
-                                        <span><strong>{{user.first_name}}</strong></span>
-                                        <span><strong>{{user.last_name}}</strong></span>
-                                        <b class="caret"></b>
-                                    </a>
-                                    <ul class="pull-right dropdown-menu" id="option-user">
-                                        <li><a href="/logout"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
-                                    </ul>
-                                </li>
+                    {% if user.is_authenticated %}
+                    <ul class="pull-right" id="logged-in">
+                        <li>
+                            <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
+                                <i class="fa fa-user"> Bienvenido, </i><br>
+                                <span><strong>{{user.first_name}}</strong></span>
+                                <span><strong>{{user.last_name}}</strong></span>
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="pull-right dropdown-menu" id="option-user">
+                                <li><a href="/logout"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
                             </ul>
-                        {% else %}
-                            <li><a href="/register"><i class="fa fa-user"></i>Regístrate</a></li>
-                        {% endif %}
+                        </li>
                     </ul>
+                    {% else %}
+                    <ul class="pull-right nav navbar-nav" id="logged-out">
+                        <li><a href="/register"><i class="fa fa-user"></i> Regístrate</a></li>
+                    </ul>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -72,7 +72,6 @@
                 <div class="contour-footer text-center">
                     <a target="_blank" href="http://www.ciec.espol.edu.ec/"> Website de Ciec </a>|
                     <a href="/contactos"> Contáctenos </a>|
-                    <a href="#"> Sugerencias </a>|
                 </div>
                 <div class="box-footer text-center">
                     <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>

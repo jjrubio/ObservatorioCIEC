@@ -9,13 +9,18 @@
 
 {% block content %}
     <div class="content-page-2" >
-         <b id="title-content-page">Formulario de registro</b>
-         <hr class="pull-left" id="separator-content-page">
+
         {% if registered %}
-            <p>Gracias por registrarte en el Observartorio Social Económico del Ecuador</p>
-            <p>Con tu registro puedes acceder a bla bla...</p>
-            <a href="/">Ir a Home</a><br />
+            <b id="title-content-page">Registro exitoso</b>
+            <hr class="pull-left" id="separator-content-page">
+            <br><br>
+            <div id="agradecimiento" class="text-center">
+                <b>¡ GRACIAS POR REGISTRARTE EN EL OBSERVARTORIO ECONÓMICO - SOCIAL DEL ECUADOR !</b><br><br>
+                <a href="/">Ir al Inicio</a><br />
+            </div>
         {% else %}
+            <b id="title-content-page">Formulario de registro</b>
+            <hr class="pull-left" id="separator-content-page">
             <form id="user_form" method="post" action="/register" >
                 {% csrf_token %}
                 {{ user_form.as_p }}

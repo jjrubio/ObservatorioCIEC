@@ -3,11 +3,10 @@ $(document).ready( function() {
     var formato_categorias = ['2003','2004','2005'];
     var formato_series = [{name: 'Indicador 1',data: [49.9, 71.5, 106.4]},
                           {name: 'Indicador 2',data: [43.9, 31.5, 60.4]},
-                          {name: 'Indicador 3',data: [29.9, 17.5, 16.4]}]; 
+                          {name: 'Indicador 3',data: [29.9, 17.5, 16.4]}];
     //Jquery
     $.getJSON('/test/', {'test': test},
     function(data){
-        console.log(data);
             $('#container').highcharts({
             chart: {
                 type: 'column'
@@ -37,5 +36,5 @@ $(document).ready( function() {
             }
         });
 
-    });    
+    });
 });

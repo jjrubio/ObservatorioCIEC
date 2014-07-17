@@ -1,7 +1,6 @@
 from django.shortcuts import HttpResponse, render, render_to_response, HttpResponseRedirect
 from django.template.context import RequestContext
 from models import *
-from django.utils import simplejson
 from django.shortcuts import get_object_or_404
 
 

@@ -5805,15 +5805,15 @@ body {
   font-family: Verdana;
   font-size: 12px;
 }
-body header #login #user_data-menu #name-user {
+body header #name-user {
   font-size: 12px;
   color: #FFF;
   text-decoration: none;
 }
-body header #login #user_data-menu #name-user .caret {
+body header #name-user .caret {
   color: #FFF;
 }
-body header #login .open > a {
+body header .open > a {
   background-color: #001c43;
 }
 body header #nav-logo {
@@ -5827,12 +5827,12 @@ body header #nav-logo .navbar-header a:first-child img {
 }
 body header #nav-logo .navbar-header a:nth-child(2) {
   margin-top: 10px;
-  font-size: 27px;
+  font-size: 20px;
   line-height: 27px;
 }
 body header #nav-logo .navbar-header i {
   margin-left: 15px;
-  font-size: 16px;
+  font-size: 10px;
   color: #FFF;
 }
 body header #nav-logo #user_data-menu {

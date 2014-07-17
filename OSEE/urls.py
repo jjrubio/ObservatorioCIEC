@@ -5,13 +5,11 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    (r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'home.views.slider', name='home'),
     url(r'^inicio/', 'home.views.slider', name='home2'),
-    url(r'^team/', 'staff.views.team_group', name='team'),
-    url(r'^features/', 'features.views.features', name='features'),
+    url(r'^equipo-trabajo/', 'staff.views.team_group', name='team'),
+    url(r'^caracteristicas/', 'features.views.features', name='features'),
     url(r'^contactos/', 'home.views.contactos', name='contactos'),
     url(r'^register', 'registers.views.register', name='register'),
     url(r'^login', 'registers.views.user_login', name='login'),

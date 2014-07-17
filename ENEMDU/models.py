@@ -3,13 +3,6 @@ from disintegrations.models import Type
 from django.contrib import messages
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-class Variable_definition(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return self.name
-
 
 class Data_from_2003_4(models.Model):
     anio = models.PositiveSmallIntegerField()
@@ -52,6 +45,10 @@ class Data_from_2003_4(models.Model):
     seguro = models.CharField(max_length=50, null=True)
     migracion = models.CharField(max_length=2, null=True)
 
+    class Meta:
+        verbose_name = "un dato desde 2003 - 4"
+        verbose_name_plural = "Datos desde 2003 - 4"
+
 
 class Data_from_2007_2(models.Model):
     anio = models.PositiveSmallIntegerField()
@@ -93,3 +90,7 @@ class Data_from_2007_2(models.Model):
     grupo_ocup_1 = models.CharField(max_length=75, null=True)
     seguro = models.CharField(max_length=50, null=True)
     migracion = models.CharField(max_length=2, null=True)
+
+    class Meta:
+        verbose_name = "un dato desde 2007 - 2"
+        verbose_name_plural = "Datos desde 2007 - 2"

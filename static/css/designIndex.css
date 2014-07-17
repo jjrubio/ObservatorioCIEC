@@ -5,12 +5,6 @@
   width: 99.9%;
 }
 
-.titulo{
-  font-family: "Verdana";
-  font-size: 2px;
-  color: #001c43;
-  font-weight: bold;
-}
 .active{
     background-color:black;
 }
@@ -26,14 +20,14 @@
   padding:299px;/*420px*/
 }
 .imagen-logo{
-  width:75px;
-  height:75px;
+  height: 75px;
 }
 .arrow{
   margin-top: 2.5em;
 }
-.form_login{
-  margin-bottom: ;
+#login_form{
+  margin-top: 100px;
+  margin-bottom: 100px;
 }
 #user_remember_me{
   float: left;
@@ -99,8 +93,6 @@ input{
 }
 #btn-login{
   width:130px;
-  margin-left:40em;
-  margin-bottom: 15em;
 }
 #user_form{
   margin-left: 3em;
@@ -145,78 +137,124 @@ body{
 #top-nav{
   margin-top: 0.5em;
 }
-#login{
-  position:absolute;
+
+# {
   margin-top: -0.4em;
   margin-left: 3%;
 }
-#myimage{
+
+#logo-navbar{
+  width: 50px;
   margin-left: 4em;
   margin-top: 0.5em;
-  margin-bottom: 0.5em;
-}
-#myslide{
-  /*margin-top: 7em;*/
 }
 
 #titulo-footer{
-  margin-top: 3em;/*7em*/
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-top: 7em;/*7em*/
   margin-bottom: 14em;
 }
 
+#agradecimiento{
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+#welcome{
+  padding-top: 20px;
+}
 
 @media only screen and (min-width : 1361px){
-  #user_data-menu{
-    margin: 35px 0px 0px -5px;
+  #text-home-1{
+    margin-left: 60px;
   }
 
   #menu{
-    margin-left: -500px;
+    margin-left: 20px;
   }
 
-  #login{
-    margin-left: 300px;
+  #logged-in{
+    margin-right: 390px;
+    margin-top: 22px;
+    margin-bottom: 0px;
   }
 
-  #text-home-1{
-    margin-left: 60px;
+  #logged-out{
+    margin-right: 390px;
+  }
+
+  #option-user{
+    margin-right: 390px;
+  }
+
+  .titulo{
+    font-family: "Verdana";
+    font-size: 15px;
+    color: #001c43;
+    font-weight: bold;
   }
 }
 
 @media only screen and (min-width : 1025px) and (max-width : 1360px){
-  #user_data-menu{
-    margin: 35px 0px 0px  10px;
-  }
 
    #menu{
-    margin-left: -500px;
+      margin-left: -250px;
+   }
+
+   #logged-in{
+    margin-right: 110px;
+    margin-top: 22px;
+    margin-bottom: 0px;
   }
 
-  #login{
-    margin-left: 290px;
+  #logged-out{
+    margin-right: 110px;
+  }
+
+  #option-user{
+    margin-right: 110px;
   }
 
   #text-home-1{
-    margin-left: 60px;
-  }
+      margin-left: 60px;
+   }
+
+   .titulo{
+      font-family: "Verdana";
+      font-size: 15px;
+      color: #001c43;
+      font-weight: bold;
+    }
 }
 
 @media only screen and (max-width : 1024px){
-  #user_data-menu{
-    margin: 35px 0px 0px  -40px;
-  }
 
   #menu{
-    margin-left: -300px;
+    margin-left: -100px;
   }
 
-  #login{
-    margin-left: 140px;
+  #logged-in{
+    margin-right: 40px;
+    margin-top: 22px;
+    margin-bottom: 0px;
+  }
+
+
+  #logged-out{
+    margin-right: 40px;
+  }
+
+  #option-user{
+    margin-right: 40px;
   }
 
   #text-home-1{
     margin-left: 30px;
+  }
+
+  .titulo{
+    font-family: "Verdana";
+    font-size: 14px;
+    color: #001c43;
+    font-weight: bold;
   }
 }

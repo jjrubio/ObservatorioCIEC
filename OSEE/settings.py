@@ -21,11 +21,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '6#6cpmv@i60)wc$-io$=8+n8gh1ifqxfp^06g4^kv_#ql@w4p7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
+# DEBUG = False
+# TEMPLATE_DEBUG = DEBUG
+
+DEBUG = True
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
@@ -36,12 +39,10 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP + (
     'django.contrib.messages.context_processors.messages',
 )
 
-GRAPPELLI_ADMIN_TITLE = 'Observatorio Económico - Social del Ecuador'
 
 # Application definition
 
 INSTALLED_APPS = (
-    # 'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
