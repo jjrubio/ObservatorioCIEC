@@ -28,7 +28,7 @@ SECRET_KEY = '6#6cpmv@i60)wc$-io$=8+n8gh1ifqxfp^06g4^kv_#ql@w4p7'
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP

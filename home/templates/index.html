@@ -19,30 +19,30 @@
                     <div class="navbar-header" id="menu">
                         <a href='/inicio/'><img id="logo-navbar" src="{{ STATIC_URL }}img/logo-ciec.png" alt="My image" /></a>
                     </div>
-                    <ul class="nav navbar-nav" id="top-nav">
-                        <li><a href="/inicio/" class="navbar-brand">Inicio</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Información<b class="caret"></b></a>
-                            <ul class="dropdown-menu text-left">
-                                <li><a href="/historia/">Reseña del Observatorio</a></li>
-                                <li><a href="/caracteristicas/">Características del Observatorio</a></li>
-                            </ul>
-                        </li>
-                        {% if user.is_authenticated %}
-                            <li><a href="/definicion-indicador/" class="navbar-brand">Ingresa al Sitio</a></li>
-                        {% else %}
+                        <ul class="nav navbar-nav" id="top-nav">
+                            <li><a href="/inicio/" class="navbar-brand">Inicio</a></li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Ingresa al Sitio<b class="caret"></b></a>
+                                <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Información<b class="caret"></b></a>
                                 <ul class="dropdown-menu text-left">
-                                    <li><a href="/definicion-indicador/">Sin registro</a></li>
-                                    <li><a href="/login/">Con registro</a></li>
+                                    <li><a href="/historia/">Reseña del Observatorio</a></li>
+                                    <li><a href="/caracteristicas/">Características del Observatorio</a></li>
                                 </ul>
                             </li>
-                        {% endif %}
-                        <li><a href="/equipo-trabajo/" class="navbar-brand">Equipo de Trabajo</a></li>
-                    </ul>
+                            {% if user.is_authenticated %}
+                                <li><a href="/definicion-indicador/" class="navbar-brand">Ingresa al Sitio</a></li>
+                            {% else %}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Ingresa al Sitio<b class="caret"></b></a>
+                                    <ul class="dropdown-menu text-left">
+                                        <li><a href="/definicion-indicador/">Sin registro</a></li>
+                                        <li><a href="/login/">Con registro</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            <li><a href="/equipo-trabajo/" class="navbar-brand">Equipo de Trabajo</a></li>
+                        </ul>
                     {% if user.is_authenticated %}
-                    <ul class="pull-right" id="logged-in">
+                    <ul class="pull-right text-left" id="logged-in">
                         <li>
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
                                 <i class="fa fa-user"> Bienvenido, </i><br>
@@ -56,9 +56,11 @@
                         </li>
                     </ul>
                     {% else %}
-                    <ul class="pull-right nav navbar-nav" id="logged-out">
-                        <li><a href="/register"><i class="fa fa-user"></i> Regístrate</a></li>
-                    </ul>
+                    <!-- <ul class="pull-right nav navbar-nav" id="logged-out">
+                        <li> -->
+                        <a class="pull-right" id="logged-out" href="/register"><i class="fa fa-user"></i> Regístrate</a>
+                        <!-- </li>
+                    </ul> -->
                     {% endif %}
                 </div>
             </div>

@@ -142,32 +142,29 @@ def calc_result(request):
     disintegrations = request.GET.getlist('disintegrations[]')
 
     indicator_int = int(indicator)
+    represent_int = int(represent)
     method_int = int(method)
     yearStart_int = int(yearStart)
     trimStart_int = int(trimStart)
     yearEnd_int = int(yearEnd)
     trimEnd_int = int(trimEnd)
 
-    represent_int = int(represent)
-    
     disintegrations_size = len(disintegrations)
 
-    if disintegrations_size == 0:
-        opcion1 = 0
-        opcion2 = 0
-        respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
-    elif disintegrations_size == 1:
-        opcion1 = int(disintegrations[0])
-        opcion2 = 0
-        respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
-    elif disintegrations_size == 2: 
-        opcion1 = int(disintegrations[0])
-        opcion2 = int(disintegrations[1])
-        respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
+    # if disintegrations_size == 0:
+    #     opcion1 = 0
+    #     opcion2 = 0
+    #     respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
+    # elif disintegrations_size == 1:
+    #     opcion1 = int(disintegrations[0])
+    #     opcion2 = 0
+    #     respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
+    # elif disintegrations_size == 2:
+    #     opcion1 = int(disintegrations[0])
+    #     opcion2 = int(disintegrations[1])
+    #     respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
 
-    data = [indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, disintegrations]
-    message = json.dumps(data)
-    return HttpResponse(message, content_type='application/json')
+
 
 def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, opcion1, opcion2):
     resultado = []
@@ -453,7 +450,7 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
             for x in range(0,len(subquery)):
                 resultado.append(Data_from_2007_2.objects.filter(**subquery[x]).exclude(descon_activ__isnull=True))
                 #Exclude descon_activ IS NULL
-    
+
     return resultado
 
 def by_list(id_desagregation):

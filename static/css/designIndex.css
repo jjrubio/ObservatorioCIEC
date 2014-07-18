@@ -118,6 +118,7 @@ body{
   margin-top: 50px;
   margin-bottom: 50px;
 }
+
 #menu{
   margin-right: 2em;
   display: inline-block;
@@ -138,19 +139,14 @@ body{
   margin-top: 0.5em;
 }
 
-# {
-  margin-top: -0.4em;
-  margin-left: 3%;
-}
-
 #logo-navbar{
   width: 50px;
   margin-left: 4em;
-  margin-top: 0.5em;
+  margin-top: -4em;
 }
 
 #titulo-footer{
-  margin-top: 7em;/*7em*/
+  margin-top: 7em;
   margin-bottom: 14em;
 }
 
@@ -173,13 +169,15 @@ body{
   }
 
   #logged-in{
-    margin-right: 390px;
+    margin-right: 350px;
     margin-top: 22px;
     margin-bottom: 0px;
   }
 
   #logged-out{
-    margin-right: 390px;
+    color: #fff;
+    margin-top: 5px;
+    margin-right: 350px;
   }
 
   #option-user{
@@ -207,6 +205,8 @@ body{
   }
 
   #logged-out{
+    color: #fff;
+    margin-top: 5px;
     margin-right: 110px;
   }
 
@@ -240,6 +240,8 @@ body{
 
 
   #logged-out{
+    color: #fff;
+    margin-top: 5px;
     margin-right: 40px;
   }
 
