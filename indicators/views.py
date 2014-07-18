@@ -151,20 +151,51 @@ def calc_result(request):
 
     disintegrations_size = len(disintegrations)
 
-    # if disintegrations_size == 0:
-    #     opcion1 = 0
-    #     opcion2 = 0
-    #     respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
-    # elif disintegrations_size == 1:
-    #     opcion1 = int(disintegrations[0])
-    #     opcion2 = 0
-    #     respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
-    # elif disintegrations_size == 2:
-    #     opcion1 = int(disintegrations[0])
-    #     opcion2 = int(disintegrations[1])
-    #     respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
+    #######Jeff
+    if method_int == 1 :
+        valor = 1
+        column_1 = get_column_1(indicator_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int)
+        # print column_1
+    else:
+        valor = 2
+    print valor
+    ########
 
+    if disintegrations_size == 0:
+        opcion1 = 0
+        opcion2 = 0
+        # respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
+    elif disintegrations_size == 1:
+        opcion1 = int(disintegrations[0])
+        opcion2 = 0
+        # respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
+    elif disintegrations_size == 2:
+        opcion1 = int(disintegrations[0])
+        opcion2 = int(disintegrations[1])
+        # respuesta = calc_segundo(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, opcion1, opcion2)
 
+    #data = [indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, disintegrations]
+    # data = [respuesta]
+    data = [column_1]
+    message = json.dumps(data)
+    return HttpResponse(message, content_type='application/json')
+
+def get_column_1(indicator_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int):
+    column = []
+    trim_1 = trimStart_int
+    trim_2 = 5
+    for i in range(yearStart_int, yearEnd_int+1):
+        print i
+        if i == yearEnd_int:
+            trim_2 = trimEnd_int+1
+
+        for j in range(trim_1, trim_2):
+            print j
+            column = column + list(Data_from_2003_4.objects.filter(anio=i, trimestre=j).values_list("pet", flat=True))#completar method 2 y value_list
+            # print len(resultado)
+            if j == 4:
+                trim_1 = 1
+    return column
 
 def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, trimEnd, opcion1, opcion2):
     resultado = []
@@ -172,20 +203,27 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
 
     #Validacion por area o representatividad
     if represent == 1:
-        pass
+        #where1 = {'area': 'Urbano'}
+        where = 'Urbano'
     elif represent == 2:
-        where = {'area': 'Urbano'}
+        #where = {'area': 'Urbano'}
+        where = 'Urbano'
     elif represent == 3:
-        where = {'area': 'Rural'}
-
-    pet = {'pet':1}
-    pea = {'pea':1}
-    ocupa = {'ocupa':1}
-    rela_jef = {'rela_jef':1}
+        #where = {'area': 'Rural'}
+        where = 'Rural'
 
     #Validacion para Desagregaciones
     if opcion1 == 0 and opcion2 == 0:
-        pass
+        if indicator == 1 or indicator == 2:
+            subquery.append({'area':where, 'anio__range':(yearStart,yearEnd)})
+        if indicator == 3 or indicator == 4 or indicator == 5:
+            subquery.append({'area':where, 'anio__range':(yearStart,yearEnd),'pet':1})
+        elif indicator == 6 or indicator == 7 or indicator == 9 or indicator == 10 or indicator == 11 or indicator == 12 or indicator == 13 or indicator == 14 or indicator == 15 or indicator == 16 or indicator == 17 or indicator == 18 or indicator == 19 or indicator == 20 or indicator == 21 or indicator == 22 or indicator == 23:
+            subquery.append({'area':where, 'anio__range':(yearStart,yearEnd),'pea':1})
+        elif indicator == 24 or indicator == 25 or indicator == 26 or indicator == 27 or indicator == 38 or indicator == 39 or indicator == 40 or indicator == 41 or indicator == 42:
+            subquery.append({'area':where, 'anio__range':(yearStart,yearEnd),'ocupa':1})
+        elif indicator == 32 or indicator == 33 or indicator == 34 or indicator == 35:
+            subquery.append({'area':where, 'anio__range':(yearStart,yearEnd),'rela_jef':1})
     elif opcion1 > 0:
         if opcion2 == 0:
             disintegrations_name_opcion_one = by_list(opcion1)
@@ -193,16 +231,16 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
             disintegrations_opcion_one_size = len(disintegrations_type_opcion_one)
 
             for i in range(0,disintegrations_opcion_one_size):
-                subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i]})
-                subquery.append(where)
+                if indicator == 1 or indicator == 2:
+                    subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i], 'area':where, 'anio__range':(yearStart,yearEnd)})
                 if indicator == 3 or indicator == 4 or indicator == 5:
-                    subquery.append(pet)
+                    subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i], 'area':where, 'anio__range':(yearStart,yearEnd), 'pet':1})
                 elif indicator == 6 or indicator == 7 or indicator == 9 or indicator == 10 or indicator == 11 or indicator == 12 or indicator == 13 or indicator == 14 or indicator == 15 or indicator == 16 or indicator == 17 or indicator == 18 or indicator == 19 or indicator == 20 or indicator == 21 or indicator == 22 or indicator == 23:
-                    subquery.append(pea)
+                    subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i], 'area':where, 'anio__range':(yearStart,yearEnd), 'pea':1})
                 elif indicator == 24 or indicator == 25 or indicator == 26 or indicator == 27 or indicator == 38 or indicator == 39 or indicator == 40 or indicator == 41 or indicator == 42:
-                    subquery.append(ocupa)
+                    subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i], 'area':where, 'anio__range':(yearStart,yearEnd), 'ocupa':1})
                 elif indicator == 32 or indicator == 33 or indicator == 34 or indicator == 35:
-                    subquery.append(rela_jef)
+                    subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i], 'area':where, 'anio__range':(yearStart,yearEnd), 'rela_jef':1})
 
         else:
             disintegrations_name_opcion_one = by_list(opcion1)
@@ -214,17 +252,16 @@ def calc_segundo(indicator, represent, method, yearStart, trimStart, yearEnd, tr
 
             for i in range(0,disintegrations_opcion_one_size):
                 for j in range(0,disintegrations_opcion_two_size):
-                    subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i],disintegrations_name_opcion_two:disintegrations_type_opcion_two[j]})
-                    subquery.append(where)
-
+                    if indicator == 1 or indicator == 2:
+                        subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i], disintegrations_name_opcion_two:disintegrations_type_opcion_two[j],'area':where, 'anio__range':(yearStart,yearEnd)})
                     if indicator == 3 or indicator == 4 or indicator == 5:
-                        subquery.append(pet)
+                        subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i], disintegrations_name_opcion_two:disintegrations_type_opcion_two[j],'area':where, 'anio__range':(yearStart,yearEnd),'pet':1})
                     elif indicator == 6 or indicator == 7 or indicator == 9 or indicator == 10 or indicator == 11 or indicator == 12 or indicator == 13 or indicator == 14 or indicator == 15 or indicator == 16 or indicator == 17 or indicator == 18 or indicator == 19 or indicator == 20 or indicator == 21 or indicator == 22 or indicator == 23:
-                        subquery.append(pea)
+                        subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i], disintegrations_name_opcion_two:disintegrations_type_opcion_two[j],'area':where, 'anio__range':(yearStart,yearEnd),'pea':1})
                     elif indicator == 24 or indicator == 25 or indicator == 26 or indicator == 27 or indicator == 38 or indicator == 39 or indicator == 40 or indicator == 41 or indicator == 42:
-                        subquery.append(ocupa)
+                        subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i], disintegrations_name_opcion_two:disintegrations_type_opcion_two[j],'area':where, 'anio__range':(yearStart,yearEnd),'ocupa':1})
                     elif indicator == 32 or indicator == 33 or indicator == 34 or indicator == 35:
-                        subquery.append(rela_jef)
+                        subquery.append({disintegrations_name_opcion_one:disintegrations_type_opcion_one[i], disintegrations_name_opcion_two:disintegrations_type_opcion_two[j],'area':where, 'anio__range':(yearStart,yearEnd),'rela_jef':1})
 
     #Validacion por cada indicador ya que tiene su propio query
     if method == 1:
