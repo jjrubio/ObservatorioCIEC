@@ -58,9 +58,11 @@ $('.btn-calc').click( function(){
     var trimStart = $('#trimStart').val();
     var yearEnd = $('#yearEnd').val();
     var trimEnd = $('#trimEnd').val();
+
     $.getJSON('/result/', {'indicator': indicator, 'represent': represent, 'method': method, 'yearStart': yearStart,
                                       'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd, 'disintegrations[]': selected},
     function(data){
+
         console.log(data);
     });
 });
