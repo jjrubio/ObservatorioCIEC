@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -11,12 +12,12 @@ class UserProfile(models.Model):
         ( 'PhD.' ,   'Doctor'),
 
     )
-    user = models.OneToOneField(User)
-    institution = models.CharField(max_length=50, null=False)
-    grado_academico = models.CharField(max_length=4, choices = AREA_CHOICES , default = 'Estudiante')
-    contador_visita = models.IntegerField(default=0)
-    telefono = models.CharField(max_length=20, null=False)
-    direccion = models.CharField(max_length=100, null=False)
+    user = models.OneToOneField(User, verbose_name='Usuario')
+    institution = models.CharField(max_length=50, null=False, verbose_name='Institución')
+    grado_academico = models.CharField(max_length=4, choices = AREA_CHOICES , default = 'Estudiante', verbose_name='Grado académico')
+    contador_visita = models.IntegerField(default=0, verbose_name='Contador de visitas')
+    telefono = models.CharField(max_length=20, null=False, verbose_name='Teléfono')
+    direccion = models.CharField(max_length=100, null=False, verbose_name='Dirección')
 
     class Meta:
         verbose_name = "perfil de usuario"

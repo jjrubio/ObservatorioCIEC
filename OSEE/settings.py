@@ -42,6 +42,7 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP + (
 
 # Application definition
 INSTALLED_APPS = (
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -126,6 +127,4 @@ CACHES = {
         }
     },
 }
-
-#solo 1 de los 2
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'

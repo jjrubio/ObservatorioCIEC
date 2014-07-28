@@ -1,25 +1,21 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from django.db import models
 
-# app_label = 'myapp'
 
 class Disintegration(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, verbose_name='Nombre')
 
     class Meta:
         verbose_name = "desagregación"
         verbose_name_plural = 'Desagregaciones'
-
 
     def __unicode__(self):
         return self.name
 
 
 class Type(models.Model):
-    name           = models.CharField(max_length=50)
-    disintegration = models.ForeignKey(Disintegration)
+    name           = models.CharField(max_length=50, verbose_name='Nombre')
+    disintegration = models.ForeignKey(Disintegration, verbose_name='Desagregación')
 
     class Meta:
         verbose_name = "tipo"

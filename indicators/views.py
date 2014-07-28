@@ -121,7 +121,7 @@ def calc_result(request):
         column_3 = columns_2_3[1]
         column_4 = get_column_4(data_byWhere)
 
-    data_result = modelo_ind(column_1,[],[],column_4)
+    # data_result = modelo_ind(column_1,[],[],column_4)
     data = [column_1, column_2, column_3, column_4]
     message = json.dumps(data, cls=DjangoJSONEncoder)
     return HttpResponse(message, content_type='application/json')
@@ -252,7 +252,10 @@ def get_area(represent_int):
 def list_by_no_denied(request):
     id_desagre = request.GET['id_desagregacion']
 
-    if id_desagre == '1' or id_desagre == '3':
+    if id_desagre == '0':
+        disintegrations = Disintegration.objects.all()
+        data = serializers.serialize('json', disintegrations)
+    elif id_desagre == '1' or id_desagre == '3':
         disintegrations = Disintegration.objects.all()
         data = serializers.serialize('json', disintegrations)
     elif id_desagre == '2':

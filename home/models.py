@@ -1,10 +1,12 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.db import models
 
 
 class Slider(models.Model):
-    img_src = models.ImageField(upload_to='sliders/')
+    img_src = models.ImageField(upload_to='sliders/', verbose_name='Imagen')
+
+    def __unicode__(self):
+        return "Imagen "+unicode(self.id)
 
 
 class Timeline(models.Model):
@@ -15,10 +17,10 @@ class Timeline(models.Model):
         ( 'warning' ,  'naranja' ),
         ( 'info' ,  'celeste' ),
     )
-    title      = models.CharField(max_length=50)
-    event      = models.TextField()
-    icon       = models.CharField(max_length=50)
-    icon_color = models.CharField(max_length=10, choices = COLOR_CHOICES, default = 'verde')
+    title      = models.CharField(max_length=50, verbose_name='Título')
+    event      = models.TextField(verbose_name='Evento')
+    icon       = models.CharField(max_length=50, verbose_name='Nombre del ícono')
+    icon_color = models.CharField(max_length=10, choices = COLOR_CHOICES, default = 'verde', verbose_name='Color del ícono')
 
     class Meta:
         verbose_name = "suceso"

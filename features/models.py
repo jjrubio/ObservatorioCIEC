@@ -1,10 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.db import models
 
 
 class Description(models.Model):
-    detail = models.CharField(max_length=200)
+    detail = models.CharField(max_length=200, verbose_name='Detalle')
 
     class Meta:
         verbose_name = "descripción"
