@@ -12,6 +12,14 @@ class UserForm(forms.Form):
     password_one = forms.CharField(label="Contraseña", widget=forms.PasswordInput(render_value=False))
     password_two = forms.CharField(label="Confirmar contraseña", widget=forms.PasswordInput(render_value=False))
 
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update({'class' : 'space_input'})
+        self.fields['last_name'].widget.attrs.update({'class' : 'space_input'})
+        self.fields['email'].widget.attrs.update({'class' : 'space_input'})
+        self.fields['password_one'].widget.attrs.update({'class' : 'space_input'})
+        self.fields['password_two'].widget.attrs.update({'class' : 'space_input'})
+
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
@@ -37,7 +45,10 @@ class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         self.fields['institution'].label = "Institución"
+        self.fields['institution'].widget.attrs.update({'class' : 'space_input'})
         self.fields['telefono'].label = "Teléfono"
+        self.fields['telefono'].widget.attrs.update({'class' : 'space_input'})
         self.fields['direccion'].label = "Dirección"
+        self.fields['direccion'].widget.attrs.update({'class' : 'space_input'})
         self.fields['grado_academico'].label = "Grado académico"
-        self.fields['grado_academico'].widget.attrs.update({'class' : 'selectpicker show-menu-arrow', 'data-width' : "26%"})
+        self.fields['grado_academico'].widget.attrs.update({'class' : 'selectpicker space_input show-menu-arrow', 'data-width' : "26%"})

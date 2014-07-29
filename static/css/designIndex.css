@@ -5,6 +5,15 @@
   width: 99.9%;
 }
 
+.space_input{
+  margin-right: 5px;
+}
+
+#user_form p:after{
+  content : "*";
+  color: #F00;
+}
+
 .active{
     background-color:black;
 }
@@ -169,7 +178,7 @@ body{
   }
 
   #logged-in{
-    margin-right: 350px;
+    margin-right: 400px;
     margin-top: 22px;
     margin-bottom: 0px;
   }
@@ -177,7 +186,7 @@ body{
   #logged-out{
     color: #fff;
     margin-top: 5px;
-    margin-right: 350px;
+    margin-right: 400px;
   }
 
   #option-user{

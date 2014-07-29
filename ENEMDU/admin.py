@@ -3,7 +3,6 @@ from models import Data_from_2003_4, Data_from_2007_2
 from resources import Data_from_year_trimResource
 from import_export.admin import ImportExportModelAdmin
 
-
 class Data_from_year_trimAdmin(ImportExportModelAdmin):
     list_display = (
         'anio', 'trimestre', 'area', 'region_natural', 'ciudad_ind',
@@ -16,6 +15,8 @@ class Data_from_year_trimAdmin(ImportExportModelAdmin):
         'migracion', )
     resource_class = Data_from_year_trimResource
     pass
+
+
 
 admin.site.register(Data_from_2003_4, Data_from_year_trimAdmin)
 admin.site.register(Data_from_2007_2, Data_from_year_trimAdmin)

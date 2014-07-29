@@ -6,6 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^grappelli/', include('grappelli.urls')),
     url(r'^$', 'home.views.slider', name='home'),
     url(r'^inicio/', 'home.views.slider', name='home2'),
     url(r'^equipo-trabajo/', 'staff.views.team_group', name='team'),

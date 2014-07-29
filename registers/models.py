@@ -18,6 +18,7 @@ class UserProfile(models.Model):
     contador_visita = models.IntegerField(default=0, verbose_name='Contador de visitas')
     telefono = models.CharField(max_length=20, null=False, verbose_name='Teléfono')
     direccion = models.CharField(max_length=100, null=False, verbose_name='Dirección')
+    required_css_class = 'required'
 
     class Meta:
         verbose_name = "perfil de usuario"
