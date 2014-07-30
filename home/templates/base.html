@@ -38,12 +38,16 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="pull-right dropdown-menu" id="option-user">
-                                <li><a href="/logout"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
+                                <li><a href="/cerrar-sesion/"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
                             </ul>
                         </li>
                     </ul>
                 {% else %}
-                    <p>Iniciar Sesion</p>
+                    <ul class="pull-right" id="user_data-menu">
+                        <li>
+                             <a class="pull-right" id="name-user" href="/iniciar-sesion/"><i class="fa fa-user"></i> Iniciar Sesión</a>
+                        </li>
+                    </ul>
                 {% endif %}
             </div>
         </header>
