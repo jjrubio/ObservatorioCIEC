@@ -42,7 +42,7 @@
   height: 75px;
 }
 .arrow{
-  margin-top: 2.5em;
+  margin-top: 2em;
 }
 #login_form{
   margin-top: 100px;
@@ -124,13 +124,9 @@ input{
 #text-home-1 .pull-left{
   width: 45%;
 }
+
 #text-home-1 .pull-right{
   margin-left: 45px;
-}
-
-#text-home-2{
-  margin-left: 35px;
-  margin-right: 45px;
 }
 
 body{
@@ -179,8 +175,18 @@ body{
 }
 
 @media only screen and (min-width : 1361px){
+  .carousel-inner > .item > img{
+    width: 100%;
+    height: 300px;
+  }
+
   #text-home-1{
     margin-left: 60px;
+  }
+
+  #text-home-2{
+    margin-left: 75px;
+    margin-right: 70px;
   }
 
   #menu{
@@ -213,6 +219,11 @@ body{
 
 @media only screen and (min-width : 1025px) and (max-width : 1360px){
 
+  .carousel-inner > .item > img{
+    width: 100%;
+    height: 300px;
+  }
+
    #menu{
       margin-left: -250px;
    }
@@ -237,6 +248,11 @@ body{
       margin-left: 60px;
    }
 
+   #text-home-2{
+    margin-left: 75px;
+    margin-right: 70px;
+  }
+
    .titulo{
       font-family: "Verdana";
       font-size: 15px;
@@ -246,6 +262,15 @@ body{
 }
 
 @media only screen and (max-width : 1024px){
+
+  .carousel-inner > .item > img{
+    width: 100%;
+    height: 450px;
+  }
+
+  .item img{
+    height: 500px;
+  }
 
   #menu{
     margin-left: -100px;
@@ -270,6 +295,11 @@ body{
 
   #text-home-1{
     margin-left: 30px;
+  }
+
+  #text-home-2{
+    margin-left: 45px;
+    margin-right: 55px;
   }
 
   .titulo{
