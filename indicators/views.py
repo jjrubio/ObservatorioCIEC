@@ -177,9 +177,9 @@ def modelo_ind(y,X,Z,fexp):
 
 def get_column_1(data, method_int, indicator_int):
     if method_int == 1:
-        column_1 = data.values_list(get_filter_by_indicator()[indicator_int][0], flat=True)
+        column_1 = data.values_list(get_filter()[indicator_int][0], flat=True)
     else:
-        column_1 = data.values_list(get_filter_by_indicator()[indicator_int][1], flat=True)
+        column_1 = data.values_list(get_filter()[indicator_int][1], flat=True)
     return list(column_1)
 
 
@@ -235,7 +235,7 @@ def get_data_byWhere(data_ENEMDU, indicator_int, represent_int, yearStart_int, t
             trim_2 = trimEnd_int+1
 
         for j in range(trim_1, trim_2):
-            data = data | data_ENEMDU.objects.filter(anio=i, trimestre=j,**get_area(represent_int)).filter(**get_filter_by_indicator()[indicator_int][2]).exclude(**get_filter_by_indicator()[indicator_int][3])
+            data = data | data_ENEMDU.objects.filter(anio=i, trimestre=j,**get_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3])
             if j == 4:
                 trim_1 = 1
     return data
@@ -330,7 +330,7 @@ def get_column_name_option(id_desagregation):
         result = ''
     return result
 
-def get_filter_by_indicator():
+def get_filter():
     data = {1 : ['pet', 'pet', {}, {}],
                   2 : ['pea', 'pea', {}, {}],
                   3 : ['pea', 'pea', {'pet' : '1'}, {}],

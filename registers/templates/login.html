@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 {% extends "index.html" %}
 
 {% load static from staticfiles %}
@@ -14,7 +11,7 @@
     <div class="content-page-2" >
         <b id="title-content-page">Iniciar Sesión</b>
         <hr class="pull-left" id="separator-content-page">
-        <form class="text-center" id="login_form" method="post" action="/login">
+        <form class="text-center" id="login_form" method="post" action="iniciar-sesion/">
             {% csrf_token %}
             Correo: <input type="text" name="username" value="" size="50" id="input_user" />
             <br />

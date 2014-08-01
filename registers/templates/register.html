@@ -21,7 +21,7 @@
         {% else %}
             <b id="title-content-page">Formulario de registro</b>
             <hr class="pull-left" id="separator-content-page">
-            <form id="user_form" method="post" action="/register" >
+            <form id="user_form" method="post" action="registro/" >
                 {% csrf_token %}
                 {{ user_form.as_p }}
                 {{ profile_form.as_p }}

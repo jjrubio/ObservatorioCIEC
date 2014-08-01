@@ -34,7 +34,6 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 GRAPPELLI_ADMIN_HEADLINE = "Observatorio Ecónomico - Social del Ecuador"
 GRAPPELLI_ADMIN_TITLE = "Observatorio Ecónomico - Social del Ecuador"
-# GRAPPELLI_AUTOCOMPLETE_LIMIT = "3"
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (

@@ -4,20 +4,15 @@ from indicators.models import Indicator
 from tinymce import models as tinymce_models
 
 class Bulletin(models.Model):
-    title = models.CharField(max_length=50,verbose_name='Título')
-    content = models.TextField(verbose_name='Contenido')
-    indicator = models.ForeignKey(Indicator,verbose_name='Indicador')
-    excel_src = models.FileField(upload_to='excels/', verbose_name='Excel')
-    graph_src = models.ImageField(upload_to='graphs/', verbose_name='Gráfico')
     body = tinymce_models.HTMLField()
-    # pdf_src   = models.ImageField(upload_to='resources/static/pdfs/')
+    pdf_src = models.FileField(upload_to='pdfs/')
 
     class Meta:
         verbose_name = "boletín"
         verbose_name_plural = "Boletines"
 
     def __unicode__(self):
-        return self.title
+        return "Boletin #"+unicode(self.id)
 
 
 class LinkCategory(models.Model):
