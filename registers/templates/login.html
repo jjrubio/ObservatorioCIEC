@@ -8,16 +8,16 @@
 {% endblock %}
 
 {% block content %}
-    <div class="content-page-2" >
-        <b id="title-content-page">Iniciar Sesión</b>
-        <hr class="pull-left" id="separator-content-page">
-        <form class="text-center" id="login_form" method="post" action="iniciar-sesion/">
-            {% csrf_token %}
-            Correo: <input type="text" name="username" value="" size="50" id="input_user" />
-            <br />
-            Contraseña: <input type="password" name="password" value="" size="50" />
-            <br />
-            <input type="submit" class="btn btn-primary btn_login" name="submit" value="Iniciar Sesión" id="btn-login" />
-        </form>
-    </div>
+            <div class="content-page-2" >
+                <b id="title-content-page">Iniciar Sesión</b>
+                <hr class="pull-left" id="separator-content-page">
+                <form class="text-center" id="login_form" method="post" action="iniciar-sesion/">
+                    {% csrf_token %}
+                    Correo: <input type="text" name="username" value="" size="50" id="input_user" />
+                    <br />
+                    Contraseña: <input type="password" name="password" value="" size="50" />
+                    <br />
+                    <input type="submit" class="btn btn-primary btn_login" name="submit" value="Iniciar Sesión" id="btn-login" />
+                </form>
+            </div>
 {% endblock %}

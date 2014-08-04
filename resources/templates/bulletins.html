@@ -7,20 +7,17 @@
 
 {% block resource %}
     {% if user.is_authenticated %}
-        <b id="title-content-page">Enlaces externos</b>
+        <b id="title-content-page">Boletines</b>
         <hr class="pull-left" id="separator-content-page">
-        {% for cat in categories %}
         <div class="external-link">
-            <b>{{cat.name}}</b>
             <ul>
-                {% for link in links|in_category:cat  %}
-                <li><a target="_blank" href="{{link.url}}">{{link.title}} <i class="fa fa-external-link"></i></a></li>
+                {% for bulletin in bulletins %}
+                    <li><a target="_blank" href="/boletin/{{bulletin.id}}/">Boletín Edición no. {{bulletin.id}} <i class="fa fa-external-link"></i></a></li>
                 {% endfor %}
             </ul>
         </div>
-        {% endfor %}
     {%else%}
-        <p class="text-center">Para visualizar o descargar los boletines, por favor <a href="/login">Inicie Sesión</a> o
-        <a href="/register">Regístrese</a></p>
+        <p class="text-center">Para visualizar o descargar los boletines, por favor <a href="/iniciar-sesion/">Inicie Sesión</a> o
+        <a href="/registro/">Regístrese</a></p>
     {%endif%}
 {% endblock %}

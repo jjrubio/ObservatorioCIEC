@@ -65,7 +65,7 @@ def user_login(request):
 			else:
 				return HttpResponseRedirect('/acceso_denegado/')
 		else:
-			return HttpResponseRedirect('/error_login/')
+			return HttpResponseRedirect('/error-sesion/')
 	else:
 		return render_to_response(template, {}, context)
 

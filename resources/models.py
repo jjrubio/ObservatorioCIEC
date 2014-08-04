@@ -4,15 +4,14 @@ from indicators.models import Indicator
 from tinymce import models as tinymce_models
 
 class Bulletin(models.Model):
-    body = tinymce_models.HTMLField()
-    pdf_src = models.FileField(upload_to='pdfs/')
+    pdf_src = models.FileField(upload_to='pdfs/', verbose_name='Archivo de PDF')
 
     class Meta:
         verbose_name = "boletín"
         verbose_name_plural = "Boletines"
 
     def __unicode__(self):
-        return "Boletin #"+unicode(self.id)
+        return ("Boletin Edicion no."+unicode(self.id))
 
 
 class LinkCategory(models.Model):

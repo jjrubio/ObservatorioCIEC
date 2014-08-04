@@ -8,65 +8,63 @@
 {% endblock %}
 
 {% block content %}
-    <div class="content-page-2" >
-        <b id="title-content-page">Inicio</b>
-        <hr class="pull-left" id="separator-content-page">
-        <div id="text-home-1" class="row">
-            <div class="col-md-4 col-lg-5">
-                <p align="justify">
-                El Observatorio Económico Social es un esfuerzo del Centro de Investigaciones Económicas de la Escuela Superior Politécnica del Litoral que busca entregar a la comunidad académica, estudiantil y sociedad en general; una herramienta interactiva que permita calcular diversos indicadores económicos y sociales que contribuyan a la discusión sobre la realidad nacional y sus políticas públicas.
-                </p><br/>
-                <p align="justify">
-                Los indicadores que se pueden calcular a través de esta plataforma se enfocan en el Mercado Laboral Ecuatoriano, analizando a la Población Económicamente Activa en base a variables socio-demográficas como: edad, género, etnia, zona urbana, zona rural, educación, ingresos, entre otras;  que parten de la Encuesta Nacional de Empleo, Desempleo y Subempleo (ENEMDU) del Instituto Nacional de Estadísticas y Censos del Ecuador.  Creemos que la principal contribución de nuestra página es la de poder calcular estimadores estadísticos que sirvan para probar diferentes tipos de hipótesis sobre nuestra sociedad, y así incentivar la investigación científica sobre estos temas.
-                </p><br/>
-
-            </div>
-            <div class="col-md-5 col-lg-5 carousel slide"  data-ride="carousel" >
-                <div class="carousel-inner">
-                    {% if imagenes %}
-                        {% for imag in imagenes %}
-                            {% if forloop.first %}
-                                <div class='item active'>
-                                    <img class="img-slider" src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" />
+            <div class="content-page-2" >
+                <b id="title-content-page">Inicio</b>
+                <hr class="pull-left" id="separator-content-page">
+                <div id="text-home-1" class="row">
+                    <div class="col-md-4 col-lg-5">
+                        <p align="justify">
+                        El Observatorio Económico Social es un esfuerzo del Centro de Investigaciones Económicas de la Escuela Superior Politécnica del Litoral que busca entregar a la comunidad académica, estudiantil y sociedad en general; una herramienta interactiva que permita calcular diversos indicadores económicos y sociales que contribuyan a la discusión sobre la realidad nacional y sus políticas públicas.
+                        </p><br/>
+                        <p align="justify">
+                        Los indicadores que se pueden calcular a través de esta plataforma se enfocan en el Mercado Laboral Ecuatoriano, analizando a la Población Económicamente Activa en base a variables socio-demográficas como: edad, género, etnia, zona urbana, zona rural, educación, ingresos, entre otras;  que parten de la Encuesta Nacional de Empleo, Desempleo y Subempleo (ENEMDU) del Instituto Nacional de Estadísticas y Censos del Ecuador.  Creemos que la principal contribución de nuestra página es la de poder calcular estimadores estadísticos que sirvan para probar diferentes tipos de hipótesis sobre nuestra sociedad, y así incentivar la investigación científica sobre estos temas.
+                        </p><br/>
+                    </div>
+                    <div class="col-md-5 col-lg-5 carousel slide"  data-ride="carousel" >
+                        <div class="carousel-inner">
+                        {% if imagenes %}
+                            {% for imag in imagenes %}
+                                {% if forloop.first %}
+                            <div class='item active'>
+                                <img class="img-slider" src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" />
+                            </div>
+                                {% else %}
+                            <div class='item'>
+                                <img class="img-slider" src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" />
+                            </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                                <div class='item active' id="noavailable">
+                                    <img class="img-slider" src="{{ STATIC_URL }}img/imgnotfound.png" alt="My image" />
                                 </div>
-                            {% else %}
-                                <div class='item'>
-                                    <img class="img-slider" src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" />
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <div class='item active' id="noavailable">
-                            <img class="img-slider" src="{{ STATIC_URL }}img/imgnotfound.png" alt="My image" />
+                        {% endif %}
                         </div>
-                    {% endif %}
+                        <a href="#myslide" data-slide="prev" class="carousel-control left"><i class="fa fa-arrow-circle-left fa-3x arrow"></i></a>
+                        <a href="#myslide" data-slide="next" class="carousel-control right"><i class="fa fa-arrow-circle-right fa-3x arrow"></i></a>
+                    </div>
                 </div>
-                <a href="#myslide" data-slide="prev" class="carousel-control left"><i class="fa fa-arrow-circle-left fa-3x arrow"></i></a>
-                <a href="#myslide" data-slide="next" class="carousel-control right"><i class="fa fa-arrow-circle-right fa-3x arrow"></i></a>
+                <div id="text-home-2">
+                   <p align="justify">
+                    Invitamos a los usuarios a que también revisen nuestros boletines bimensuales, en donde estaremos presentando relaciones interesantes para las diferentes variables socio-demográficas de nuestro país.
+                    </p><br/>
+                    <p align="justify">
+                    Bienvenidos,
+                    </p><br/>
+                    <b>Centro de Investigaciones Económicas</b><br/>
+                    <b>ESPOL</b><br/>
+                </div>
+                <div id="titulo-footer" class="text-center">
+                    <div class="col-md-3 col-lg-2">
+                        <img src="{{ STATIC_URL }}img/logo-ciec.png" alt="My image" class="imagen-logo"/>
+                    </div>
+                    <div id="welcome" class="col-md-6 col-lg-8">
+                        <b class="titulo">BIENVENIDO AL</b><br>
+                        <b class="titulo">OBSERVATORIO ECONÓMICO - SOCIAL DEL ECUADOR</b>
+                    </div>
+                    <div class="col-md-3 col-lg-2">
+                        <img src="{{ STATIC_URL }}img/logo-espol.png" alt="My image" class="imagen-logo"/>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div id="text-home-2">
-           <p align="justify">
-            Invitamos a los usuarios a que también revisen nuestros boletines bimensuales, en donde estaremos presentando relaciones interesantes para las diferentes variables socio-demográficas de nuestro país.
-            </p><br/>
-            <p align="justify">
-            Bienvenidos,
-            </p><br/>
-            <b>Centro de Investigaciones Económicas</b><br/>
-            <b>ESPOL</b><br/>
-        </div>
-
-        <div id="titulo-footer" class="text-center">
-            <div class="col-md-3 col-lg-2">
-                <img src="{{ STATIC_URL }}img/logo-ciec.png" alt="My image" class="imagen-logo"/>
-            </div>
-            <div id="welcome" class="col-md-6 col-lg-8">
-                <b class="titulo">BIENVENIDO AL</b><br>
-                <b class="titulo">OBSERVATORIO ECONÓMICO - SOCIAL DEL ECUADOR</b>
-            </div>
-            <div class="col-md-3 col-lg-2">
-                <img src="{{ STATIC_URL }}img/logo-espol.png" alt="My image" class="imagen-logo"/>
-            </div>
-        </div>
-    </div>
 {% endblock %}

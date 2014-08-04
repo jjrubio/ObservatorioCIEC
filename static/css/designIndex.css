@@ -1,11 +1,3 @@
- .myhr{
-  border-width: 2px;
-  border-style: solid;
-  border-color: #0cb3ac;
-  width: 99.9%;
-}
-
-
 .error:last-child{
   color: #f00;
   font-weight: 100;
@@ -165,7 +157,7 @@ body{
   margin-bottom: 14em;
 }
 
-#agradecimiento{
+#mensaje-alerta{
   margin-top: 100px;
   margin-bottom: 100px;
 }

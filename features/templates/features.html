@@ -5,14 +5,14 @@
 {% block title %}Características{% endblock %}
 
 {% block content %}
-    <div class="content-page-2" >
-        <b id="title-content-page">Características</b>
-        <hr class="pull-left" id="separator-content-page">
-        <ul class="text-justify">
-            {% for detail in description %}
-                <li>{{detail}} </li> <br>
-            {% endfor %}
-        </ul>
-        <div class="separador"></div>
-    </div>
+            <div class="content-page-2" >
+                <b id="title-content-page">Características</b>
+                <hr class="pull-left" id="separator-content-page">
+                <ul class="text-justify">
+                    {% for detail in description %}
+                    <li>{{detail}}</li><br>
+                    {% endfor %}
+                </ul>
+                <div class="separador"></div>
+            </div>
 {% endblock %}

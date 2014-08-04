@@ -8,22 +8,22 @@
 {% endblock %}
 
 {% block content %}
-    	<div class="content-page-2" >
-	    <b id="title-content-page">Equipo de Trabajo</b>
-	    <hr class="pull-left" id="separator-content-page">
-	    <br>
-	    {% if profile %}
-	    	{% for i in profile%}
-	    		<div class="text-profile">
-	    			<i class="fa fa-user"></i><strong> {{i.grado_academico}} {{i.nombre}} {{i.apellido}}</strong><br>
-		    		<i><i class="fa fa-envelope-o"></i> {{i.correo}}</i><br><br>
-		    		{{i.resumen}}
-		    		<hr><br>
-	    		</div>
-	    	{%  endfor %}
-	    {% else %}
-	    	<p>No hay datos a mostrar</p>
-	    {%  endif %}
-	    <div id="datos"></div>
-	</div>
+            <div class="content-page-2" >
+                <b id="title-content-page">Equipo de Trabajo</b>
+                <hr class="pull-left" id="separator-content-page">
+                <br>
+                {% if profile %}
+                    {% for i in profile%}
+                <div class="text-profile">
+                    <i class="fa fa-user"></i><strong> {{i.grado_academico}} {{i.nombre}} {{i.apellido}}</strong><br>
+                    <i><i class="fa fa-envelope-o"></i> {{i.correo}}</i><br><br>
+                    {{i.resumen}}
+                    <hr><br>
+                </div>
+                    {%  endfor %}
+                {% else %}
+                <p>No hay datos a mostrar</p>
+                {%  endif %}
+                <div id="datos"></div>
+            </div>
 {% endblock %}

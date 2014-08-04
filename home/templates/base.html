@@ -29,25 +29,25 @@
                     <i>" servir como base para investigaciones socioeconómicas "</i>
                 </div>
                 {% if user.is_authenticated %}
-                    <ul class="pull-right" id="user_data-menu">
-                        <li>
-                            <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
-                                <i class="fa fa-user"> Bienvenido, </i><br>
-                                <span><strong>{{user.first_name}}</strong></span>
-                                <span><strong>{{user.last_name}}</strong></span>
-                                <b class="caret"></b>
-                            </a>
-                            <ul class="pull-right dropdown-menu" id="option-user">
-                                <li><a href="/cerrar-sesion/"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                <ul class="pull-right" id="user_data-menu">
+                    <li>
+                        <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
+                            <i class="fa fa-user"> Bienvenido, </i><br>
+                            <span><strong>{{user.first_name}}</strong></span>
+                            <span><strong>{{user.last_name}}</strong></span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="pull-right dropdown-menu" id="option-user">
+                            <li><a href="/cerrar-sesion/"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
+                        </ul>
+                    </li>
+                </ul>
                 {% else %}
-                    <ul class="pull-right" id="user_data-menu">
-                        <li>
-                             <a class="pull-right" id="name-user" href="/iniciar-sesion/"><i class="fa fa-user"></i> Iniciar Sesión</a>
-                        </li>
-                    </ul>
+                <ul class="pull-right" id="user_data-menu">
+                    <li>
+                         <a class="pull-right" id="name-user" href="/iniciar-sesion/"><i class="fa fa-user"></i> Iniciar Sesión</a>
+                    </li>
+                </ul>
                 {% endif %}
             </div>
         </header>
@@ -62,7 +62,6 @@
                 </ul>
             </div>
             {% block content %}{% endblock %}
-
             <footer>
                 <div class="contour-footer text-center">
                     <a target="_blank" href="http://www.ciec.espol.edu.ec/"> Website de Ciec </a>|
@@ -74,34 +73,33 @@
             </footer>
         </div>
     </div>
-    </header>
 
-        <!-- Core Scripts - Include with every page -->
-        <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-        <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
-        <script type="text/javascript" src="http://code.highcharts.com/modules/exporting.js"></script>
-        <script type="text/javascript" src="{% static "js/graphics.js" %}"></script>
-        <script>
-            $(function(){
-                setNavigation();
+    <!-- Core Scripts - Include with every page -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script type="text/javascript" src="{% static "js/graphics.js" %}"></script>
+    <script>
+        $(function(){
+            setNavigation();
+        });
+
+        function setNavigation() {
+            var path = window.location.pathname;
+            path = path.replace(/\?#$/, "");
+            path = decodeURIComponent(path);
+
+            $("#tabs-menu a").each(function () {
+                var href = $(this).attr('href');
+                if(path.substring(0,href.length) === href){
+                    $(this).closest('li').addClass('active');
+                }
             });
-
-            function setNavigation() {
-                var path = window.location.pathname;
-                path = path.replace(/\?#$/, "");
-                path = decodeURIComponent(path);
-
-                $("#tabs-menu a").each(function () {
-                    var href = $(this).attr('href');
-                    if(path.substring(0,href.length) === href){
-                        $(this).closest('li').addClass('active');
-                    }
-                });
-            }
-        </script>
-        <!-- Page Specific Scripts -->
-        {% block extraScripts %}{% endblock %}
+        }
+    </script>
+    <!-- Page Specific Scripts -->
+    {% block extraScripts %}{% endblock %}
 </body>
 
 </html>

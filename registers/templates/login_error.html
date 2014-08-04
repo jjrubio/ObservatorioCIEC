@@ -8,10 +8,12 @@
 {% endblock %}
 
 {% block content %}
-	<div class="container block_content">
-		<h1 class="titulo-secundario">Credenciales Inválidas</h1>
-		<hr class="myhr">
-		<p>El usuario o contraseña ingresada son inválidas </p>
-		<p><a href="/login/">Iniciar Sesión</a> </p>
-	</div>
+    <div class="content-page-2" >
+        <b id="title-content-page">Credenciales inválidas</b>
+        <hr class="pull-left" id="separator-content-page">
+        <div id="mensaje-alerta" class="text-center">
+            <p><b> ¡ EL USUARIO O CONTRASEÑA INGRESADA SON INVÁLIDAS ! </b></p>
+            <p><a href="/iniciar-sesion/">Volver a Iniciar Sesión</a> </p>
+        </div>
+    </div>
 {% endblock %}

@@ -32,6 +32,20 @@ $('#indicator').change( function() {
     getMenu($("#category").val(), $("#subcategory").val(), $(this).val());
 });
 
+$('#a-parametros').click(function(){
+  $('#desagregaciones').removeClass( "in" );
+  $('#resultados').removeClass( "in" );
+});
+
+$('#a-desagregaciones').click(function(){
+  $('#parametros').removeClass( "in" );
+  $('#resultados').removeClass( "in" );
+});
+
+$('#a-resultados').click(function(){
+  $('#desagregaciones').removeClass( "in" );
+  $('#parametros').removeClass( "in" );
+});
 
 $('.btn-next').click( function(){
     $('#parametros').removeClass( "in" );
@@ -43,7 +57,9 @@ $('.btn-back').click( function(){
 
 $('.btn-calc').click( function(){
     $('#desagregaciones').removeClass( "in" );
-
+    $('.fa-spinner').show();
+    $('#text-spinner').show();
+    $('.graph').hide();
     var selected = new Array();
     $('input:checkbox').each(function(){
         if($(this).is(':checked')){
@@ -62,8 +78,10 @@ $('.btn-calc').click( function(){
     $.getJSON('/result/', {'indicator': indicator, 'represent': represent, 'method': method, 'yearStart': yearStart,
                                       'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd, 'disintegrations[]': selected},
     function(data){
-
         console.log(data);
+        $('.fa-spinner').hide();
+        $('#text-spinner').hide();
+        $('.graph').show();
     });
 });
 

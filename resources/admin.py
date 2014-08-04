@@ -3,7 +3,7 @@ from models import *
 
 
 class BulletinAdmin(admin.ModelAdmin):
-    list_display = ('body', 'pdf_src', )
+    list_display = ('pdf_src', )
 
 
 class LinkAdmin(admin.ModelAdmin):
