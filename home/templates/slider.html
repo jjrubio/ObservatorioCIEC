@@ -20,6 +20,7 @@
                         Los indicadores que se pueden calcular a través de esta plataforma se enfocan en el Mercado Laboral Ecuatoriano, analizando a la Población Económicamente Activa en base a variables socio-demográficas como: edad, género, etnia, zona urbana, zona rural, educación, ingresos, entre otras;  que parten de la Encuesta Nacional de Empleo, Desempleo y Subempleo (ENEMDU) del Instituto Nacional de Estadísticas y Censos del Ecuador.  Creemos que la principal contribución de nuestra página es la de poder calcular estimadores estadísticos que sirvan para probar diferentes tipos de hipótesis sobre nuestra sociedad, y así incentivar la investigación científica sobre estos temas.
                         </p><br/>
                     </div>
+                    <!-- <a class="twitter-timeline" width="180" height="200" href="https://twitter.com/CIEC_ESPOL" data-widget-id="496376936218624000">Tweets por @CIEC_ESPOL</a> -->
                     <div class="col-md-5 col-lg-5 carousel slide"  data-ride="carousel" >
                         <div class="carousel-inner">
                         {% if imagenes %}
@@ -67,4 +68,9 @@
                     </div>
                 </div>
             </div>
+{% endblock %}
+{% block extraScripts %}
+    <script>
+    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+    </script>
 {% endblock %}
