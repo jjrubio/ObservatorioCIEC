@@ -376,3 +376,14 @@ def get_filter():
                 }
     return data
 
+def table(request):
+    trim_1 = request.GET['trim_1']
+    trim_2 = request.GET['trim_2']
+    yearStart = request.GET['yearStart']
+    yearEnd = request.GET['yearEnd']
+
+    disintegrations = Disintegration.objects.all()
+    print disintegrations
+    data = serializers.serialize('json',disintegrations)
+
+    return HttpResponse(data,content_type='application/json') 	
