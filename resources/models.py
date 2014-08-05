@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from indicators.models import Indicator
-from tinymce import models as tinymce_models
 
 class Bulletin(models.Model):
     pdf_src = models.FileField(upload_to='pdfs/', verbose_name='Archivo de PDF')

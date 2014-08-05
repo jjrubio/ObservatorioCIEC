@@ -61,7 +61,6 @@ INSTALLED_APPS = (
     'resources',
     'staff',
     'import_export',
-    'tinymce',
 )
 
 MIDDLEWARE_CLASSES = (
