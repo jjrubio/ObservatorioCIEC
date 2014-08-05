@@ -82,6 +82,7 @@ $('.btn-calc').click( function(){
         $('.fa-spinner').hide();
         $('#text-spinner').hide();
         $('.graph').show();
+        table(trimStart,trimEnd,yearStart,yearEnd,data);
     });
 });
 
@@ -223,5 +224,29 @@ $('#info-method').hover(function(){
     $('#meaning-parameters').hide();
 })
 
+$("#btmExport").click(function(e){
+    window.open('data:application/vnd.ms-excel,'+encodeURIComponent($('#dvData').html()));
+    e.preventDefault();
+});
+
+function table(trim_1,trim_2,yearStart,yearEnd,data){
+  console.log(trim_1);
+  console.log(trim_2);
+  console.log(yearStart);
+  console.log(yearEnd);
+  $.getJSON('/table/', {'trim_1': trim_1, 'trim_2': trim_2, 'yearStart': yearStart, 'yearEnd': yearEnd},
+    function(data){
+        $.each(data, function(index,value){
+          var th_one = '<th colspan="3">'+value.fields.name+'</th>';
+          var th_two = '<th>'+'val1'+'</th>'+'<th>'+'val2'+'</th>'+'<th>'+'val3'+'</th>';
+          $('#titulo').append(th_one);
+          $('#titulo_secundario').append(th_two);
+        });
+    });
+}
+
+function graph(data){
+  console.log("Dentro de la funcion graph:"+data);
+}
 
 
