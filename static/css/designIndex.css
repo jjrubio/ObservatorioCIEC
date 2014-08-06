@@ -1,3 +1,27 @@
+.faq {
+      counter-reset: my-badass-counter;
+    }
+    .faq dt {
+      position: relative;
+      font: bold 16px Georgia;
+      padding: 4px 0 10px 0;
+    }
+    .faq dt:before {
+      content: counter(my-badass-counter);
+      counter-increment: my-badass-counter;
+      position: absolute;
+      left: 26%;
+      font: bold 50px/1 Sans-Serif;
+      vertical-align: center;
+    }
+    .faq dd {
+      margin: 0 0 50px 0;
+    }
+    .faq dt, .faq dd {
+      padding-left: 30%;
+      padding-right: 30%;
+    }
+
 .error:last-child{
   color: #f00;
   font-weight: 100;

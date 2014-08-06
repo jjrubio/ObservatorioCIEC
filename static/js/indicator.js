@@ -230,10 +230,10 @@ $("#btmExport").click(function(e){
 });
 
 function table(trim_1,trim_2,yearStart,yearEnd,data){
-  console.log(trim_1);
-  console.log(trim_2);
-  console.log(yearStart);
-  console.log(yearEnd);
+  // console.log(trim_1);
+  // console.log(trim_2);
+  // console.log(yearStart);
+  // console.log(yearEnd);
   $.getJSON('/table/', {'trim_1': trim_1, 'trim_2': trim_2, 'yearStart': yearStart, 'yearEnd': yearEnd},
     function(data){
         $.each(data, function(index,value){

@@ -8,11 +8,15 @@
             <div class="content-page-2" >
                 <b id="title-content-page">Características</b>
                 <hr class="pull-left" id="separator-content-page">
-                <ul class="text-justify">
+                <dl class="faq">
                     {% for detail in description %}
-                    <li>{{detail}}</li><br>
+                    <dt>{{detail|truncatewords:1}}</dt>
+                    <dd>{{detail}}</dd>
                     {% endfor %}
-                </ul>
+                </dl>
                 <div class="separador"></div>
             </div>
+{% endblock %}
+{% block extraScripts %}
+
 {% endblock %}
