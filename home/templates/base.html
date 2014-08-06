@@ -33,9 +33,13 @@
                 <ul class="pull-right" id="user_data-menu">
                     <li>
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="name-user">
-                            <i class="fa fa-user"> Bienvenido, </i><br>
-                            <span><strong>{{user.first_name}}</strong></span>
-                            <span><strong>{{user.last_name}}</strong></span>
+                          <i class="fa fa-user"> Bienvenido, </i><br>
+                          {% if user.first_name %}
+                                <span><strong>{{user.first_name}}</strong></span>
+                                <span><strong>{{user.last_name}}</strong></span>
+                            {% else %}
+                               <span><strong>{{user.username }}</strong></span>
+                            {%endif%}
                             <b class="caret"></b>
                         </a>
                         <ul class="pull-right dropdown-menu" id="option-user">

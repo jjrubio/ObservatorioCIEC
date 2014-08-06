@@ -224,7 +224,7 @@ $('#info-method').hover(function(){
     $('#meaning-parameters').hide();
 })
 
-$("#btmExport").click(function(e){
+$("#btnExport").click(function(e){
     window.open('data:application/vnd.ms-excel,'+encodeURIComponent($('#dvData').html()));
     e.preventDefault();
 });
