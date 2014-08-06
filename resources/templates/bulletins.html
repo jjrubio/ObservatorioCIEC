@@ -6,18 +6,14 @@
 {% block arrow_link %}<i class="fa fa-chevron-left pull-right"></i>{% endblock %}
 
 {% block resource %}
-    {% if user.is_authenticated %}
-        <b id="title-content-page">Boletines</b>
-        <hr class="pull-left" id="separator-content-page">
-        <div class="external-link">
-            <ul>
-                {% for bulletin in bulletins %}
-                    <li><a target="_blank" href="/boletin/{{bulletin.id}}/">Boletín Edición no. {{bulletin.id}} <i class="fa fa-external-link"></i></a></li>
-                {% endfor %}
-            </ul>
-        </div>
-    {%else%}
-        <p class="text-center">Para visualizar o descargar los boletines, por favor <a href="/iniciar-sesion/">Inicie Sesión</a> o
-        <a href="/registro/">Regístrese</a></p>
-    {%endif%}
+    
+    <b id="title-content-page">Boletines</b>
+    <hr class="pull-left" id="separator-content-page">
+    <div class="external-link">
+        <ul>
+            {% for bulletin in bulletins %}
+                <li><a target="_blank" href="/boletin/{{bulletin.id}}/">Boletín Edición no. {{bulletin.id}} <i class="fa fa-external-link"></i></a></li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
