@@ -400,8 +400,42 @@ def table(request):
     yearStart = request.GET['yearStart']
     yearEnd = request.GET['yearEnd']
 
-    disintegrations = Disintegration.objects.all()
-    # print disintegrations
-    data = serializers.serialize('json',disintegrations)
+    arreglo = ['2003:4','2004:1','2004:2','2004:3','2004:4']
+    data = json.dumps(arreglo)
+    return HttpResponse(data, content_type='application/json')
 
+def grafico(request):
+    datos = [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+
+    data = json.dumps(datos)
     return HttpResponse(data,content_type='application/json')
+
+def indicador_filtro(request):
+    id_indicador = request.GET['id_indicator']
+
+    if id_indicador == '1' or id_indicador == '2' or id_indicador == '3' or id_indicador == '4' or id_indicador == '5' or id_indicador == '6' or id_indicador == '7' or id_indicador == '8' or id_indicador == '9' or id_indicador == '10' or id_indicador == '11' or id_indicador == '12' or id_indicador == '13' or id_indicador == '14' or id_indicador == '15' or id_indicador == '16' or id_indicador == '17' or id_indicador == '18' or id_indicador == '19' or id_indicador == '20' or id_indicador == '21' or id_indicador == '22' or id_indicador == '23' or id_indicador == '24' or id_indicador == '25' or id_indicador == '26' or id_indicador == '27' or id_indicador == '28' or id_indicador == '29':
+        disintegrations = Disintegration.objects.exclude(id__in=[7, 8, 9, 10, 11, 12, 13, 14])
+        data = serializers.serialize('json', disintegrations)
+    elif id_indicador == '30' or id_indicador == '31':
+        disintegrations = Disintegration.objects.exclude(id__in=[11, 12, 13, 14])
+        data = serializers.serialize('json', disintegrations)
+    elif id_indicador == '32':
+        disintegrations = Disintegration.objects.exclude(id__in=[11, 13, 14])
+        data = serializers.serialize('json', disintegrations)
+    elif id_indicador == '33' or id_indicador == '34' or id_indicador == '35' or id_indicador == '36' or id_indicador == '37' or id_indicador == '38':
+        disintegrations = Disintegration.objects.exclude(id__in=[10, 11, 13, 14])
+        data = serializers.serialize('json', disintegrations)
+    elif id_indicador == '39' or id_indicador == '40' or id_indicador == '41':
+        disintegrations = Disintegration.objects.exclude(id__in=[6, 7, 8, 9, 10])
+        data = serializers.serialize('json', disintegrations)
+    elif id_indicador == '42':
+        disintegrations = Disintegration.objects.exclude(id__in=[2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
+        data = serializers.serialize('json', disintegrations)
+    elif id_indicador == '43':
+        disintegrations = Disintegration.objects.exclude(id__in=[7, 8, 9, 10, 11, 12, 13, 14])
+        data = serializers.serialize('json', disintegrations)
+    elif id_indicador == '44' or id_indicador == '45' or id_indicador == '46' or id_indicador == '47' or id_indicador == '48' or id_indicador == '49':
+        disintegrations = Disintegration.objects.exclude(id__in=[7, 8, 9, 10, 11, 13, 14])
+        data = serializers.serialize('json', disintegrations)
+
+    return HttpResponse(data, content_type='application/json')

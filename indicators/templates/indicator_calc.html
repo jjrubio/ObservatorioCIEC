@@ -121,19 +121,7 @@
                                             <form id="form-disintegrations" method="post" class="form-css">
                                                 {% csrf_token %}
                                                 <label><i class="fa fa-warning fa-lg"></i> Puede escoger hasta dos desagregaciones</label>
-                                                <div id="ckb">
-                                                {% if disintegrations %}
-                                                    {% for desag in disintegrations %}
-                                                    <div class="checkbox">
-                                                        <label>
-                                                            <input type="checkbox" id="{{ desag.id }}" > {{ desag.name }}
-                                                        </label>
-                                                    </div>
-                                                    {% endfor %}
-                                                {% else %}
-                                                    <p>No se han agregado desagregaciones.</p>
-                                                {% endif %}
-                                                </div>
+                                                <div id="ckb"></div>
                                                 <label class="text-center">
                                                     <div class="buttons">
                                                         <button type="button" class="btn btn-back" data-toggle="collapse" data-target="#parametros">
@@ -162,19 +150,22 @@
                                 <div id="resultado" class="panel-collapse collapse">
                                     <div class="panel-body text-center">
                                         <form action="">
-                    					    <div id="dvData">
-                    						<table class="table table-bordered">
-                    							<thead>
-                    								<tr id="titulo"><th></th></tr>
-                    								<tr id="titulo_secundario"><th>Periodo</th></tr>
-                    							</thead>
-                    						</table>
-                    					    </div>
-                    					    <br/>
+                    			    <div id="scroll" style="overflow:auto;" hidden>
+                                                <table class="table table-bordered table-responsive" id="dvData" >
+                                                    <thead>
+                                                        <tr id="titulo"><th></th></tr>
+                                                        <tr id="titulo_secundario"><th>Periodo</th></tr>
+                                                    </thead>
+                                                    <tbody id="periodo">
+                                                        <!--tr id="data"></tr-->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                    		            <br/>
                                             <i class="fa fa-spinner fa-spin fa-5x" style='display:none'></i>
                                             <p id="text-spinner" hidden><b>CARGANDO DATOS . . .</b></p>
                                             <div id="container" class="graph text-center" style="min-width: 800px; height: 400px; margin: 0 0 0 10em;" hidden></div>
-					                       <input type="button" class="btn btn-calc" id="btnExport" value="Exportar tabla a Excel" />
+					    <input type="button" class="btn btn-calc" id="btnExport" value="Exportar tabla a Excel" hidden />
                                         </form>
                                     </div>
                                 </div>
@@ -187,7 +178,6 @@
 {% block extraScripts %}
     <script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
     <script src="{% static "js/indicator.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/chb.js" %}" type="text/javascript"></script>
     <script type="text/javascript">
         var MEDIA_URL = {{MEDIA_URL}};
 
