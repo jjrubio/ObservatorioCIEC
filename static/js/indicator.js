@@ -292,7 +292,6 @@ function graphs(){
 }
 
 function indicador_desagregacion_filtro(id_indicador){
-  console.log(id_indicador);
   $.getJSON('/indicadorFiltro/', {'id_indicator': id_indicador},
     function(data){
         $('#ckb').children().remove();
@@ -300,12 +299,12 @@ function indicador_desagregacion_filtro(id_indicador){
             var tmpHTML = "<div class=\'checkbox\'><label><input type=\'checkbox\' id="+item.pk+">"+item.fields.name+"</label></div>";
             $('#ckb').append(tmpHTML);
           });
-          init();
+          init(data);
     });
 }
 
 //Validaciones entre desagregaciones
-function init(){
+function init(data){
   $(":checkbox").click(function(){
     var validos_selec = [];
 
@@ -320,7 +319,8 @@ function init(){
       indicador_desagregacion_filtro(id_indicator);
     }
     else if(validos_selec.length == 1){
-      filter(validos_selec[0]);
+      filter(validos_selec[0],data);
+      
     }
     else if(validos_selec.length > 2){
       $(this).prop('checked',false);
@@ -328,8 +328,14 @@ function init(){
   });
 }
 
-function filter(id_1){
-  $.getJSON('/list_denied/', {'id_desagregacion': id_1},function(data){
+function filter(id_1,data_filter){
+  var des_filter = new Array();
+  $.each(data_filter, function(i,v){
+    des_filter.push(v.pk);
+  });
+
+  $.getJSON('/list_denied/', {'id_desagregacion': id_1, 'data_filters[]' : des_filter},function(data){
+      console.log(data);
       $('#ckb').children().remove();
       $.each(data, function(index, item){
           if(id_1 == item.pk){
@@ -339,7 +345,7 @@ function filter(id_1){
               var tmpHTML = "<div class=\'checkbox\'><label><input type=\'checkbox\' id="+item.pk+">"+item.fields.name+"</label></div>";
               $('#ckb').append(tmpHTML);
           }
-          init();
+          init(data);
       });
   });
 }
