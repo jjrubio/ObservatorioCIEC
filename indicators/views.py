@@ -21,7 +21,6 @@ def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1'):
     template = "indicator_def.html"
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
-
 def indicators_detail(cat_id, subcat_id, ind_id):
     message = []
     subcategoriesArray = []
@@ -338,7 +337,7 @@ def list_by_no_denied(request):
         ids_value_list = disintegrations.values_list('id',flat=True)
         result = indicador_desagregacion(datos,ids_value_list)
         data = serializers.serialize('json', result)
-     
+
     return HttpResponse(data, content_type='application/json')
 
 def get_column_name_option(id_desagregation):
@@ -466,7 +465,7 @@ def indicador_filtro(request):
 
 def indicador_desagregacion(datos,ids):
     result = []
-    
+
     for i in range(0,len(ids)):
         for j in range(0,len(datos)):
             if ids[i] == int(datos [j]):
