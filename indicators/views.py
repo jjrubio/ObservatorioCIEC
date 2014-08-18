@@ -110,7 +110,6 @@ def calc_result(request):
     trim_1 = trimStart_int
     trim_2 = 5
     for i in range(yearStart_int, yearEnd_int+1):
-        models_by_name_and_period = []
         if i == yearEnd_int:
             trim_2 = trimEnd_int+1
         for j in range(trim_1, trim_2):
@@ -122,10 +121,7 @@ def calc_result(request):
             column_names = columns_2_3[2]
             column_4 = get_column_4(data_byWhere)
             models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
-            for model_by_period in models_by_period:
-                model_by_name_and_period = [model_by_period[0], model_by_period[1]]
-                models_by_name_and_period.append(model_by_name_and_period)
-            data_result_by_period = [i, j, models_by_name_and_period, column_names]
+            data_result_by_period = [i, j, models_by_period.tolist(), column_names]
             data_result.append(data_result_by_period)
             if j == 4:
                 trim_1 = 1
