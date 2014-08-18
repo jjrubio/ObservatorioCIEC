@@ -103,7 +103,6 @@ def calc_result(request):
     yearEnd_int = int(yearEnd)
     trimEnd_int = int(trimEnd)
     data_result = []
-    models_by_name_and_period = []
     if method_int == 1 :
         data_ENEMDU = Data_from_2003_4
     else:
@@ -111,6 +110,7 @@ def calc_result(request):
     trim_1 = trimStart_int
     trim_2 = 5
     for i in range(yearStart_int, yearEnd_int+1):
+        models_by_name_and_period = []
         if i == yearEnd_int:
             trim_2 = trimEnd_int+1
         for j in range(trim_1, trim_2):
@@ -129,6 +129,7 @@ def calc_result(request):
             data_result.append(data_result_by_period)
             if j == 4:
                 trim_1 = 1
+
     message = json.dumps(data_result, cls=DjangoJSONEncoder)
     return HttpResponse(message, content_type='application/json')
 
