@@ -62,7 +62,7 @@ $('.btn-calc').click( function(){
     $('.fa-spinner').show();
     $('#text-spinner').show();
     $('.graph').hide();
-    var selected = new Array();
+    var selected = [];
     $('input:checkbox').each(function(){
         if($(this).is(':checked')){
             selected.push($(this).attr('id'));
@@ -84,8 +84,8 @@ $('.btn-calc').click( function(){
         $('.fa-spinner').hide();
         $('#text-spinner').hide();
         $('.graph').show();
-        table(trimStart,trimEnd,yearStart,yearEnd,data);
-        graphs();
+        table(data);
+        graphs(data);
         $('#btnExport').show();
         $('#scroll').show();
     });
@@ -234,61 +234,42 @@ $("#btnExport").click(function(e){
     e.preventDefault();
 });
 
-function table(trim_1,trim_2,yearStart,yearEnd,data){
-  $.getJSON('/table/', {'trim_1': trim_1, 'trim_2': trim_2, 'yearStart': yearStart, 'yearEnd': yearEnd},
-    function(data){
-      console.log(data);
-      for(var i=0;i<data.length;i++){
-        var tr_periodos = '<tr><td>'+data[i]+'</td></tr>';
-        $('#periodo').append(tr_periodos);
+function table(data){}
+
+function graphs(data){
+  var anio_trim = [];
+  var to_graph = [];
+  var name_desa = [];
+  var valores = [];
+  var anterior;
+  var i, j, k, cst, z, count = 0, index = 0;
+  for(i=0;i<data.length;i++){
+    anio_trim.push(data[i][0]+'-'+data[i][1]);
+    for(j=0;j<data[i][2].length;j++){
+      valores[index] = [data[i][2][j][0], (data[i][2][j][0] + data[i][2][j][1]), (data[i][2][j][0] - data[i][2][j][1])];
+      index++;
+    }
+  }
+  cst = valores.length / data.length;
+  for(z=0;z<valores.length;z++){
+    if(count<cst){
+      if(to_graph[count] == null){
+        to_graph[count] = valores[z];
+        count++;
+      }else{
+        to_graph[count] = [to_graph[count], valores[z]];
+        count++;
       }
-        /*$.each(data, function(index,value){
-          console.log(value);
-          var tr_periodos = '<tr></td>'+value+'</td></tr>';
-          /*var th_one = '<th colspan="3">'+value.fields.name+'</th>';
-          var th_two = '<th>'+'val1'+'</th>'+'<th>'+'val2'+'</th>'+'<th>'+'val3'+'</th>';
-          var td = '<td>'+'3'+'</td>'+'<td>'+'4'+'</td>'+'<td>'+'5'+'</td>';
-          $('#titulo').append(th_one);
-          $('#titulo_secundario').append(th_two);
-          $('#data').append(td);
-          //$('#periodo').append(tr_periodos);
-        });*/
-    });
-}
-
-function graphs(){
-  //console.log("Dentro de la funcion graph:"+data);
-  var options = {
-    chart : {
-      renderTo: 'container',
-      type : 'column'
-    },
-    title: {
-      text: 'Titulo del grafico',
-      x: -20
-    },
-    subtitle: {
-      text: 'Subtitulo del grafico',
-      x: -20
-    },
-    xAxis: {
-      categories: []
-    },
-    yAxis:{
-      title: 'Axisa Y'
-    },
-    series: [{}]
-  };
-
-  $.getJSON('/grafico/',
-    function(data){
-      console.log(data);
-      options.series[0].name = 'Name';
-      options.series[0].data = data;
-      options.series[0].dashStyle = 'dash';
-      options.xAxis.categories[0] = 'valueOne';
-      var chart = new Highcharts.Chart(options);
-  });  
+    }else{
+      count=0;
+      to_graph[count] = [to_graph[count], valores[z]];
+      count++;
+    }
+  }
+  for(i=0;i<data[0][3].length;i++){
+    name_desa.push(data[0][3][i]);
+  }
+    
 }
 
 function indicador_desagregacion_filtro(id_indicador){
@@ -329,13 +310,12 @@ function init(data){
 }
 
 function filter(id_1,data_filter){
-  var des_filter = new Array();
+  var des_filter = [];
   $.each(data_filter, function(i,v){
     des_filter.push(v.pk);
   });
 
   $.getJSON('/list_denied/', {'id_desagregacion': id_1, 'data_filters[]' : des_filter},function(data){
-      console.log(data);
       $('#ckb').children().remove();
       $.each(data, function(index, item){
           if(id_1 == item.pk){

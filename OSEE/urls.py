@@ -29,7 +29,5 @@ urlpatterns = patterns('',
     url(r'^list/', 'indicators.views.list_desagregation', name='list_desagregation'),
     url(r'^test/', 'indicators.views.test', name='test'),
     url(r'^result/', 'indicators.views.calc_result', name='result'),
-    url(r'^table/', 'indicators.views.table', name='table'),
-    url(r'^grafico/', 'indicators.views.grafico', name='grafico'),
     url(r'^indicadorFiltro/', 'indicators.views.indicador_filtro', name='indicador_filtro'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

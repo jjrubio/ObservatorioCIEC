@@ -440,22 +440,6 @@ def get_filter():
                 }
     return data
 
-def table(request):
-    trim_1 = request.GET['trim_1']
-    trim_2 = request.GET['trim_2']
-    yearStart = request.GET['yearStart']
-    yearEnd = request.GET['yearEnd']
-
-    arreglo = ['2003:4','2004:1','2004:2','2004:3','2004:4']
-    data = json.dumps(arreglo)
-    return HttpResponse(data, content_type='application/json')
-
-def grafico(request):
-    datos = [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-
-    data = json.dumps(datos)
-    return HttpResponse(data,content_type='application/json')
-
 def indicador_filtro(request):
     id_indicador = request.GET['id_indicator']
 
