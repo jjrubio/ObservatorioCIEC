@@ -107,38 +107,6 @@ def calc_result(request):
     else:
         data_ENEMDU = Data_from_2007_2
 
-
-    a = data_ENEMDU.objects.values_list('ciudad_ind').distinct()
-    a1 = data_ENEMDU.objects.values_list('region_natural').distinct()
-    a2 = data_ENEMDU.objects.values_list('ciudad_ind').distinct()
-    a3 = data_ENEMDU.objects.values_list('genero').distinct()
-    a4 = data_ENEMDU.objects.values_list('etnia').distinct()
-    a5 = data_ENEMDU.objects.values_list('edad_group').distinct()
-    a6 = data_ENEMDU.objects.values_list('nivinst').distinct()
-    a7 = data_ENEMDU.objects.values_list('seguro').distinct()
-    a8 = data_ENEMDU.objects.values_list('grupo_ocup_1').distinct()
-    a9 = data_ENEMDU.objects.values_list('rama_act_2').distinct()
-    a10 = data_ENEMDU.objects.values_list('categ_ocupa').distinct()
-    a11 = data_ENEMDU.objects.values_list('condact').distinct()
-    a12 = data_ENEMDU.objects.values_list('tipo_ocupa').distinct()
-    a13 = data_ENEMDU.objects.values_list('tipo_deso').distinct()
-
-    print a
-    print a1
-    print a2
-    print a3
-    print a4
-    print a5
-    print a6
-    print a7
-    print a8
-    print a9
-    print a10
-    print a11
-    print a12
-    print a13
-
-
     if(int(disintegrations[0]) == 2 or int(disintegrations[1]) == 2):
         if(represent_int == 2):
             data_ENEMDU = data_ENEMDU.objects.exclude(ciudad_ind='Resto Pais Rural')
@@ -210,10 +178,6 @@ def modelo_ind(y,X,Z,fexp,clusrobust=True):
     fy = fexp * y
     del T
 
-    # print y.shape
-    # print X.shape
-    # print Z.shape
-    # print fexp.shape
     model=sm.OLS(fy,fT,"drop")
     res_ols=model.fit()
 
@@ -301,10 +265,6 @@ def get_column_2_3(data, disintegrations, represent_int):
 
         filter_column_2_by = data.values_list(option_1, flat=True)
         filter_column_3_by = data.values_list(option_2, flat=True)
-
-
-        print filter_column_2_by.count()
-        print filter_column_3_by.count()
 
         types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).values_list('name', flat=True)
         column_2_array = np.array([], 'int')
