@@ -12,7 +12,6 @@ import numpy as np
 import statsmodels.api as sm
 import statsmodels.stats as sms
 
-
 def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1'):
     json = indicators_detail(cat_id, subcat_id, ind_id)
     indicators = Indicator.objects.all()
@@ -102,20 +101,65 @@ def calc_result(request):
     trimStart_int = int(trimStart)
     yearEnd_int = int(yearEnd)
     trimEnd_int = int(trimEnd)
-    data_result = []
+
     if method_int == 1 :
         data_ENEMDU = Data_from_2003_4
     else:
         data_ENEMDU = Data_from_2007_2
+
+
+    a = data_ENEMDU.objects.values_list('ciudad_ind').distinct()
+    a1 = data_ENEMDU.objects.values_list('region_natural').distinct()
+    a2 = data_ENEMDU.objects.values_list('ciudad_ind').distinct()
+    a3 = data_ENEMDU.objects.values_list('genero').distinct()
+    a4 = data_ENEMDU.objects.values_list('etnia').distinct()
+    a5 = data_ENEMDU.objects.values_list('edad_group').distinct()
+    a6 = data_ENEMDU.objects.values_list('nivinst').distinct()
+    a7 = data_ENEMDU.objects.values_list('seguro').distinct()
+    a8 = data_ENEMDU.objects.values_list('grupo_ocup_1').distinct()
+    a9 = data_ENEMDU.objects.values_list('rama_act_2').distinct()
+    a10 = data_ENEMDU.objects.values_list('categ_ocupa').distinct()
+    a11 = data_ENEMDU.objects.values_list('condact').distinct()
+    a12 = data_ENEMDU.objects.values_list('tipo_ocupa').distinct()
+    a13 = data_ENEMDU.objects.values_list('tipo_deso').distinct()
+
+    print a
+    print a1
+    print a2
+    print a3
+    print a4
+    print a5
+    print a6
+    print a7
+    print a8
+    print a9
+    print a10
+    print a11
+    print a12
+    print a13
+
+
+    if(int(disintegrations[0]) == 2 or int(disintegrations[1]) == 2):
+        if(represent_int == 2):
+            data_ENEMDU = data_ENEMDU.objects.exclude(ciudad_ind='Resto Pais Rural')
+        elif(represent_int == 3):
+            data_ENEMDU = data_ENEMDU.objects.exclude(ciudad_ind='Resto Pais Urbano')
+        else:
+            data_ENEMDU = data_ENEMDU.objects.all()
+    else:
+        data_ENEMDU = data_ENEMDU.objects.all()
+
+    data_result = []
     trim_1 = trimStart_int
     trim_2 = 5
+
     for i in range(yearStart_int, yearEnd_int+1):
         if i == yearEnd_int:
             trim_2 = trimEnd_int+1
         for j in range(trim_1, trim_2):
-            data_byWhere = data_ENEMDU.objects.filter(anio=i, trimestre=j,**get_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
+            data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
             column_1 = get_column_1(data_byWhere, method_int, indicator_int)
-            columns_2_3 = get_column_2_3(data_byWhere, disintegrations)
+            columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
             column_2 = columns_2_3[0]
             column_3 = columns_2_3[1]
             column_names = columns_2_3[2]
@@ -232,7 +276,7 @@ def get_column_1(data, method_int, indicator_int):
     return column_1_array
 
 
-def get_column_2_3(data, disintegrations):
+def get_column_2_3(data, disintegrations, represent_int):
     disintegrations_size = len(disintegrations)
     if disintegrations_size == 0:
         column_2_array = None
@@ -254,8 +298,14 @@ def get_column_2_3(data, disintegrations):
     elif disintegrations_size == 2:
         option_1 = get_column_name_option(int(disintegrations[0]))
         option_2 = get_column_name_option(int(disintegrations[1]))
+
         filter_column_2_by = data.values_list(option_1, flat=True)
         filter_column_3_by = data.values_list(option_2, flat=True)
+
+
+        print filter_column_2_by.count()
+        print filter_column_3_by.count()
+
         types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).values_list('name', flat=True)
         column_2_array = np.array([], 'int')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
@@ -390,6 +440,8 @@ def get_column_name_option(id_desagregation):
         result = 'tipo_ocupa'
     elif id_desagregation == 13:
         result = 'tipo_deso'
+    elif id_desagregation == 14:
+        result = 'condInact'
     else :
         result = ''
     return result
