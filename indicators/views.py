@@ -137,7 +137,7 @@ def calc_result(request):
             data_result.append(data_result_by_period)
             if j == 4:
                 trim_1 = 1
-
+    # data_result = test_proc()
     message = json.dumps(data_result, cls=DjangoJSONEncoder)
     return HttpResponse(message, content_type='application/json')
 
@@ -160,6 +160,7 @@ def modelo_ind(y,X,Z,fexp,clusrobust=True):
         n,colY = y.shape
         T=np.array([])
         colX,colZ = 0,0
+
     elif not np.any(Z):
         n,colX = X.shape
         colZ = 0
@@ -229,7 +230,10 @@ def test_proc():
     X = np.loadtxt(dirspec + "//argX.txt",delimiter=',')
     Z = np.loadtxt(dirspec + "//argZ.txt",delimiter=',')
     fexp = np.loadtxt(dirspec + "//argFexp.txt",delimiter=',')
-    return modelo_ind(y,X,Z,fexp)
+
+    a = np.array([])
+
+    return modelo_ind(y,a,a,fexp)
 
 def get_column_1(data, method_int, indicator_int):
     if method_int == 1:
@@ -266,13 +270,31 @@ def get_column_2_3(data, disintegrations, represent_int):
         filter_column_2_by = data.values_list(option_1, flat=True)
         filter_column_3_by = data.values_list(option_2, flat=True)
 
-        types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).values_list('name', flat=True)
+        if(int(disintegrations[0]) == 2):
+            if(represent_int==2):
+                types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).exclude(name='Resto Pais Rural').values_list('name', flat=True)
+            elif(represent_int==3):
+                types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).exclude(name='Resto Pais Urbano').values_list('name', flat=True)
+            else:
+                types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).values_list('name', flat=True)
+        else:
+                types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).values_list('name', flat=True)
+
+        if(int(disintegrations[1]) == 2):
+            if(represent_int==2):
+                types_option_2 = Type.objects.filter(disintegration_id = int(disintegrations[1])).exclude(name='Resto Pais Rural').values_list('name', flat=True)
+            elif(represent_int==3):
+                types_option_2 = Type.objects.filter(disintegration_id = int(disintegrations[1])).exclude(name='Resto Pais Urbano').values_list('name', flat=True)
+            else:
+                types_option_2 = Type.objects.filter(disintegration_id = int(disintegrations[1])).values_list('name', flat=True)
+        else:
+            types_option_2 = Type.objects.filter(disintegration_id = int(disintegrations[1])).values_list('name', flat=True)
+
         column_2_array = np.array([], 'int')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
         for i in range(1,len(filter_column_2_by)+1):
             column_2_array[i-1] = [1 if x == column_2_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_1]
-        types_option_2 = Type.objects.filter(disintegration_id = int(disintegrations[1])).values_list('name', flat=True)
         column_3_array = np.array([], 'int')
         column_3_array = np.zeros((len(filter_column_3_by),len(types_option_2)))
         column_3_aux = list(filter_column_3_by)
@@ -430,25 +452,32 @@ def get_filter():
                   21 : ['', 'deaboc2', {'pea' : '1'}, {}],
                   22 : ['deso1', 'deso1', {'pea' : '1'}, {}],
                   23 : ['deso2', 'deso2', {'pea' : '1'}, {}],
-                  24 : ['oplenos', 'oplenos', {'ocupa' : '1'}, {}],
-                  25 : ['suboc', 'suboc', {'ocupa' : '1'}, {}],
-                  26 : ['ingrl', 'ingrl', {'ocupa' : '1'}, {'ingrl' : None}],
-                  27 : ['', 'satis_laboral', {'ocupa' : '1'}, {'satis_laboral' : None}],
-                  28 : ['', 'descon_bajos_ingresos', {'ocupa' : '1'}, {'descon_bajos_ingresos' : None}],
-                  29 : ['', 'descon_horarios', {'ocupa' : '1'}, {'descon_horarios' : None}],
-                  30 : ['', 'descon_estabil', {'ocupa' : '1'}, {'descon_estabil' : None}],
-                  31 : ['', 'descon_amb_laboral', {'ocupa' : '1'}, {'descon_amb_laboral' : None}],
-                  32 : ['', 'descon_activ', {'ocupa' : '1'}, {'descon_activ' : None}],
-                  33 : ['anosaprob', 'anosaprob', {}, {'anosaprob' : None}],
-                  34 : ['experiencia', 'experiencia', {}, {'experiencia' : None}],
-                  35 : ['migracion_extranjera', 'migracion_extranjera', {}, {}],
-                  36 : ['migracion_rural_urbano', 'migracion_rural_urbano', {}, {}],
-                  37 : ['tamano_hogar', 'tamano_hogar', {'rela_jef' : '1'}, {}],
-                  38 : ['hogar_completo', 'hogar_completo', {'rela_jef' : '1'}, {}],
-                  39 : ['hogar_noFamiliar', 'hogar_noFamiliar', {'rela_jef' : '1'}, {}],
-                  40 : ['ingreso_hogar', 'ingreso_hogar', {'rela_jef' : '1'}, {}],
-                  41 : ['part_quehaceres', 'part_quehaceres', {}, {}],
-                  42 : ['horas_part_quehaceres', 'horas_part_quehaceres', {}, {}],
+                  24 : ['rentista', 'rentista', {'pet' : '1'}, {}],
+                  25 : ['jubil', 'jubil', {'pet' : '1'}, {}],
+                  26 : ['estudiant', 'estudiant', {'pet' : '1'}, {}],
+                  27 : ['amaCasa', 'amaCasa', {'pet' : '1'}, {}],
+                  28 : ['incapacit', 'incapacit', {'pet' : '1'}, {}],
+                  29 : ['otro', 'otro', {'pet' : '1'}, {}],
+                  30 : ['oplenos', 'oplenos', {'ocupa' : '1'}, {}],
+                  31 : ['suboc', 'suboc', {'ocupa' : '1'}, {}],
+                  32 : ['ingrl', 'ingrl', {'ocupa' : '1'}, {'ingrl' : None}],
+                  33 : ['', 'satis_laboral', {'ocupa' : '1'}, {'satis_laboral' : None}],
+                  34 : ['', 'descon_bajos_ingresos', {'ocupa' : '1'}, {'descon_bajos_ingresos' : None}],
+                  35 : ['', 'descon_horarios', {'ocupa' : '1'}, {'descon_horarios' : None}],
+                  36 : ['', 'descon_estabil', {'ocupa' : '1'}, {'descon_estabil' : None}],
+                  37 : ['', 'descon_amb_laboral', {'ocupa' : '1'}, {'descon_amb_laboral' : None}],
+                  38 : ['', 'descon_activ', {'ocupa' : '1'}, {'descon_activ' : None}],
+                  39 : ['anosaprob', 'anosaprob', {}, {'anosaprob' : None}],
+                  40 : ['analfabeta', 'analfabeta', {}, {'analfabeta' : None}],
+                  41 : ['experiencia', 'experiencia', {}, {'experiencia' : None}],
+                  42 : ['migracion_extranjera', 'migracion_extranjera', {}, {}],
+                  43 : ['migracion_rural_urbano', 'migracion_rural_urbano', {}, {}],
+                  44 : ['tamano_hogar', 'tamano_hogar', {'rela_jef' : '1'}, {}],
+                  45 : ['hogar_completo', 'hogar_completo', {'rela_jef' : '1'}, {}],
+                  46 : ['hogar_noFamiliar', 'hogar_noFamiliar', {'rela_jef' : '1'}, {}],
+                  47 : ['ingreso_hogar', 'ingreso_hogar', {'rela_jef' : '1'}, {}],
+                  48 : ['part_quehaceres', 'part_quehaceres', {}, {}],
+                  49 : ['horas_part_quehaceres', 'horas_part_quehaceres', {}, {}],
                 }
     return data
 
