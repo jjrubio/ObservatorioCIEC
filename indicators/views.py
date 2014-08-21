@@ -129,7 +129,6 @@ def calc_result(request):
             data_result.append(data_result_by_period)
             if j == 4:
                 trim_1 = 1
-    # data_result = test_proc()
     message = json.dumps(data_result, cls=DjangoJSONEncoder)
     return HttpResponse(message, content_type='application/json')
 
@@ -218,17 +217,6 @@ def modelo_ind(y,X,Z,fexp,clusrobust=True):
         output[iOut,1]=output[iOut,1]**0.5
 
     return output
-    # return np.array([1,2])
-def test_proc():
-    dirspec = "/home/jaruban/Documentos"
-    y = np.loadtxt(dirspec + "//argY.txt",delimiter=',')
-    X = np.loadtxt(dirspec + "//argX.txt",delimiter=',')
-    Z = np.loadtxt(dirspec + "//argZ.txt",delimiter=',')
-    fexp = np.loadtxt(dirspec + "//argFexp.txt",delimiter=',')
-
-    a = np.array([])
-
-    return modelo_ind(y,a,a,fexp)
 
 def get_column_1(data, method_int, indicator_int):
     if method_int == 1:
