@@ -248,7 +248,7 @@ def get_column_2_3(data, disintegrations, represent_int):
     elif disintegrations_size == 1:
         option_1 = get_column_name_option(int(disintegrations[0]))
         filter_column_2_by = data.values_list(option_1, flat=True)
-        types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).values_list('name', flat=True)
+        types_option_1 = get_type_by_represent(disintegrations[0], represent_int)
         column_2_array = np.array([], 'int')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
@@ -265,37 +265,22 @@ def get_column_2_3(data, disintegrations, represent_int):
         filter_column_2_by = data.values_list(option_1, flat=True)
         filter_column_3_by = data.values_list(option_2, flat=True)
 
-        if(int(disintegrations[0]) == 2):
-            if(represent_int==2):
-                types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).exclude(name='Resto Pais Rural').values_list('name', flat=True)
-            elif(represent_int==3):
-                types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).exclude(name='Resto Pais Urbano').values_list('name', flat=True)
-            else:
-                types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).values_list('name', flat=True)
-        else:
-                types_option_1 = Type.objects.filter(disintegration_id = int(disintegrations[0])).values_list('name', flat=True)
-
-        if(int(disintegrations[1]) == 2):
-            if(represent_int==2):
-                types_option_2 = Type.objects.filter(disintegration_id = int(disintegrations[1])).exclude(name='Resto Pais Rural').values_list('name', flat=True)
-            elif(represent_int==3):
-                types_option_2 = Type.objects.filter(disintegration_id = int(disintegrations[1])).exclude(name='Resto Pais Urbano').values_list('name', flat=True)
-            else:
-                types_option_2 = Type.objects.filter(disintegration_id = int(disintegrations[1])).values_list('name', flat=True)
-        else:
-            types_option_2 = Type.objects.filter(disintegration_id = int(disintegrations[1])).values_list('name', flat=True)
+        types_option_1 = get_type_by_represent(disintegrations[0], represent_int)
+        types_option_2 = get_type_by_represent(disintegrations[1], represent_int)
 
         column_2_array = np.array([], 'int')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
         for i in range(1,len(filter_column_2_by)+1):
             column_2_array[i-1] = [1 if x == column_2_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_1]
+
         column_3_array = np.array([], 'int')
         column_3_array = np.zeros((len(filter_column_3_by),len(types_option_2)))
         column_3_aux = list(filter_column_3_by)
         for i in range(1,len(filter_column_3_by)+1):
             column_3_array[i-1] = [1 if x == column_3_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_2]
         column_names = []
+
         for d1 in types_option_1:
             for d2 in types_option_2:
                 column_names.append(d1+' - '+d2)
@@ -533,6 +518,18 @@ def get_data_by_represent(data_ENEMDU, represent_int):
     else:
         data = data_ENEMDU.objects.all()
     return data
+
+def get_type_by_represent(disintegrations_pos, represent_int):
+    if(int(disintegrations_pos) == 2):
+        if(represent_int==2):
+            types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).exclude(name='Resto Pais Rural').values_list('name', flat=True)
+        elif(represent_int==3):
+            types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).exclude(name='Resto Pais Urbano').values_list('name', flat=True)
+        else:
+            types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).values_list('name', flat=True)
+    else:
+        types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).values_list('name', flat=True)
+    return types_option
 
 def get_last_full_year(request):
     year = Data_from_2007_2.objects.values_list('anio', 'trimestre').distinct().last()
