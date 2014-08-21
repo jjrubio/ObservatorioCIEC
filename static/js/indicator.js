@@ -1,3 +1,12 @@
+var last_year;
+var last_trim;
+
+$(document).ready(function() {
+    $.getJSON('/last-full-year/',function(data){
+        last_year = data[0];
+        last_trim = data[1];
+    });
+});
 
 function getMenu(cat, subcat, ind){
         var url = location.href;
@@ -91,8 +100,6 @@ $('.btn-calc').click( function(){
     });
 });
 
-
-var d = new Date();
 //Valores por defecto para Periodo Inicial y Periodo Final
 $('#method').change(function(){
   $('#yearStart').empty();
@@ -106,11 +113,11 @@ $('#method').change(function(){
     modificarPeriodo($('#trimEnd'), 1, 1);
     $('#yearEnd option[value='+2007+']').attr("selected","selected");
   }else{
-    modificarPeriodo($('#yearStart'), 2007, d.getFullYear());
-    modificarPeriodo($('#yearEnd'), 2007, d.getFullYear());
+    modificarPeriodo($('#yearStart'), 2007, last_year);
+    modificarPeriodo($('#yearEnd'), 2007, last_year);
     modificarPeriodo($('#trimStart'), 2, 4);
-    modificarPeriodo($('#trimEnd'), 1, Math.round((d.getMonth()+1)/3));
-    $('#yearEnd option[value='+d.getFullYear()+']').attr("selected","selected");
+    modificarPeriodo($('#trimEnd'), 1, last_trim);
+    $('#yearEnd option[value='+last_year+']').attr("selected","selected");
     $('#trimEnd option:last').attr("selected","selected");
   }
   $('.selectpicker').selectpicker('refresh');
@@ -135,15 +142,15 @@ $('#yearStart').change(function(){
   }else{
     if($('#yearStart').val() == 2007){
       modificarPeriodo('#trimStart', 2, 4);
-    }else if($('#yearStart').val() == d.getFullYear()){
-      modificarPeriodo('#trimStart', 1, Math.round((d.getMonth()+1)/3));
+    }else if($('#yearStart').val() == last_year){
+      modificarPeriodo('#trimStart', 1, last_trim);
     }else{
       modificarPeriodo('#trimStart', 1, 4);
     }
-    modificarPeriodo($('#yearEnd'), $('#yearStart').val(), d.getFullYear());
-    modificarPeriodo($('#trimEnd'), 1, Math.round((d.getMonth()+1)/3));
-    $('#trimEnd option[value='+Math.round((d.getMonth()+1)/3)+']').attr("selected","selected");
-    $('#yearEnd option[value='+d.getFullYear()+']').attr("selected","selected");
+    modificarPeriodo($('#yearEnd'), $('#yearStart').val(), last_year);
+    modificarPeriodo($('#trimEnd'), 1, last_trim);
+    $('#trimEnd option[value='+last_trim+']').attr("selected","selected");
+    $('#yearEnd option[value='+last_year+']').attr("selected","selected");
   }
   if(this.value == $('#yearEnd').val()){
     $('#trimEnd').empty();
@@ -175,8 +182,8 @@ $('#yearEnd').change(function(){
   }else{
     if($('#yearEnd').val() == 2007){
       modificarPeriodo('#trimEnd', 2, 4);
-    }else if($('#yearEnd').val() == d.getFullYear()){
-      modificarPeriodo('#trimEnd', 1, Math.round((d.getMonth()+1)/3));
+    }else if($('#yearEnd').val() == last_year){
+      modificarPeriodo('#trimEnd', 1, last_trim);
     }else{
       modificarPeriodo('#trimEnd', 1, 4);
     }
@@ -269,7 +276,7 @@ function graphs(data){
   for(i=0;i<data[0][3].length;i++){
     name_desa.push(data[0][3][i]);
   }
-    
+
 }
 
 function indicador_desagregacion_filtro(id_indicador){
@@ -301,7 +308,7 @@ function init(data){
     }
     else if(validos_selec.length == 1){
       filter(validos_selec[0],data);
-      
+
     }
     else if(validos_selec.length > 2){
       $(this).prop('checked',false);

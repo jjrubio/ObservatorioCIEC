@@ -522,3 +522,9 @@ def indicador_desagregacion(datos,ids):
     disin = Disintegration.objects.filter(id__in=result)
 
     return disin
+
+def get_last_full_year(request):
+    year = Data_from_2007_2.objects.values_list('anio', 'trimestre').distinct().last()
+    last_full_year = [year[0], year[1]]
+    data = json.dumps(last_full_year)
+    return HttpResponse(data, content_type='application/json')
