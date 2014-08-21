@@ -241,7 +241,20 @@ $("#btnExport").click(function(e){
     e.preventDefault();
 });
 
-function table(data){}
+function table(data){
+  var i, j=0, k=0, cst, z, count = 0, index = 0;
+  for(i=0;i<data.length;i++){
+    //var tr_periodos = '<tr><td>'+data[i][0]+'-'+data[i][1]+'</tr></td>';
+    var tr_periodos = '<tr><td>'+data[i][0]+'-'+data[i][1]+'</tr></td>';
+    $('#periodo').append(tr_periodos);
+  }
+  for(i=0;i<data[0][3].length;i++){
+    var th_one = '<th colspan="3">'+data[0][3][i]+'</th>';
+    var th_two = '<th>'+'var'+'</th>'+'<th>'+'n'+'</th>'+'<th>'+'##'+'</th>';
+    $('#titulo').append(th_one);
+    $('#titulo_secundario').append(th_two);
+  }
+}
 
 function graphs(data){
   var anio_trim = [];
