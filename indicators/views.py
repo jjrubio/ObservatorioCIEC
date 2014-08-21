@@ -64,10 +64,11 @@ def indicators_detail(cat_id, subcat_id, ind_id):
 
 def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     json = indicators_detail(cat_id, subcat_id, ind_id)
-    indicators = Indicator.objects.all()
     subcategories = Subcategory.objects.all()
     categories = Category.objects.all()
     disintegrations = Disintegration.objects.all()
+    method_option = get_method_option(json[2][0]['id'])
+    all_years = get_years_list()
     template = "indicator_calc.html"
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
@@ -524,3 +525,23 @@ def get_last_full_year(request):
     last_full_year = [year[0], year[1]]
     data = json.dumps(last_full_year)
     return HttpResponse(data, content_type='application/json')
+
+def get_method_option(indicator):
+    method_1_valor = get_filter()[indicator][0]
+    method_2_valor = get_filter()[indicator][1]
+
+    if method_1_valor == '':
+        method_option = 1
+    elif method_2_valor == '':
+        method_option = 2
+    else:
+        method_option = 3
+    return method_option
+
+def get_years_list():
+    method_1_years = Data_from_2003_4.objects.values_list('anio').distinct()
+    method_2_years = Data_from_2007_2.objects.values_list('anio').distinct()
+    method_2_last_year = Data_from_2007_2.objects.values_list('anio').distinct().last()
+    method_2_last_trims = Data_from_2007_2.objects.filter(anio = method_2_last_year[0]).values_list('trimestre').distinct()
+    all_years = [method_1_years, method_2_years, method_2_last_trims]
+    return all_years

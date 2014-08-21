@@ -49,8 +49,14 @@
                                                 <label>
                                                         <span>Metodología </span><br><br>
                                                         <select id="method" class="selectpicker show-menu-arrow"  data-width="93%">
+                                                        {% if method_option == 1 %}
+                                                            <option value="1">2003-4 hasta 2007-1 </option>
+                                                        {% elif method_option == 2 %}
+                                                            <option value="2">2007-2 hasta la actualidad</option>
+                                                        {% else %}
                                                             <option value="1">2003-4 hasta 2007-1 </option>
                                                             <option value="2">2007-2 hasta la actualidad</option>
+                                                        {% endif %}
                                                         </select>
                                                         <i id="info-method" class="fa fa-info-circle fa-lg pull-right"></i>
                                                 </label>
@@ -59,15 +65,25 @@
                                                     <span>Período Inicial </span><br><br>
                                                     <span>Año: </span>
                                                     <select id="yearStart" class="selectpicker show-menu-arrow pull-left" data-size="5"  data-width="25%" >
-                                                        <option value="2003">2003</option>
-                                                        <option value="2004">2004</option>
-                                                        <option value="2005">2005</option>
-                                                        <option value="2006">2006</option>
-                                                        <option value="2007">2007</option>
+                                                        {% if method_option == 1 or method_option == 3 %}
+                                                            {% for year in all_years.0 %}
+                                                                <option value="{{year.0}}">{{year.0}}</option>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            {% for year in all_years.1 %}
+                                                                <option value="{{year.0}}">{{year.0}}</option>
+                                                            {% endfor %}
+                                                        {% endif %}
                                                     </select>
                                                     <span>Trimestre: </span>
                                                     <select id="trimStart" class="selectpicker show-menu-arrow" data-width="25%">
-                                                        <option value="4">4</option>
+                                                        {% if method_option == 1 or method_option == 3 %}
+                                                            <option value="4">4</option>
+                                                        {% else %}
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                        {% endif %}
                                                     </select>
                                                 </label>
 
@@ -75,15 +91,37 @@
                                                     <span>Período Final </span><br><br>
                                                     <span>Año: </span>
                                                     <select id="yearEnd" class="selectpicker show-menu-arrow pull-left" data-size="5" data-width="25%" >
-                                                        <option value="2003">2003</option>
-                                                        <option value="2004">2004</option>
-                                                        <option value="2005">2005</option>
-                                                        <option value="2006">2006</option>
-                                                        <option value="2007" selected="selected">2007</option>
+                                                        {% if method_option == 1 or method_option == 3 %}
+                                                            {% for year in all_years.0 %}
+                                                                {% if forloop.last %}
+                                                                    <option value="{{year.0}}"  selected="selected">{{year.0}}</option>
+                                                                {% else %}
+                                                                    <option value="{{year.0}}">{{year.0}}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            {% for year in all_years.1 %}
+                                                                {% if forloop.last %}
+                                                                    <option value="{{year.0}}"  selected="selected">{{year.0}}</option>
+                                                                {% else %}
+                                                                    <option value="{{year.0}}">{{year.0}}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
                                                     </select>
                                                     <span>Trimestre: </span>
                                                     <select id="trimEnd" class="selectpicker show-menu-arrow"  data-width="25%">
-                                                        <option value="1">1</option>
+                                                        {% if method_option == 1 or method_option == 3 %}
+                                                            <option value="1">1</option>
+                                                        {% else %}
+                                                            {% for trim in all_years.2 %}
+                                                                {% if forloop.last %}
+                                                                    <option value="{{trim.0}}"  selected="selected">{{trim.0}}</option>
+                                                                {% else %}
+                                                                    <option value="{{trim.0}}">{{trim.0}}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
                                                     </select>
                                                 </label>
                                                 <label class="text-center">
