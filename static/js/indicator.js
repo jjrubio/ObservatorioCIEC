@@ -277,6 +277,38 @@ function graphs(data){
     name_desa.push(data[0][3][i]);
   }
 
+  //Grafico
+  var options = {
+    chart : {
+      renderTo: 'container',
+      type : 'line'
+    },
+    title: {
+      text: name_desa[0],
+      x: -20
+    },
+    subtitle: {
+      text: 'Observatorio',
+      x: -20
+    },
+    xAxis: {
+      categories: anio_trim
+    },
+    yAxis:{
+      title: 'Valores'
+    },
+    series: [{},{},{}]
+  };
+
+  options.series[0].data = [to_graph[0][0][0], to_graph[0][1][0]];
+  options.series[1].data = [to_graph[1][0][1], to_graph[1][1][1]];
+  options.series[2].data = [to_graph[2][0][2], to_graph[2][1][2]];
+  options.series[0].dashStyle = 'dash';
+  options.series[1].dashStyle = 'dash';
+  options.series[2].dashStyle = 'dash';
+  //options.xAxis.categories[0] = 'valueOne';
+  var chart = new Highcharts.Chart(options);
+
 }
 
 function indicador_desagregacion_filtro(id_indicador){
