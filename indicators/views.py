@@ -71,18 +71,6 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     template = "indicator_calc.html"
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
-def list_desagregation(request):
-    disintegrations = Disintegration.objects.all()
-    data = serializers.serialize('json', disintegrations)
-
-    return HttpResponse(data, content_type='application/json')
-
-def test(request):
-    test = request.GET['test']
-    data = ['2003', '2004', '2005']
-    dato = json.dumps(data)
-    return HttpResponse(dato, content_type='application/json')
-
 @cache_page(30)
 def calc_result(request):
     indicator = request.GET['indicator']
@@ -107,13 +95,17 @@ def calc_result(request):
     else:
         data_ENEMDU = Data_from_2007_2
 
-    if(int(disintegrations[0]) == 2 or int(disintegrations[1]) == 2):
-        if(represent_int == 2):
-            data_ENEMDU = data_ENEMDU.objects.exclude(ciudad_ind='Resto Pais Rural')
-        elif(represent_int == 3):
-            data_ENEMDU = data_ENEMDU.objects.exclude(ciudad_ind='Resto Pais Urbano')
+    if not len(disintegrations) == 0:
+        if len(disintegrations) == 1:
+            if(int(disintegrations[0]) == 2):
+                data_ENEMDU = get_data_by_represent(data_ENEMDU, represent_int)
+            else:
+                data_ENEMDU = data_ENEMDU.objects.all()
         else:
-            data_ENEMDU = data_ENEMDU.objects.all()
+            if(int(disintegrations[0]) == 2 or int(disintegrations[1]) == 2):
+                data_ENEMDU = get_data_by_represent(data_ENEMDU, represent_int)
+            else:
+                data_ENEMDU = data_ENEMDU.objects.all()
     else:
         data_ENEMDU = data_ENEMDU.objects.all()
 
@@ -144,6 +136,7 @@ def calc_result(request):
 # Recordar que las filas de todos los vectores y matrices de entrada
 # deben de estar ordenados por "fexp"
 def modelo_ind(y,X,Z,fexp,clusrobust=True):
+
     # Calcular el indicador de cluster para corregir la matriz VCV
     clusvar = np.array([],'int')
     ngroup=1
@@ -156,21 +149,23 @@ def modelo_ind(y,X,Z,fexp,clusrobust=True):
         clusvar=np.append(clusvar,ngroup)
 
     # Armar la regresion por OLS segun el modelo
-    if not (np.any(X) or np.any(Z)):
-        n,colY = y.shape
-        T=np.array([])
+    if (X.shape[0]==0 and Z.shape[0]==0):
+        pass
+        n = y.shape[0]
+        T=np.ones([n,1])
         colX,colZ = 0,0
-
-    elif not np.any(Z):
+        nOut=1
+    elif (Z.shape[0]==0):
         n,colX = X.shape
         colZ = 0
-        T=np.array(X[:,1:]) # Quitar por colinealidad 1 indicador por cada matriz
+        T=np.concatenate((np.ones([n,1]),X[:,1:]),axis=1)  # Quitar por colinealidad 1 indicador por cada matriz
+        nOut=colX
     else:
         n,colX = X.shape
         n,colZ = Z.shape
-        T=np.concatenate((X[:,1:], Z[:,1:]),axis=1) # Quitar por colinealidad 1 indicador por cada matriz
+        T=np.concatenate((np.ones([n,1]),X[:,1:], Z[:,1:]),axis=1) # Quitar por colinealidad 1 indicador por cada matriz
+        nOut=colX*colZ
 
-    T=np.concatenate((np.ones([n,1]),T),axis=1)
     fT=T
     irow = 0
     for row in T:
@@ -190,11 +185,11 @@ def modelo_ind(y,X,Z,fexp,clusrobust=True):
         vcv=res_ols.cov_params()
 
     # Construir la salida en el formato acordado
-    nOut=colX*colZ
     output=np.zeros((nOut,2))
     iX,iZ=0,0
     offX,offZ=0,0
     for iOut in range(nOut):
+
         # Incluir el coeficiente que corresponde a la tasa de cada combinacion y su varianza
         # que es la suma de las varianzas más 2 veces todas las covarianzas cruzadas
         if (iZ==0 and iX==0):
@@ -221,9 +216,9 @@ def modelo_ind(y,X,Z,fexp,clusrobust=True):
             iX+=1
 
         output[iOut,1]=output[iOut,1]**0.5
+
     return output
-
-
+    # return np.array([1,2])
 def test_proc():
     dirspec = "/home/jaruban/Documentos"
     y = np.loadtxt(dirspec + "//argY.txt",delimiter=',')
@@ -247,8 +242,8 @@ def get_column_1(data, method_int, indicator_int):
 def get_column_2_3(data, disintegrations, represent_int):
     disintegrations_size = len(disintegrations)
     if disintegrations_size == 0:
-        column_2_array = None
-        column_3_array = None
+        column_2_array = np.array([])
+        column_3_array = np.array([])
         column_names = ['Sin desagregaciones']
     elif disintegrations_size == 1:
         option_1 = get_column_name_option(int(disintegrations[0]))
@@ -259,7 +254,7 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_2_aux = list(filter_column_2_by)
         for i in range(1,len(filter_column_2_by)+1):
             column_2_array[i-1] = [1 if x == column_2_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_1]
-        column_3_array = None
+        column_3_array = np.array([])
         column_names = []
         for d1 in types_option_1:
             column_names.append(d1)
@@ -522,6 +517,22 @@ def indicador_desagregacion(datos,ids):
     disin = Disintegration.objects.filter(id__in=result)
 
     return disin
+
+
+def list_desagregation(request):
+    disintegrations = Disintegration.objects.all()
+    data = serializers.serialize('json', disintegrations)
+
+    return HttpResponse(data, content_type='application/json')
+
+def get_data_by_represent(data_ENEMDU, represent_int):
+    if(represent_int == 2):
+        data = data_ENEMDU.objects.exclude(ciudad_ind='Resto Pais Rural')
+    elif(represent_int == 3):
+        data = data_ENEMDU.objects.exclude(ciudad_ind='Resto Pais Urbano')
+    else:
+        data = data_ENEMDU.objects.all()
+    return data
 
 def get_last_full_year(request):
     year = Data_from_2007_2.objects.values_list('anio', 'trimestre').distinct().last()
