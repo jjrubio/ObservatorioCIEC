@@ -122,18 +122,22 @@ def calc_result(request):
             if (represent_int == 3 and  represent_database == 'Urbana'):
                 pass
             else:
-                data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
+                data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
                 column_1 = get_column_1(data_byWhere, method_int, indicator_int)
                 columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
                 column_2 = columns_2_3[0]
                 column_3 = columns_2_3[1]
-                column_names = columns_2_3[2]
+                column_dimensions = columns_2_3[2]
+                column_names = columns_2_3[3]
                 column_4 = get_column_4(data_byWhere)
                 models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
-                data_result_by_period = [i, j, models_by_period.tolist(), column_names]
+                data_result_by_period = [i, j, models_by_period.tolist()]
                 data_result.append(data_result_by_period)
             if j == 4:
                 trim_1 = 1
+    data_result.append(get_area_name(represent_int))
+    data_result.append(column_dimensions)
+    data_result.append(column_names)
     message = json.dumps(data_result, cls=DjangoJSONEncoder)
     return HttpResponse(message, content_type='application/json')
 
@@ -225,18 +229,28 @@ def modelo_ind(y,X,Z,fexp,clusrobust=True):
 
 def get_column_1(data, method_int, indicator_int):
     if method_int == 1:
-        column_1 = data.values_list(get_filter()[indicator_int][0], flat=True)
+        if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18):
+            column_1_a = data.values_list(get_filter()[indicator_int][0], flat=True)
+            column_1_b = data.values_list(get_filter()[indicator_int][4], flat=True)
+            column_1 = [(x * y) for x, y in zip(column_1_a, column_1_b)]
+        else:
+            column_1 = data.values_list(get_filter()[indicator_int][0], flat=True)
     else:
-        column_1 = data.values_list(get_filter()[indicator_int][1], flat=True)
-    column_1_array = np.array(list(column_1), 'float')
+        if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18):
+            column_1_a = data.values_list(get_filter()[indicator_int][1], flat=True)
+            column_1_b = data.values_list(get_filter()[indicator_int][4], flat=True)
+            column_1 = [(x * y) for x, y in zip(column_1_a, column_1_b)]
+        else:
+            column_1 = data.values_list(get_filter()[indicator_int][1], flat=True)
+    column_1_array = np.array(list(column_1), 'int')
     return column_1_array
-
 
 def get_column_2_3(data, disintegrations, represent_int):
     disintegrations_size = len(disintegrations)
     if disintegrations_size == 0:
         column_2_array = np.array([])
         column_3_array = np.array([])
+        column_dimensions = [0, 0]
         column_names = ['Sin desagregaciones']
     elif disintegrations_size == 1:
         option_1 = get_column_name_option(int(disintegrations[0]))
@@ -248,6 +262,7 @@ def get_column_2_3(data, disintegrations, represent_int):
         for i in range(1,len(filter_column_2_by)+1):
             column_2_array[i-1] = [1 if x == column_2_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_1]
         column_3_array = np.array([])
+        column_dimensions = [len(types_option_1), 0]
         column_names = []
         for d1 in types_option_1:
             column_names.append(d1)
@@ -272,20 +287,31 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_3_aux = list(filter_column_3_by)
         for i in range(1,len(filter_column_3_by)+1):
             column_3_array[i-1] = [1 if x == column_3_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_2]
+
+        column_dimensions = [len(types_option_1), len(types_option_2)]
         column_names = []
 
         for d1 in types_option_1:
             for d2 in types_option_2:
                 column_names.append(d1+' - '+d2)
-    columns = [column_2_array, column_3_array, column_names]
+    columns = [column_2_array, column_3_array, column_dimensions, column_names]
     return columns
 
 def get_column_4(data):
     column_4 = data.values_list("fexp", flat=True)
-    column_4_array = np.array(list(column_4), 'float')
+    column_4_array = np.array(list(column_4), 'int')
     return column_4_array
 
-def get_area(represent_int):
+def get_area_name(represent_int):
+    if represent_int == 1:
+        area = 'Nacional'
+    elif represent_int == 2:
+        area = 'Urbana'
+    else:
+        area = 'Rural'
+    return area
+
+def get_filter_area(represent_int):
     if represent_int == 1:
         area = {}
     elif represent_int == 2:
@@ -409,17 +435,17 @@ def get_filter():
                   5 : ['ocupa', 'ocupa', {'pet' : '1'}, {}],
                   6 : ['ocupa', 'ocupa', {'pea' : '1'}, {}],
                   7 : ['oplenos', 'oplenos', {'pea' : '1'}, {}],
-                  8 : ['', 'ocupa*sect_formal', {'pea' : '1'}, {}],
-                  9 : ['ocupa*sect_informal', 'ocupa*sect_informal', {'pea' : '1'}, {}],
-                  10 : ['ocupa*sect_srvdom', 'ocupa*sect_srvdom', {'pea' : '1'}, {}],
+                  8 : ['', 'ocupa', {'pea' : '1'}, {}, 'sect_formal'],
+                  9 : ['ocupa', 'ocupa', {'pea' : '1'}, {}, 'sect_informal'],
+                  10 : ['ocupa', 'ocupa', {'pea' : '1'}, {}, 'sect_srvdom'],
                   11 : ['suboc', 'suboc', {'pea' : '1'}, {}],
                   12 : ['suboc1', 'suboc1', {'pea' : '1'}, {}],
                   13 : ['', 'suboc2', {'pea' : '1'}, {}],
                   14 : ['sub_inv', '', {'pea' : '1'}, {}],
                   15 : ['sub_informal', '', {'pea' : '1'}, {}],
-                  16 : ['suboc*sect_moderno', '', {'pea' : '1'}, {}],#probar multiplicacion de columnas
-                  17 : ['sub_inv*sect_moderno', '', {'pea' : '1'}, {}],
-                  18 : ['suboc1*sec_moderno', '', {'pea' : '1'}, {}],
+                  16 : ['suboc', '', {'pea' : '1'}, {}, 'sect_moderno'],
+                  17 : ['sub_inv', '', {'pea' : '1'}, {}, 'sect_moderno'],
+                  18 : ['suboc1', '', {'pea' : '1'}, {}, 'sect_moderno'],
                   19 : ['deso', 'deso', {'pea' : '1'}, {}],
                   20 : ['', 'deaboc1', {'pea' : '1'}, {}],
                   21 : ['', 'deaboc2', {'pea' : '1'}, {}],
