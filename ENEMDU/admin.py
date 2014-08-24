@@ -1,7 +1,11 @@
 from django.contrib import admin
-from models import Data_from_2003_4, Data_from_2007_2
+from models import Structure, Data_from_2003_4, Data_from_2007_2
 from resources import Data_from_year_trimResource
 from import_export.admin import ImportExportModelAdmin
+
+
+class StructureAdmin(admin.ModelAdmin):
+    list_display = ('anio', 'trim', 'represent' )
 
 
 class Data_from_year_trimAdmin(ImportExportModelAdmin):
@@ -26,5 +30,6 @@ class Data_from_year_trimAdmin(ImportExportModelAdmin):
     resource_class = Data_from_year_trimResource
     pass
 
+admin.site.register(Structure, StructureAdmin)
 admin.site.register(Data_from_2003_4, Data_from_year_trimAdmin)
 admin.site.register(Data_from_2007_2, Data_from_year_trimAdmin)

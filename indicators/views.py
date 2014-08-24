@@ -118,16 +118,20 @@ def calc_result(request):
         if i == yearEnd_int:
             trim_2 = trimEnd_int+1
         for j in range(trim_1, trim_2):
-            data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
-            column_1 = get_column_1(data_byWhere, method_int, indicator_int)
-            columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
-            column_2 = columns_2_3[0]
-            column_3 = columns_2_3[1]
-            column_names = columns_2_3[2]
-            column_4 = get_column_4(data_byWhere)
-            models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
-            data_result_by_period = [i, j, models_by_period.tolist(), column_names]
-            data_result.append(data_result_by_period)
+            represent_database = str(Structure.objects.get(anio=i, trim=j))
+            if (represent_int == 3 and  represent_database == 'Urbana'):
+                pass
+            else:
+                data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
+                column_1 = get_column_1(data_byWhere, method_int, indicator_int)
+                columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
+                column_2 = columns_2_3[0]
+                column_3 = columns_2_3[1]
+                column_names = columns_2_3[2]
+                column_4 = get_column_4(data_byWhere)
+                models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
+                data_result_by_period = [i, j, models_by_period.tolist(), column_names]
+                data_result.append(data_result_by_period)
             if j == 4:
                 trim_1 = 1
     message = json.dumps(data_result, cls=DjangoJSONEncoder)
@@ -531,9 +535,9 @@ def get_method_option(indicator):
     method_2_valor = get_filter()[indicator][1]
 
     if method_1_valor == '':
-        method_option = 1
-    elif method_2_valor == '':
         method_option = 2
+    elif method_2_valor == '':
+        method_option = 1
     else:
         method_option = 3
     return method_option

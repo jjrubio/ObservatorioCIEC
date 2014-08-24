@@ -1,7 +1,29 @@
+# -*- coding: utf-8 -*-
 from django.db import models
-from disintegrations.models import Type
-from django.contrib import messages
-from django.core.validators import MaxValueValidator, MinValueValidator
+
+
+class Structure(models.Model):
+    TRIM_CHOICES  =  (
+        ( 1 , 1 ),
+        ( 2 , 2 ),
+        ( 3 , 3 ),
+        ( 4,  4 ),
+    )
+    REPRESENT_CHOICES  =  (
+        ( 'Nacional' ,  'Nacional' ),
+        ( 'Urbana' ,  'Urbana' ),
+        ( 'Rural' ,  'Rural' ),
+    )
+    anio = models.PositiveSmallIntegerField(verbose_name='Año')
+    trim = models.PositiveSmallIntegerField(choices = TRIM_CHOICES, default = 1, verbose_name='Trimestre')
+    represent = models.CharField(max_length=30, choices = REPRESENT_CHOICES, default = 'Nacional', verbose_name='Representatividad', null=True)
+
+    class Meta:
+        verbose_name = "estructura"
+        verbose_name_plural = "Estructuras"
+
+    def __unicode__(self):
+        return self.represent
 
 
 class Data_from_2003_4(models.Model):
