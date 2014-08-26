@@ -242,86 +242,88 @@ $("#btnExport").click(function(e){
 });
 
 function table(data){
-  var i, j=0, k=0, cst, z, count = 0, index = 0;
-  for(i=0;i<data.length;i++){
-    //var tr_periodos = '<tr><td>'+data[i][0]+'-'+data[i][1]+'</tr></td>';
-    var tr_periodos = '<tr><td>'+data[i][0]+'-'+data[i][1]+'</tr></td>';
-    $('#periodo').append(tr_periodos);
+  var tam_total,i,index=0,j,cst,count=0,dim_1,dim_2,representatividad;
+  var valores = [];
+  var anio_trim = [];
+  var to_graph = [];
+  var name_desagre = [];
+  tam_total = data.length;
+  tam_for = tam_total - 3;
+  representatividad = data[tam_for];
+  dim_1 = data[tam_for+1][0];
+  dim_2 = data[tam_for+1][1];
+
+  for(i=(tam_for+2);i<tam_total;i++){
+    for(j=0;j<(data[i].length);j++){
+      name_desagre.push(data[i][j]);
+    }
   }
-  for(i=0;i<data[0][3].length;i++){
-    var th_one = '<th colspan="3">'+data[0][3][i]+'</th>';
+  for(i=0;i<name_desagre.length;i++){
+    var th_one = '<th colspan="3">'+name_desagre[i]+'</th>';
     var th_two = '<th>'+'var'+'</th>'+'<th>'+'n'+'</th>'+'<th>'+'##'+'</th>';
     $('#titulo').append(th_one);
     $('#titulo_secundario').append(th_two);
   }
+  //TEST
+  for(i=0;i<data.length-3;i++){
+    //var tr_periodos = '<tr><td>'+data[i][0]+'-'+data[i][1]+'</td></tr>';
+    var fin = '<tr id="tst"><td>'
+    for(j=0;j<data[i][2].length;j++){
+      //var td_data = '<tr><td>'+data[i][2][j][0]+'</td>'+'<td>'+(data[i][2][j][0] + data[i][2][j][1])+'</td>'+'<td>'+(data[i][2][j][0] - data[i][2][j][1])+'</td></tr>';
+      //var td_data = '<tr><td>'+data[i][0]+'-'+data[i][1]+'</td><td>'+data[i][2][j][0]+'</td><td>'+(data[i][2][j][0] + data[i][2][j][1])+'</td><td>'+(data[i][2][j][0] - data[i][2][j][1])+'</td></tr>';
+      var td_data = '<td>'+data[i][2][j][0]+'</td><td>'+(data[i][2][j][0] + data[i][2][j][1])+'</td><td>'+(data[i][2][j][0] - data[i][2][j][1])+'</td>';
+      //$('#periodo').append(td_data);
+      $('#tst').append(td_data);
+      $('#periodo').append(fin);
+    }
+//    $('#periodo').append(fin);
+  }
+  //END
 }
 
 function graphs(data){
+  var tam_total,i,index=0,j,cst,count=0,dim_1,dim_2,representatividad;
+  var valores = [];
   var anio_trim = [];
   var to_graph = [];
-  var name_desa = [];
-  var valores = [];
-  var anterior;
-  var i, j, k, cst, z, count = 0, index = 0;
-  for(i=0;i<data.length;i++){
+  var name_desagre = [];
+  tam_total = data.length;
+  tam_for = tam_total - 3;
+
+  console.log(data);
+
+  for(i=0;i<tam_for;i++){
     anio_trim.push(data[i][0]+'-'+data[i][1]);
+    console.log(data[i]);
     for(j=0;j<data[i][2].length;j++){
       valores[index] = [data[i][2][j][0], (data[i][2][j][0] + data[i][2][j][1]), (data[i][2][j][0] - data[i][2][j][1])];
       index++;
     }
   }
-  cst = valores.length / data.length;
-  for(z=0;z<valores.length;z++){
+  cst = data[0][2].length;
+  for(i=0;i<valores.length;i++){
     if(count<cst){
       if(to_graph[count] == null){
-        to_graph[count] = valores[z];
-        count++;
+        to_graph[count] = valores[i];
       }else{
-        to_graph[count] = [to_graph[count], valores[z]];
-        count++;
+        to_graph[count] = to_graph[count].concat(valores[i]);
       }
+      count++;
     }else{
       count=0;
-      to_graph[count] = [to_graph[count], valores[z]];
+      to_graph[count] = to_graph[count].concat(valores[i]);
       count++;
     }
   }
-  for(i=0;i<data[0][3].length;i++){
-    name_desa.push(data[0][3][i]);
+  representatividad = data[tam_for];
+  dim_1 = data[tam_for+1][0];
+  dim_2 = data[tam_for+1][1];
+  for(i=(tam_for+2);i<tam_total;i++){
+    for(j=0;j<(data[i].length);j++){
+      name_desagre.push(data[i][j]);
+    }
   }
-
-  //Grafico
-  var options = {
-    chart : {
-      renderTo: 'container',
-      type : 'line'
-    },
-    title: {
-      text: name_desa[0],
-      x: -20
-    },
-    subtitle: {
-      text: 'Observatorio',
-      x: -20
-    },
-    xAxis: {
-      categories: anio_trim
-    },
-    yAxis:{
-      title: 'Valores'
-    },
-    series: [{},{},{}]
-  };
-
-  options.series[0].data = [to_graph[0][0][0], to_graph[0][1][0]];
-  options.series[1].data = [to_graph[1][0][1], to_graph[1][1][1]];
-  options.series[2].data = [to_graph[2][0][2], to_graph[2][1][2]];
-  options.series[0].dashStyle = 'dash';
-  options.series[1].dashStyle = 'dash';
-  options.series[2].dashStyle = 'dash';
-  //options.xAxis.categories[0] = 'valueOne';
-  var chart = new Highcharts.Chart(options);
-
+  console.log(to_graph);
 }
 
 function indicador_desagregacion_filtro(id_indicador){
