@@ -67,6 +67,7 @@ $('.btn-back').click( function(){
 });
 
 $('.btn-calc').click( function(){
+    $('#parametros').removeClass( "in" );
     $('#desagregaciones').removeClass( "in" );
     $('.fa-spinner').show();
     $('#text-spinner').show();

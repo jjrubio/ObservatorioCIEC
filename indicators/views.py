@@ -242,7 +242,8 @@ def get_column_1(data, method_int, indicator_int):
             column_1 = [(x * y) for x, y in zip(column_1_a, column_1_b)]
         else:
             column_1 = data.values_list(get_filter()[indicator_int][1], flat=True)
-    column_1_array = np.array(list(column_1), 'int')
+    column_1_array = np.array(list(column_1), 'float')
+    # print np.unique(column_1_array)
     return column_1_array
 
 def get_column_2_3(data, disintegrations, represent_int):
@@ -256,7 +257,7 @@ def get_column_2_3(data, disintegrations, represent_int):
         option_1 = get_column_name_option(int(disintegrations[0]))
         filter_column_2_by = data.values_list(option_1, flat=True)
         types_option_1 = get_type_by_represent(disintegrations[0], represent_int)
-        column_2_array = np.array([], 'int')
+        column_2_array = np.array([], 'float')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
         for i in range(1,len(filter_column_2_by)+1):
@@ -276,13 +277,13 @@ def get_column_2_3(data, disintegrations, represent_int):
         types_option_1 = get_type_by_represent(disintegrations[0], represent_int)
         types_option_2 = get_type_by_represent(disintegrations[1], represent_int)
 
-        column_2_array = np.array([], 'int')
+        column_2_array = np.array([], 'float')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
         for i in range(1,len(filter_column_2_by)+1):
             column_2_array[i-1] = [1 if x == column_2_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_1]
 
-        column_3_array = np.array([], 'int')
+        column_3_array = np.array([], 'float')
         column_3_array = np.zeros((len(filter_column_3_by),len(types_option_2)))
         column_3_aux = list(filter_column_3_by)
         for i in range(1,len(filter_column_3_by)+1):
@@ -299,7 +300,7 @@ def get_column_2_3(data, disintegrations, represent_int):
 
 def get_column_4(data):
     column_4 = data.values_list("fexp", flat=True)
-    column_4_array = np.array(list(column_4), 'int')
+    column_4_array = np.array(list(column_4), 'float')
     return column_4_array
 
 def get_area_name(represent_int):
@@ -429,7 +430,7 @@ def get_column_name_option(id_desagregation):
 
 def get_filter():
     data = {1 : ['pet', 'pet', {}, {}],
-                  2 : ['pea', 'pea', {}, {}],
+                  2 : ['pea', 'pea', {}, {'pea' : None}],
                   3 : ['pea', 'pea', {'pet' : '1'}, {}],
                   4 : ['pei', 'pei', {'pet' : '1'}, {}],
                   5 : ['ocupa', 'ocupa', {'pet' : '1'}, {}],
@@ -469,14 +470,14 @@ def get_filter():
                   39 : ['anosaprob', 'anosaprob', {}, {'anosaprob' : None}],
                   40 : ['analfabeta', 'analfabeta', {}, {'analfabeta' : None}],
                   41 : ['experiencia', 'experiencia', {}, {'experiencia' : None}],
-                  42 : ['migracion_extranjera', 'migracion_extranjera', {}, {}],
-                  43 : ['migracion_rural_urbano', 'migracion_rural_urbano', {}, {}],
+                  42 : ['migracion_extranjera', 'migracion_extranjera', {}, {'migracion_extranjera' : None}],
+                  43 : ['migracion_rural_urbano', 'migracion_rural_urbano', {}, {'migracion_rural_urbano' : None}],
                   44 : ['tamano_hogar', 'tamano_hogar', {'rela_jef' : '1'}, {}],
                   45 : ['hogar_completo', 'hogar_completo', {'rela_jef' : '1'}, {}],
                   46 : ['hogar_noFamiliar', 'hogar_noFamiliar', {'rela_jef' : '1'}, {}],
                   47 : ['ingreso_hogar', 'ingreso_hogar', {'rela_jef' : '1'}, {}],
-                  48 : ['part_quehaceres', 'part_quehaceres', {}, {}],
-                  49 : ['horas_part_quehaceres', 'horas_part_quehaceres', {}, {}],
+                  48 : ['part_quehaceres', 'part_quehaceres', {}, {'part_quehaceres' : None}],
+                  49 : ['horas_part_quehaceres', 'horas_part_quehaceres', {}, {'horas_part_quehaceres' : None}],
                 }
     return data
 
