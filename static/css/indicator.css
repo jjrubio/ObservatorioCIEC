@@ -66,6 +66,11 @@
 #main-panel .panel-footer .pull-left a {
   color: #0cb3ac;
 }
+
+#scroll b {
+  float: left;
+}
+
 .form-css label {
   display: block;
   margin: 0px 0px 5px;

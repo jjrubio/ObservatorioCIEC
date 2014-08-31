@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.shortcuts import HttpResponse, render_to_response
 from django.template.context import RequestContext
@@ -11,6 +12,7 @@ from django.views.decorators.cache import cache_page
 import numpy as np
 import statsmodels.api as sm
 import statsmodels.stats as sms
+import math
 
 def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1'):
     json = indicators_detail(cat_id, subcat_id, ind_id)
@@ -128,14 +130,24 @@ def calc_result(request):
                 column_2 = columns_2_3[0]
                 column_3 = columns_2_3[1]
                 column_dimensions = columns_2_3[2]
-                column_names = columns_2_3[3]
+                column_titles = columns_2_3[3]
+                column_names = columns_2_3[4]
+                column_N = columns_2_3[5]
                 column_4 = get_column_4(data_byWhere)
                 models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
-                data_result_by_period = [i, j, models_by_period.tolist()]
+                data_result_by_period = [i, j, column_N, models_by_period.tolist()]
                 data_result.append(data_result_by_period)
             if j == 4:
                 trim_1 = 1
-    data_result.append(get_area_name(represent_int))
+
+    disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
+    title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+    if(yearStart_int == yearEnd_int):
+        years_title = str(yearStart_int)
+    else:
+        years_title = str(yearStart_int)+' - '+str(yearEnd_int)
+    data_result.append(title)
+    data_result.append(years_title)
     data_result.append(column_dimensions)
     data_result.append(column_names)
     message = json.dumps(data_result, cls=DjangoJSONEncoder)
@@ -243,7 +255,6 @@ def get_column_1(data, method_int, indicator_int):
         else:
             column_1 = data.values_list(get_filter()[indicator_int][1], flat=True)
     column_1_array = np.array(list(column_1), 'float')
-    # print np.unique(column_1_array)
     return column_1_array
 
 def get_column_2_3(data, disintegrations, represent_int):
@@ -252,7 +263,10 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_2_array = np.array([])
         column_3_array = np.array([])
         column_dimensions = [0, 0]
+        column_titles = ['sin desagregación']
         column_names = ['Sin desagregaciones']
+        sumaFexp = int(math.ceil(sum(data.values_list('fexp', flat=True))))
+        column_N = [sumaFexp]
     elif disintegrations_size == 1:
         option_1 = get_column_name_option(int(disintegrations[0]))
         filter_column_2_by = data.values_list(option_1, flat=True)
@@ -264,9 +278,15 @@ def get_column_2_3(data, disintegrations, represent_int):
             column_2_array[i-1] = [1 if x == column_2_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_1]
         column_3_array = np.array([])
         column_dimensions = [len(types_option_1), 0]
+        title_1 = Disintegration.objects.get(id=(Type.objects.get(name=types_option_1[0]).disintegration_id)).name.encode('utf-8')
+        column_titles = [' por '+title_1]
         column_names = []
         for d1 in types_option_1:
             column_names.append(d1)
+        column_N = []
+        for option in types_option_1:
+            sumaFexp = int(math.ceil(sum(data.filter(**{option_1:option}).values_list('fexp', flat=True))))
+            column_N.append(sumaFexp)
     elif disintegrations_size == 2:
         option_1 = get_column_name_option(int(disintegrations[0]))
         option_2 = get_column_name_option(int(disintegrations[1]))
@@ -290,12 +310,21 @@ def get_column_2_3(data, disintegrations, represent_int):
             column_3_array[i-1] = [1 if x == column_3_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_2]
 
         column_dimensions = [len(types_option_1), len(types_option_2)]
+        title_1 = Disintegration.objects.get(id=(Type.objects.get(name=types_option_1[0]).disintegration_id)).name.encode('utf-8')
+        title_2 = Disintegration.objects.get(id=(Type.objects.get(name=types_option_2[0]).disintegration_id)).name.encode('utf-8')
+        column_titles = [' por '+title_1+' y '+title_2]
         column_names = []
+
+        column_N = []
+        for optionA in types_option_1:
+            for optionB in types_option_2:
+                sumaFexp = int(math.ceil(sum(data.filter(**{option_1:optionA}).filter(**{option_2:optionB}).values_list('fexp', flat=True))))
+                column_N.append(sumaFexp)
 
         for d1 in types_option_1:
             for d2 in types_option_2:
                 column_names.append(d1+' - '+d2)
-    columns = [column_2_array, column_3_array, column_dimensions, column_names]
+    columns = [column_2_array, column_3_array, column_dimensions, column_titles, column_names, column_N]
     return columns
 
 def get_column_4(data):
@@ -452,12 +481,12 @@ def get_filter():
                   21 : ['', 'deaboc2', {'pea' : '1'}, {}],
                   22 : ['deso1', 'deso1', {'pea' : '1'}, {}],
                   23 : ['deso2', 'deso2', {'pea' : '1'}, {}],
-                  24 : ['rentista', 'rentista', {'pet' : '1'}, {}],
-                  25 : ['jubil', 'jubil', {'pet' : '1'}, {}],
-                  26 : ['estudiant', 'estudiant', {'pet' : '1'}, {}],
-                  27 : ['amaCasa', 'amaCasa', {'pet' : '1'}, {}],
-                  28 : ['incapacit', 'incapacit', {'pet' : '1'}, {}],
-                  29 : ['otro', 'otro', {'pet' : '1'}, {}],
+                  24 : ['rentista', 'rentista', {'pei' : '1'}, {'rentista' : None}],
+                  25 : ['jubil', 'jubil', {'pei' : '1'}, {'jubil' : None}],
+                  26 : ['estudiant', 'estudiant', {'pei' : '1'}, {'estudiant' : None}],
+                  27 : ['amaCasa', 'amaCasa', {'pei' : '1'}, {'amaCasa' : None}],
+                  28 : ['incapacit', 'incapacit', {'pei' : '1'}, {'incapacit' : None}],
+                  29 : ['otro', 'otro', {'pei' : '1'}, {'otro' : None}],
                   30 : ['oplenos', 'oplenos', {'ocupa' : '1'}, {}],
                   31 : ['suboc', 'suboc', {'ocupa' : '1'}, {}],
                   32 : ['ingrl', 'ingrl', {'ocupa' : '1'}, {'ingrl' : None}],
