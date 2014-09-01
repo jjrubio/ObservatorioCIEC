@@ -14,6 +14,7 @@ import statsmodels.api as sm
 import statsmodels.stats as sms
 import math
 
+
 def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1'):
     json = indicators_detail(cat_id, subcat_id, ind_id)
     indicators = Indicator.objects.all()
@@ -21,6 +22,7 @@ def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1'):
     categories = Category.objects.all()
     template = "indicator_def.html"
     return render_to_response(template, context_instance=RequestContext(request, locals()))
+
 
 def indicators_detail(cat_id, subcat_id, ind_id):
     message = []
@@ -64,6 +66,7 @@ def indicators_detail(cat_id, subcat_id, ind_id):
     message.append(indicatorSelectArray)
     return message
 
+
 def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     json = indicators_detail(cat_id, subcat_id, ind_id)
     subcategories = Subcategory.objects.all()
@@ -73,6 +76,7 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     all_years = get_years_list()
     template = "indicator_calc.html"
     return render_to_response(template, context_instance=RequestContext(request, locals()))
+
 
 @cache_page(30)
 def calc_result(request):
@@ -93,7 +97,7 @@ def calc_result(request):
     yearEnd_int = int(yearEnd)
     trimEnd_int = int(trimEnd)
 
-    if method_int == 1 :
+    if method_int == 1:
         data_ENEMDU = Data_from_2003_4
     else:
         data_ENEMDU = Data_from_2007_2
@@ -121,7 +125,7 @@ def calc_result(request):
             trim_2 = trimEnd_int+1
         for j in range(trim_1, trim_2):
             represent_database = str(Structure.objects.get(anio=i, trim=j))
-            if (represent_int == 3 and  represent_database == 'Urbana'):
+            if (represent_int == 3 and represent_database == 'Urbana'):
                 pass
             else:
                 data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
@@ -162,91 +166,93 @@ def calc_result(request):
     message = json.dumps(data_result, cls=DjangoJSONEncoder)
     return HttpResponse(message, content_type='application/json')
 
+
 # Recordar que las filas de todos los vectores y matrices de entrada
 # deben de estar ordenados por "fexp"
-def modelo_ind(y,X,Z,fexp,clusrobust=True):
+def modelo_ind(y, X, Z, fexp, clusrobust=True):
 
     # Calcular el indicador de cluster para corregir la matriz VCV
-    clusvar = np.array([],'int')
-    ngroup=1
-    last=fexp[0]
+    clusvar = np.array([], 'int')
+    ngroup = 1
+    last = fexp[0]
 
     for el in fexp:
-        if abs(last-el)>0.01:
+        if abs(last-el) > 0.01:
             ngroup += 1
-            last=el
-        clusvar=np.append(clusvar,ngroup)
+            last = el
+        clusvar = np.append(clusvar,ngroup)
 
     # Armar la regresion por OLS segun el modelo
-    if (X.shape[0]==0 and Z.shape[0]==0):
+    if (X.shape[0] == 0 and Z.shape[0] == 0):
         pass
         n = y.shape[0]
-        T=np.ones([n,1])
-        colX,colZ = 0,0
-        nOut=1
-    elif (Z.shape[0]==0):
-        n,colX = X.shape
+        T = np.ones([n,1])
+        colX, colZ = 0, 0
+        nOut = 1
+    elif (Z.shape[0] == 0):
+        n, colX = X.shape
         colZ = 0
-        T=np.concatenate((np.ones([n,1]),X[:,1:]),axis=1)  # Quitar por colinealidad 1 indicador por cada matriz
-        nOut=colX
+        T = np.concatenate((np.ones([n,1]),X[:,1:]),axis=1)  # Quitar por colinealidad 1 indicador por cada matriz
+        nOut = colX
     else:
-        n,colX = X.shape
-        n,colZ = Z.shape
-        T=np.concatenate((np.ones([n,1]),X[:,1:], Z[:,1:]),axis=1) # Quitar por colinealidad 1 indicador por cada matriz
-        nOut=colX*colZ
+        n, colX = X.shape
+        n, colZ = Z.shape
+        T = np.concatenate((np.ones([n,1]),X[:,1:], Z[:,1:]),axis=1) # Quitar por colinealidad 1 indicador por cada matriz
+        nOut = colX*colZ
 
-    fT=T
+    fT = T
     irow = 0
     for row in T:
-        fT[irow,:] =fexp[irow]*T[irow,:]
+        fT[irow,:] = fexp[irow]*T[irow,:]
         irow += 1
     fy = fexp * y
     del T
 
-    model=sm.OLS(fy,fT,"drop")
-    res_ols=model.fit()
+    model = sm.OLS(fy,fT,"drop")
+    res_ols = model.fit()
 
     # Esta linea tiene que ser cambiada por la obtencion
     # de la "cluster robust variance"
     if clusrobust:
-        vcv=sms.sandwich_covariance.cov_cluster(res_ols,clusvar)
+        vcv = sms.sandwich_covariance.cov_cluster(res_ols,clusvar)
     else:
-        vcv=res_ols.cov_params()
+        vcv = res_ols.cov_params()
 
     # Construir la salida en el formato acordado
-    output=np.zeros((nOut,2))
-    iX,iZ=0,0
-    offX,offZ=0,0
+    output = np.zeros((nOut,2))
+    iX, iZ = 0, 0
+    offX, offZ = 0, 0
     for iOut in range(nOut):
 
         # Incluir el coeficiente que corresponde a la tasa de cada combinacion y su varianza
         # que es la suma de las varianzas más 2 veces todas las covarianzas cruzadas
-        if (iZ==0 and iX==0):
-            output[iOut,0]=res_ols.params[0]
-            output[iOut,1]=vcv[0,0]
-        elif (iZ>0 and iX==0):
-            offZ=(colX-1)+iZ
-            output[iOut,0]=res_ols.params[0]+res_ols.params[offZ]
-            output[iOut,1]=vcv[0,0]+vcv[offZ,offZ]+(2*vcv[0,offZ])
-        elif (iZ==0 and iX>0):
-            offX=iX
-            output[iOut,0]=res_ols.params[0]+res_ols.params[offX]
-            output[iOut,1]=vcv[0,0]+vcv[offX,offX]+(2*vcv[0,offX])
+        if (iZ == 0 and iX == 0):
+            output[iOut, 0] = res_ols.params[0]
+            output[iOut, 1] = vcv[0, 0]
+        elif (iZ > 0 and iX == 0):
+            offZ = (colX-1)+iZ
+            output[iOut,0] = res_ols.params[0]+res_ols.params[offZ]
+            output[iOut,1] = vcv[0,0]+vcv[offZ,offZ]+(2*vcv[0,offZ])
+        elif (iZ == 0 and iX > 0):
+            offX = iX
+            output[iOut, 0] = res_ols.params[0]+res_ols.params[offX]
+            output[iOut, 1] = vcv[0, 0]+vcv[offX,offX]+(2*vcv[0,offX])
         else:
-            offZ=(colX-1)+iZ
-            offX=iX
-            output[iOut,0]=res_ols.params[0]+res_ols.params[offX]+res_ols.params[offZ]
-            output[iOut,1]=vcv[0,0]+vcv[offX,offX]+vcv[offZ,offZ]+(2*vcv[0,offX])+(2*vcv[0,offZ])+(2*vcv[offX,offZ])
+            offZ = (colX-1)+iZ
+            offX = iX
+            output[iOut, 0] = res_ols.params[0]+res_ols.params[offX]+res_ols.params[offZ]
+            output[iOut, 1] = vcv[0, 0]+vcv[offX,offX]+vcv[offZ,offZ]+(2*vcv[0,offX])+(2*vcv[0,offZ])+(2*vcv[offX,offZ])
 
-        if (iZ<colZ-1):
-            iZ+=1
+        if (iZ < colZ-1):
+            iZ += 1
         else:
-            iZ=0
-            iX+=1
+            iZ = 0
+            iX += 1
 
-        output[iOut,1]=output[iOut,1]**0.5
+        output[iOut, 1] = output[iOut, 1]**0.5
 
     return output
+
 
 def get_column_1(data, method_int, indicator_int):
     if method_int == 1:
@@ -266,6 +272,7 @@ def get_column_1(data, method_int, indicator_int):
     column_1_array = np.array(list(column_1), 'float')
     return column_1_array
 
+
 def get_column_2_3(data, disintegrations, represent_int):
     disintegrations_size = len(disintegrations)
     if disintegrations_size == 0:
@@ -284,13 +291,13 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
 
-        wsq = set(column_2_aux)
-        print wsq
+        # wsq = set(column_2_aux)
+        # print wsq
         # for w in wsq:
         #     print w.encode('ascii','ignore')
-        print types_option_1
+        # print types_option_1
 
-        for i in range(1,len(filter_column_2_by)+1):
+        for i in range(1, len(filter_column_2_by)+1):
             column_2_array[i-1] = [1 if x == column_2_aux[i-1] else 0 for x in types_option_1]
 
         column_3_array = np.array([])
@@ -318,14 +325,14 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_2_array = np.array([], 'float')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
-        for i in range(1,len(filter_column_2_by)+1):
+        for i in range(1, len(filter_column_2_by)+1):
             column_2_array[i-1] = [1 if x == column_2_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_1]
 
         column_3_array = np.array([], 'float')
         column_3_array = np.zeros((len(filter_column_3_by),len(types_option_2)))
         column_3_aux = list(filter_column_3_by)
 
-        for i in range(1,len(filter_column_3_by)+1):
+        for i in range(1, len(filter_column_3_by)+1):
             column_3_array[i-1] = [1 if x == column_3_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_2]
 
         column_dimensions = [len(types_option_1), len(types_option_2)]
@@ -346,10 +353,12 @@ def get_column_2_3(data, disintegrations, represent_int):
     columns = [column_2_array, column_3_array, column_dimensions, column_titles, column_names, column_N]
     return columns
 
+
 def get_column_4(data):
     column_4 = data.values_list("fexp", flat=True)
     column_4_array = np.array(list(column_4), 'float')
     return column_4_array
+
 
 def get_area_name(represent_int):
     if represent_int == 1:
@@ -360,6 +369,7 @@ def get_area_name(represent_int):
         area = 'Rural'
     return area
 
+
 def get_filter_area(represent_int):
     if represent_int == 1:
         area = {}
@@ -369,6 +379,7 @@ def get_filter_area(represent_int):
         area = {'area': 'Rural'}
     return area
 
+
 def list_by_no_denied(request):
     id_desagre = request.GET['id_desagregacion']
     datos = request.GET.getlist('data_filters[]')
@@ -376,72 +387,83 @@ def list_by_no_denied(request):
     #Validacion entre desagregaciones
     if id_desagre == '1' or id_desagre == '3':
         disintegrations = Disintegration.objects.all()
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '2':
         disintegrations = Disintegration.objects.exclude(
-            id__in=[10, 4, 5, 6, 8])
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+            id__in=[4, 5, 6, 8, 10, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '4':
         disintegrations = Disintegration.objects.exclude(
-            id__in=[10, 2, 5, 6, 8])
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+            id__in=[2, 5, 6, 8, 10, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '5':
         disintegrations = Disintegration.objects.exclude(
-            id__in=[10, 2, 4, 6, 8, 9])
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+            id__in=[2, 4, 6, 8, 9, 10, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '6':
         disintegrations = Disintegration.objects.exclude(
-            id__in=[10, 2, 4, 5, 8, 9])
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+            id__in=[2, 4, 5, 8, 9, 10, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '7':
-        disintegrations = Disintegration.objects.exclude(id__in=[8])
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+        disintegrations = Disintegration.objects.exclude(
+            id__in=[8, 11, 13, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '8':
         disintegrations = Disintegration.objects.exclude(
-            id__in=[10, 2, 4, 5, 6, 7, 9])
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+            id__in=[2, 4, 5, 6, 7, 9, 10, 11, 12, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '9':
-        disintegrations = Disintegration.objects.exclude(id__in=[10, 5, 6, 8])
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+        disintegrations = Disintegration.objects.exclude(
+            id__in=[5, 6, 8, 10, 11, 13, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '10':
         disintegrations = Disintegration.objects.exclude(
-            id__in=[2, 4, 5, 6, 8, 9])
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+            id__in=[2, 4, 5, 6, 8, 9, 11, 12, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '11':
-        disintegrations = Disintegration.objects.exclude(id__in=[12, 13])
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+        disintegrations = Disintegration.objects.exclude(
+            id__in=[7, 8, 9, 10, 12, 13, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '12':
-        disintegrations = Disintegration.objects.exclude(id__in=[11, 13])
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+        disintegrations = Disintegration.objects.exclude(
+            id__in=[8, 10, 11, 13, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '13':
-        disintegrations = Disintegration.objects.exclude(id__in=[11, 12])
-        ids_value_list = disintegrations.values_list('id',flat=True)
-        result = indicador_desagregacion(datos,ids_value_list)
+        disintegrations = Disintegration.objects.exclude(
+            id__in=[7, 9, 11, 12, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
-
+    elif id_desagre == '14':
+        disintegrations = Disintegration.objects.exclude(
+            id__in=[2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
+        data = serializers.serialize('json', result)
     return HttpResponse(data, content_type='application/json')
+
 
 def get_column_name_option(id_desagregation):
     if id_desagregation == 1:
@@ -472,62 +494,66 @@ def get_column_name_option(id_desagregation):
         result = 'tipo_deso'
     elif id_desagregation == 14:
         result = 'condInact'
-    else :
+    else:
         result = ''
     return result
 
+
 def get_filter():
-    data = {1 : ['pet', 'pet', {}, {}],
-                  2 : ['pea', 'pea', {}, {'pea' : None}],
-                  3 : ['pea', 'pea', {'pet' : '1'}, {}],
-                  4 : ['pei', 'pei', {'pet' : '1'}, {}],
-                  5 : ['ocupa', 'ocupa', {'pet' : '1'}, {}],
-                  6 : ['ocupa', 'ocupa', {'pea' : '1'}, {}],
-                  7 : ['oplenos', 'oplenos', {'pea' : '1'}, {}],
-                  8 : ['', 'ocupa', {'pea' : '1'}, {}, 'sect_formal'],
-                  9 : ['ocupa', 'ocupa', {'pea' : '1'}, {}, 'sect_informal'],
-                  10 : ['ocupa', 'ocupa', {'pea' : '1'}, {}, 'sect_srvdom'],
-                  11 : ['suboc', 'suboc', {'pea' : '1'}, {}],
-                  12 : ['suboc1', 'suboc1', {'pea' : '1'}, {}],
-                  13 : ['', 'suboc2', {'pea' : '1'}, {}],
-                  14 : ['sub_inv', '', {'pea' : '1'}, {}],
-                  15 : ['sub_informal', '', {'pea' : '1'}, {}],
-                  16 : ['suboc', '', {'pea' : '1'}, {}, 'sect_moderno'],
-                  17 : ['sub_inv', '', {'pea' : '1'}, {}, 'sect_moderno'],
-                  18 : ['suboc1', '', {'pea' : '1'}, {}, 'sect_moderno'],
-                  19 : ['deso', 'deso', {'pea' : '1'}, {}],
-                  20 : ['', 'deaboc1', {'pea' : '1'}, {}],
-                  21 : ['', 'deaboc2', {'pea' : '1'}, {}],
-                  22 : ['deso1', 'deso1', {'pea' : '1'}, {}],
-                  23 : ['deso2', 'deso2', {'pea' : '1'}, {}],
-                  24 : ['rentista', 'rentista', {'pei' : '1'}, {'rentista' : None}],
-                  25 : ['jubil', 'jubil', {'pei' : '1'}, {'jubil' : None}],
-                  26 : ['estudiant', 'estudiant', {'pei' : '1'}, {'estudiant' : None}],
-                  27 : ['amaCasa', 'amaCasa', {'pei' : '1'}, {'amaCasa' : None}],
-                  28 : ['incapacit', 'incapacit', {'pei' : '1'}, {'incapacit' : None}],
-                  29 : ['otro', 'otro', {'pei' : '1'}, {'otro' : None}],
-                  30 : ['oplenos', 'oplenos', {'ocupa' : '1'}, {}],
-                  31 : ['suboc', 'suboc', {'ocupa' : '1'}, {}],
-                  32 : ['ingrl', 'ingrl', {'ocupa' : '1'}, {'ingrl' : None}],
-                  33 : ['', 'satis_laboral', {'ocupa' : '1'}, {'satis_laboral' : None}],
-                  34 : ['', 'descon_bajos_ingresos', {'ocupa' : '1'}, {'descon_bajos_ingresos' : None}],
-                  35 : ['', 'descon_horarios', {'ocupa' : '1'}, {'descon_horarios' : None}],
-                  36 : ['', 'descon_estabil', {'ocupa' : '1'}, {'descon_estabil' : None}],
-                  37 : ['', 'descon_amb_laboral', {'ocupa' : '1'}, {'descon_amb_laboral' : None}],
-                  38 : ['', 'descon_activ', {'ocupa' : '1'}, {'descon_activ' : None}],
-                  39 : ['anosaprob', 'anosaprob', {}, {'anosaprob' : None}],
-                  40 : ['analfabeta', 'analfabeta', {}, {'analfabeta' : None}],
-                  41 : ['experiencia', 'experiencia', {}, {'experiencia' : None}],
-                  42 : ['migracion_extranjera', 'migracion_extranjera', {}, {'migracion_extranjera' : None}],
-                  43 : ['migracion_rural_urbano', 'migracion_rural_urbano', {}, {'migracion_rural_urbano' : None}],
-                  44 : ['tamano_hogar', 'tamano_hogar', {'rela_jef' : '1'}, {}],
-                  45 : ['hogar_completo', 'hogar_completo', {'rela_jef' : '1'}, {}],
-                  46 : ['hogar_noFamiliar', 'hogar_noFamiliar', {'rela_jef' : '1'}, {}],
-                  47 : ['ingreso_hogar', 'ingreso_hogar', {'rela_jef' : '1'}, {}],
-                  48 : ['part_quehaceres', 'part_quehaceres', {}, {'part_quehaceres' : None}],
-                  49 : ['horas_part_quehaceres', 'horas_part_quehaceres', {}, {'horas_part_quehaceres' : None}],
-                }
+
+    data ={
+        1: ['pet', 'pet', {}, {}],
+        2: ['pea', 'pea', {}, {'pea' : None}],
+        3: ['pea', 'pea', {'pet' : '1'}, {}],
+        4: ['pei', 'pei', {'pet' : '1'}, {}],
+        5: ['ocupa', 'ocupa', {'pet' : '1'}, {}],
+        6: ['ocupa', 'ocupa', {'pea' : '1'}, {}],
+        7: ['oplenos', 'oplenos', {'pea' : '1'}, {}],
+        8: ['', 'ocupa', {'pea' : '1'}, {}, 'sect_formal'],
+        9: ['ocupa', 'ocupa', {'pea' : '1'}, {}, 'sect_informal'],
+        10: ['ocupa', 'ocupa', {'pea' : '1'}, {}, 'sect_srvdom'],
+        11: ['suboc', 'suboc', {'pea' : '1'}, {}],
+        12: ['suboc1', 'suboc1', {'pea' : '1'}, {}],
+        13: ['', 'suboc2', {'pea' : '1'}, {}],
+        14: ['sub_inv', '', {'pea' : '1'}, {}],
+        15: ['sub_informal', '', {'pea' : '1'}, {}],
+        16: ['suboc', '', {'pea' : '1'}, {}, 'sect_moderno'],
+        17: ['sub_inv', '', {'pea' : '1'}, {}, 'sect_moderno'],
+        18: ['suboc1', '', {'pea' : '1'}, {}, 'sect_moderno'],
+        19: ['deso', 'deso', {'pea' : '1'}, {}],
+        20: ['', 'deaboc1', {'pea' : '1'}, {}],
+        21: ['', 'deaboc2', {'pea' : '1'}, {}],
+        22: ['deso1', 'deso1', {'pea' : '1'}, {}],
+        23: ['deso2', 'deso2', {'pea' : '1'}, {}],
+        24: ['rentista', 'rentista', {'pei' : '1'}, {'rentista' : None}],
+        25: ['jubil', 'jubil', {'pei' : '1'}, {'jubil' : None}],
+        26: ['estudiant', 'estudiant', {'pei' : '1'}, {'estudiant' : None}],
+        27: ['amaCasa', 'amaCasa', {'pei' : '1'}, {'amaCasa' : None}],
+        28: ['incapacit', 'incapacit', {'pei' : '1'}, {'incapacit' : None}],
+        29: ['otro', 'otro', {'pei' : '1'}, {'otro' : None}],
+        30: ['oplenos', 'oplenos', {'ocupa' : '1'}, {}],
+        31: ['suboc', 'suboc', {'ocupa' : '1'}, {}],
+        32: ['ingrl', 'ingrl', {'ocupa' : '1'}, {'ingrl' : None}],
+        33: ['', 'satis_laboral', {'ocupa' : '1'}, {'satis_laboral' : None}],
+        34: ['', 'descon_bajos_ingresos', {'ocupa' : '1'}, {'descon_bajos_ingresos' : None}],
+        35: ['', 'descon_horarios', {'ocupa' : '1'}, {'descon_horarios' : None}],
+        36: ['', 'descon_estabil', {'ocupa' : '1'}, {'descon_estabil' : None}],
+        37: ['', 'descon_amb_laboral', {'ocupa' : '1'}, {'descon_amb_laboral' : None}],
+        38: ['', 'descon_activ', {'ocupa' : '1'}, {'descon_activ' : None}],
+        39: ['anosaprob', 'anosaprob', {}, {'anosaprob' : None}],
+        40: ['analfabeta', 'analfabeta', {}, {'analfabeta' : None}],
+        41: ['experiencia', 'experiencia', {}, {'experiencia' : None}],
+        42: ['migracion_extranjera', 'migracion_extranjera', {}, {'migracion_extranjera' : None}],
+        43: ['migracion_rural_urbano', 'migracion_rural_urbano', {}, {'migracion_rural_urbano' : None}],
+        44: ['tamano_hogar', 'tamano_hogar', {'rela_jef' : '1'}, {}],
+        45: ['hogar_completo', 'hogar_completo', {'rela_jef' : '1'}, {}],
+        46: ['hogar_noFamiliar', 'hogar_noFamiliar', {'rela_jef' : '1'}, {}],
+        47: ['ingreso_hogar', 'ingreso_hogar', {'rela_jef' : '1'}, {}],
+        48: ['part_quehaceres', 'part_quehaceres', {}, {'part_quehaceres' : None}],
+        49: ['horas_part_quehaceres', 'horas_part_quehaceres', {}, {'horas_part_quehaceres' : None}],
+    }
     return data
+
 
 def indicador_filtro(request):
     id_indicador = request.GET['id_indicator']
@@ -559,12 +585,13 @@ def indicador_filtro(request):
 
     return HttpResponse(data, content_type='application/json')
 
+
 def indicador_desagregacion(datos,ids):
     result = []
 
-    for i in range(0,len(ids)):
-        for j in range(0,len(datos)):
-            if ids[i] == int(datos [j]):
+    for i in range(0, len(ids)):
+        for j in range(0, len(datos)):
+            if ids[i] == int(datos[j]):
                 result.append(int(datos[j]))
 
     disin = Disintegration.objects.filter(id__in=result)
@@ -578,6 +605,7 @@ def list_desagregation(request):
 
     return HttpResponse(data, content_type='application/json')
 
+
 def get_data_by_represent(data_ENEMDU, represent_int):
     if(represent_int == 2):
         data = data_ENEMDU.objects.exclude(ciudad_ind='Resto Pais Rural')
@@ -587,11 +615,12 @@ def get_data_by_represent(data_ENEMDU, represent_int):
         data = data_ENEMDU.objects.all()
     return data
 
+
 def get_type_by_represent(disintegrations_pos, represent_int):
     if(int(disintegrations_pos) == 2):
-        if(represent_int==2):
+        if(represent_int == 2):
             types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).exclude(name='Resto Pais Rural').values_list('name', flat=True)
-        elif(represent_int==3):
+        elif(represent_int == 3):
             types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).exclude(name='Resto Pais Urbano').values_list('name', flat=True)
         else:
             types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).values_list('name', flat=True)
@@ -599,11 +628,13 @@ def get_type_by_represent(disintegrations_pos, represent_int):
         types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).values_list('name', flat=True)
     return types_option
 
+
 def get_last_full_year(request):
     year = Data_from_2007_2.objects.values_list('anio', 'trimestre').distinct().last()
     last_full_year = [year[0], year[1]]
     data = json.dumps(last_full_year)
     return HttpResponse(data, content_type='application/json')
+
 
 def get_method_option(indicator):
     method_1_valor = get_filter()[indicator][0]
@@ -616,6 +647,7 @@ def get_method_option(indicator):
     else:
         method_option = 3
     return method_option
+
 
 def get_years_list():
     method_1_years = Data_from_2003_4.objects.values_list('anio').distinct()
