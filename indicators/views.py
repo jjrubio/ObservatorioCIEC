@@ -133,9 +133,12 @@ def calc_result(request):
                 column_titles = columns_2_3[3]
                 column_names = columns_2_3[4]
                 column_N = columns_2_3[5]
+                # print columns_2_3
                 column_4 = get_column_4(data_byWhere)
                 models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
-                data_result_by_period = [i, j, column_N, models_by_period.tolist()]
+                models_by_period_none = np.where(np.isnan(models_by_period), None, models_by_period)
+                data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
+                # print models_by_period_none
                 data_result.append(data_result_by_period)
             if j == 4:
                 trim_1 = 1
@@ -146,10 +149,16 @@ def calc_result(request):
         years_title = str(yearStart_int)
     else:
         years_title = str(yearStart_int)+' - '+str(yearEnd_int)
+
     data_result.append(title)
     data_result.append(years_title)
     data_result.append(column_dimensions)
     data_result.append(column_names)
+    # print data_result[0]
+    # print data_result[1]
+    # print data_result[2]
+    # print data_result[3]
+    # print data_result[4]
     message = json.dumps(data_result, cls=DjangoJSONEncoder)
     return HttpResponse(message, content_type='application/json')
 
@@ -274,15 +283,24 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_2_array = np.array([], 'float')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
+
+        wsq = set(column_2_aux)
+        print wsq
+        # for w in wsq:
+        #     print w.encode('ascii','ignore')
+        print types_option_1
+
         for i in range(1,len(filter_column_2_by)+1):
-            column_2_array[i-1] = [1 if x == column_2_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_1]
+            column_2_array[i-1] = [1 if x == column_2_aux[i-1] else 0 for x in types_option_1]
+
         column_3_array = np.array([])
         column_dimensions = [len(types_option_1), 0]
-        title_1 = Disintegration.objects.get(id=(Type.objects.get(name=types_option_1[0]).disintegration_id)).name.encode('utf-8')
+        title_1 = Disintegration.objects.get(id=disintegrations[0]).name.encode('utf-8')
         column_titles = [' por '+title_1]
         column_names = []
         for d1 in types_option_1:
             column_names.append(d1)
+
         column_N = []
         for option in types_option_1:
             sumaFexp = int(math.ceil(sum(data.filter(**{option_1:option}).values_list('fexp', flat=True))))
@@ -306,12 +324,13 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_3_array = np.array([], 'float')
         column_3_array = np.zeros((len(filter_column_3_by),len(types_option_2)))
         column_3_aux = list(filter_column_3_by)
+
         for i in range(1,len(filter_column_3_by)+1):
             column_3_array[i-1] = [1 if x == column_3_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_2]
 
         column_dimensions = [len(types_option_1), len(types_option_2)]
-        title_1 = Disintegration.objects.get(id=(Type.objects.get(name=types_option_1[0]).disintegration_id)).name.encode('utf-8')
-        title_2 = Disintegration.objects.get(id=(Type.objects.get(name=types_option_2[0]).disintegration_id)).name.encode('utf-8')
+        title_1 = Disintegration.objects.get(id=disintegrations[0]).name.encode('utf-8')
+        title_2 = Disintegration.objects.get(id=disintegrations[1]).name.encode('utf-8')
         column_titles = [' por '+title_1+' y '+title_2]
         column_names = []
 
