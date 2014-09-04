@@ -234,8 +234,10 @@ $('#info-method').hover(function(){
 })
 
 $("#btnExport").click(function(e){
-    window.open('data:application/vnd.ms-excel,'+encodeURIComponent($('#dvData').html()));
-    e.preventDefault();
+  $('#Exporta_a_Excel').btechco_excelexport({
+    containerid: "Exporta_a_Excel"
+    ,datatype: $datatype.Table
+  });
 });
 
 function table(data){
