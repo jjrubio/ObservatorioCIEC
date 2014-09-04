@@ -69,13 +69,8 @@ $('.btn-back').click( function(){
 $('.btn-calc').click( function(){
     $('#parametros').removeClass( "in" );
     $('#desagregaciones').removeClass( "in" );
-    $('.fa-spinner').show();
-    $('#text-spinner').show();
-    $('#title').hide();
-    $('#years-title').hide();
-    $('#scroll').hide();
-    $('#btnExport').hide();
-    $('.graph').hide();
+    $('#loading-result').show();
+    $('#content-result').hide();
     var selected = [];
     $('input:checkbox').each(function(){
         if($(this).is(':checked')){
@@ -95,15 +90,10 @@ $('.btn-calc').click( function(){
                                       'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd, 'disintegrations[]': selected},
     function(data){
         console.log(data);
-        $('.fa-spinner').hide();
-        $('#text-spinner').hide();
         table(data);
         graphs(data);
-        $('#title').show();
-        $('#years-title').show();
-        $('#scroll').show();
-        $('#btnExport').show();
-        $('.graph').show();
+        $('#loading-result').hide();
+        $('#content-result').show();
     });
 });
 
@@ -250,20 +240,28 @@ $("#btnExport").click(function(e){
 
 function table(data){
     var tam_data = data.length;
-    var tam_periodos = tam_data - 4;
-    var titulo = data[tam_data - 4];
-    var anios_titulo = data[tam_data - 3];
-    var valor_dim_1 = data[tam_data -2][0];
-    var valor_dim_2 = data[tam_data -2][1];
+    var tam_periodos = tam_data - 8;
+    var titulo = data[tam_data - 8];
+    var anios_titulo = data[tam_data - 7];
+    var valor_dim_1 = data[tam_data -5][0];
+    var valor_dim_2 = data[tam_data -5][1];
     var nombres_desagre = [];
-    var data_x_periodo;
 
-    $('#title').text(titulo);
-    $('#years-title').text(anios_titulo);
+    $('.title').text(titulo);
+    $('.years-title').text(anios_titulo);
 
-    for(i=0 ; i<(data[tam_data-1].length); i++){
-        nombres_desagre.push(data[tam_data-1][i]);
+    if(valor_dim_2 == 0){
+        for(i=0 ; i<(data[tam_data-2].length); i++){
+            nombres_desagre.push(data[tam_data-2][i]);
+        }
+    }else{
+        for(i=0 ; i<(data[tam_data-2].length); i++){
+            for(j=0 ; j<(data[tam_data-1].length); j++){
+                nombres_desagre.push(data[tam_data-2][i]+' - '+data[tam_data-1][j]);
+            }
+        }
     }
+
 
     $('#titulo').empty()
     $('#titulo_secundario').empty()
@@ -302,6 +300,40 @@ function table(data){
 }
 
 function graphs(data){
+    var tam_data = data.length;
+    var tam_periodos = tam_data - 8;
+    var titulo = data[tam_data - 8];
+    var anios_titulo = data[tam_data - 7];
+    var valor_dim_1 = data[tam_data - 5][0];
+    var valor_dim_2 = data[tam_data - 5][1];
+    var name_desagre_1 = data[tam_data - 4];
+    var name_desagre_2 = data[tam_data - 3];
+    var type_desagre_1;
+    var type_desagre_2;
+    var nombres_desagre = [];
+
+    $("#ul_desagregaciones").empty();
+    if(valor_dim_2 == 0){
+        $("#ul_desagregaciones").append('<li><a href="#'+name_desagre_1+'" role="tab" data-toggle="tab">'+name_desagre_1+'</a></li>')
+        $("#div_desagregaciones").append('<div class="tab-pane active" id="'+name_desagre_1+'"></div>');
+    }else{
+        if(valor_dim_1 <= valor_dim_2){
+            type_desagre_1 =data[tam_data - 2];
+            type_desagre_2 =data[tam_data - 1];
+        }else{
+            type_desagre_1 =data[tam_data - 1];
+            type_desagre_2 =data[tam_data - 2];
+        }
+
+        for(i=0; i<type_desagre_1.length; i++){
+            $("#ul_desagregaciones").append('<li><a href="#'+type_desagre_1[i]+'" role="tab" data-toggle="tab">'+type_desagre_1[i]+'</a></li>')
+            $("#div_desagregaciones").append('<div class="tab-pane active" id="'+type_desagre_1[i]+'"></div>');
+        }
+    }
+    $("#ul_desagregaciones li:first-child").addClass( "active" );
+
+
+
   // var tam_total,i,index=0,j,cst,count=0,dim_1,dim_2,representatividad;
   // var valores = [];
   // var anio_trim = [];
@@ -344,36 +376,85 @@ function graphs(data){
   //   }
   // }
   // // console.log(to_graph);
-  // var options = {
-  //   chart : {
-  //     renderTo: 'container',
-  //     type : 'line'
-  //   },
-  //   title: {
-  //     text: name_desagre[0],
-  //     x: -20
-  //   },
-  //   subtitle: {
-  //     text: 'Observatorio',
-  //     x: -20
-  //   },
-  //   xAxis: {
-  //     categories: anio_trim
-  //   },
-  //   yAxis:{
-  //     title: 'Valores'
-  //   },
-  //   series: [{},{},{}]
-  // };
+  var options = {
+    chart: {
+            renderTo: 'container',
+            type: 'spline',
+        },
+        title: {
+            // text: 'Tasa de poblacion en edad de trabajar',
+            text: 'Hombre',
+            x: -20 //center
+        },
+        // subtitle: {
+        //     text: 'Hombre',
+        //     x: -20
+        // },
+        xAxis: {
+            categories: ['2003', '2004', '2005', '2006', '2007'],
+            title: {
+                enabled: true,
+                text: 'Años',
+            },
+        },
+        yAxis: {
+            title: {
+                text: 'Porcentaje (%)'
+            },
+            labels: {
+                formatter: function () {
+                    return (this.value*100) + '%';
+                }
+            },
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                marker: {
+                    enabled: false
+                },
+            },
+        },
+        series: [{
+            name: 'Indicador',
+            data: [0.70, 0.69, 0.95, 1.4512, 1.82],
+            dataLabels: {
+                enabled: true,
+                formatter: function () {
+                    return Highcharts.numberFormat(this.y*100, 2, ',') + '%';
+                },
+                color: '#5b9bd5',
+                y: -15
+            },
+            color: '#6AA4D9',
+        }, {
+            name: 'Positivo',
+            data: [0.75, 0.74, 1.00, 1.50, 1.87],
+            dashStyle: 'Dot',
+            color: '#6AA4D9',
+        },{
+            name: 'Negativo',
+            data: [0.65, 0.64, 0.90, 1.40, 1.77],
+            dashStyle: 'Dot',
+            color: '#6AA4D9',
+        },],
+        exporting: {
+            filename: 'custom-file-name'
+        }
+  };
 
-  // options.series[0].data = [to_graph[0][0][0], to_graph[0][1][0]];
-  // options.series[1].data = [to_graph[1][0][1], to_graph[1][1][1]];
-  // options.series[2].data = [to_graph[2][0][2], to_graph[2][1][2]];
+
+  // options.series[0].data = [5, 12];
   // options.series[0].dashStyle = 'dash';
-  // options.series[1].dashStyle = 'dash';
-  // options.series[2].dashStyle = 'dash';
-  // //options.xAxis.categories[0] = 'valueOne';
-  // var chart = new Highcharts.Chart(options);
+  // options.xAxis.categories[0] = 'valueOne';
+  var chart = new Highcharts.Chart(options);
+
+  // chart.series[0].addPoint(50);
 }
 
 function indicador_desagregacion_filtro(id_indicador){
@@ -429,7 +510,7 @@ function filter(id_1,data_filter){
               var tmpHTML = "<div class=\'checkbox\'><label><input type=\'checkbox\' id="+item.pk+">"+item.fields.name+"</label></div>";
               $('#ckb').append(tmpHTML);
           }
-          init(data);
+          init(data_filter);
       });
   });
 }

@@ -67,8 +67,30 @@
   color: #0cb3ac;
 }
 
-#scroll b {
+.table{
+  margin-bottom: 0px;
+}
+
+#scroll_table, #scroll_graph{
+  position: relative;
+  max-height: 430px;
+  overflow: hidden;
+  margin: 20px 25px 50px 25px;
+}
+
+#scroll_graph{
+    margin-top: 75px;
+}
+
+.data-type-name {
   float: left;
+  margin-left: 25px;
+}
+
+.graph{
+  min-width: 800px;
+  height: 400px;
+  margin: 0 0 0 10em;
 }
 
 .form-css label {

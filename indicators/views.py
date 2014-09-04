@@ -12,6 +12,7 @@ from django.views.decorators.cache import cache_page
 import numpy as np
 import statsmodels.api as sm
 import statsmodels.stats as sms
+from scipy.stats import t
 import math
 
 
@@ -125,131 +126,146 @@ def calc_result(request):
             trim_2 = trimEnd_int+1
         for j in range(trim_1, trim_2):
             represent_database = str(Structure.objects.get(anio=i, trim=j))
-            if (represent_int == 3 and represent_database == 'Urbana'):
-                pass
-            else:
+            if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
+                or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
                 data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
                 column_1 = get_column_1(data_byWhere, method_int, indicator_int)
                 columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
                 column_2 = columns_2_3[0]
                 column_3 = columns_2_3[1]
                 column_dimensions = columns_2_3[2]
-                column_titles = columns_2_3[3]
-                column_names = columns_2_3[4]
-                column_N = columns_2_3[5]
-                # print columns_2_3
+                column_N = columns_2_3[6]
                 column_4 = get_column_4(data_byWhere)
                 models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
                 models_by_period_none = np.where(np.isnan(models_by_period), None, models_by_period)
                 data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
-                # print models_by_period_none
                 data_result.append(data_result_by_period)
+
             if j == 4:
                 trim_1 = 1
 
+    column_titles = columns_2_3[3]
+    column_name_d1 = column_titles[0]
+    column_name_d2 = column_titles[1]
+    column_types_d1 = columns_2_3[4]
+    column_types_d2 = columns_2_3[5]
+
     disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
-    title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+    if(column_dimensions[0] == 0):
+        title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+    elif(column_dimensions[1] == 0):
+        title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+    else:
+        title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
+
     if(yearStart_int == yearEnd_int):
         years_title = str(yearStart_int)
     else:
         years_title = str(yearStart_int)+' - '+str(yearEnd_int)
 
+    unit = str(Indicator.objects.get(id = indicator_int).unit)
+
     data_result.append(title)
     data_result.append(years_title)
+    data_result.append(unit)
     data_result.append(column_dimensions)
-    data_result.append(column_names)
-    # print data_result[0]
-    # print data_result[1]
-    # print data_result[2]
-    # print data_result[3]
-    # print data_result[4]
+    data_result.append(column_name_d1)
+    data_result.append(column_name_d2)
+    data_result.append(column_types_d1)
+    data_result.append(column_types_d2)
     message = json.dumps(data_result, cls=DjangoJSONEncoder)
     return HttpResponse(message, content_type='application/json')
 
 
 # Recordar que las filas de todos los vectores y matrices de entrada
 # deben de estar ordenados por "fexp"
-def modelo_ind(y, X, Z, fexp, clusrobust=True):
+def modelo_ind(y,X,Z,fexp,conf=0.95,clusrobust=True):
 
     # Calcular el indicador de cluster para corregir la matriz VCV
-    clusvar = np.array([], 'int')
-    ngroup = 1
-    last = fexp[0]
+    clusvar = np.array([],'int')
+    ngroup=1
+    last=fexp[0]
 
     for el in fexp:
-        if abs(last-el) > 0.01:
+        if abs(last-el)>0.01:
             ngroup += 1
-            last = el
-        clusvar = np.append(clusvar,ngroup)
+            last=el
+        clusvar=np.append(clusvar,ngroup)
 
     # Armar la regresion por OLS segun el modelo
-    if (X.shape[0] == 0 and Z.shape[0] == 0):
-        pass
+    if not (X.any() or Z.any()):
         n = y.shape[0]
-        T = np.ones([n,1])
-        colX, colZ = 0, 0
-        nOut = 1
-    elif (Z.shape[0] == 0):
-        n, colX = X.shape
+        T=np.ones([n,1])
+        colX,colZ = 0,0
+        nOut=1
+        df=n-1
+    elif not Z.any():
+        n,colX = X.shape
         colZ = 0
-        T = np.concatenate((np.ones([n,1]),X[:,1:]),axis=1)  # Quitar por colinealidad 1 indicador por cada matriz
-        nOut = colX
+        T=np.concatenate((np.ones([n,1]),X[:,1:]),axis=1)  # Quitar por colinealidad 1 indicador por cada matriz
+        nOut=colX
+        df=n-(colX-1)-1
     else:
-        n, colX = X.shape
-        n, colZ = Z.shape
-        T = np.concatenate((np.ones([n,1]),X[:,1:], Z[:,1:]),axis=1) # Quitar por colinealidad 1 indicador por cada matriz
-        nOut = colX*colZ
+        n,colX = X.shape
+        n,colZ = Z.shape
+        T=np.concatenate((np.ones([n,1]),X[:,1:], Z[:,1:]),axis=1) # Quitar por colinealidad 1 indicador por cada matriz
+        nOut=colX*colZ
+        df=n-(colX-1)-(colZ-1)-1
 
-    fT = T
+    fT=T
     irow = 0
     for row in T:
-        fT[irow,:] = fexp[irow]*T[irow,:]
+        fT[irow,:] =fexp[irow]*T[irow,:]
         irow += 1
     fy = fexp * y
     del T
 
-    model = sm.OLS(fy,fT,"drop")
-    res_ols = model.fit()
+    model=sm.OLS(fy,fT,"drop")
+    res_ols=model.fit()
 
-    # Esta linea tiene que ser cambiada por la obtencion
-    # de la "cluster robust variance"
+    # Ver si se quiere corregir la varianza por clusters o no
     if clusrobust:
-        vcv = sms.sandwich_covariance.cov_cluster(res_ols,clusvar)
+        vcv=sms.sandwich_covariance.cov_cluster(res_ols,clusvar)
     else:
-        vcv = res_ols.cov_params()
+        vcv=res_ols.cov_params()
 
     # Construir la salida en el formato acordado
-    output = np.zeros((nOut,2))
-    iX, iZ = 0, 0
-    offX, offZ = 0, 0
+    output=np.zeros((nOut,4))
+    iX,iZ=0,0
+    offX,offZ=0,0
+    crit=t.interval(conf,df)
     for iOut in range(nOut):
-
         # Incluir el coeficiente que corresponde a la tasa de cada combinacion y su varianza
         # que es la suma de las varianzas más 2 veces todas las covarianzas cruzadas
-        if (iZ == 0 and iX == 0):
-            output[iOut, 0] = res_ols.params[0]
-            output[iOut, 1] = vcv[0, 0]
-        elif (iZ > 0 and iX == 0):
-            offZ = (colX-1)+iZ
-            output[iOut,0] = res_ols.params[0]+res_ols.params[offZ]
-            output[iOut,1] = vcv[0,0]+vcv[offZ,offZ]+(2*vcv[0,offZ])
-        elif (iZ == 0 and iX > 0):
-            offX = iX
-            output[iOut, 0] = res_ols.params[0]+res_ols.params[offX]
-            output[iOut, 1] = vcv[0, 0]+vcv[offX,offX]+(2*vcv[0,offX])
+        if (iZ==0 and iX==0):
+            output[iOut,0]=res_ols.params[0]
+            output[iOut,1]=vcv[0,0]
+        elif (iZ>0 and iX==0):
+            offZ=(colX-1)+iZ
+            output[iOut,0]=res_ols.params[0]+res_ols.params[offZ]
+            output[iOut,1]=vcv[0,0]+vcv[offZ,offZ]+(2*vcv[0,offZ])
+        elif (iZ==0 and iX>0):
+            offX=iX
+            output[iOut,0]=res_ols.params[0]+res_ols.params[offX]
+            output[iOut,1]=vcv[0,0]+vcv[offX,offX]+(2*vcv[0,offX])
         else:
-            offZ = (colX-1)+iZ
-            offX = iX
-            output[iOut, 0] = res_ols.params[0]+res_ols.params[offX]+res_ols.params[offZ]
-            output[iOut, 1] = vcv[0, 0]+vcv[offX,offX]+vcv[offZ,offZ]+(2*vcv[0,offX])+(2*vcv[0,offZ])+(2*vcv[offX,offZ])
+            offZ=(colX-1)+iZ
+            offX=iX
+            output[iOut,0]=res_ols.params[0]+res_ols.params[offX]+res_ols.params[offZ]
+            output[iOut,1]=vcv[0,0]+vcv[offX,offX]+vcv[offZ,offZ]+(2*vcv[0,offX])+(2*vcv[0,offZ])+(2*vcv[offX,offZ])
 
-        if (iZ < colZ-1):
-            iZ += 1
+        if (iZ<colZ-1):
+            iZ+=1
         else:
-            iZ = 0
-            iX += 1
+            iZ=0
+            iX+=1
 
-        output[iOut, 1] = output[iOut, 1]**0.5
+        # Devolver la desv. estandar y no la varianza
+        output[iOut,1]=output[iOut,1]**0.5
+
+        # Calcular los límites para el intervalo de confianza
+        output[iOut,2]=output[iOut,0]+(crit[0]*output[iOut,1])
+        output[iOut,3]=output[iOut,0]+(crit[1]*output[iOut,1])
 
     return output
 
@@ -279,8 +295,9 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_2_array = np.array([])
         column_3_array = np.array([])
         column_dimensions = [0, 0]
-        column_titles = ['sin desagregación']
-        column_names = ['Sin desagregaciones']
+        column_titles = ['Sin Desagregaciones', '']
+        column_types_d1 = ['Sin Desagregaciones']
+        column_types_d2 = ['']
         sumaFexp = int(math.ceil(sum(data.values_list('fexp', flat=True))))
         column_N = [sumaFexp]
     elif disintegrations_size == 1:
@@ -291,22 +308,17 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
 
-        # wsq = set(column_2_aux)
-        # print wsq
-        # for w in wsq:
-        #     print w.encode('ascii','ignore')
-        # print types_option_1
-
         for i in range(1, len(filter_column_2_by)+1):
             column_2_array[i-1] = [1 if x == column_2_aux[i-1] else 0 for x in types_option_1]
 
         column_3_array = np.array([])
         column_dimensions = [len(types_option_1), 0]
         title_1 = Disintegration.objects.get(id=disintegrations[0]).name.encode('utf-8')
-        column_titles = [' por '+title_1]
-        column_names = []
+        column_titles = [title_1, '']
+        column_types_d1 = []
         for d1 in types_option_1:
-            column_names.append(d1)
+            column_types_d1.append(d1)
+        column_types_d2 = ['']
 
         column_N = []
         for option in types_option_1:
@@ -338,8 +350,7 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_dimensions = [len(types_option_1), len(types_option_2)]
         title_1 = Disintegration.objects.get(id=disintegrations[0]).name.encode('utf-8')
         title_2 = Disintegration.objects.get(id=disintegrations[1]).name.encode('utf-8')
-        column_titles = [' por '+title_1+' y '+title_2]
-        column_names = []
+        column_titles = [title_1, title_2]
 
         column_N = []
         for optionA in types_option_1:
@@ -347,10 +358,13 @@ def get_column_2_3(data, disintegrations, represent_int):
                 sumaFexp = int(math.ceil(sum(data.filter(**{option_1:optionA}).filter(**{option_2:optionB}).values_list('fexp', flat=True))))
                 column_N.append(sumaFexp)
 
+        column_types_d1 = []
+        column_types_d2 = []
         for d1 in types_option_1:
-            for d2 in types_option_2:
-                column_names.append(d1+' - '+d2)
-    columns = [column_2_array, column_3_array, column_dimensions, column_titles, column_names, column_N]
+            column_types_d1.append(d1)
+        for d2 in types_option_2:
+            column_types_d2.append(d2)
+    columns = [column_2_array, column_3_array, column_dimensions, column_titles, column_types_d1, column_types_d2, column_N]
     return columns
 
 
