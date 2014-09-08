@@ -137,7 +137,7 @@ def calc_result(request):
                 column_N = columns_2_3[6]
                 column_4 = get_column_4(data_byWhere)
                 models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
-                models_by_period_none = np.where(np.isnan(models_by_period), None, models_by_period)
+                models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
                 data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
                 data_result.append(data_result_by_period)
 
@@ -364,6 +364,7 @@ def get_column_2_3(data, disintegrations, represent_int):
             column_types_d1.append(d1)
         for d2 in types_option_2:
             column_types_d2.append(d2)
+
     columns = [column_2_array, column_3_array, column_dimensions, column_titles, column_types_d1, column_types_d2, column_N]
     return columns
 

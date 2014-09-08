@@ -17,9 +17,6 @@
   margin-bottom: 30px;
   margin-left: 20%;
 }
-#main-panel .panel-body img {
-  margin-bottom: 30px;
-}
 #main-panel .panel-body .panel-group {
   margin-bottom: 0px;
 }
@@ -71,15 +68,40 @@
   margin-bottom: 0px;
 }
 
-#scroll_table, #scroll_graph{
+#scroll_table{
   position: relative;
   max-height: 430px;
   overflow: hidden;
   margin: 20px 25px 50px 25px;
 }
 
+#btnExport{
+  margin-right: 25px;
+}
+#btnExport img{
+  margin-top: -5px;
+}
+
 #scroll_graph{
-    margin-top: 75px;
+    max-height: 460px;
+    margin: 75px 25px 50px 25px;
+}
+
+#div_desagregaciones{
+  position: relative;
+  height: 460px;
+  max-height: 460px;
+  overflow: hidden;
+}
+
+.tab-content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 10px;
+}
+
+.nav-tabs {
+    margin-bottom: 0;
 }
 
 .data-type-name {
@@ -88,9 +110,9 @@
 }
 
 .graph{
-  min-width: 800px;
+  min-width:800px;
   height: 400px;
-  margin: 0 0 0 10em;
+  margin: 30px 0 0 0;
 }
 
 .form-css label {

@@ -197,6 +197,7 @@
                                             <b class="title"></b><br>
                                             <b class="years-title"></b><br><br>
                                             <b class="data-type-name">TABLA DE DATOS</b>
+                                            <a id="btnExport" class="pull-right">Exportar tabla a Excel <img src="{{STATIC_URL}}img/Excel-icon.png" alt="excel"> </a>
                                             <div id="scroll_table">
                                                 <table class="table table-bordered table-responsive" id="dvData" >
                                                     <thead>
@@ -205,22 +206,15 @@
                                                     </thead>
                                                     <tbody id="periodo"></tbody>
                                                 </table>
-                                                <!-- <input type="button" class="btn btn-calc pull-right" id="btnExport" value="Exportar tabla a Excel"/> -->
                                             </div>
 
-                                            <!-- <b class="title"></b><br>
-                                            <b class="years-title"></b><br><br> -->
                                             <b class="data-type-name">GRÁFICOS ESTADÍSTICOS</b>
                                             <div id="scroll_graph">
                                                 <!-- Nav tabs -->
                                                 <ul class="nav nav-tabs" id="ul_desagregaciones" role="tablist">
-                                                  <!-- <li class="active"><a href="#home" role="tab" data-toggle="tab">Home</a></li> -->
                                                 </ul>
                                                 <!-- Tab panes -->
-                                                <div class="tab-content" id="div_desagregaciones">
-                                                  <div class="tab-pane active" id="home">
-                                                      <div id="container" class="graph text-center" ></div>
-                                                  </div>
+                                                <div class="tab-content text-center" id="div_desagregaciones">
                                                 </div>
                                             </div>
                                         </div>
@@ -246,6 +240,7 @@
         var MEDIA_URL = {{MEDIA_URL}};
 
         $('#scroll_table').perfectScrollbar();
+        $('#div_desagregaciones').perfectScrollbar();
 
         $('.selectpicker').selectpicker();
 
