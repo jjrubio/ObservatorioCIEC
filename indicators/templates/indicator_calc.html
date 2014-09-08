@@ -165,9 +165,13 @@
                                                         <button type="button" class="btn btn-back" data-toggle="collapse" data-target="#parametros">
                                                         Atrás
                                                         </button>
-                                                        <button type="button" class="btn btn-calc" data-toggle="collapse" data-target="#resultado">
-                                                        Calcular
-                                                        </button>
+                                                        {% if user.is_authenticated or permiso %}
+                                                        	<button type="button" class="btn btn-calc" data-toggle="collapse" data-target="#resultado">
+		                                                        Calcular
+                						</button>
+							{% else %}
+                                                            <p>Para realizar calculo, por favor <a href="/registro/">Registrarse</a></p>
+                                                        {% endif %}
                                                     </div>
                                                 </label>
                                             </form>
@@ -199,7 +203,7 @@
                                             <b class="data-type-name">TABLA DE DATOS</b>
                                             <a id="btnExport" class="pull-right">Exportar tabla a Excel <img src="{{STATIC_URL}}img/Excel-icon.png" alt="excel"> </a>
                                             <div id="scroll_table">
-                                                <table class="table table-bordered table-responsive" id="dvData" >
+                                                <table class="table table-bordered table-responsive" id="Exporta_a_Excel" >
                                                     <thead>
                                                         <tr id="titulo"></tr>
                                                         <tr id="titulo_secundario"></tr>
