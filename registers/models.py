@@ -19,6 +19,8 @@ class UserProfile(models.Model):
     telefono = models.CharField(max_length=20, null=False, verbose_name='Teléfono')
     direccion = models.CharField(max_length=100, null=False, verbose_name='Dirección')
     required_css_class = 'required'
+    activation_key = models.CharField(max_length=40)
+    key_expires = models.DateTimeField()
 
     class Meta:
         verbose_name = "perfil de usuario"
