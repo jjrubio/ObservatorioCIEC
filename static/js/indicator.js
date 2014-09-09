@@ -6,6 +6,7 @@ $(document).ready(function() {
         last_year = data[0];
         last_trim = data[1];
     });
+    $('#parametros').collapse('show');
 });
 
 function getMenu(cat, subcat, ind){
@@ -41,34 +42,41 @@ $('#indicator').change( function() {
     getMenu($("#category").val(), $("#subcategory").val(), $(this).val());
 });
 
-$('#a-parametros').click(function(){
-  $('#desagregaciones').removeClass( "in" );
-  $('#resultados').removeClass( "in" );
-});
+// $('#a-parametros').click(function(){
+//   $('#parametros').collapse('show');
+//   $('#desagregaciones').collapse('hide');
+//   $('#resultado').collapse('hide');
+// });
 
-$('#a-desagregaciones').click(function(){
-  $('#parametros').removeClass( "in" );
-  $('#resultados').removeClass( "in" );
-});
+// $('#a-desagregaciones').click(function(){
+//   $('#parametros').removeClass( "in" );
+//   $('#resultados').removeClass( "in" );
+// });
 
-$('#a-resultados').click(function(){
-  $('#desagregaciones').removeClass( "in" );
-  $('#parametros').removeClass( "in" );
-});
+// $('#a-resultados').click(function(){
+//   $('#desagregaciones').removeClass( "in" );
+//   $('#parametros').removeClass( "in" );
+// });
 
-$('.btn-next').click( function(){
-    $('#parametros').removeClass( "in" );
+$('.btn-next, #a-desagregaciones').click( function(){
+    $('#parametros').collapse('hide');
+    $('#desagregaciones').collapse('show');
+    $('#resultado').collapse('hide');
     var id_indicator = $('#indicator option:selected').attr('id');
     indicador_desagregacion_filtro(id_indicator);
 });
 
-$('.btn-back').click( function(){
-    $('#desagregaciones').removeClass( "in" );
+$('.btn-back, #a-parametros').click( function(){
+    // $('#desagregaciones').removeClass( "in" );
+    $('#parametros').collapse('show');
+    $('#desagregaciones').collapse('hide');
+    $('#resultado').collapse('hide');
 });
 
-$('.btn-calc').click( function(){
-    $('#parametros').removeClass( "in" );
-    $('#desagregaciones').removeClass( "in" );
+$('.btn-calc, #a-resultados').click( function(){
+    $('#parametros').collapse('hide');
+    $('#desagregaciones').collapse('hide');
+    $('#resultado').collapse('show');
     $('#loading-result').show();
     $('#content-result').hide();
     var selected = [];
@@ -89,9 +97,8 @@ $('.btn-calc').click( function(){
     $.getJSON('/result/', {'indicator': indicator, 'represent': represent, 'method': method, 'yearStart': yearStart,
                                       'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd, 'disintegrations[]': selected},
     function(data){
-        console.log(data);
         table(data);
-        // graphs(data);
+        graphs(data);
         $('#loading-result').hide();
         $('#content-result').show();
     });
@@ -264,7 +271,7 @@ function table(data){
         }
     }
 
-
+    $('#scroll_table').perfectScrollbar('destroy');
     $('#titulo').empty()
     $('#titulo_secundario').empty()
     $('#periodo').empty()
@@ -297,6 +304,7 @@ function table(data){
             }
         }
     }
+    $('#scroll_table').perfectScrollbar();
 }
 
 function graphs(data){
@@ -311,8 +319,8 @@ function graphs(data){
   var name_desagre_2 = data[tam_data - 3];
   var type_desagre_1 =data[tam_data - 2];
   var type_desagre_2 =data[tam_data - 1];
-  var number_tabs, type_desagre, totalFexp;
-  var graph_render, graph_title, graph_subtitle, graph_valuesX, graph_title, graph_width;
+  var number_tabs, type_desagre, fexp, totalFexp;
+  var graph_render, graph_title, graph_subtitle, graph_valuesX, text_valuesY, space_valuesY, graph_title, graph_width;
   var name_ind_serie, data_ind_serie;
   var name_indPlus_serie, data_indPlus_serie;
   var name_indMinus_serie, data_indMinus_serie;
@@ -342,6 +350,7 @@ function graphs(data){
       for(i=0; i<type_desagre_1.length; i++){
           $("#ul_desagregaciones").append('<li><a href="#'+type_desagre_1[i].replace(/ /g,"_")+'" role="tab" data-toggle="tab">'+type_desagre_1[i]+'</a></li>')
           $("#div_desagregaciones").append('<div class="tab-pane" id="'+type_desagre_1[i].replace(/ /g,"_")+'"></div>');
+          $("#"+type_desagre_1[i].replace(/ /g,"_")).append('<b>'+name_desagre_1+': '+type_desagre_1[i]+' según '+name_desagre_2+'</b>');
       }
 
       number_tabs = type_desagre_1.length;
@@ -362,8 +371,11 @@ function graphs(data){
       data_ind_serie = [];
       totalFexp = 0;
       for(k=0; k<tam_periodos; k++){
-        data_ind_serie.push(parseFloat(data[k][3][j+(i*type_desagre.length)][0].toFixed(4)));
-        totalFexp = totalFexp + data[k][2][j+(i*type_desagre.length)];
+        fexp = data[k][2][j+(i*type_desagre.length)];
+        if(fexp != 0){
+          data_ind_serie.push(parseFloat(data[k][3][j+(i*type_desagre.length)][0].toFixed(4)));
+        }
+        totalFexp = totalFexp + fexp;
       }
 
       //Validar que se grafica
@@ -388,17 +400,22 @@ function graphs(data){
         name_indMinus_serie = 'Negativo';
         data_indMinus_serie = [];
         for(k=0; k<tam_periodos; k++){
-          data_indMinus_serie.push(parseFloat(data[k][3][j+(i*type_desagre.length)][2].toFixed(4)));
+          fexp = data[k][2][j+(i*type_desagre.length)];
+          if(fexp != 0){
+            data_indMinus_serie.push(parseFloat(data[k][3][j+(i*type_desagre.length)][2].toFixed(4)));
+          }
         }
 
         name_indPlus_serie = 'Positivo';
         data_indPlus_serie = [];
         for(k=0; k<tam_periodos; k++){
-          data_indPlus_serie.push(parseFloat(data[k][3][j+(i*type_desagre.length)][3].toFixed(4)));
+          fexp = data[k][2][j+(i*type_desagre.length)];
+          if(fexp != 0){
+            data_indPlus_serie.push(parseFloat(data[k][3][j+(i*type_desagre.length)][3].toFixed(4)));
+          }
         }
 
-        filename_download = type_desagre[j].replace(/ /g,"_")+'_'+data[0][0]+'_'+data[tam_periodos-1][0];
-
+        filename_download = type[i].replace(/ /g,"_").replace(/,/g,"")+'_'+type_desagre[j].replace(/ /g,"_").replace(/,/g,"")+'_'+data[0][0]+'_'+data[tam_periodos-1][0];
 
          if(tam_periodos <= 12){
           graph_width = 800;
@@ -408,11 +425,25 @@ function graphs(data){
           $(".graph").css("margin-left","0px");
         }
 
+        if(unidad == 'Porcentaje'){
+          space_valuesY = 0.1;
+          text_valuesY = 'Porcentaje';
+        }else if(unidad == 'Años'){
+          space_valuesY = 2;
+          text_valuesY = 'Promedio de años';
+        }else if(unidad == 'Dólares'){
+          space_valuesY = 50;
+          text_valuesY = 'Dólares';
+        }else if(unidad == 'Personas'){
+          space_valuesY = 1;
+          text_valuesY = 'Número de personas';
+        }
+
         var options = {
           chart: {
-                  renderTo: graph_render,
-                  type: 'spline',
-                  width: graph_width,
+              renderTo: graph_render,
+              type: 'spline',
+              width: graph_width,
           },
           title: {
               text: graph_title,
@@ -433,17 +464,24 @@ function graphs(data){
               labels: {
                   formatter: function () {
                     if(unidad == 'Porcentaje'){
-                      return (Highcharts.numberFormat(this.value*100, 0, ',') + '%');
+                      return Highcharts.numberFormat(this.value*100, 2, ',') + '%';
+                    }else if(unidad == 'Años'){
+                      return (Highcharts.numberFormat(this.value*1, 0, ','));
+                    }else if(unidad == 'Dólares'){
+                      return ('$ '+Highcharts.numberFormat(this.value*1, 0, ','));
+                    }else if(unidad == 'Personas'){
+                      return (Highcharts.numberFormat(this.value*1, 0, ','));
                     }
                   },
               },
               title: {
                   enabled: true,
-                  text: unidad,
+                  text: text_valuesY,
               },
               min: 0,
               lineWidth: 1,
-              tickInterval: 0.1
+              tickInterval: space_valuesY,
+
           },
           legend: {
               enabled: false
@@ -467,6 +505,12 @@ function graphs(data){
                   formatter: function () {
                     if(unidad == 'Porcentaje'){
                       return Highcharts.numberFormat(this.y*100, 2, ',') + '%';
+                    }else if(unidad == 'Años'){
+                      return (Highcharts.numberFormat(this.y*1, 2, ','));
+                    }else if(unidad == 'Dólares'){
+                      return ('$ '+Highcharts.numberFormat(this.y*1, 2, ','));
+                    }else if(unidad == 'Personas'){
+                      return (Highcharts.numberFormat(this.y*1, 2, ','));
                     }
                   },
                   y: -20

@@ -142,6 +142,7 @@ def calc_result(request):
             represent_database = str(Structure.objects.get(anio=i, trim=j))
             if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
                 or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
+                # pass
                 data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
                 column_1 = get_column_1(data_byWhere, method_int, indicator_int)
                 columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
@@ -177,7 +178,7 @@ def calc_result(request):
     else:
         years_title = str(yearStart_int)+' - '+str(yearEnd_int)
 
-    unit = str(Indicator.objects.get(id = indicator_int).unit)
+    unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
 
     data_result.append(title)
     data_result.append(years_title)
@@ -352,14 +353,16 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
         for i in range(1, len(filter_column_2_by)+1):
-            column_2_array[i-1] = [1 if x == column_2_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_1]
+            column_2_array[i-1] = [1 if x == column_2_aux[i-1] else 0 for x in types_option_1]
 
         column_3_array = np.array([], 'float')
         column_3_array = np.zeros((len(filter_column_3_by),len(types_option_2)))
         column_3_aux = list(filter_column_3_by)
 
+        for j in range(0, 20):
+            print column_3_aux[j]
         for i in range(1, len(filter_column_3_by)+1):
-            column_3_array[i-1] = [1 if x == column_3_aux[i-1].encode('ascii','ignore') else 0 for x in types_option_2]
+            column_3_array[i-1] = [1 if x == column_3_aux[i-1] else 0 for x in types_option_2]
 
         column_dimensions = [len(types_option_1), len(types_option_2)]
         title_1 = Disintegration.objects.get(id=disintegrations[0]).name.encode('utf-8')
