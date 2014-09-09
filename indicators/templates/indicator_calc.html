@@ -94,7 +94,7 @@
                                                 {% if method_option == 1 or method_option == 3 %}
                                                     {% for year in all_years.0 %}
                                                         {% if forloop.last %}
-                                                            <option value="{{year.0}}"  selected="selected">{{year.0}}</option>
+                                                            <option value="{{year.0}}">{{year.0}}</option>
                                                         {% else %}
                                                             <option value="{{year.0}}">{{year.0}}</option>
                                                         {% endif %}
@@ -238,13 +238,10 @@
     <script type="text/javascript" src="{% static "js/jquery.battatech.excelexport.min.js" %}"></script>
     <script type="text/javascript">
         var MEDIA_URL = {{MEDIA_URL}};
-
+        $("#yearEnd option:last").attr("selected", "selected");
+        $('.selectpicker').selectpicker();
         $('#scroll_table').perfectScrollbar();
         $('#div_desagregaciones').perfectScrollbar();
-
-        $('.selectpicker').selectpicker();
-
-        $('.fa-info-circle').tooltip();
     </script>
 {% endblock %}
 

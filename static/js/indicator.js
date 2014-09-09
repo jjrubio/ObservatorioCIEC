@@ -2,7 +2,7 @@ var last_year;
 var last_trim;
 
 $(document).ready(function() {
-    $.getJSON('/last-full-year/',function(data){
+   $.getJSON('/last-full-year/',function(data){
         last_year = data[0];
         last_trim = data[1];
     });
