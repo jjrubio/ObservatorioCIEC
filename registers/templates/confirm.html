@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Inicias Sesion{% endblock %}
+
+{% block extraCSS %}
+{% endblock %}
+
+{% block content %}
+	<div class="content-page-2" >
+		<b id="title-content-page">CUENTA ACTIVA</b>
+		<hr class="pull-left" id="separator-content-page">
+		<div id="mensaje-alerta" class="text-center">
+	        {% if success %}
+	        	<p><br>¡SU CUENTA HA SIDO ACTIVADA!</br></p>
+	        	<p>Puede iniciar sesión <a href="/iniciar-sesion/">aqui</a></p>
+	        {% elif has_account_active %}
+	        	<p><br>¡USTED YA TIENEN UNA CUENTA ACTIVADA!</br></p>
+	        	<p>Puede iniciar sesión <a href="/iniciar-sesion/">aqui</a></p>
+	        {% else %}
+	        	<p><br>TIENE INICIADA LA SESIÓN EN EL OBSERVATORIO ECONÓMICO SOCIAL DEL ECUADOR - OESE</br></p>
+	        {% endif %}
+	    </div>
+    </div>
+{% endblock %}
