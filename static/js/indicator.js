@@ -6,7 +6,6 @@ $(document).ready(function() {
         last_year = data[0];
         last_trim = data[1];
     });
-    $('#parametros').collapse('show');
 });
 
 function getMenu(cat, subcat, ind){
@@ -42,40 +41,21 @@ $('#indicator').change( function() {
     getMenu($("#category").val(), $("#subcategory").val(), $(this).val());
 });
 
-// $('#a-parametros').click(function(){
-//   $('#parametros').collapse('show');
-//   $('#desagregaciones').collapse('hide');
-//   $('#resultado').collapse('hide');
-// });
-
-// $('#a-desagregaciones').click(function(){
-//   $('#parametros').removeClass( "in" );
-//   $('#resultados').removeClass( "in" );
-// });
-
-// $('#a-resultados').click(function(){
-//   $('#desagregaciones').removeClass( "in" );
-//   $('#parametros').removeClass( "in" );
-// });
+$('#accordion').on('show.bs.collapse', function () {
+    $('#accordion .in').collapse('hide');
+});
 
 $('.btn-next, #a-desagregaciones').click( function(){
-    $('#parametros').collapse('hide');
     $('#desagregaciones').collapse('show');
-    $('#resultado').collapse('hide');
     var id_indicator = $('#indicator option:selected').attr('id');
     indicador_desagregacion_filtro(id_indicator);
 });
-
+//
 $('.btn-back, #a-parametros').click( function(){
-    // $('#desagregaciones').removeClass( "in" );
     $('#parametros').collapse('show');
-    $('#desagregaciones').collapse('hide');
-    $('#resultado').collapse('hide');
 });
 
 $('.btn-calc, #a-resultados').click( function(){
-    $('#parametros').collapse('hide');
-    $('#desagregaciones').collapse('hide');
     $('#resultado').collapse('show');
     $('#loading-result').show();
     $('#content-result').hide();
