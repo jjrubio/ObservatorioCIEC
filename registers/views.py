@@ -85,7 +85,7 @@ def user_login(request):
 
 				return HttpResponseRedirect('/definicion-indicador/')
 			else:
-				return HttpResponseRedirect('/acceso_denegado/')
+				return HttpResponseRedirect('/acceso-denegado/')
 		else:
 			return HttpResponseRedirect('/error-sesion/')
 	else:
