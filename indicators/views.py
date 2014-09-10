@@ -69,19 +69,19 @@ def indicators_detail(cat_id, subcat_id, ind_id):
 
 
 def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
-    permiso = False
-    if request.session.get('last_visit'):
-        last_visit_time = request.session.get('last_visit')
-        visits = request.session.get('visits', '0')
-        count = request.session.get('visits')
+    permiso = True
+    #if request.session.get('last_visit'):
+       # last_visit_time = request.session.get('last_visit')
+       # visits = request.session.get('visits', '0')
+       # count = request.session.get('visits')
 
-        if (datetime.now() - datetime.strptime(last_visit_time[:-7], "%Y-%m-%d %H:%M:%S")).days > 0:
-            request.session['visits'] = visits + 1
-            request.session['last_visit'] = str(datetime.now())
-            permiso = True
-    else:
-        request.session['last_visit'] = str(datetime.now())
-        request.session['visits'] = 1
+       # if (datetime.now() - datetime.strptime(last_visit_time[:-7], "%Y-%m-%d %H:%M:%S")).days > 0:
+           # request.session['visits'] = visits + 1
+           # request.session['last_visit'] = str(datetime.now())
+           # permiso = True
+   # else:
+       # request.session['last_visit'] = str(datetime.now())
+       # request.session['visits'] = 1
 
     json = indicators_detail(cat_id, subcat_id, ind_id)
     subcategories = Subcategory.objects.all()
