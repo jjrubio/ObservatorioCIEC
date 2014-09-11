@@ -121,17 +121,6 @@ STATIC_ROOT = ''
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL='/media/'
 
-TINYMCE_DEFAULT_CONFIG = {
-    'theme': 'advanced',
-    'plugins': "spellchecker,autoresize,fullscreen,preview",
-    'theme_advanced_buttons1' : "fontselect,fontsizeselect,separator,bullist,numlist,separator,outdent,indent,separator,link,unlink,separator,hr,charmap,separator,image,fullscreen",
-    'theme_advanced_buttons2' : "bold,italic,underline,strikethrough,sub,sup,separator,forecolor,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,undo,redo,separator,spellchecker,preview",
-    'fullscreen_new_window': True,
-    'fullscreen_settings' : {
-            'theme_advanced_path_location': "top"
-    }
-}
-
 CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
