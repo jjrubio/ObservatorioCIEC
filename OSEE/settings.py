@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
-from .email_info import EMAIL_USE_TLS, EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_PORT
+from .email_info import EMAIL_USE_TLS, EMAIL_HOST, EMAIL_HOST_USER, EMAIL_PORT
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -132,22 +132,21 @@ TINYMCE_DEFAULT_CONFIG = {
     }
 }
 
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'redis_cache.RedisCache',
-#         'LOCATION': '/var/run/redis/redis.sock',#127.0.0.1/6379
-#         'OPTIONS': {
-#             'DB': 1,
-#             'PARSER_CLASS': 'redis.connection.HiredisParser'
-#         }
-#     },
-# }
-# SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': '/var/run/redis/redis.sock',#127.0.0.1/6379
+        'OPTIONS': {
+            'DB': 1,
+            'PARSER_CLASS': 'redis.connection.HiredisParser'
+        }
+    },
+}
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 #Email setup
 EMAIL_HOST = EMAIL_HOST
 EMAIL_HOST_USER = EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 EMAIL_USE_TLS = EMAIL_USE_TLS
 EMAIL_PORT = EMAIL_PORT
 
