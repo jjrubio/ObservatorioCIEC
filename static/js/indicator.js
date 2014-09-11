@@ -1,5 +1,6 @@
 var last_year;
 var last_trim;
+var excel_filename_download;
 
 $(document).ready(function() {
    $.getJSON('/last-full-year/',function(data){
@@ -221,10 +222,12 @@ $('#info-method').hover(function(){
 })
 
 $("#btnExport").click(function(e){
-  $('#Exporta_a_Excel').btechco_excelexport({
+  var uri = $('#Exporta_a_Excel').btechco_excelexport({
     containerid: "Exporta_a_Excel"
+    ,returnUri: true
     ,datatype: $datatype.Table
   });
+  $(this).attr('download', excel_filename_download+'.xls').attr('href', uri).attr('target', '_blank');
 });
 
 function table(data){
@@ -299,7 +302,7 @@ function graphs(data){
   var name_desagre_2 = data[tam_data - 3];
   var type_desagre_1 =data[tam_data - 2];
   var type_desagre_2 =data[tam_data - 1];
-  var number_tabs, type_desagre, fexp, totalFexp;
+  var number_tabs, type_desagre, fexp, totalFexp, name_desagre;
   var graph_render, graph_title, graph_subtitle, graph_valuesX, text_valuesY, space_valuesY, graph_title, graph_width;
   var name_ind_serie, data_ind_serie;
   var name_indPlus_serie, data_indPlus_serie;
@@ -395,7 +398,20 @@ function graphs(data){
           }
         }
 
-        filename_download = type[i].replace(/ /g,"_").replace(/,/g,"")+'_'+type_desagre[j].replace(/ /g,"_").replace(/,/g,"")+'_'+data[0][0]+'_'+data[tam_periodos-1][0];
+        if(valor_dim_2 == 0){
+          name_desagre = name_desagre_1;
+        }else{
+          name_desagre = name_desagre_1+'_'+name_desagre_2;
+        }
+
+        if(data[0][0] == data[tam_periodos-1][0]){
+          excel_filename_download = titulo.split(" por ")[0].replace(/ /g,"_")+'-'+titulo.split(" nivel ")[1].replace(/ /g,"_")+'-'+name_desagre.replace(/ /g,"_")+'-'+data[0][0];
+          img_filename_download = type[i].replace(/ /g,"_").replace(/,/g,"")+'-'+type_desagre[j].replace(/ /g,"-").replace(/,/g,"")+'-'+data[0][0];
+        }else{
+          excel_filename_download = titulo.split(" por ")[0].replace(/ /g,"_")+'-'+titulo.split(" nivel ")[1].replace(/ /g,"_")+'-'+name_desagre.replace(/ /g,"_")+'-'+data[0][0]+'_'+data[tam_periodos-1][0];
+          img_filename_download = type[i].replace(/ /g,"_").replace(/,/g,"")+'-'+type_desagre[j].replace(/ /g,"-").replace(/,/g,"")+'-'+data[0][0]+'_'+data[tam_periodos-1][0];
+        }
+
 
          if(tam_periodos <= 12){
           graph_width = 800;
@@ -508,7 +524,7 @@ function graphs(data){
               color: '#6AA4D9',
           },],
           exporting: {
-              filename: filename_download,
+              filename: img_filename_download,
           }
         };
 

@@ -58,11 +58,21 @@
   color: #333;
 }
 #main-panel .panel-footer {
-  height: 40px;
+  height: 50px;
+  vertical-align: middle;
 }
-#main-panel .panel-footer .pull-left a {
-  color: #0cb3ac;
-  font-size: 15px;
+#main-panel .panel-footer .pull-left button{
+  background-color: #0cb3ac;
+  border-color: #0cb3ac;
+  color: #fff;
+}
+
+#main-panel .panel-footer .pull-right {
+  margin-top: 6px;
+}
+
+.fa-info-circle {
+  color: #39b3d7;
 }
 
 .table{
@@ -78,6 +88,8 @@
 
 #btnExport{
   margin-right: 25px;
+  color: #39b3d7;
+  font-weight: bold;
 }
 #btnExport img{
   margin-top: -5px;
