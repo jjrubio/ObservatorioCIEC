@@ -60,6 +60,7 @@ $('.btn-calc, #a-resultados').click( function(){
     $('#resultado').collapse('show');
     $('#loading-result').show();
     $('#content-result').hide();
+    $('#content-not-result').hide();
     var selected = [];
     $('input:checkbox').each(function(){
         if($(this).is(':checked')){
@@ -78,10 +79,15 @@ $('.btn-calc, #a-resultados').click( function(){
     $.getJSON('/result/', {'indicator': indicator, 'represent': represent, 'method': method, 'yearStart': yearStart,
                                       'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd, 'disintegrations[]': selected},
     function(data){
-        table(data);
-        graphs(data);
+        if(data.length>0){
+          table(data);
+          graphs(data);
+          $('#content-result').show();
+        }else{
+          $('#content-not-result').show();
+        }
         $('#loading-result').hide();
-        $('#content-result').show();
+
     });
 });
 
