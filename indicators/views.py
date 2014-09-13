@@ -159,7 +159,7 @@ def calc_result(request):
                 models_by_period = cache.get(cache_value)
                 if models_by_period is None:
                     models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
-                    cache.set(cache_value, models_by_period)
+                    cache.set(cache_value, models_by_period, None)
 
                 models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
                 data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
