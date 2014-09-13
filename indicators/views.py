@@ -15,6 +15,8 @@ import statsmodels.stats as sms
 from scipy.stats import t
 import math
 from datetime import datetime
+from django.core.cache import cache
+
 
 def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1'):
     json = indicators_detail(cat_id, subcat_id, ind_id)
@@ -93,7 +95,7 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
 
-@cache_page(30)
+# @cache_page(30)
 def calc_result(request):
     indicator = request.GET['indicator']
     represent = request.GET['represent']
@@ -119,16 +121,19 @@ def calc_result(request):
 
     if not len(disintegrations) == 0:
         if len(disintegrations) == 1:
+            cache_value = '%s_%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, disintegrations[0])
             if(int(disintegrations[0]) == 2):
                 data_ENEMDU = get_data_by_represent(data_ENEMDU, represent_int)
             else:
                 data_ENEMDU = data_ENEMDU.objects.all()
         else:
+            cache_value = '%s_%s_%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, disintegrations[0], disintegrations[1])
             if(int(disintegrations[0]) == 2 or int(disintegrations[1]) == 2):
                 data_ENEMDU = get_data_by_represent(data_ENEMDU, represent_int)
             else:
                 data_ENEMDU = data_ENEMDU.objects.all()
     else:
+        cache_value = '%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int)
         data_ENEMDU = data_ENEMDU.objects.all()
 
     data_result = []
@@ -142,7 +147,6 @@ def calc_result(request):
             represent_database = str(Structure.objects.get(anio=i, trim=j))
             if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
                 or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
-                # pass
                 data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
                 column_1 = get_column_1(data_byWhere, method_int, indicator_int)
                 columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
@@ -151,7 +155,12 @@ def calc_result(request):
                 column_dimensions = columns_2_3[2]
                 column_N = columns_2_3[6]
                 column_4 = get_column_4(data_byWhere)
-                models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
+
+                models_by_period = cache.get(cache_value)
+                if models_by_period is None:
+                    models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
+                    cache.set(cache_value, models_by_period)
+
                 models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
                 data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
                 data_result.append(data_result_by_period)
