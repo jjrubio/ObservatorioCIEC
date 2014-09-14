@@ -7,7 +7,8 @@ from disintegrations.models import *
 from ENEMDU.models import *
 import json
 from django.core import serializers
-from django.core.serializers.json import DjangoJSONEncoder
+from json import dumps, loads, JSONEncoder, JSONDecoder
+import pickle
 from django.views.decorators.cache import cache_page
 import numpy as np
 import statsmodels.api as sm
@@ -16,6 +17,18 @@ from scipy.stats import t
 import math
 from datetime import datetime
 from django.core.cache import cache
+
+
+class PythonObjectEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (list, dict, str, unicode, int, float, bool, type(None))):
+            return JSONEncoder.default(self, obj)
+        return {'_python_object': pickle.dumps(obj)}
+
+def as_python_object(dct):
+    if '_python_object' in dct:
+        return pickle.loads(str(dct['_python_object']))
+    return dct
 
 
 def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1'):
@@ -139,7 +152,7 @@ def calc_result(request):
     if data_result is None:
 
         data_result = []
-        data_exist = 0
+        ban = 0
         trim_1 = trimStart_int
         trim_2 = 5
         for i in range(yearStart_int, yearEnd_int+1):
@@ -149,7 +162,7 @@ def calc_result(request):
                 represent_database = str(Structure.objects.get(anio=i, trim=j))
                 if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
                     or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
-                    data_exist = data_exist + 1
+
                     data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
                     column_1 = get_column_1(data_byWhere, method_int, indicator_int)
                     columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
@@ -163,43 +176,44 @@ def calc_result(request):
                     models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
                     data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
                     data_result.append(data_result_by_period)
+                    if (ban == 0):
+                        column_titles = columns_2_3[3]
+                        column_name_d1 = column_titles[0]
+                        column_name_d2 = column_titles[1]
+                        column_types_d1 = columns_2_3[4]
+                        column_types_d2 = columns_2_3[5]
+
+                        disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
+                        if(column_dimensions[0] == 0):
+                            title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                        elif(column_dimensions[1] == 0):
+                            title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                        else:
+                            title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
+
+                        if(yearStart_int == yearEnd_int):
+                            years_title = str(yearStart_int)
+                        else:
+                            years_title = str(yearStart_int)+' - '+str(yearEnd_int)
+
+                        unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
+
+                        data_result.append(title)
+                        data_result.append(years_title)
+                        data_result.append(unit)
+                        data_result.append(column_dimensions)
+                        data_result.append(column_name_d1)
+                        data_result.append(column_name_d2)
+                        data_result.append(column_types_d1)
+                        data_result.append(column_types_d2)
+                        ban = 1
 
                 if j == 4:
                     trim_1 = 1
 
-        if data_exist > 0 :
-            column_titles = columns_2_3[3]
-            column_name_d1 = column_titles[0]
-            column_name_d2 = column_titles[1]
-            column_types_d1 = columns_2_3[4]
-            column_types_d2 = columns_2_3[5]
+        cache.set(cache_value, data_result, None)
 
-            disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
-            if(column_dimensions[0] == 0):
-                title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
-            elif(column_dimensions[1] == 0):
-                title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
-            else:
-                title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
-
-            if(yearStart_int == yearEnd_int):
-                years_title = str(yearStart_int)
-            else:
-                years_title = str(yearStart_int)+' - '+str(yearEnd_int)
-
-            unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
-
-            data_result.append(title)
-            data_result.append(years_title)
-            data_result.append(unit)
-            data_result.append(column_dimensions)
-            data_result.append(column_name_d1)
-            data_result.append(column_name_d2)
-            data_result.append(column_types_d1)
-            data_result.append(column_types_d2)
-            cache.set(cache_value, data_result, None)
-
-    message = json.dumps(data_result, cls=DjangoJSONEncoder)
+    message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
 
 
