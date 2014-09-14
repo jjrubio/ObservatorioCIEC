@@ -198,20 +198,21 @@ def calc_result(request):
 
                         unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
 
-                        data_result.append(title)
-                        data_result.append(years_title)
-                        data_result.append(unit)
-                        data_result.append(column_dimensions)
-                        data_result.append(column_name_d1)
-                        data_result.append(column_name_d2)
-                        data_result.append(column_types_d1)
-                        data_result.append(column_types_d2)
                         ban = 1
 
                 if j == 4:
                     trim_1 = 1
 
-        cache.set(cache_value, data_result, None)
+        if ban == 1:
+            data_result.append(title)
+            data_result.append(years_title)
+            data_result.append(unit)
+            data_result.append(column_dimensions)
+            data_result.append(column_name_d1)
+            data_result.append(column_name_d2)
+            data_result.append(column_types_d1)
+            data_result.append(column_types_d2)
+            cache.set(cache_value, data_result, None)
 
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
