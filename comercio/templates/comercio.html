@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% load apptags %}
+
+{% load static from staticfiles %}
+
+{% block title %}Comercio Exterior{% endblock %}
+
+{% block extraCSS %}
+    
+{% endblock %}
+
+{% block content %}
+    <div class="content-page-2">
+        <b id="title-content-page">Comercio Exterior</b>
+        <hr class="pull-left" id="separator-content-page">
+        <div id="main-panel" class="panel panel-default">
+	        <div class="tabbable">
+	          <ul class="nav nav-tabs" id="myTabs">
+	            <li class="active" id="1"><a href="#pane" data-toggle="tab">EXPORTACIONES</a></li>
+	            <li id="2"><a href="#pane" data-toggle="tab">IMPORTACIONES</a></li>
+	          </ul>
+	          <div class="tab-content" id="datos">
+	          	<div class="tab-pane active" id="pane">
+	          		<p>ESCOJA UNA OPCIÓN</p>
+					<select id="options" data-width="93%">
+		                <option value="1">Código/Subpartida</option>
+		                <option value="2">Por País</option>
+		        	</select>
+		        	<p id="search_by_label">BUSCAR POR</p>
+		        	<select id="search_by" data-width="93%">
+		                <option value="1">Código</option>
+		                <option value="2">Descripción</option>
+		        	</select>
+		        	<p>ESTÁNDAR</p>
+		        	<select id="standars" data-width="93%">
+		                <option value="1">NANDINA</option>
+		                <option value="2">CGCE</option>
+		                <option value="3">CUII3</option>
+		                <option value="4">CPC</option>
+		                <option value="5">CUODE</option>
+		        	</select>
+		        	<p>PERIODICIDAD</p>
+		        	<select id="period" data-width="93%">
+		        		<option value="1">ANUAL</option>
+		        		<option value="2">MENSUAL</option>
+		        		<option value="3">SEMESTRAL</option>
+		        		<option value="4">TRIMESTRAL</option>
+		        	</select>
+					<!--p>DESDE</p>
+					<div class="form-group">
+						<div class='input-group date' id='datetimepicker5'>
+							<input type='text' class="form-control" data-date-format="YYYY/MM/DD"/>
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</div>
+					<p>HASTA</p>
+					<div class="form-group">
+						<div class='input-group date' id='datetimepicker5'>
+							<input type='text' class="form-control" data-date-format="YYYY/MM/DD"/>
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</div-->
+					<p>NIVEL DE AGREGACIÓN</p>
+					<input type="text" id="txt_agregacion">
+					<p>PATRÓN</p>
+					<input type="text" id="txt_patron">
+					<br/>
+					<div id="pais">
+						<label><input name="checkbox" id="checkbox" type='checkbox'>Separar por país</label>
+					</div>
+					<br/>
+					<input type="button" class="btn btn-primary" value="BUSCAR" id="btn_search">
+	          	</div>
+	          </div>
+	        </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extraScripts %}
+<script type="text/javascript" src="{% static "js/bootstrap-datepicker.js" %}" ></script>
+<script>
+	/*$(function () {
+		$('#datetimepicker5').datetimepicker({
+			pickTime: false
+		});
+	});*/
+</script>
+    
+{% endblock %}
+
