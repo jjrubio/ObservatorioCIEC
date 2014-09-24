@@ -62,6 +62,7 @@ INSTALLED_APPS = (
     'resources',
     'staff',
     'import_export',
+    'comercio',
 )
 
 MIDDLEWARE_CLASSES = (

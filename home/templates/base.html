@@ -14,6 +14,8 @@
     <!-- Core CSS - Include with every page -->
     <link href="{% static "css/style.css" %}" rel="stylesheet" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" />
+    <link href="{% static "css/datepicker.css" %}" rel="stylesheet" />
+    <link href="{% static "css/comercio.css" %}" rel="stylesheet" />
 
     <!-- Page Specific CSS -->
     {% block extraCSS %}{% endblock %}
@@ -82,6 +84,7 @@
     <!-- Core Scripts - Include with every page -->
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{% static "js/comercio.js" %}" ></script>
     <script>
         $(function(){
             setNavigation();
