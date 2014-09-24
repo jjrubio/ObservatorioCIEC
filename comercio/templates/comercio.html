@@ -22,58 +22,52 @@
 	          </ul>
 	          <div class="tab-content" id="datos">
 	          	<div class="tab-pane active" id="pane">
-	          		<p>ESCOJA UNA OPCIÓN</p>
-					<select id="options" data-width="93%">
+	          		<span>Escoja una opción</span>
+					<select id="options" data-width="93%" class="pull-right selectpicker">
 		                <option value="1">Código/Subpartida</option>
 		                <option value="2">Por País</option>
 		        	</select>
-		        	<p id="search_by_label">BUSCAR POR</p>
-		        	<select id="search_by" data-width="93%">
+		        	<br/><br/>
+		        	<span id="search_by_label">Buscar por</span>
+		        	<select id="search_by" data-width="93%" class="pull-right selectpicker">
 		                <option value="1">Código</option>
 		                <option value="2">Descripción</option>
 		        	</select>
-		        	<p>ESTÁNDAR</p>
-		        	<select id="standars" data-width="93%">
+		        	<br/><br/>
+		        	<span>Estándar</span>
+		        	<select id="standars" data-width="93%" class="pull-right selectpicker">
 		                <option value="1">NANDINA</option>
 		                <option value="2">CGCE</option>
 		                <option value="3">CUII3</option>
 		                <option value="4">CPC</option>
 		                <option value="5">CUODE</option>
 		        	</select>
-		        	<p>PERIODICIDAD</p>
-		        	<select id="period" data-width="93%">
+		        	<br/><br/>
+		        	<span>Periodicidad</span>
+		        	<select id="period" data-width="93%" class="pull-right selectpicker">
 		        		<option value="1">ANUAL</option>
 		        		<option value="2">MENSUAL</option>
 		        		<option value="3">SEMESTRAL</option>
 		        		<option value="4">TRIMESTRAL</option>
 		        	</select>
-					<!--p>DESDE</p>
-					<div class="form-group">
-						<div class='input-group date' id='datetimepicker5'>
-							<input type='text' class="form-control" data-date-format="YYYY/MM/DD"/>
-							<span class="input-group-addon">
-								<span class="glyphicon glyphicon-calendar"></span>
-							</span>
-						</div>
-					</div>
-					<p>HASTA</p>
-					<div class="form-group">
-						<div class='input-group date' id='datetimepicker5'>
-							<input type='text' class="form-control" data-date-format="YYYY/MM/DD"/>
-							<span class="input-group-addon">
-								<span class="glyphicon glyphicon-calendar"></span>
-							</span>
-						</div>
-					</div-->
-					<p>NIVEL DE AGREGACIÓN</p>
-					<input type="text" id="txt_agregacion">
-					<p>PATRÓN</p>
-					<input type="text" id="txt_patron">
-					<br/>
+		        	<br/><br/>
+		        	<span>Desde</span>
+		        	<input type="text" id="txt_desde" class="pull-right">
+		        	<br/><br/>
+					<span>Hasta</span>
+					<input type="text" id="txt_hasta" class="pull-right">
+					<br/><br/>
+					<span> Nivel de agregación</span>
+					<!--input type="text" id="txt_agregacion" class="pull-right"-->
+					<input type="number" name="agregacion" min="0" max="100" class="pull-right" >
+					<br/><br/>
+					<span>Patrón</span>
+					<input type="text" id="txt_patron" class="pull-right">
+					<br/><br/>
 					<div id="pais">
-						<label><input name="checkbox" id="checkbox" type='checkbox'>Separar por país</label>
+						<label><input name="checkbox" id="checkbox" type='checkbox'>  Separar por país</label>
 					</div>
-					<br/>
+					<br/><br/>
 					<input type="button" class="btn btn-primary" value="BUSCAR" id="btn_search">
 	          	</div>
 	          </div>
