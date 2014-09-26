@@ -80,8 +80,15 @@ $('.btn-calc, #a-resultados').click( function(){
                                       'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd, 'disintegrations[]': selected},
     function(data){
         if(data.length>0){
+          startTime = new Date();
           table(data);
+          endTime = new Date();
+          console.log('Tiempo de tabla de datos: '+((endTime - startTime)*0.001)+' sec');
+
+          startTime = new Date();
           graphs(data);
+          endTime = new Date();
+          console.log('Tiempo de graficos: '+((endTime - startTime)*0.001)+' sec');
           $('#content-result').show();
         }else{
           $('#content-not-result').show();
@@ -233,7 +240,7 @@ $("#btnExport").click(function(e){
     ,returnUri: true
     ,datatype: $datatype.Table
   });
-  $(this).attr('download', excel_filename_download+'.xls').attr('href', uri).attr('target', '_blank');
+  $(this).attr('download', excel_filename_download+'.xlsx').attr('href', uri).attr('target', '_blank');
 });
 
 function table(data){
@@ -266,13 +273,15 @@ function table(data){
     $('#periodo').empty()
 
     $('#titulo').append('<th></th>');
-    $('#titulo_secundario').append('<th class="text-center">Periodo</th>');
+    $('#titulo_secundario').append('<th class="text-center" rowspan="2">Periodo</th>');
 
     for(i=0; i<nombres_desagre.length; i++){
-        var th_one = '<th colspan="3" class="text-center">'+nombres_desagre[i]+'</th>';
-        var th_two = '<th class="text-center">'+'N'+'</th>'+'<th class="text-center">'+'Indic.'+'</th>'+'<th class="text-center">'+'Std.'+'</th>';
+        var th_one = '<th colspan="4" class="text-center">'+nombres_desagre[i]+'</th>';
+        var th_two = '<th class="text-center" rowspan="2">'+'N'+'</th>'+'<th class="text-center" rowspan="2">'+'Indic.'+'</th>'+'<th class="text-center" colspan="2">'+'Intervalo'+'</th>';
+        var th_three = '<th class="text-center">'+'Limite inferior'+'</th>'+'<th class="text-center">'+'Limite superior'+'</th>';
         $('#titulo').append(th_one);
         $('#titulo_secundario').append(th_two);
+        $('#titulo_terciario').append(th_three);
     }
 
     for(i=0; i<tam_periodos; i++){
@@ -284,12 +293,14 @@ function table(data){
             }else{
                 $('#periodo tr:last-child td:last-child').after('<td>'+data[i][2][j]+'</td>');
             }
-            for(k=0; k<2; k++){
+            for(k=0; k<4; k++){
+              if(k != 1){
                 if(data[i][2][j] == 0){
                     $('#periodo tr:last-child td:last-child').after('<td>   </td>');
                 }else{
                     $('#periodo tr:last-child td:last-child').after('<td>'+data[i][3][j][k].toFixed(6)+'</td>');
                 }
+              }
             }
         }
     }
@@ -446,6 +457,7 @@ function graphs(data){
               renderTo: graph_render,
               type: 'spline',
               width: graph_width,
+              animation: false,
           },
           title: {
               text: graph_title,
@@ -489,10 +501,13 @@ function graphs(data){
               enabled: false
           },
           tooltip: {
+              animation: false,
               enabled: false
           },
           plotOptions: {
               series: {
+                  shadow: false,
+                  animation: false,
                   marker: {
                       enabled: false
                   },

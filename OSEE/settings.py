@@ -36,6 +36,8 @@ INTERNAL_IPS = ('127.0.0.1',)
 GRAPPELLI_ADMIN_HEADLINE = "Observatorio Ecónomico - Social del Ecuador"
 GRAPPELLI_ADMIN_TITLE = "Observatorio Ecónomico - Social del Ecuador"
 
+# DEBUG_TOOLBAR_PATCH_SETTINGS = False
+
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
     "django.contrib.auth.context_processors.auth",
@@ -62,17 +64,19 @@ INSTALLED_APPS = (
     'resources',
     'staff',
     'import_export',
+    # 'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 ROOT_URLCONF = 'OSEE.urls'
@@ -120,17 +124,17 @@ STATIC_ROOT = ''
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL='/media/'
 
-CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': 'localhost:6379',#/var/run/redis/redis.sock
-        'OPTIONS': {
-            'DB': 1,
-            'PARSER_CLASS': 'redis.connection.HiredisParser'
-        }
-    },
-}
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'redis_cache.RedisCache',
+#         'LOCATION': 'localhost:6379',#/var/run/redis/redis.sock
+#         'OPTIONS': {
+#             'DB': 1,
+#             'PARSER_CLASS': 'redis.connection.HiredisParser'
+#         }
+#     },
+# }
+# SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 #Email setup
 EMAIL_HOST = EMAIL_HOST
