@@ -65,6 +65,7 @@ INSTALLED_APPS = (
     'staff',
     'import_export',
     # 'debug_toolbar',
+    'comercio',
 )
 
 MIDDLEWARE_CLASSES = (

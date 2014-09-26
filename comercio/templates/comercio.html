@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% load apptags %}
+
+{% load static from staticfiles %}
+
+{% block title %}Comercio Exterior{% endblock %}
+
+{% block extraCSS %}
+    
+{% endblock %}
+
+{% block content %}
+    <div class="content-page-2">
+        <b id="title-content-page">Comercio Exterior</b>
+        <hr class="pull-left" id="separator-content-page">
+        <div id="main-panel" class="panel panel-default">
+	        <div class="tabbable">
+	          <ul class="nav nav-tabs" id="myTabs">
+	            <li class="active" id="1"><a href="#pane" data-toggle="tab">EXPORTACIONES</a></li>
+	            <li id="2"><a href="#pane" data-toggle="tab">IMPORTACIONES</a></li>
+	          </ul>
+	          <div class="tab-content" id="datos">
+	          	<div class="tab-pane active" id="pane">
+	          		<span>Escoja una opción</span>
+					<select id="options" data-width="93%" class="pull-right selectpicker">
+		                <option value="1">Código/Subpartida</option>
+		                <option value="2">Por País</option>
+		        	</select>
+		        	<br/><br/>
+		        	<span id="search_by_label">Buscar por</span>
+		        	<select id="search_by" data-width="93%" class="pull-right selectpicker">
+		                <option value="1">Código</option>
+		                <option value="2">Descripción</option>
+		        	</select>
+		        	<br/><br/>
+		        	<span>Estándar</span>
+		        	<select id="standars" data-width="93%" class="pull-right selectpicker">
+		                <option value="1">NANDINA</option>
+		                <option value="2">CGCE</option>
+		                <option value="3">CUII3</option>
+		                <option value="4">CPC</option>
+		                <option value="5">CUODE</option>
+		        	</select>
+		        	<br/><br/>
+		        	<span>Periodicidad</span>
+		        	<select id="period" data-width="93%" class="pull-right selectpicker">
+		        		<option value="1">ANUAL</option>
+		        		<option value="2">MENSUAL</option>
+		        		<option value="3">SEMESTRAL</option>
+		        		<option value="4">TRIMESTRAL</option>
+		        	</select>
+		        	<br/><br/>
+		        	<span>Desde</span>
+		        	<input type="text" id="txt_desde" class="pull-right">
+		        	<br/><br/>
+					<span>Hasta</span>
+					<input type="text" id="txt_hasta" class="pull-right">
+					<br/><br/>
+					<span> Nivel de agregación</span>
+					<!--input type="text" id="txt_agregacion" class="pull-right"-->
+					<input type="number" name="agregacion" min="0" max="100" class="pull-right" >
+					<br/><br/>
+					<span>Patrón</span>
+					<input type="text" id="txt_patron" class="pull-right">
+					<br/><br/>
+					<div id="pais">
+						<label><input name="checkbox" id="checkbox" type='checkbox'>  Separar por país</label>
+					</div>
+					<br/><br/>
+					<input type="button" class="btn btn-primary" value="BUSCAR" id="btn_search">
+	          	</div>
+	          </div>
+	        </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extraScripts %}
+<script type="text/javascript" src="{% static "js/bootstrap-datepicker.js" %}" ></script>
+<script>
+	/*$(function () {
+		$('#datetimepicker5').datetimepicker({
+			pickTime: false
+		});
+	});*/
+</script>
+    
+{% endblock %}
+
