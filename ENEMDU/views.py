@@ -30,7 +30,7 @@ def insert_data_enemdu(request):
             #Luego de haber subido el archivo se corre el load_files.sh
             #subprocess.call('/home/patu/Downloads/ObservatorioCIEC-master/load_files.sh')
             #subprocess.call('/home/patu/Downloads/ObservatorioCIEC-master/load_files')
-            subprocess.Popen(['/home/patu/Downloads/ObservatorioCIEC-master/load_files',dbtable])
+            subprocess.Popen(['/home/jaruban/ObservatorioCIEC/load_files',dbtable])
             upload_success = True
         else:
             upload_form = UploadFileForm()

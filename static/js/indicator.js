@@ -109,7 +109,6 @@ $('.btn-calc, #a-resultados').click( function(){
     var trim_2 = 5;
     var cont = 0;
 
-    console.log(yearEnd+yearStart);
     for( i=parseInt(yearStart); i<(parseInt(yearEnd)+1); i++){
       if( i == parseInt(yearEnd)){
         trim_2 = parseInt(trimEnd)+1;
@@ -122,7 +121,7 @@ $('.btn-calc, #a-resultados').click( function(){
       }
     }
 
-    timeData = cont*6;
+    timeData = cont*8;
     console.log(timeData);
     var progress = $(".loading-progress").progressTimer({
       timeLimit: timeData,

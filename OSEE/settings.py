@@ -63,7 +63,6 @@ INSTALLED_APPS = (
     'registers',
     'resources',
     'staff',
-    'import_export',
     # 'debug_toolbar',
     'comercio',
 )
