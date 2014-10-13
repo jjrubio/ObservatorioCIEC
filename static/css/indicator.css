@@ -123,6 +123,11 @@
   margin-left: 25px;
 }
 
+.loading-progress{
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
 .graph{
   min-width:800px;
   height: 400px;

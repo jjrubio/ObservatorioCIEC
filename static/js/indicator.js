@@ -56,6 +56,35 @@ $('.btn-back, #a-parametros').click( function(){
     $('#parametros').collapse('show');
 });
 
+// function makeRequest() {
+//   var url = '/result/';
+//   var onLoadHandler = function(event){
+//      // Parse the JSON and build a list.
+//   }
+//   var onTimeOutHandler = function(event){
+//     var content = document.getElementById('results'),
+//       p = document.createElement('p'),
+//       msg = document.createTextNode('Just a little bit longer!');
+//       p.appendChild(msg);
+//       content.appendChild(p);
+
+//       // Restarts the request.
+//       event.target.open('GET',url);
+
+//       // Optionally, set a longer timeout to override the original.
+//       event.target.timeout = 6000;
+//       event.target.send();
+//   }
+//   var xhr = new XMLHttpRequest();
+//   xhr.open('GET',url);
+//   xhr.timeout = 3000;
+//   xhr.onload = onLoadHandler;
+//   xhr.ontimeout = onTimeOutHandler;
+//   xhr.send();
+// }
+
+// window.addEventListener('DOMContentLoaded', makeRequest, false);
+
 $('.btn-calc, #a-resultados').click( function(){
     $('#resultado').collapse('show');
     $('#loading-result').show();
@@ -76,25 +105,53 @@ $('.btn-calc, #a-resultados').click( function(){
     var yearEnd = $('#yearEnd').val();
     var trimEnd = $('#trimEnd').val();
 
+    var trim_1 = parseInt(trimStart);
+    var trim_2 = 5;
+    var cont = 0;
+
+    console.log(yearEnd+yearStart);
+    for( i=parseInt(yearStart); i<(parseInt(yearEnd)+1); i++){
+      if( i == parseInt(yearEnd)){
+        trim_2 = parseInt(trimEnd)+1;
+      }
+      for( j=trim_1; j<trim_2; j++){
+        cont++;
+      }
+      if( j == 5){
+        trim_1 = 1;
+      }
+    }
+
+    timeData = cont*6;
+    console.log(timeData);
+    var progress = $(".loading-progress").progressTimer({
+      timeLimit: timeData,
+      baseStyle: 'progress-bar-warning',
+      warningStyle: '',
+      completeStyle: 'progress-bar-success',
+      onFinish: function () {}
+    });
+
     $.getJSON('/result/', {'indicator': indicator, 'represent': represent, 'method': method, 'yearStart': yearStart,
                                       'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd, 'disintegrations[]': selected},
     function(data){
+
         if(data.length>0){
-          startTime = new Date();
-          table(data);
-          endTime = new Date();
-          console.log('Tiempo de tabla de datos: '+((endTime - startTime)*0.001)+' sec');
+            startTime = new Date();
+            table(data);
+            endTime = new Date();
+            console.log('Tiempo de tabla de datos: '+((endTime - startTime)*0.001)+' sec');
 
-          startTime = new Date();
-          graphs(data);
-          endTime = new Date();
-          console.log('Tiempo de graficos: '+((endTime - startTime)*0.001)+' sec');
-          $('#content-result').show();
-        }else{
-          $('#content-not-result').show();
-        }
-        $('#loading-result').hide();
-
+            startTime = new Date();
+            graphs(data);
+            endTime = new Date();
+            console.log('Tiempo de graficos: '+((endTime - startTime)*0.001)+' sec');
+            $('#content-result').show();
+          }else{
+            $('#content-not-result').show();
+          }
+          $('#loading-result').hide();
+          progress.progressTimer('complete');
     });
 });
 

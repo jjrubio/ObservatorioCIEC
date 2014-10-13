@@ -95,6 +95,7 @@ def indicators_detail(cat_id, subcat_id, ind_id):
     message.append(indicatorSelectArray)
     return message
 
+
 @timeit
 def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     permiso = True
@@ -120,6 +121,7 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     template = "indicator_calc.html"
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
+
 @timeit
 def calc_result(request):
     indicator = request.GET['indicator']
@@ -130,6 +132,14 @@ def calc_result(request):
     yearEnd = request.GET['yearEnd']
     trimEnd = request.GET['trimEnd']
     disintegrations = request.GET.getlist('disintegrations[]')
+    # indicator = 1
+    # represent = 2
+    # method = 1
+    # yearStart = 2003
+    # trimStart = 4
+    # yearEnd = 2007
+    # trimEnd = 1
+    # disintegrations = []
 
     indicator_int = int(indicator)
     represent_int = int(represent)
@@ -161,75 +171,75 @@ def calc_result(request):
         cache_value = '%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int)
         data_ENEMDU = data_ENEMDU.objects.all()
 
-    data_result = cache.get(cache_value)
-    if data_result is None:
+    # data_result = cache.get(cache_value)
+    # if data_result is None:
 
-        data_result = []
-        ban = 0
-        trim_1 = trimStart_int
-        trim_2 = 5
+    data_result = []
+    ban = 0
+    trim_1 = trimStart_int
+    trim_2 = 5
 
-        for i in range(yearStart_int, yearEnd_int+1):
-            if i == yearEnd_int:
-                trim_2 = trimEnd_int+1
-            for j in range(trim_1, trim_2):
-                represent_database = str(Structure.objects.get(anio=i, trim=j))
-                if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
-                    or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
+    for i in range(yearStart_int, yearEnd_int+1):
+        if i == yearEnd_int:
+            trim_2 = trimEnd_int+1
+        for j in range(trim_1, trim_2):
+            represent_database = str(Structure.objects.get(anio=i, trim=j))
+            if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
+                or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
 
-                    print i, ' - ',j
+                print i,j
 
-                    data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
-                    column_1 = get_column_1(data_byWhere, method_int, indicator_int)
-                    columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
-                    column_2 = columns_2_3[0]
-                    column_3 = columns_2_3[1]
-                    column_dimensions = columns_2_3[2]
-                    column_N = columns_2_3[6]
-                    column_4 = get_column_4(data_byWhere)
+                data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
+                column_1 = get_column_1(data_byWhere, method_int, indicator_int)
+                columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
+                column_2 = columns_2_3[0]
+                column_3 = columns_2_3[1]
+                column_dimensions = columns_2_3[2]
+                column_N = columns_2_3[6]
+                column_4 = get_column_4(data_byWhere)
 
-                    models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
-                    models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
-                    data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
-                    data_result.append(data_result_by_period)
+                models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
+                models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
+                data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
+                data_result.append(data_result_by_period)
 
-                    if (ban == 0):
-                        column_titles = columns_2_3[3]
-                        column_name_d1 = column_titles[0]
-                        column_name_d2 = column_titles[1]
-                        column_types_d1 = columns_2_3[4]
-                        column_types_d2 = columns_2_3[5]
+                if (ban == 0):
+                    column_titles = columns_2_3[3]
+                    column_name_d1 = column_titles[0]
+                    column_name_d2 = column_titles[1]
+                    column_types_d1 = columns_2_3[4]
+                    column_types_d2 = columns_2_3[5]
 
-                        disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
-                        if(column_dimensions[0] == 0):
-                            title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
-                        elif(column_dimensions[1] == 0):
-                            title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
-                        else:
-                            title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
+                    disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
+                    if(column_dimensions[0] == 0):
+                        title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                    elif(column_dimensions[1] == 0):
+                        title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                    else:
+                        title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
 
-                        if(yearStart_int == yearEnd_int):
-                            years_title = str(yearStart_int)
-                        else:
-                            years_title = str(yearStart_int)+' - '+str(yearEnd_int)
+                    if(yearStart_int == yearEnd_int):
+                        years_title = str(yearStart_int)
+                    else:
+                        years_title = str(yearStart_int)+' - '+str(yearEnd_int)
 
-                        unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
+                    unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
 
-                        ban = 1
+                    ban = 1
 
-                if j == 4:
-                    trim_1 = 1
+            if j == 4:
+                trim_1 = 1
 
-        if ban == 1:
-            data_result.append(title)
-            data_result.append(years_title)
-            data_result.append(unit)
-            data_result.append(column_dimensions)
-            data_result.append(column_name_d1)
-            data_result.append(column_name_d2)
-            data_result.append(column_types_d1)
-            data_result.append(column_types_d2)
-            cache.set(cache_value, data_result, None)
+    if ban == 1:
+        data_result.append(title)
+        data_result.append(years_title)
+        data_result.append(unit)
+        data_result.append(column_dimensions)
+        data_result.append(column_name_d1)
+        data_result.append(column_name_d2)
+        data_result.append(column_types_d1)
+        data_result.append(column_types_d2)
+            # cache.set(cache_value, data_result, None)
 
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
@@ -351,6 +361,7 @@ def get_column_1(data, method_int, indicator_int):
     column_1_array = np.array(list(column_1), 'float')
     return column_1_array
 
+
 @timeit
 def get_column_2_3(data, disintegrations, represent_int):
     disintegrations_size = len(disintegrations)
@@ -373,8 +384,11 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
 
-        for i in range(1, len(filter_column_2_by)+1):
-            column_2_array[i-1] = [1 if x == column_2_aux[i-1] else 0 for x in types_option_1]
+        for i in range(0, len(filter_column_2_by)):
+            if column_2_aux[i] == None:
+                pass
+            else:
+                column_2_array[i] = [1 if x == column_2_aux[i] else 0 for x in types_option_1]
 
         column_3_array = np.array([])
         column_dimensions = [len(types_option_1), 0]
@@ -387,7 +401,7 @@ def get_column_2_3(data, disintegrations, represent_int):
 
         column_N = []
         for option in types_option_1:
-            sumaFexp = int(math.ceil(sum(data.filter(**{option_1:option}).values_list('fexp', flat=True))))
+            sumaFexp = int(math.ceil(sum(data.filter(**{option_1:option}).exclude(**{option_1:None}).values_list('fexp', flat=True))))
             column_N.append(sumaFexp)
 
     elif disintegrations_size == 2:
@@ -403,14 +417,20 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_2_array = np.array([], 'float')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
-        for i in range(1, len(filter_column_2_by)+1):
-            column_2_array[i-1] = [1 if x == column_2_aux[i-1] else 0 for x in types_option_1]
+        for i in range(0, len(filter_column_2_by)):
+            if column_2_aux[i] == None:
+                pass
+            else:
+                column_2_array[i] = [1 if x == column_2_aux[i] else 0 for x in types_option_1]
 
         column_3_array = np.array([], 'float')
         column_3_array = np.zeros((len(filter_column_3_by),len(types_option_2)))
         column_3_aux = list(filter_column_3_by)
-        for i in range(1, len(filter_column_3_by)+1):
-            column_3_array[i-1] = [1 if x == column_3_aux[i-1] else 0 for x in types_option_2]
+        for i in range(0, len(filter_column_3_by)):
+            if column_2_aux[i] == None:
+                pass
+            else:
+                column_3_array[i] = [1 if x == column_3_aux[i] else 0 for x in types_option_2]
 
         column_dimensions = [len(types_option_1), len(types_option_2)]
         title_1 = Disintegration.objects.get(id=disintegrations[0]).name.encode('utf-8')
@@ -424,7 +444,7 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_N = []
         for optionA in types_option_1:
             for optionB in types_option_2:
-                sumaFexp = int(math.ceil(sum(data.filter(**{option_1:optionA}).filter(**{option_2:optionB}).values_list('fexp', flat=True))))
+                sumaFexp = int(math.ceil(sum(data.filter(**{option_1:optionA}).filter(**{option_2:optionB}).exclude(**{option_1:None}).exclude(**{option_2:None}).values_list('fexp', flat=True))))
                 column_N.append(sumaFexp)
 
         column_types_d1 = []
@@ -437,11 +457,13 @@ def get_column_2_3(data, disintegrations, represent_int):
     columns = [column_2_array, column_3_array, column_dimensions, column_titles, column_types_d1, column_types_d2, column_N]
     return columns
 
+
 @timeit
 def get_column_4(data):
     column_4 = data.values_list("fexp", flat=True)
     column_4_array = np.array(list(column_4), 'float')
     return column_4_array
+
 
 @timeit
 def get_area_name(represent_int):
@@ -453,6 +475,7 @@ def get_area_name(represent_int):
         area = 'Rural'
     return area
 
+
 @timeit
 def get_filter_area(represent_int):
     if represent_int == 1:
@@ -462,6 +485,7 @@ def get_filter_area(represent_int):
     else:
         area = {'area': 'Rural'}
     return area
+
 
 @timeit
 def list_by_no_denied(request):
@@ -548,6 +572,7 @@ def list_by_no_denied(request):
         data = serializers.serialize('json', result)
     return HttpResponse(data, content_type='application/json')
 
+
 @timeit
 def get_column_name_option(id_desagregation):
     if id_desagregation == 1:
@@ -581,6 +606,7 @@ def get_column_name_option(id_desagregation):
     else:
         result = ''
     return result
+
 
 @timeit
 def get_filter():
@@ -638,6 +664,7 @@ def get_filter():
     }
     return data
 
+
 @timeit
 def indicador_filtro(request):
     id_indicador = request.GET['id_indicator']
@@ -669,6 +696,7 @@ def indicador_filtro(request):
 
     return HttpResponse(data, content_type='application/json')
 
+
 @timeit
 def indicador_desagregacion(datos,ids):
     result = []
@@ -682,12 +710,14 @@ def indicador_desagregacion(datos,ids):
 
     return disin
 
+
 @timeit
 def list_desagregation(request):
     disintegrations = Disintegration.objects.all()
     data = serializers.serialize('json', disintegrations)
 
     return HttpResponse(data, content_type='application/json')
+
 
 @timeit
 def get_data_by_represent(data_ENEMDU, represent_int):
@@ -698,6 +728,7 @@ def get_data_by_represent(data_ENEMDU, represent_int):
     else:
         data = data_ENEMDU.objects.all()
     return data
+
 
 @timeit
 def get_type_by_represent(disintegrations_pos, represent_int):
@@ -712,12 +743,14 @@ def get_type_by_represent(disintegrations_pos, represent_int):
         types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).values_list('name', flat=True)
     return types_option
 
+
 @timeit
 def get_last_full_year(request):
     year = Data_from_2007_2.objects.values_list('anio', 'trimestre').distinct().last()
     last_full_year = [year[0], year[1]]
     data = json.dumps(last_full_year)
     return HttpResponse(data, content_type='application/json')
+
 
 @timeit
 def get_method_option(indicator):
@@ -732,6 +765,7 @@ def get_method_option(indicator):
         method_option = 3
     return method_option
 
+
 @timeit
 def get_years_list():
     method_1_years = Data_from_2003_4.objects.values_list('anio').distinct()
@@ -742,25 +776,73 @@ def get_years_list():
     return all_years
 
 
-def generar_cache(request):
+def indicator_filter_list(id):
+    if id == 1 or id == 2 or id == 3 or id == 4 or id == 5 or id == 6 or id == 7 or id == 8 or id == 9 or id == 10 or id == 11 or id == 12 or id == 13 or id == 14 or id == 15 or id == 16 or id == 17 or id == 18 or id == 19 or id == 20 or id == 21 or id == 22 or id == 23 or id == 24 or id == 25 or id == 26 or id == 27 or id == 28 or id == 29:
+        disintegrations = [1, 2, 3, 4, 5, 6]
+    elif id == 30 or id == 31:
+        disintegrations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    elif id == 32:
+        disintegrations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
+    elif id == 33 or id == 34 or id == 35 or id == 36 or id == 37 or id == 38:
+        disintegrations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12]
+    elif id == 39 or id == 40 or id == 41:
+        disintegrations = [1, 2, 3, 4, 5, 11, 12, 13, 14]
+    elif id == 42:
+        disintegrations = [1, 3]
+    elif id == 43:
+        disintegrations = [1, 2, 3, 4, 5, 6]
+    elif id == 44 or id == 45 or id == 46 or id == 47 or id == 48 or id == 49:
+        disintegrations = [1, 2, 3, 4, 5, 6, 12]
+    return disintegrations
+
+
+def disintegration_denied_list(dis):
+    if dis == 1 or dis == 3:
+        denied = []
+    elif dis == 2:
+        denied = [4, 5, 6, 8, 10, 14]
+    elif dis == 4:
+        denied = [2, 5, 6, 8, 10, 14]
+    elif dis == 5:
+        denied = [2, 4, 6, 8, 9, 10, 14]
+    elif dis == 6:
+        denied = [2, 4, 5, 8, 9, 10, 14]
+    elif dis == 7:
+        denied = [8, 11, 13, 14]
+    elif dis == 8:
+        denied = [2, 4, 5, 6, 7, 9, 10, 11, 12, 14]
+    elif dis == 9:
+        denied = [5, 6, 8, 10, 11, 13, 14]
+    elif dis == 10:
+        denied = [2, 4, 5, 6, 8, 9, 11, 12, 14]
+    elif dis == 11:
+        denied = [7, 8, 9, 10, 12, 13, 14]
+    elif dis == 12:
+        denied = [8, 10, 11, 13, 14]
+    elif dis == 13:
+        denied = [7, 9, 11, 12, 14]
+    elif dis == 14:
+        denied = [2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+    return denied
+
+
+def calc_data(ind, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value):
     data_result = []
     ban = 0
     trim_1 = trimStart_int
     trim_2 = 5
 
-    for i in range(yearStart_int, yearEnd_int+1):
+    for i in range(yearStart_aux, yearEnd_aux+1):
         if i == yearEnd_int:
-            trim_2 = trimEnd_int+1
-        for j in range(trim_1, trim_2):
+            trimEnd_aux = trimEnd_int + 1
+        for j in range(trimStart_aux, trimEnd_aux):
             represent_database = str(Structure.objects.get(anio=i, trim=j))
-            if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
-                or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
-
-                print i, ' - ',j
-
-                data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
-                column_1 = get_column_1(data_byWhere, method_int, indicator_int)
-                columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
+            if ((represent == 1 and represent_database == 'Nacional') or (represent == 2 and represent_database == 'Nacional')
+                or (represent == 2 and represent_database == 'Urbana') or (represent == 3 and represent_database == 'Nacional')):
+                print i,j
+                data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent)).filter(**get_filter()[ind][2]).exclude(**get_filter()[ind][3]).order_by('fexp')
+                column_1 = get_column_1(data_byWhere, method, ind)
+                columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent)
                 column_2 = columns_2_3[0]
                 column_3 = columns_2_3[1]
                 column_dimensions = columns_2_3[2]
@@ -779,20 +861,20 @@ def generar_cache(request):
                     column_types_d1 = columns_2_3[4]
                     column_types_d2 = columns_2_3[5]
 
-                    disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
+                    disintegration = (Indicator.objects.get(id=ind).name).encode('utf-8')
                     if(column_dimensions[0] == 0):
-                        title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                        title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent)
                     elif(column_dimensions[1] == 0):
-                        title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                        title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent)
                     else:
-                        title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
+                        title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent)
 
                     if(yearStart_int == yearEnd_int):
                         years_title = str(yearStart_int)
                     else:
                         years_title = str(yearStart_int)+' - '+str(yearEnd_int)
 
-                    unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
+                    unit = Indicator.objects.get(id = ind).unit.encode('utf-8')
 
                     ban = 1
 
@@ -809,3 +891,110 @@ def generar_cache(request):
         data_result.append(column_types_d1)
         data_result.append(column_types_d2)
         cache.set(cache_value, data_result, None)
+    return 1
+
+
+def generar_cache(request):
+    data_result = []
+    indicators = Indicator.objects.all()
+    represent = 2
+    last_full_year = Data_from_2007_2.objects.values_list('anio', 'trimestre').distinct().last()
+    numqueries = 0
+
+    for ind in indicators:
+        for represent in xrange(1, 4):
+            for method in xrange(1, 2):
+                if(method == 1):
+                    if(ind.id == 8 or ind.id == 13 or ind.id == 20 or ind.id == 21 or ind.id == 33 or ind.id == 34 or ind.id == 35 or ind.id == 36 or ind.id == 37 or ind.id == 38):
+                        break
+                    data_ENEMDU_aux = Data_from_2003_4
+                    yearStart_int = 2004
+                    trimStart_int = 1
+                    yearEnd_int = 2004
+                    trimEnd_int = 1
+                # else:
+                #     if(ind.id == 14 or ind.id == 15 or ind.id == 16 or ind.id == 17 or ind.id == 18):
+                #         break
+                #     data_ENEMDU_aux = Data_from_2007_2
+                #     yearStart_int = 2007
+                #     trimStart_int = 2
+                #     yearEnd_int = 2007
+                #     trimEnd_int = 2
+                    # yearEnd_int = last_full_year[0]
+                    # trimEnd_int = last_full_year[1]
+
+                trimStart_aux1 = trimStart_int
+                trimEnd_aux1 = trimStart_int
+
+                for yearStart_aux in xrange(yearStart_int, yearEnd_int+1):
+
+                    if yearStart_aux == yearEnd_int:
+                        trimStart_aux2 = trimEnd_int + 1
+                    else:
+                        trimStart_aux2 = 5
+
+                    for trimStart_aux in xrange(trimStart_aux1, trimStart_aux2):
+
+                        trimEnd_aux1 = trimStart_aux
+
+                        for yearEnd_aux in xrange(yearStart_aux, yearEnd_int+1):
+
+                            if yearEnd_aux == yearEnd_int:
+                                trimEnd_aux2 = trimEnd_int + 1
+                            else:
+                                trimEnd_aux2 = 5
+
+                            for trimEnd_aux in xrange(trimEnd_aux1, trimEnd_aux2):
+
+                                for num_disintegration in xrange(0, 3):
+
+                                    if num_disintegration == 0:
+                                        numqueries += 1
+                                        disintegrations = []
+                                        cache_value = '%s_%s_%s_%s_%s_%s_%s'%(ind.id, represent, method, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux)
+                                        data_ENEMDU = data_ENEMDU_aux.objects.all()
+                                        if data_result is None:
+                                            calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
+                                        print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations
+
+                                    elif num_disintegration == 1:
+                                        for dis in indicator_filter_list(ind.id):
+                                            numqueries += 1
+                                            disintegrations = [dis]
+                                            cache_value = '%s_%s_%s_%s_%s_%s_%s_%s'%(ind.id, represent, method, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations[0])
+                                            if(int(disintegrations[0]) == 2):
+                                                data_ENEMDU = get_data_by_represent(data_ENEMDU_aux, represent)
+                                            else:
+                                                data_ENEMDU = data_ENEMDU_aux.objects.all()
+                                            data_result = cache.get(cache_value)
+                                            if data_result is None:
+                                                calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
+                                            print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, dis, disintegrations
+
+                                    elif num_disintegration == 2:
+                                        for dis1 in indicator_filter_list(ind.id):
+                                            disintegration_accept_list = set(indicator_filter_list(ind.id)) - set(disintegration_denied_list(dis1)) - set([dis1])
+                                            for dis2 in disintegration_accept_list:
+                                                numqueries += 1
+                                                disintegrations = [dis1, dis2]
+                                                cache_value = '%s_%s_%s_%s_%s_%s_%s_%s_%s'%(ind.id, represent, method, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations[0], disintegrations[1])
+                                                if(int(disintegrations[0]) == 2 or int(disintegrations[1]) == 2):
+                                                    data_ENEMDU = get_data_by_represent(data_ENEMDU_aux, represent)
+                                                else:
+                                                    data_ENEMDU = data_ENEMDU_aux.objects.all()
+                                                data_result = cache.get(cache_value)
+                                                if data_result is None:
+                                                    calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
+                                                print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, dis1, dis2, disintegration_accept_list
+
+
+
+
+                            if trimEnd_aux == 4:
+                                trimEnd_aux1 = 1
+                    if trimStart_aux == 4:
+                        trimStart_aux1 = 1
+    print numqueries
+
+    message = json.dumps(data_result, cls=PythonObjectEncoder)
+    return HttpResponse(message, content_type='application/json')
