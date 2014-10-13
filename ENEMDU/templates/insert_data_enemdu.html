@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load apptags %}
+
+{% load static from staticfiles %}
+
+{% block title %}Upload file csv{% endblock %}
+
+{% block extraCSS %}
+    
+{% endblock %}
+
+{% block content %}
+    <div class="content-page-2">
+        {% if upload_success %}
+            <p>Subida de datos exitoso!</p>
+            <p>Para subir otro archivo, por favor dar clic <a href="/subida_csv/">aquí</a></p>
+        {% else %}
+            <b id="title-content-page">Subir archivo</b>
+            <hr class="pull-left" id="separator-content-page">
+            <form id="user_form" method="post" action="subida_csv/" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{upload_form.as_p}}
+                <input type="submit" value="Cargar archivo a tabla" />
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block extraScripts %}
+
+{% endblock %}

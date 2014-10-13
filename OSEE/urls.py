@@ -36,4 +36,5 @@ urlpatterns = patterns('',
     url(r'^result/', 'indicators.views.calc_result', name='result'),
     url(r'^indicadorFiltro/', 'indicators.views.indicador_filtro', name='indicador_filtro'),
     url(r'^generar_cache/', 'indicators.views.generar_cache', name='cache'),
+    url(r'^subida_csv/', 'ENEMDU.views.insert_data_enemdu', name='insert_data_enemdu'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
