@@ -43,12 +43,13 @@
 }
 #main-panel .panel-body .btn-next,
 #main-panel .panel-body .btn-calc {
-  margin-top: 100px;
+  margin-top: 30px;
   margin-bottom: 30px;
   background-color: #428bca;
   border-color: #357ebd;
   color: #fff;
 }
+
 #main-panel .panel-body .btn-next:hover,
 #main-panel .panel-body .btn-calc:hover {
   background-color: #426bca;

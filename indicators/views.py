@@ -96,7 +96,7 @@ def indicators_detail(cat_id, subcat_id, ind_id):
     return message
 
 
-@timeit
+# @timeit
 def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     permiso = True
     #if request.session.get('last_visit'):
@@ -122,7 +122,7 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
 
-@timeit
+# @timeit
 def calc_result(request):
     indicator = request.GET['indicator']
     represent = request.GET['represent']
@@ -131,6 +131,7 @@ def calc_result(request):
     trimStart = request.GET['trimStart']
     yearEnd = request.GET['yearEnd']
     trimEnd = request.GET['trimEnd']
+    confidence_level = request.GET['confidence_level']
     disintegrations = request.GET.getlist('disintegrations[]')
     # indicator = 1
     # represent = 2
@@ -148,6 +149,8 @@ def calc_result(request):
     trimStart_int = int(trimStart)
     yearEnd_int = int(yearEnd)
     trimEnd_int = int(trimEnd)
+    confidence_level_int = float(confidence_level)/100
+    # print confidence_level_int
 
     if method_int == 1:
         data_ENEMDU = Data_from_2003_4
@@ -186,8 +189,7 @@ def calc_result(request):
             represent_database = str(Structure.objects.get(anio=i, trim=j))
             if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
                 or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
-
-                print i,j
+                # print i,j
 
                 data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
                 column_1 = get_column_1(data_byWhere, method_int, indicator_int)
@@ -198,7 +200,7 @@ def calc_result(request):
                 column_N = columns_2_3[6]
                 column_4 = get_column_4(data_byWhere)
 
-                models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
+                models_by_period = modelo_ind(column_1,column_2,column_3,column_4, confidence_level_int)
                 models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
                 data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
                 data_result.append(data_result_by_period)
@@ -247,7 +249,7 @@ def calc_result(request):
 
 # Recordar que las filas de todos los vectores y matrices de entrada
 # deben de estar ordenados por "fexp"
-@timeit
+# @timeit
 def modelo_ind(y,X,Z,fexp,conf=0.95,clusrobust=True):
 
     # Calcular el indicador de cluster para corregir la matriz VCV
@@ -342,7 +344,7 @@ def modelo_ind(y,X,Z,fexp,conf=0.95,clusrobust=True):
     return output
 
 
-@timeit
+# @timeit
 def get_column_1(data, method_int, indicator_int):
     if method_int == 1:
         if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18):
@@ -362,7 +364,7 @@ def get_column_1(data, method_int, indicator_int):
     return column_1_array
 
 
-@timeit
+# @timeit
 def get_column_2_3(data, disintegrations, represent_int):
     disintegrations_size = len(disintegrations)
 
@@ -458,14 +460,14 @@ def get_column_2_3(data, disintegrations, represent_int):
     return columns
 
 
-@timeit
+# @timeit
 def get_column_4(data):
     column_4 = data.values_list("fexp", flat=True)
     column_4_array = np.array(list(column_4), 'float')
     return column_4_array
 
 
-@timeit
+# @timeit
 def get_area_name(represent_int):
     if represent_int == 1:
         area = 'Nacional'
@@ -476,7 +478,7 @@ def get_area_name(represent_int):
     return area
 
 
-@timeit
+# @timeit
 def get_filter_area(represent_int):
     if represent_int == 1:
         area = {}
@@ -487,7 +489,7 @@ def get_filter_area(represent_int):
     return area
 
 
-@timeit
+# @timeit
 def list_by_no_denied(request):
     id_desagre = request.GET['id_desagregacion']
     datos = request.GET.getlist('data_filters[]')
@@ -573,7 +575,7 @@ def list_by_no_denied(request):
     return HttpResponse(data, content_type='application/json')
 
 
-@timeit
+# @timeit
 def get_column_name_option(id_desagregation):
     if id_desagregation == 1:
         result = 'region_natural'
@@ -608,7 +610,7 @@ def get_column_name_option(id_desagregation):
     return result
 
 
-@timeit
+# @timeit
 def get_filter():
 
     data ={
@@ -665,7 +667,7 @@ def get_filter():
     return data
 
 
-@timeit
+# @timeit
 def indicador_filtro(request):
     id_indicador = request.GET['id_indicator']
 
@@ -697,7 +699,7 @@ def indicador_filtro(request):
     return HttpResponse(data, content_type='application/json')
 
 
-@timeit
+# @timeit
 def indicador_desagregacion(datos,ids):
     result = []
 
@@ -711,7 +713,7 @@ def indicador_desagregacion(datos,ids):
     return disin
 
 
-@timeit
+# @timeit
 def list_desagregation(request):
     disintegrations = Disintegration.objects.all()
     data = serializers.serialize('json', disintegrations)
@@ -719,7 +721,7 @@ def list_desagregation(request):
     return HttpResponse(data, content_type='application/json')
 
 
-@timeit
+# @timeit
 def get_data_by_represent(data_ENEMDU, represent_int):
     if(represent_int == 2):
         data = data_ENEMDU.objects.exclude(ciudad_ind='Resto Pais Rural')
@@ -730,7 +732,7 @@ def get_data_by_represent(data_ENEMDU, represent_int):
     return data
 
 
-@timeit
+# @timeit
 def get_type_by_represent(disintegrations_pos, represent_int):
     if(int(disintegrations_pos) == 2):
         if(represent_int == 2):
@@ -744,7 +746,7 @@ def get_type_by_represent(disintegrations_pos, represent_int):
     return types_option
 
 
-@timeit
+# @timeit
 def get_last_full_year(request):
     year = Data_from_2007_2.objects.values_list('anio', 'trimestre').distinct().last()
     last_full_year = [year[0], year[1]]
@@ -752,7 +754,7 @@ def get_last_full_year(request):
     return HttpResponse(data, content_type='application/json')
 
 
-@timeit
+# @timeit
 def get_method_option(indicator):
     method_1_valor = get_filter()[indicator][0]
     method_2_valor = get_filter()[indicator][1]
@@ -766,7 +768,7 @@ def get_method_option(indicator):
     return method_option
 
 
-@timeit
+# @timeit
 def get_years_list():
     method_1_years = Data_from_2003_4.objects.values_list('anio').distinct()
     method_2_years = Data_from_2007_2.objects.values_list('anio').distinct()
@@ -826,6 +828,34 @@ def disintegration_denied_list(dis):
     return denied
 
 
+def numero_consultas(request):
+    represent = request.GET['represent']
+    yearStart = request.GET['yearStart']
+    trimStart = request.GET['trimStart']
+    yearEnd = request.GET['yearEnd']
+    trimEnd = request.GET['trimEnd']
+    represent_int = int(represent)
+    yearStart_int = int(yearStart)
+    trimStart_int = int(trimStart)
+    yearEnd_int = int(yearEnd)
+    trimEnd_int = int(trimEnd)
+
+    trim_1 = trimStart_int
+    trim_2 = 5
+    num = 0
+
+    for i in range(yearStart_int, yearEnd_int+1):
+        if i == yearEnd_int:
+            trim_2 = trimEnd_int+1
+        for j in range(trim_1, trim_2):
+            represent_database = str(Structure.objects.get(anio=i, trim=j))
+            if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
+                or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
+                num += 1
+    message = json.dumps(num)
+    return HttpResponse(message, content_type='application/json')
+
+
 def calc_data(ind, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value):
     data_result = []
     ban = 0
@@ -839,7 +869,7 @@ def calc_data(ind, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimE
             represent_database = str(Structure.objects.get(anio=i, trim=j))
             if ((represent == 1 and represent_database == 'Nacional') or (represent == 2 and represent_database == 'Nacional')
                 or (represent == 2 and represent_database == 'Urbana') or (represent == 3 and represent_database == 'Nacional')):
-                print i,j
+                # print i,j
                 data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent)).filter(**get_filter()[ind][2]).exclude(**get_filter()[ind][3]).order_by('fexp')
                 column_1 = get_column_1(data_byWhere, method, ind)
                 columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent)
@@ -955,7 +985,7 @@ def generar_cache(request):
                                         data_ENEMDU = data_ENEMDU_aux.objects.all()
                                         if data_result is None:
                                             calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
-                                        print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations
+                                        # print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations
 
                                     elif num_disintegration == 1:
                                         for dis in indicator_filter_list(ind.id):
@@ -969,7 +999,7 @@ def generar_cache(request):
                                             data_result = cache.get(cache_value)
                                             if data_result is None:
                                                 calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
-                                            print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, dis, disintegrations
+                                            # print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, dis, disintegrations
 
                                     elif num_disintegration == 2:
                                         for dis1 in indicator_filter_list(ind.id):
@@ -985,7 +1015,7 @@ def generar_cache(request):
                                                 data_result = cache.get(cache_value)
                                                 if data_result is None:
                                                     calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
-                                                print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, dis1, dis2, disintegration_accept_list
+                                                # print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, dis1, dis2, disintegration_accept_list
 
 
 
@@ -994,7 +1024,7 @@ def generar_cache(request):
                                 trimEnd_aux1 = 1
                     if trimStart_aux == 4:
                         trimStart_aux1 = 1
-    print numqueries
+    # print numqueries
 
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')

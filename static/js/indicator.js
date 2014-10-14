@@ -104,35 +104,22 @@ $('.btn-calc, #a-resultados').click( function(){
     var trimStart = $('#trimStart').val();
     var yearEnd = $('#yearEnd').val();
     var trimEnd = $('#trimEnd').val();
+    var confidence_level = $('#confidence_level').val();
 
-    var trim_1 = parseInt(trimStart);
-    var trim_2 = 5;
-    var cont = 0;
-
-    for( i=parseInt(yearStart); i<(parseInt(yearEnd)+1); i++){
-      if( i == parseInt(yearEnd)){
-        trim_2 = parseInt(trimEnd)+1;
-      }
-      for( j=trim_1; j<trim_2; j++){
-        cont++;
-      }
-      if( j == 5){
-        trim_1 = 1;
-      }
-    }
-
-    timeData = cont*8;
-    console.log(timeData);
-    var progress = $(".loading-progress").progressTimer({
-      timeLimit: timeData,
-      baseStyle: 'progress-bar-warning',
-      warningStyle: '',
-      completeStyle: 'progress-bar-success',
-      onFinish: function () {}
+    $.getJSON('/numero_consultas/', {'represent': represent, 'yearStart': yearStart, 'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd},
+    function(number){
+      timeData = number*14;
+      var progress = $(".loading-progress").progressTimer({
+          timeLimit: timeData,
+          baseStyle: 'progress-bar-warning',
+          warningStyle: '',
+          completeStyle: 'progress-bar-success',
+          onFinish: function () {}
+        });
     });
 
-    $.getJSON('/result/', {'indicator': indicator, 'represent': represent, 'method': method, 'yearStart': yearStart,
-                                      'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd, 'disintegrations[]': selected},
+    $.getJSON('/result/', {'indicator': indicator, 'represent': represent, 'method': method, 'yearStart': yearStart, 'trimStart': trimStart,
+                                    'yearEnd': yearEnd, 'trimEnd': trimEnd, 'confidence_level': confidence_level, 'disintegrations[]': selected},
     function(data){
 
         if(data.length>0){
