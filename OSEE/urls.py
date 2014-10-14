@@ -37,4 +37,5 @@ urlpatterns = patterns('',
     url(r'^indicadorFiltro/', 'indicators.views.indicador_filtro', name='indicador_filtro'),
     url(r'^generar_cache/', 'indicators.views.generar_cache', name='cache'),
     url(r'^subida_csv/', 'ENEMDU.views.insert_data_enemdu', name='insert_data_enemdu'),
+    url(r'^acceso_denegado/', 'ENEMDU.views.access_denied', name='access_denied'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
