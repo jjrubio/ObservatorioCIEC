@@ -671,8 +671,17 @@ def get_filter():
 def indicador_filtro(request):
     id_indicador = request.GET['id_indicator']
 
-    if id_indicador == '1' or id_indicador == '2' or id_indicador == '3' or id_indicador == '4' or id_indicador == '5' or id_indicador == '6' or id_indicador == '7' or id_indicador == '8' or id_indicador == '9' or id_indicador == '10' or id_indicador == '11' or id_indicador == '12' or id_indicador == '13' or id_indicador == '14' or id_indicador == '15' or id_indicador == '16' or id_indicador == '17' or id_indicador == '18' or id_indicador == '19' or id_indicador == '20' or id_indicador == '21' or id_indicador == '22' or id_indicador == '23' or id_indicador == '24' or id_indicador == '25' or id_indicador == '26' or id_indicador == '27' or id_indicador == '28' or id_indicador == '29':
+   if id_indicador == '1':
+        disintegrations = Disintegration.objects.exclude(id__in=[4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
+        data = serializers.serialize('json', disintegrations)
+    elif id_indicador == '2' or id_indicador == '3' or id_indicador == '4' or id_indicador == '5' or id_indicador == '6' or id_indicador == '7' or id_indicador == '8' or id_indicador == '9' or id_indicador == '10' or id_indicador == '11' or id_indicador == '12' or id_indicador == '13' or id_indicador == '14' or id_indicador == '15' or id_indicador == '16' or id_indicador == '17' or id_indicador == '18' or id_indicador == '19' or id_indicador == '20' or id_indicador == '21' or id_indicador == '22' or id_indicador == '23' or id_indicador == '24' or id_indicador == '25' or id_indicador == '26' or id_indicador == '29':
         disintegrations = Disintegration.objects.exclude(id__in=[7, 8, 9, 10, 11, 12, 13, 14])
+        data = serializers.serialize('json', disintegrations)
+    elif id_indicador == '27':
+        disintegrations = Disintegration.objects.exclude(id__in=[7, 8, 9, 11, 12, 13, 14])
+        data = serializers.serialize('json', disintegrations)
+    elif id_indicador == '28' or id_indicador == '29':
+        disintegrations = Disintegration.objects.exclude(id__in=[11, 12, 13, 14])
         data = serializers.serialize('json', disintegrations)
     elif id_indicador == '30' or id_indicador == '31':
         disintegrations = Disintegration.objects.exclude(id__in=[11, 12, 13, 14])

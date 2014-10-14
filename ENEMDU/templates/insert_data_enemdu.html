@@ -23,29 +23,36 @@
                         <span>Para subir otro archivo, por favor dar clic <a href="/subida_csv/">aquí</a></span>
                         <br/><br/><br/>
                     </div>
-                    <div class="col-lg-4"></div>
                 </div>
             </div>
         {% else %}
             <b id="title-content-page">Subir archivo</b>
             <hr class="pull-left" id="separator-content-page">
-            <div class="panel-body">
+            <div class="panel-body" id="formulario">
                 <div class="center">
                     <form id="form_upload" method="post" action="subida_csv/" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <span>Escoja que tabla desea cargar los datos: </span><br/>
+                        <div class="col-lg-3">
+                            <span class="texto">Escoja que tabla desea cargar los datos: </span><br/>
+                        </div>
                         <select class="form-control" id="id_choices" name="choices">
                             <option value="1">Datos 2003-4 a 2007-1</option>
                             <option value="2">Datos 2007-2 a la actualidad</option>
                         </select>
-                        <br/>
-                        <span>Escoja un archivo txt o csv</span><br/>
+                        <br/><br/>           
+                        <div class="col-lg-3">
+                            <span class="texto">Escoja un archivo txt o csv:</span><br/>
+                        </div>
                         <label class="btn btn-default">
                             <input id="file" name="file" type="file" style="display:none;">
                             Selecciones un archivo
                         </label>
                         <br/><br/>
-                        <input type="submit" value="Cargar archivo" class="btn btn-primary"/><br/>
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-4" id="btn-send">
+                            <input type="submit" value="Cargar archivo" class="btn btn-primary"/><br/>
+                        </div>
+                        <div class="col-lg-4"></div>
                     </form>
                 </div>
             </div>
