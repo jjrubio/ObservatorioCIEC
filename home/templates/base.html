@@ -66,6 +66,9 @@
                     <!--li><a href="/calculo-indicador/">CÁLCULO DEL INDICADOR</a></li-->
                     <li><a href="/comercio-exterior/">COMERCIO EXTERIOR</a></li>
                     <li><a href="/recursos/boletines/">RECURSOS</a></li>
+                    {% if user.is_superuser %}
+                        <li><a href="/subida_csv/">SUBIR DATOS A BASE</a></li>
+                    {%endif%}
                 </ul>
             </div>
             {% block content %}{% endblock %}
