@@ -38,4 +38,5 @@ urlpatterns = patterns('',
     url(r'^numero_consultas/', 'indicators.views.numero_consultas', name='num_consultas'),
     url(r'^generar_cache/', 'indicators.views.generar_cache', name='cache'),
     url(r'^subida_csv/', 'ENEMDU.views.insert_data_enemdu', name='insert_data_enemdu'),
+    url(r'^acceso_denegado/', 'ENEMDU.views.access_denied', name='access_denied'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
