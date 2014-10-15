@@ -35,11 +35,13 @@ class Indicator(models.Model):
     formula_src     = models.ImageField(upload_to='formulas/', verbose_name='Imagen fórmula')
     icon = models.CharField(max_length=20, verbose_name='Nombre del ícono')
     subcategory     = models.ForeignKey(Subcategory, verbose_name='Subcategoría')
+    counter = models.PositiveIntegerField(verbose_name='# de veces calculada')
     disintegrations = models.ManyToManyField(Disintegration, verbose_name='Desagregaciones')
 
     class Meta:
         verbose_name = "indicador"
         verbose_name_plural = "Indicadores"
+        ordering = ["-counter"]
 
     def __unicode__(self):
         return self.name

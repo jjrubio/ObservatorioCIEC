@@ -133,14 +133,6 @@ def calc_result(request):
     trimEnd = request.GET['trimEnd']
     confidence_level = request.GET['confidence_level']
     disintegrations = request.GET.getlist('disintegrations[]')
-    # indicator = 1
-    # represent = 2
-    # method = 1
-    # yearStart = 2003
-    # trimStart = 4
-    # yearEnd = 2007
-    # trimEnd = 1
-    # disintegrations = []
 
     indicator_int = int(indicator)
     represent_int = int(represent)
@@ -150,7 +142,6 @@ def calc_result(request):
     yearEnd_int = int(yearEnd)
     trimEnd_int = int(trimEnd)
     confidence_level_int = float(confidence_level)/100
-    # print confidence_level_int
 
     if method_int == 1:
         data_ENEMDU = Data_from_2003_4
@@ -241,6 +232,8 @@ def calc_result(request):
         data_result.append(column_name_d2)
         data_result.append(column_types_d1)
         data_result.append(column_types_d2)
+        indicator_counter = Indicator.objects.get(id=indicator_int).counter + 1
+        update_indicator_counter = Indicator.objects.filter(id=indicator_int).update(counter=indicator_counter)
             # cache.set(cache_value, data_result, None)
 
     message = json.dumps(data_result, cls=PythonObjectEncoder)
@@ -671,7 +664,7 @@ def get_filter():
 def indicador_filtro(request):
     id_indicador = request.GET['id_indicator']
 
-   if id_indicador == '1':
+    if id_indicador == '1':
         disintegrations = Disintegration.objects.exclude(id__in=[4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
         data = serializers.serialize('json', disintegrations)
     elif id_indicador == '2' or id_indicador == '3' or id_indicador == '4' or id_indicador == '5' or id_indicador == '6' or id_indicador == '7' or id_indicador == '8' or id_indicador == '9' or id_indicador == '10' or id_indicador == '11' or id_indicador == '12' or id_indicador == '13' or id_indicador == '14' or id_indicador == '15' or id_indicador == '16' or id_indicador == '17' or id_indicador == '18' or id_indicador == '19' or id_indicador == '20' or id_indicador == '21' or id_indicador == '22' or id_indicador == '23' or id_indicador == '24' or id_indicador == '25' or id_indicador == '26' or id_indicador == '29':

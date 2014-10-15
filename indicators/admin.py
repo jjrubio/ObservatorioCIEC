@@ -3,7 +3,7 @@ from models import Indicator, Subcategory, Category
 
 
 class IndicadorAdmin(admin.ModelAdmin):
-    list_display = ('name','definition','unit','formula_src','subcategory', )
+    list_display = ('name','definition','unit','formula_src','counter','subcategory', )
     filter_horizontal = ('disintegrations',)
 
 
