@@ -65,6 +65,7 @@ INSTALLED_APPS = (
     'staff',
     # 'debug_toolbar',
     'comercio',
+    # 'djcelery',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -145,3 +146,10 @@ EMAIL_PORT = EMAIL_PORT
 
 #KEY REGISTRATION
 AUTH_PROFILE_MODULE = "registers.UserProfile"
+
+# import djcelery
+# djcelery.setup_loader()
+
+# BROKER_URL = 'redis://127.0.0.1:6379/0'
+
+# CELERY_IMPORTS = ("indicators.task",)

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load apptags %}
+
+{% load static from staticfiles %}
+
+{% block title %}Generar cache{% endblock %}
+
+{% block extraCSS %}
+{% endblock %}
+
+{% block content %}
+    <div class="content-page-2">
+        <b id="title-content-page">Caché</b>
+        <hr class="pull-left" id="separator-content-page">
+        <div class="panel-body" id="formulario">
+            <div class="text-center">
+                <b id ="msg_cache" hidden>La generación de cache está en proceso. Espere por favor ....</b>
+                <div id="spin_cache" hidden><i class="fa fa-spinner fa-spin fa-5x"></i></div>
+                <!-- <div class="loading-progress" ></div> -->
+                <button type="button" class="btn  btn-primary" id="generar_cache">
+                Generar caché
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extraScripts %}
+<!-- <script src="{% static "js/jquery.progressTimer.js" %}" type="text/javascript"></script> -->
+<script type="text/javascript" src="{% static "js/cache.js" %}" ></script>
+{% endblock %}

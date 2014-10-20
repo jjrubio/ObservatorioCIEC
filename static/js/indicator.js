@@ -56,34 +56,6 @@ $('.btn-back, #a-parametros').click( function(){
     $('#parametros').collapse('show');
 });
 
-// function makeRequest() {
-//   var url = '/result/';
-//   var onLoadHandler = function(event){
-//      // Parse the JSON and build a list.
-//   }
-//   var onTimeOutHandler = function(event){
-//     var content = document.getElementById('results'),
-//       p = document.createElement('p'),
-//       msg = document.createTextNode('Just a little bit longer!');
-//       p.appendChild(msg);
-//       content.appendChild(p);
-
-//       // Restarts the request.
-//       event.target.open('GET',url);
-
-//       // Optionally, set a longer timeout to override the original.
-//       event.target.timeout = 6000;
-//       event.target.send();
-//   }
-//   var xhr = new XMLHttpRequest();
-//   xhr.open('GET',url);
-//   xhr.timeout = 3000;
-//   xhr.onload = onLoadHandler;
-//   xhr.ontimeout = onTimeOutHandler;
-//   xhr.send();
-// }
-
-// window.addEventListener('DOMContentLoaded', makeRequest, false);
 
 $('.btn-calc, #a-resultados').click( function(){
     $('#resultado').collapse('show');

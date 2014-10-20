@@ -63,11 +63,11 @@
                 <ul class="nav navbar-nav pull-right" id="tabs-menu">
                     <li><a href="/inicio/">INICIO</a></li>
                     <li><a href="/definicion-indicador/">INDICADOR</a></li>
-                    <!--li><a href="/calculo-indicador/">CÁLCULO DEL INDICADOR</a></li-->
                     <li><a href="/comercio-exterior/">COMERCIO EXTERIOR</a></li>
                     <li><a href="/recursos/boletines/">RECURSOS</a></li>
                     {% if user.is_superuser %}
-                        <li><a href="/subida_csv/">SUBIR DATOS A BASE</a></li>
+                        <li><a href="/subir_csv/">SUBIR CSV</a></li>
+                        <li><a id="cache_link" href="/cache/">CACHÉ</a></li>
                     {%endif%}
                 </ul>
             </div>
@@ -87,7 +87,6 @@
     <!-- Core Scripts - Include with every page -->
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="{% static "js/comercio.js" %}" ></script>
     <script>
         $(function(){
             setNavigation();

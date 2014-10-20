@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from django.shortcuts import HttpResponse, render_to_response
+from django.shortcuts import HttpResponse, HttpResponseRedirect, render_to_response
 from django.template.context import RequestContext
 from models import *
 from disintegrations.models import *
@@ -17,6 +17,7 @@ import math
 from django.core.cache import cache
 import time
 from django.db.models import Sum
+# from task import trada
 
 
 def timeit(method):
@@ -122,7 +123,7 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
 
-# @timeit
+@timeit
 def calc_result(request):
     indicator = request.GET['indicator']
     represent = request.GET['represent']
@@ -147,6 +148,10 @@ def calc_result(request):
         data_ENEMDU = Data_from_2003_4
     else:
         data_ENEMDU = Data_from_2007_2
+
+
+    # demorada.apply_async(countdown=5)
+    # trada.delay()
 
     if not len(disintegrations) == 0:
         if len(disintegrations) == 1:
@@ -927,106 +932,196 @@ def calc_data(ind, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimE
 
 
 def generar_cache(request):
-    data_result = []
-    indicators = Indicator.objects.all()
-    represent = 2
-    last_full_year = Data_from_2007_2.objects.values_list('anio', 'trimestre').distinct().last()
-    numqueries = 0
+    user = request.user
+    is_super_user = user.is_superuser
 
-    for ind in indicators:
-        for represent in xrange(1, 4):
-            for method in xrange(1, 2):
-                if(method == 1):
-                    if(ind.id == 8 or ind.id == 13 or ind.id == 20 or ind.id == 21 or ind.id == 33 or ind.id == 34 or ind.id == 35 or ind.id == 36 or ind.id == 37 or ind.id == 38):
-                        break
-                    data_ENEMDU_aux = Data_from_2003_4
-                    yearStart_int = 2004
-                    trimStart_int = 1
-                    yearEnd_int = 2004
-                    trimEnd_int = 1
-                # else:
-                #     if(ind.id == 14 or ind.id == 15 or ind.id == 16 or ind.id == 17 or ind.id == 18):
-                #         break
-                #     data_ENEMDU_aux = Data_from_2007_2
-                #     yearStart_int = 2007
-                #     trimStart_int = 2
-                #     yearEnd_int = 2007
-                #     trimEnd_int = 2
-                    # yearEnd_int = last_full_year[0]
-                    # trimEnd_int = last_full_year[1]
+    if is_super_user:
+        data_result = []
+        indicators = Indicator.objects.all()
+        represent = 2
+        last_full_year = Data_from_2007_2.objects.values_list('anio', 'trimestre').distinct().last()
+        numqueries = 0
 
-                trimStart_aux1 = trimStart_int
-                trimEnd_aux1 = trimStart_int
-
-                for yearStart_aux in xrange(yearStart_int, yearEnd_int+1):
-
-                    if yearStart_aux == yearEnd_int:
-                        trimStart_aux2 = trimEnd_int + 1
+        for ind in indicators:
+            for represent in xrange(1, 4):
+                for method in xrange(1, 3):
+                    if(method == 1):
+                        if(ind.id == 8 or ind.id == 13 or ind.id == 20 or ind.id == 21 or ind.id == 33 or ind.id == 34 or ind.id == 35 or ind.id == 36 or ind.id == 37 or ind.id == 38):
+                            break
+                        data_ENEMDU_aux = Data_from_2003_4
+                        yearStart_int = 2004
+                        trimStart_int = 1
+                        yearEnd_int = 2004
+                        trimEnd_int = 1
                     else:
-                        trimStart_aux2 = 5
+                        if(ind.id == 14 or ind.id == 15 or ind.id == 16 or ind.id == 17 or ind.id == 18):
+                            break
+                        data_ENEMDU_aux = Data_from_2007_2
+                        yearStart_int = 2007
+                        trimStart_int = 2
+                        yearEnd_int = 2007
+                        trimEnd_int = 2
+                        yearEnd_int = last_full_year[0]
+                        trimEnd_int = last_full_year[1]
 
-                    for trimStart_aux in xrange(trimStart_aux1, trimStart_aux2):
+                    trimStart_aux1 = trimStart_int
+                    trimEnd_aux1 = trimStart_int
 
-                        trimEnd_aux1 = trimStart_aux
+                    for yearStart_aux in xrange(yearStart_int, yearEnd_int+1):
 
-                        for yearEnd_aux in xrange(yearStart_aux, yearEnd_int+1):
+                        if yearStart_aux == yearEnd_int:
+                            trimStart_aux2 = trimEnd_int + 1
+                        else:
+                            trimStart_aux2 = 5
 
-                            if yearEnd_aux == yearEnd_int:
-                                trimEnd_aux2 = trimEnd_int + 1
-                            else:
-                                trimEnd_aux2 = 5
+                        for trimStart_aux in xrange(trimStart_aux1, trimStart_aux2):
 
-                            for trimEnd_aux in xrange(trimEnd_aux1, trimEnd_aux2):
+                            trimEnd_aux1 = trimStart_aux
 
-                                for num_disintegration in xrange(0, 3):
+                            for yearEnd_aux in xrange(yearStart_aux, yearEnd_int+1):
 
-                                    if num_disintegration == 0:
-                                        numqueries += 1
-                                        disintegrations = []
-                                        cache_value = '%s_%s_%s_%s_%s_%s_%s'%(ind.id, represent, method, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux)
-                                        data_ENEMDU = data_ENEMDU_aux.objects.all()
-                                        if data_result is None:
-                                            calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
-                                        # print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations
+                                if yearEnd_aux == yearEnd_int:
+                                    trimEnd_aux2 = trimEnd_int + 1
+                                else:
+                                    trimEnd_aux2 = 5
 
-                                    elif num_disintegration == 1:
-                                        for dis in indicator_filter_list(ind.id):
+                                for trimEnd_aux in xrange(trimEnd_aux1, trimEnd_aux2):
+
+                                    for num_disintegration in xrange(0, 3):
+
+                                        if num_disintegration == 0:
                                             numqueries += 1
-                                            disintegrations = [dis]
-                                            cache_value = '%s_%s_%s_%s_%s_%s_%s_%s'%(ind.id, represent, method, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations[0])
-                                            if(int(disintegrations[0]) == 2):
-                                                data_ENEMDU = get_data_by_represent(data_ENEMDU_aux, represent)
-                                            else:
-                                                data_ENEMDU = data_ENEMDU_aux.objects.all()
-                                            data_result = cache.get(cache_value)
+                                            disintegrations = []
+                                            cache_value = '%s_%s_%s_%s_%s_%s_%s'%(ind.id, represent, method, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux)
+                                            data_ENEMDU = data_ENEMDU_aux.objects.all()
                                             if data_result is None:
                                                 calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
-                                            # print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, dis, disintegrations
+                                            # print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations
 
-                                    elif num_disintegration == 2:
-                                        for dis1 in indicator_filter_list(ind.id):
-                                            disintegration_accept_list = set(indicator_filter_list(ind.id)) - set(disintegration_denied_list(dis1)) - set([dis1])
-                                            for dis2 in disintegration_accept_list:
+                                        elif num_disintegration == 1:
+                                            for dis in indicator_filter_list(ind.id):
                                                 numqueries += 1
-                                                disintegrations = [dis1, dis2]
-                                                cache_value = '%s_%s_%s_%s_%s_%s_%s_%s_%s'%(ind.id, represent, method, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations[0], disintegrations[1])
-                                                if(int(disintegrations[0]) == 2 or int(disintegrations[1]) == 2):
+                                                disintegrations = [dis]
+                                                cache_value = '%s_%s_%s_%s_%s_%s_%s_%s'%(ind.id, represent, method, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations[0])
+                                                if(int(disintegrations[0]) == 2):
                                                     data_ENEMDU = get_data_by_represent(data_ENEMDU_aux, represent)
                                                 else:
                                                     data_ENEMDU = data_ENEMDU_aux.objects.all()
                                                 data_result = cache.get(cache_value)
                                                 if data_result is None:
                                                     calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
-                                                # print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, dis1, dis2, disintegration_accept_list
+                                                print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, dis, disintegrations
 
+                                        elif num_disintegration == 2:
+                                            for dis1 in indicator_filter_list(ind.id):
+                                                disintegration_accept_list = set(indicator_filter_list(ind.id)) - set(disintegration_denied_list(dis1)) - set([dis1])
+                                                for dis2 in disintegration_accept_list:
+                                                    numqueries += 1
+                                                    disintegrations = [dis1, dis2]
+                                                    cache_value = '%s_%s_%s_%s_%s_%s_%s_%s_%s'%(ind.id, represent, method, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations[0], disintegrations[1])
+                                                    if(int(disintegrations[0]) == 2 or int(disintegrations[1]) == 2):
+                                                        data_ENEMDU = get_data_by_represent(data_ENEMDU_aux, represent)
+                                                    else:
+                                                        data_ENEMDU = data_ENEMDU_aux.objects.all()
+                                                    data_result = cache.get(cache_value)
+                                                    if data_result is None:
+                                                        calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
+                                                    # print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, dis1, dis2, disintegration_accept_list
 
-
-
-                            if trimEnd_aux == 4:
-                                trimEnd_aux1 = 1
-                    if trimStart_aux == 4:
-                        trimStart_aux1 = 1
-    # print numqueries
-
-    message = json.dumps(data_result, cls=PythonObjectEncoder)
+                                if trimEnd_aux == 4:
+                                    trimEnd_aux1 = 1
+                        if trimStart_aux == 4:
+                            trimStart_aux1 = 1
+    message = json.dumps(1)
     return HttpResponse(message, content_type='application/json')
+
+
+def total_consultas(request):
+    user = request.user
+    is_super_user = user.is_superuser
+
+    if is_super_user:
+        data_result = []
+        indicators = Indicator.objects.all()
+        represent = 2
+        last_full_year = Data_from_2007_2.objects.values_list('anio', 'trimestre').distinct().last()
+        numqueries = 0
+
+        for ind in indicators:
+            for represent in xrange(1, 4):
+                for method in xrange(1, 3):
+                    if(method == 1):
+                        if(ind.id == 8 or ind.id == 13 or ind.id == 20 or ind.id == 21 or ind.id == 33 or ind.id == 34 or ind.id == 35 or ind.id == 36 or ind.id == 37 or ind.id == 38):
+                            break
+                        data_ENEMDU_aux = Data_from_2003_4
+                        yearStart_int = 2004
+                        trimStart_int = 1
+                        yearEnd_int = 2004
+                        trimEnd_int = 1
+                    else:
+                        if(ind.id == 14 or ind.id == 15 or ind.id == 16 or ind.id == 17 or ind.id == 18):
+                            break
+                        data_ENEMDU_aux = Data_from_2007_2
+                        yearStart_int = 2007
+                        trimStart_int = 2
+                        yearEnd_int = 2007
+                        trimEnd_int = 2
+                        yearEnd_int = last_full_year[0]
+                        trimEnd_int = last_full_year[1]
+
+                    trimStart_aux1 = trimStart_int
+                    trimEnd_aux1 = trimStart_int
+
+                    for yearStart_aux in xrange(yearStart_int, yearEnd_int+1):
+
+                        if yearStart_aux == yearEnd_int:
+                            trimStart_aux2 = trimEnd_int + 1
+                        else:
+                            trimStart_aux2 = 5
+
+                        for trimStart_aux in xrange(trimStart_aux1, trimStart_aux2):
+
+                            trimEnd_aux1 = trimStart_aux
+
+                            for yearEnd_aux in xrange(yearStart_aux, yearEnd_int+1):
+
+                                if yearEnd_aux == yearEnd_int:
+                                    trimEnd_aux2 = trimEnd_int + 1
+                                else:
+                                    trimEnd_aux2 = 5
+
+                                for trimEnd_aux in xrange(trimEnd_aux1, trimEnd_aux2):
+
+                                    for num_disintegration in xrange(0, 3):
+
+                                        if num_disintegration == 0:
+                                                numqueries += 1
+                                                print numqueries
+                                        elif num_disintegration == 1:
+                                            for dis in indicator_filter_list(ind.id):
+                                                numqueries += 1
+                                                print numqueries
+                                        elif num_disintegration == 2:
+                                            for dis1 in indicator_filter_list(ind.id):
+                                                disintegration_accept_list = set(indicator_filter_list(ind.id)) - set(disintegration_denied_list(dis1)) - set([dis1])
+                                                for dis2 in disintegration_accept_list:
+                                                   numqueries += 1
+                                                   print numqueries
+
+                                if trimEnd_aux == 4:
+                                    trimEnd_aux1 = 1
+                        if trimStart_aux == 4:
+                            trimStart_aux1 = 1
+        print numqueries
+    message = json.dumps(numqueries)
+    return HttpResponse(message, content_type='application/json')
+
+
+def cache_page(request):
+    template = "indicator_cache.html"
+    return render_to_response(template, context_instance=RequestContext(request, locals()))
+
+
+def access_denied(request):
+    template = 'access_denied.html'
+    return render_to_response(template, context_instance=RequestContext(request, locals()))
