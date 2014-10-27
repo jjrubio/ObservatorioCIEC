@@ -8,9 +8,10 @@
 
 {% block extraCSS %}
 	<link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
-	<!--link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/css/bootstrap.min.css"-->
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
+	<link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
 	<link rel="stylesheet" type="text/css" href="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker.css">
+	<link href="{% static "css/jquery.bootstrap-touchspin.css" %}" rel="stylesheet"  />
 {% endblock %}
 
 {% block content %}
@@ -24,61 +25,84 @@
 	            <li id="2"><a href="#pane" data-toggle="tab">IMPORTACIONES</a></li>
 	          </ul>
 	          <div class="tab-content" id="datos">
+	          	<!-- <div class="col-lg-4"></div> -->
 	          	<div class="tab-pane active" id="pane">
-	          		<span>Escoja una opción</span>
-					<select id="options" data-width="93%" class="pull-right selectpicker">
-		                <option value="1">Código/Subpartida</option>
-		                <option value="2">Por País</option>
-		        	</select>
-		        	<br/><br/>
-		        	<span id="search_by_label">Buscar por</span>
-		        	<select id="search_by" data-width="93%" class="pull-right selectpicker">
-		                <option value="1">Código</option>
-		                <option value="2">Descripción</option>
-		        	</select>
-		        	<br/><br/>
-		        	<span>Estándar</span>
-		        	<select id="standars" data-width="93%" class="pull-right selectpicker">
-		                <option value="1">NANDINA</option>
-		                <option value="2">CGCE</option>
-		                <option value="3">CUII3</option>
-		                <option value="4">CPC</option>
-		                <option value="5">CUODE</option>
-		        	</select>
-		        	<br/><br/>
-		        	<span>Periodicidad</span>
-		        	<select id="period" data-width="93%" class="pull-right selectpicker">
-		        		<option value="1">ANUAL</option>
-		        		<option value="2">MENSUAL</option>
-		        		<option value="3">SEMESTRAL</option>
-		        		<option value="4">TRIMESTRAL</option>
-		        	</select>
-		        	<br/><br/>
-	        		<span>Desde</span>
-		        	<div class="input-group margin-bottom-sm date datepicker">
-						<input id="startDate" class="form-control pull-right" type="text" >
-						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-					</div>
-		        	<br/><br/>
-					<span>Hasta</span>
-					<div class="input-group margin-bottom-sm date datepicker">
-						<input id="endDate" class="form-control pull-right" type="text" >
-						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-					</div>
-					<br/><br/>
-					<span> Nivel de agregación</span>
-					<input type="number" id="txt_agregacion" name="agregacion" min="0" max="100" class="pull-right">
-					<br/>
-					<span class="hidden">*Valores solo del 0 al 100</span>
-					<br/><br/>
-					<span>Patrón</span>
-					<input type="text" id="txt_patron" class="pull-right">
-					<br/><br/>
-					<div id="pais">
-						<label><input name="checkbox" id="checkbox" type='checkbox'>  Separar por país</label>
-					</div>
-					<br/><br/>
-					<input type="button" class="btn btn-primary" value="BUSCAR" id="btn_search">
+	          		<label>
+	          			<span>Escoja una opción</span>
+				<select id="options" data-width="100%" class="selectpicker">
+			                <option value="1">Código/Subpartida</option>
+			                <option value="2">Por País</option>
+			        	</select>
+	          		</label>
+
+		        	<label>
+				<span id="search_by_label">Buscar por</span>
+			        	<select id="search_by" data-width="100%" class="selectpicker">
+			                <option value="1">Código</option>
+			                <option value="2">Descripción</option>
+			        	</select>
+		        	</label>
+
+		        	<label>
+		        		<span>Estándar</span>
+			        	<select id="standars" data-width="100%" class="selectpicker">
+			                <option value="1">NANDINA</option>
+			                <option value="2">CGCE</option>
+			                <option value="3">CUII3</option>
+			                <option value="4">CPC</option>
+			                <option value="5">CUODE</option>
+			        	</select>
+		        	</label>
+
+			<label>
+				<span>Periodicidad</span>
+			        	<select id="period" data-width="100%" class="selectpicker">
+			        		<option value="1">Mensual</option>
+			        		<option value="2">Trimestral</option>
+			        		<option value="3">Semestral</option>
+			        		<option value="4">Anual</option>
+			        	</select>
+			</label>
+
+			<label>
+				<span>Desde</span>
+			        	<div class="input-group margin-bottom-sm date datepicker">
+					<input id="startDate" class="form-control" type="text" >
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+			</label>
+
+	        		<label>
+	        			<span>Hasta</span>
+				<div class="input-group margin-bottom-sm date datepicker">
+					<input id="endDate" class="form-control" type="text" >
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+	        		</label>
+
+			<label>
+				<span> Nivel de agregación</span>
+				<input id="txt_agregacion" type="text" value="" name="agregacion">
+				<br/>
+				<span class="hidden">*Valores solo del 0 al 100</span>
+			</label>
+
+			<label>
+				<span>Patrón</span>
+				<input type="text" id="txt_patron" class="form-control">
+			</label>
+			<br>
+
+			<label>
+				<div id="pais">
+					<input name="checkbox" id="checkbox" type='checkbox'>  Separar por país
+				</div>
+			</label>
+			<br>
+
+			<label>
+				<input type="button" class="btn btn-primary" value="BUSCAR" id="btn_search">
+			</label>
 	          	</div>
 	          </div>
 	        </div>
@@ -86,8 +110,16 @@
     </div>
 {% endblock %}
 {% block extraScripts %}
+<script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
 <script type="text/javascript" src="{% static "js/comercio.js" %}" ></script>
 <script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
+<script src="{% static "js/jquery.bootstrap-touchspin.js" %}" type="text/javascript"></script>
 <script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript">
+	$('.selectpicker').selectpicker();
+	$("#txt_agregacion").TouchSpin({
+	  verticalbuttons: true
+	});
+</script>
 {% endblock %}
