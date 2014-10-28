@@ -127,7 +127,11 @@
                                         </label>
                                         <label>
                                             <span>Nivel de Confianza </span><br><br>
-                                             <input id="confidence_level" type="text" value="95" name="confidence_level">
+                                             <select id="confidence_level" class="selectpicker show-menu-arrow" data-width="100%">
+                                                    <option value="90">90 %</option>
+                                                    <option value="95" selected="selected">95 %</option>
+                                                    <option value="99">99 %</option>
+                                            </select>
                                         </label>
                                         <label class="text-center">
                                             <span>&nbsp;</span>
@@ -194,7 +198,8 @@
                               <div class="panel-body text-center">
                                 <div id="loading-result" hidden>
                                     <br>
-                                    <p id="text-spinner"><b>Calculando indicador, espere por favor ...</b></p>
+                                    <p id="text-1-loading"><b>Calculando indicador, espere por favor ...</b></p>
+                                    <p id="text-2-loading" hidden><b>...renderizando tablas y gráficos</b></p>
                                     <div class="loading-progress"></div>
                                 </div>
 
@@ -253,17 +258,6 @@
         $('.selectpicker').selectpicker();
         $('#scroll_table').perfectScrollbar();
         $('#div_desagregaciones').perfectScrollbar();
-
-        $("#confidence_level").TouchSpin({
-            // verticalbuttons: true,
-            min: 1,
-            max: 99.90,
-            step: 0.1,
-            decimals: 2,
-            boostat: 5,
-            maxboostedstep: 10,
-            postfix: '%'
-        });
     </script>
 {% endblock %}
 

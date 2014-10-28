@@ -9,12 +9,16 @@ def comercio_page(request):
     return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 
+def comercio(request):
+    pass
+
+
 #estandar: Nandina, CGCE, CPC, CUODE, CIIU3
 #value_A: patron% o null segun 'BuscarPor'
 #value_B: patron% o null segun 'BuscarPor'
 def sql_A(estandar, value_A, value_B):
-    estandar.objects.filter(Q(subpartida=value_A) | Q(descripcion=value_B)) #5 - 9
-    return 1
+    data = estandar.objects.filter(Q(subpartida=value_A) | Q(descripcion=value_B)) #5 - 9
+    return data
 
 #tipo: Si es export/import
 #estandar: Nandina, CGCE, CPC, CUODE, CIIU3
@@ -26,9 +30,8 @@ def sql_A(estandar, value_A, value_B):
 #ini_date: desde.substring(0,4)
 #fin_date: hasta.substring(0,4)
 def sql_B(tipo, estandar, clase, periodicidad, value_A, value_B, agreg, ini_date, fin_date):
-    # if(tipo=='export' and  clase=='codigo' and periodicidad="mes"):
-    #     print "hola"
-    return 1
+    if(tipo=='export' and periodicidad="mes"):
+        print 'fd'
 
 # SELECT substr(ifnull(date(EXPORT_CPC.ANO || '-0' || EXPORT_CPC.MES || '-01', 'utc'),
 # date(EXPORT_CPC.ANO || '-' || EXPORT_CPC.MES || '-01', 'utc'))1,7) AS FECHA,

@@ -25,7 +25,7 @@ class CIIU3(models.Model):
 
 
 class CPC(models.Model):
-    codigo = models.CharField(max_length=10, unique=True)
+    codigo = models.CharField(max_length=10, primary_key=True)
     descripcion = models.TextField()
 
 
@@ -89,10 +89,10 @@ class Export_Nandina(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
     pais = models.ForeignKey(Paises, to_field='codigo')
-    subpartida_nandina = models.ForeignKey(Nandina, to_field='subpartida')
+    subpartida_nandina = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
-    subpartida_key = models.CharField(max_length=10)
+    subpartida_key =  models.ForeignKey(Nandina, to_field='subpartida')
 
 
 class Import_CGCE(models.Model):
@@ -139,11 +139,11 @@ class Import_Nandina(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
     pais = models.ForeignKey(Paises, to_field='codigo')
-    subpartida_nandina = models.ForeignKey(Nandina, to_field='subpartida')
+    subpartida_nandina = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
     cib = models.DecimalField(decimal_places=2, max_digits=7)
-    subpartida_key = models.CharField(max_length=10)
+    subpartida_key = models.ForeignKey(Nandina, to_field='subpartida')
 
 
 class sqliteadmin_queries(models.Model):

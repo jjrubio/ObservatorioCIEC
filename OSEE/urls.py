@@ -2,11 +2,9 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-import debug_toolbar
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # url(r'^__debug__/', include(debug_toolbar.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^$', 'home.views.slider', name='home'),

@@ -60,6 +60,7 @@ $('.btn-back, #a-parametros').click( function(){
 $('.btn-calc, #a-resultados').click( function(){
     $('#resultado').collapse('show');
     $('#loading-result').show();
+    $('#text-2-loading').hide();
     $('#content-result').hide();
     $('#content-not-result').hide();
     var selected = [];
@@ -80,13 +81,15 @@ $('.btn-calc, #a-resultados').click( function(){
 
     $.getJSON('/numero_consultas/', {'represent': represent, 'yearStart': yearStart, 'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd},
     function(number){
-      timeData = number*14;
+      timeData = number*25;
       var progress = $(".loading-progress").progressTimer({
           timeLimit: timeData,
           baseStyle: 'progress-bar-warning',
           warningStyle: '',
           completeStyle: 'progress-bar-success',
-          onFinish: function () {}
+          onFinish: function () {
+            $('#text-2-loading').show();
+          }
         });
     });
 

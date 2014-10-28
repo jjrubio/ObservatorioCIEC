@@ -20,19 +20,6 @@ from django.db.models import Sum
 # from task import trada
 
 
-def timeit(method):
-
-    def timed(*args, **kw):
-        ts = time.time()
-        result = method(*args, **kw)
-        te = time.time()
-
-        print '%r %2.2f sec' % \
-              (method.__name__, te-ts)
-        return result
-
-    return timed
-
 class PythonObjectEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (list, dict, str, unicode, int, float, bool, type(None))):
@@ -97,21 +84,20 @@ def indicators_detail(cat_id, subcat_id, ind_id):
     return message
 
 
-# @timeit
 def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     permiso = True
-    #if request.session.get('last_visit'):
-       # last_visit_time = request.session.get('last_visit')
-       # visits = request.session.get('visits', '0')
-       # count = request.session.get('visits')
+    # if request.session.get('last_visit'):
+    #    last_visit_time = request.session.get('last_visit')
+    #    visits = request.session.get('visits', '0')
+    #    count = request.session.get('visits')
 
-       # if (datetime.now() - datetime.strptime(last_visit_time[:-7], "%Y-%m-%d %H:%M:%S")).days > 0:
-           # request.session['visits'] = visits + 1
-           # request.session['last_visit'] = str(datetime.now())
-           # permiso = True
-   # else:
-       # request.session['last_visit'] = str(datetime.now())
-       # request.session['visits'] = 1
+    #    if (datetime.now() - datetime.strptime(last_visit_time[:-7], "%Y-%m-%d %H:%M:%S")).days > 0:
+    #        request.session['visits'] = visits + 1
+    #        request.session['last_visit'] = str(datetime.now())
+    #        permiso = True
+    # else:
+    #    request.session['last_visit'] = str(datetime.now())
+    #    request.session['visits'] = 1
 
     json = indicators_detail(cat_id, subcat_id, ind_id)
     subcategories = Subcategory.objects.all()
@@ -123,7 +109,6 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
 
-@timeit
 def calc_result(request):
     indicator = request.GET['indicator']
     represent = request.GET['represent']
@@ -144,11 +129,17 @@ def calc_result(request):
     trimEnd_int = int(trimEnd)
     confidence_level_int = float(confidence_level)/100
 
+    # lname = 1
+    # ind_2 = indicators_subcategory
+    # vpr = Subcategory.objects.raw("SELECT * FROM %(Subcategory)s WHERE category_id = %s", [lname])
+
+    # for obj in vpr:
+    #     print obj
+
     if method_int == 1:
         data_ENEMDU = Data_from_2003_4
     else:
         data_ENEMDU = Data_from_2007_2
-
 
     # demorada.apply_async(countdown=5)
     # trada.delay()
@@ -170,76 +161,75 @@ def calc_result(request):
         cache_value = '%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int)
         data_ENEMDU = data_ENEMDU.objects.all()
 
-    # data_result = cache.get(cache_value)
-    # if data_result is None:
+    data_result = cache.get(cache_value)
+    if data_result is None:
 
-    data_result = []
-    ban = 0
-    trim_1 = trimStart_int
-    trim_2 = 5
+        data_result = []
+        ban = 0
+        trim_1 = trimStart_int
+        trim_2 = 5
 
-    for i in range(yearStart_int, yearEnd_int+1):
-        if i == yearEnd_int:
-            trim_2 = trimEnd_int+1
-        for j in range(trim_1, trim_2):
-            represent_database = str(Structure.objects.get(anio=i, trim=j))
-            if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
-                or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
-                # print i,j
+        for i in range(yearStart_int, yearEnd_int+1):
+            if i == yearEnd_int:
+                trim_2 = trimEnd_int+1
+            for j in range(trim_1, trim_2):
+                represent_database = str(Structure.objects.get(anio=i, trim=j))
+                if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
+                    or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
 
-                data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
-                column_1 = get_column_1(data_byWhere, method_int, indicator_int)
-                columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
-                column_2 = columns_2_3[0]
-                column_3 = columns_2_3[1]
-                column_dimensions = columns_2_3[2]
-                column_N = columns_2_3[6]
-                column_4 = get_column_4(data_byWhere)
+                    data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
+                    column_1 = get_column_1(data_byWhere, method_int, indicator_int)
+                    columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
+                    column_2 = columns_2_3[0]
+                    column_3 = columns_2_3[1]
+                    column_dimensions = columns_2_3[2]
+                    column_N = columns_2_3[6]
+                    column_4 = get_column_4(data_byWhere)
 
-                models_by_period = modelo_ind(column_1,column_2,column_3,column_4, confidence_level_int)
-                models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
-                data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
-                data_result.append(data_result_by_period)
+                    models_by_period = modelo_ind(column_1,column_2,column_3,column_4, confidence_level_int)
+                    models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
+                    data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
+                    data_result.append(data_result_by_period)
 
-                if (ban == 0):
-                    column_titles = columns_2_3[3]
-                    column_name_d1 = column_titles[0]
-                    column_name_d2 = column_titles[1]
-                    column_types_d1 = columns_2_3[4]
-                    column_types_d2 = columns_2_3[5]
+                    if (ban == 0):
+                        column_titles = columns_2_3[3]
+                        column_name_d1 = column_titles[0]
+                        column_name_d2 = column_titles[1]
+                        column_types_d1 = columns_2_3[4]
+                        column_types_d2 = columns_2_3[5]
 
-                    disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
-                    if(column_dimensions[0] == 0):
-                        title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
-                    elif(column_dimensions[1] == 0):
-                        title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
-                    else:
-                        title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
+                        disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
+                        if(column_dimensions[0] == 0):
+                            title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                        elif(column_dimensions[1] == 0):
+                            title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                        else:
+                            title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
 
-                    if(yearStart_int == yearEnd_int):
-                        years_title = str(yearStart_int)
-                    else:
-                        years_title = str(yearStart_int)+' - '+str(yearEnd_int)
+                        if(yearStart_int == yearEnd_int):
+                            years_title = str(yearStart_int)
+                        else:
+                            years_title = str(yearStart_int)+' - '+str(yearEnd_int)
 
-                    unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
+                        unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
 
-                    ban = 1
+                        ban = 1
 
-            if j == 4:
-                trim_1 = 1
+                if j == 4:
+                    trim_1 = 1
 
-    if ban == 1:
-        data_result.append(title)
-        data_result.append(years_title)
-        data_result.append(unit)
-        data_result.append(column_dimensions)
-        data_result.append(column_name_d1)
-        data_result.append(column_name_d2)
-        data_result.append(column_types_d1)
-        data_result.append(column_types_d2)
-        indicator_counter = Indicator.objects.get(id=indicator_int).counter + 1
-        update_indicator_counter = Indicator.objects.filter(id=indicator_int).update(counter=indicator_counter)
-            # cache.set(cache_value, data_result, None)
+        if ban == 1:
+            data_result.append(title)
+            data_result.append(years_title)
+            data_result.append(unit)
+            data_result.append(column_dimensions)
+            data_result.append(column_name_d1)
+            data_result.append(column_name_d2)
+            data_result.append(column_types_d1)
+            data_result.append(column_types_d2)
+            indicator_counter = Indicator.objects.get(id=indicator_int).counter + 1
+            update_indicator_counter = Indicator.objects.filter(id=indicator_int).update(counter=indicator_counter)
+            cache.set(cache_value, data_result, None)
 
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
@@ -247,19 +237,7 @@ def calc_result(request):
 
 # Recordar que las filas de todos los vectores y matrices de entrada
 # deben de estar ordenados por "fexp"
-# @timeit
-def modelo_ind(y,X,Z,fexp,conf=0.95,clusrobust=True):
-
-    # Calcular el indicador de cluster para corregir la matriz VCV
-    clusvar = np.array([],'int')
-    ngroup=1
-    last=fexp[0]
-
-    for el in fexp:
-        if abs(last-el)>0.01:
-            ngroup += 1
-            last=el
-        clusvar=np.append(clusvar,ngroup)
+def modelo_ind(y,X,Z,fexp,conf=0.95):
 
     # Armar la regresion por OLS segun el modelo
     if not (X.any() or Z.any()):
@@ -285,30 +263,27 @@ def modelo_ind(y,X,Z,fexp,conf=0.95,clusrobust=True):
         nOut=colX*colZ
         df=n-(colX-1)-(colZ-1)-(colX-1)*(colZ-1)-1
 
+    # Este procedimiento es equivalente a la "pweights regression" en Stata 13
     fT=T
     irow = 0
     for row in T:
-        fT[irow,:] =fexp[irow]*T[irow,:]
+        fT[irow,:]=(fexp[irow]**0.5)*T[irow,:]
         irow += 1
-    fy = fexp * y
-    del T
+    fy = (fexp**0.5) * y
+    del y,T
 
-    model=sm.OLS(fy,fT,"drop")
+    model=sm.OLS(fy,fT,"drop",True)
     res_ols=model.fit()
-
-    # Ver si se quiere corregir la varianza por clusters o no
-    if clusrobust:
-        vcv=sms.sandwich_covariance.cov_cluster(res_ols,clusvar)
-    else:
-        vcv=res_ols.cov_params()
+    vcv=sms.sandwich_covariance.cov_hac(res_ols,0)
 
     # Construir la salida en el formato acordado
     output=np.zeros((nOut,4))
     iX,iZ=0,0
     crit=t.interval(conf,df)
+
     for iOut in range(nOut):
         # Incluir el coeficiente que corresponde a la tasa de cada combinacion y su varianza
-        # que es la suma de las varianzas mÃ¡s 2 veces todas las covarianzas cruzadas
+        # que es la suma de las varianzas más 2 veces todas las covarianzas cruzadas
         if (iZ==0 and iX==0):
             output[iOut,0]=res_ols.params[0]
             output[iOut,1]=vcv[0,0]
@@ -323,9 +298,10 @@ def modelo_ind(y,X,Z,fexp,conf=0.95,clusrobust=True):
         else:
             offZ=(colX-1)+iZ
             offX=iX
-            offXZ=(colX-1)+(colZ-1)+(colX-1)*(iX-1)+iZ
+            offXZ=(colX-1)+(colZ-1)+(colX-1)*(iZ-1)+iX
             output[iOut,0]=res_ols.params[0]+res_ols.params[offX]+res_ols.params[offZ]+res_ols.params[offXZ]
             output[iOut,1]=vcv[0,0]+vcv[offX,offX]+vcv[offZ,offZ]+vcv[offXZ,offXZ]+(2*vcv[0,offX])+(2*vcv[0,offZ])+(2*vcv[0,offXZ])+(2*vcv[offX,offZ])+(2*vcv[offX,offXZ])+(2*vcv[offZ,offXZ])
+
         if (iZ<colZ-1):
             iZ+=1
         else:
@@ -335,14 +311,13 @@ def modelo_ind(y,X,Z,fexp,conf=0.95,clusrobust=True):
         # Devolver la desv. estandar y no la varianza
         output[iOut,1]=output[iOut,1]**0.5
 
-        # Calcular los lÃ­mites para el intervalo de confianza
+        # Calcular los límites para el intervalo de confianza
         output[iOut,2]=output[iOut,0]+(crit[0]*output[iOut,1])
         output[iOut,3]=output[iOut,0]+(crit[1]*output[iOut,1])
 
     return output
 
 
-# @timeit
 def get_column_1(data, method_int, indicator_int):
     if method_int == 1:
         if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18):
@@ -362,7 +337,6 @@ def get_column_1(data, method_int, indicator_int):
     return column_1_array
 
 
-# @timeit
 def get_column_2_3(data, disintegrations, represent_int):
     disintegrations_size = len(disintegrations)
 
@@ -458,14 +432,12 @@ def get_column_2_3(data, disintegrations, represent_int):
     return columns
 
 
-# @timeit
 def get_column_4(data):
     column_4 = data.values_list("fexp", flat=True)
     column_4_array = np.array(list(column_4), 'float')
     return column_4_array
 
 
-# @timeit
 def get_area_name(represent_int):
     if represent_int == 1:
         area = 'Nacional'
@@ -476,7 +448,6 @@ def get_area_name(represent_int):
     return area
 
 
-# @timeit
 def get_filter_area(represent_int):
     if represent_int == 1:
         area = {}
@@ -487,7 +458,6 @@ def get_filter_area(represent_int):
     return area
 
 
-# @timeit
 def list_by_no_denied(request):
     id_desagre = request.GET['id_desagregacion']
     datos = request.GET.getlist('data_filters[]')
@@ -573,7 +543,6 @@ def list_by_no_denied(request):
     return HttpResponse(data, content_type='application/json')
 
 
-# @timeit
 def get_column_name_option(id_desagregation):
     if id_desagregation == 1:
         result = 'region_natural'
@@ -608,7 +577,6 @@ def get_column_name_option(id_desagregation):
     return result
 
 
-# @timeit
 def get_filter():
 
     data ={
@@ -665,7 +633,6 @@ def get_filter():
     return data
 
 
-# @timeit
 def indicador_filtro(request):
     id_indicador = request.GET['id_indicator']
 
@@ -706,7 +673,6 @@ def indicador_filtro(request):
     return HttpResponse(data, content_type='application/json')
 
 
-# @timeit
 def indicador_desagregacion(datos,ids):
     result = []
 
@@ -720,7 +686,6 @@ def indicador_desagregacion(datos,ids):
     return disin
 
 
-# @timeit
 def list_desagregation(request):
     disintegrations = Disintegration.objects.all()
     data = serializers.serialize('json', disintegrations)
@@ -728,7 +693,6 @@ def list_desagregation(request):
     return HttpResponse(data, content_type='application/json')
 
 
-# @timeit
 def get_data_by_represent(data_ENEMDU, represent_int):
     if(represent_int == 2):
         data = data_ENEMDU.objects.exclude(ciudad_ind='Resto Pais Rural')
@@ -739,7 +703,6 @@ def get_data_by_represent(data_ENEMDU, represent_int):
     return data
 
 
-# @timeit
 def get_type_by_represent(disintegrations_pos, represent_int):
     if(int(disintegrations_pos) == 2):
         if(represent_int == 2):
@@ -753,7 +716,6 @@ def get_type_by_represent(disintegrations_pos, represent_int):
     return types_option
 
 
-# @timeit
 def get_last_full_year(request):
     year = Data_from_2007_2.objects.values_list('anio', 'trimestre').distinct().last()
     last_full_year = [year[0], year[1]]
@@ -761,7 +723,6 @@ def get_last_full_year(request):
     return HttpResponse(data, content_type='application/json')
 
 
-# @timeit
 def get_method_option(indicator):
     method_1_valor = get_filter()[indicator][0]
     method_2_valor = get_filter()[indicator][1]
@@ -775,7 +736,6 @@ def get_method_option(indicator):
     return method_option
 
 
-# @timeit
 def get_years_list():
     method_1_years = Data_from_2003_4.objects.values_list('anio').distinct()
     method_2_years = Data_from_2007_2.objects.values_list('anio').distinct()
