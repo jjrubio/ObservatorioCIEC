@@ -34,7 +34,7 @@ class CUODE(models.Model):
     descripcion = models.TextField()
 
 
-class Nandina(models.Model):
+class NANDINA(models.Model):
     subpartida = models.CharField(max_length=10)
     descripcion = models.TextField()
 
@@ -85,7 +85,7 @@ class Export_CUODE(models.Model):
     fob = models.DecimalField(decimal_places=2, max_digits=7)
 
 
-class Export_Nandina(models.Model):
+class Export_NANDINA(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
     pais = models.CharField(max_length=10)
@@ -135,7 +135,7 @@ class Import_CUODE(models.Model):
     cib = models.DecimalField(decimal_places=2, max_digits=7)
 
 
-class Import_Nandina(models.Model):
+class Import_NANDINA(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
     pais = models.PositiveSmallIntegerField()
