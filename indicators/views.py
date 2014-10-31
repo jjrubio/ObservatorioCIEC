@@ -143,6 +143,8 @@ def calc_result(request):
 
     # demorada.apply_async(countdown=5)
     # trada.delay()
+    test_proc()
+    print test_proc()
 
     if not len(disintegrations) == 0:
         if len(disintegrations) == 1:
@@ -161,78 +163,88 @@ def calc_result(request):
         cache_value = '%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int)
         data_ENEMDU = data_ENEMDU.objects.all()
 
-    data_result = cache.get(cache_value)
-    if data_result is None:
+    # data_result = cache.get(cache_value)
+    # if data_result is None:
 
-        data_result = []
-        ban = 0
-        trim_1 = trimStart_int
-        trim_2 = 5
+    data_result = []
+    ban = 0
+    trim_1 = trimStart_int
+    trim_2 = 5
 
-        for i in range(yearStart_int, yearEnd_int+1):
-            if i == yearEnd_int:
-                trim_2 = trimEnd_int+1
-            for j in range(trim_1, trim_2):
-                represent_database = str(Structure.objects.get(anio=i, trim=j))
-                if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
-                    or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
+    for i in range(yearStart_int, yearEnd_int+1):
+        if i == yearEnd_int:
+            trim_2 = trimEnd_int+1
+        for j in range(trim_1, trim_2):
+            represent_database = str(Structure.objects.get(anio=i, trim=j))
+            if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
+                or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
 
-                    data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
-                    column_1 = get_column_1(data_byWhere, method_int, indicator_int)
-                    columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
-                    column_2 = columns_2_3[0]
-                    column_3 = columns_2_3[1]
-                    column_dimensions = columns_2_3[2]
-                    column_N = columns_2_3[6]
-                    column_4 = get_column_4(data_byWhere)
+                data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
+                column_1 = get_column_1(data_byWhere, method_int, indicator_int)
+                columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
+                column_2 = columns_2_3[0]
+                column_3 = columns_2_3[1]
+                column_dimensions = columns_2_3[2]
+                column_N = columns_2_3[6]
+                column_4 = get_column_4(data_byWhere)
 
-                    models_by_period = modelo_ind(column_1,column_2,column_3,column_4, confidence_level_int)
-                    models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
-                    data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
-                    data_result.append(data_result_by_period)
+                models_by_period = modelo_ind(column_1,column_2,column_3,column_4, confidence_level_int)
+                models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
+                data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
+                data_result.append(data_result_by_period)
 
-                    if (ban == 0):
-                        column_titles = columns_2_3[3]
-                        column_name_d1 = column_titles[0]
-                        column_name_d2 = column_titles[1]
-                        column_types_d1 = columns_2_3[4]
-                        column_types_d2 = columns_2_3[5]
+                if (ban == 0):
+                    column_titles = columns_2_3[3]
+                    column_name_d1 = column_titles[0]
+                    column_name_d2 = column_titles[1]
+                    column_types_d1 = columns_2_3[4]
+                    column_types_d2 = columns_2_3[5]
 
-                        disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
-                        if(column_dimensions[0] == 0):
-                            title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
-                        elif(column_dimensions[1] == 0):
-                            title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
-                        else:
-                            title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
+                    disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
+                    if(column_dimensions[0] == 0):
+                        title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                    elif(column_dimensions[1] == 0):
+                        title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                    else:
+                        title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
 
-                        if(yearStart_int == yearEnd_int):
-                            years_title = str(yearStart_int)
-                        else:
-                            years_title = str(yearStart_int)+' - '+str(yearEnd_int)
+                    if(yearStart_int == yearEnd_int):
+                        years_title = str(yearStart_int)
+                    else:
+                        years_title = str(yearStart_int)+' - '+str(yearEnd_int)
 
-                        unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
+                    unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
 
-                        ban = 1
+                    ban = 1
 
-                if j == 4:
-                    trim_1 = 1
+            if j == 4:
+                trim_1 = 1
 
-        if ban == 1:
-            data_result.append(title)
-            data_result.append(years_title)
-            data_result.append(unit)
-            data_result.append(column_dimensions)
-            data_result.append(column_name_d1)
-            data_result.append(column_name_d2)
-            data_result.append(column_types_d1)
-            data_result.append(column_types_d2)
-            indicator_counter = Indicator.objects.get(id=indicator_int).counter + 1
-            update_indicator_counter = Indicator.objects.filter(id=indicator_int).update(counter=indicator_counter)
-            cache.set(cache_value, data_result, None)
+    if ban == 1:
+        data_result.append(title)
+        data_result.append(years_title)
+        data_result.append(unit)
+        data_result.append(column_dimensions)
+        data_result.append(column_name_d1)
+        data_result.append(column_name_d2)
+        data_result.append(column_types_d1)
+        data_result.append(column_types_d2)
+        indicator_counter = Indicator.objects.get(id=indicator_int).counter + 1
+        update_indicator_counter = Indicator.objects.filter(id=indicator_int).update(counter=indicator_counter)
+        cache.set(cache_value, data_result, None)
 
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
+
+
+def test_proc(conf=0.95,clusrobust=True):
+    dirspec = "/home/jaruban/Documentos/OESE"
+    y = np.loadtxt(dirspec + "//column_1.txt",delimiter=',')
+    X = np.loadtxt(dirspec + "//column_2.txt",delimiter=',')
+    Z = np.loadtxt(dirspec + "//column_3.txt",delimiter=',')
+    fexp = np.loadtxt(dirspec + "//column_4.txt",delimiter=',')
+
+    return modelo_ind(y,X,Z,fexp,conf)
 
 
 # Recordar que las filas de todos los vectores y matrices de entrada
