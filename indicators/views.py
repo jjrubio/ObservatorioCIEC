@@ -16,6 +16,8 @@ from scipy.stats import t
 import math
 from django.core.cache import cache
 import time
+from datetime import datetime
+from django.contrib.sessions.models import Session
 from django.db.models import Sum
 # from task import trada
 
@@ -475,20 +477,25 @@ def list_by_no_denied(request):
     datos = request.GET.getlist('data_filters[]')
 
     #Validacion entre desagregaciones
-    if id_desagre == '1' or id_desagre == '3':
-        disintegrations = Disintegration.objects.all()
+    if id_desagre == '1':
+        disintegrations = Disintegration.objects.exclude(id__in=[2, 4])
         ids_value_list = disintegrations.values_list('id', flat=True)
         result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '2':
         disintegrations = Disintegration.objects.exclude(
-            id__in=[4, 5, 6, 8, 10, 14])
+            id__in=[1, 4, 5, 6, 8, 10, 14])
+        ids_value_list = disintegrations.values_list('id', flat=True)
+        result = indicador_desagregacion(datos, ids_value_list)
+        data = serializers.serialize('json', result)
+    elif id_desagre == '3':
+        disintegrations = Disintegration.objects.all()
         ids_value_list = disintegrations.values_list('id', flat=True)
         result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
     elif id_desagre == '4':
         disintegrations = Disintegration.objects.exclude(
-            id__in=[2, 5, 6, 8, 10, 14])
+            id__in=[1, 2, 5, 6, 8, 10, 14])
         ids_value_list = disintegrations.values_list('id', flat=True)
         result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
@@ -512,7 +519,7 @@ def list_by_no_denied(request):
         data = serializers.serialize('json', result)
     elif id_desagre == '8':
         disintegrations = Disintegration.objects.exclude(
-            id__in=[2, 4, 5, 6, 7, 9, 10, 11, 12, 14])
+            id__in=[2, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14])
         ids_value_list = disintegrations.values_list('id', flat=True)
         result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
@@ -524,7 +531,7 @@ def list_by_no_denied(request):
         data = serializers.serialize('json', result)
     elif id_desagre == '10':
         disintegrations = Disintegration.objects.exclude(
-            id__in=[2, 4, 5, 6, 8, 9, 11, 12, 14])
+            id__in=[2, 4, 5, 6, 8, 9, 11, 12, 13, 14])
         ids_value_list = disintegrations.values_list('id', flat=True)
         result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
@@ -542,7 +549,7 @@ def list_by_no_denied(request):
         data = serializers.serialize('json', result)
     elif id_desagre == '13':
         disintegrations = Disintegration.objects.exclude(
-            id__in=[7, 9, 11, 12, 14])
+            id__in=[7, 8, 9, 10, 11, 12, 14])
         ids_value_list = disintegrations.values_list('id', flat=True)
         result = indicador_desagregacion(datos, ids_value_list)
         data = serializers.serialize('json', result)
