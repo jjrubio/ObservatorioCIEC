@@ -39,7 +39,7 @@ def comercio(request):
         standar_name = NANDINA
         standar_table = 'comercio_nandina'
         export_standar_name = Export_NANDINA
-        import_standar_table = 'comercio_export_nandina'
+        export_standar_table = 'comercio_export_nandina'
         import_standar_name = Import_NANDINA
         import_standar_table = 'comercio_import_nandina'
     else:
@@ -48,28 +48,28 @@ def comercio(request):
             standar_name = CGCE
             standar_table = 'comercio_cgce'
             export_standar_name = Export_CGCE
-            import_standar_table = 'comercio_export_cgce'
+            export_standar_table = 'comercio_export_cgce'
             import_standar_name = Import_CGCE
             import_standar_table = 'comercio_import_cgce'
         elif standar == '3':
             standar_name = CIIU3
             standar_table = 'comercio_ciiu3'
             export_standar_name = Export_CIIU3
-            import_standar_table = 'comercio_export_ciiu3'
+            export_standar_table = 'comercio_export_ciiu3'
             import_standar_name = Import_CIIU3
             import_standar_table = 'comercio_import_ciiu3'
         elif standar == '4':
             standar_name = CPC
             standar_table = 'comercio_cpc'
             export_standar_name = Export_CPC
-            import_standar_table = 'comercio_export_cpc'
+            export_standar_table = 'comercio_export_cpc'
             import_standar_name = Import_CPC
             import_standar_table = 'comercio_import_cpc'
         elif standar == '5':
             standar_name = CUODE
             standar_table = 'comercio_cuode'
             export_standar_name = Export_CUODE
-            import_standar_table = 'comercio_export_cuode'
+            export_standar_table = 'comercio_export_cuode'
             import_standar_name = Import_CUODE
             import_standar_table = 'comercio_import_cuode'
 
@@ -88,6 +88,13 @@ def comercio(request):
     data_result.append([data_table_A])
 
     data_table_B = []
+
+    if tab_selected == '1':
+        trans_standar_name = export_standar_name
+        trans_standar_table = export_standar_table
+    else:
+        trans_standar_name = import_standar_name
+        trans_standar_table = import_standar_table
 
     # table_B = sql_B()
 
@@ -118,9 +125,9 @@ def sql_A(standar_name, standar_table, standar_clase, value_A, value_B):
 #ini_date: desde.substring(0,4)
 #fin_date: hasta.substring(0,4)
 def sql_B(tipo, standar_name, standar_table, standar_clase, periodicidad, value_A, value_B, agreg, ini_date, fin_date):
-    if(tipo=='export' and periodicidad=="mes"):
+    if(tipo=='1' and periodicidad=="mensual"):
         print 'en espera'
-        # raw_body = ("SELECT * FROM %s WHERE %s ") % (standar_table, standar_codigo)
+        raw_body = ("SELECT substr(ifnull(date(%s.ANO || '-0' || %s.MES || '-01', 'utc'),") % (standar_table, standar_table)
         # raw_where = ("LIKE %s OR descripcion LIKE %s")
         # data = standar_name.objects.raw(raw_body+raw_where, [value_A, value_B])
     return data
