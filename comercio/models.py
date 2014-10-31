@@ -6,7 +6,7 @@ class Lista_estandares(models.Model):
 
 
 class Paises(models.Model):
-    codigo = models.PositiveSmallIntegerField(unique=True)
+    codigo = models.PositiveSmallIntegerField()
     pais = models.TextField()
 
 
@@ -15,45 +15,45 @@ class Periodicidad(models.Model):
 
 
 class CGCE(models.Model):
-    codigo = models.CharField(max_length=10, unique=True)
+    codigo = models.CharField(max_length=10)
     descripcion = models.TextField()
 
 
 class CIIU3(models.Model):
-    codigo = models.CharField(max_length=10, unique=True)
+    codigo = models.CharField(max_length=10)
     descripcion = models.TextField()
 
 
 class CPC(models.Model):
-    codigo = models.CharField(max_length=10, primary_key=True)
+    codigo = models.CharField(max_length=10)
     descripcion = models.TextField()
 
 
 class CUODE(models.Model):
-    codigo = models.CharField(max_length=10, unique=True)
+    codigo = models.CharField(max_length=10)
     descripcion = models.TextField()
 
 
 class Nandina(models.Model):
-    subpartida = models.CharField(max_length=10, unique=True)
+    subpartida = models.CharField(max_length=10)
     descripcion = models.TextField()
 
 
 class Equivalencia(models.Model):
-    nandina = models.ForeignKey(Nandina, to_field='subpartida')
-    cpc = models.ForeignKey(CPC, to_field='codigo')
-    cuode = models.ForeignKey(CUODE, to_field='codigo')
-    cgce = models.ForeignKey(CGCE, to_field='codigo')
+    nandina = models.CharField(max_length=10)
+    cpc = models.CharField(max_length=10)
+    cuode = models.CharField(max_length=10)
+    cgce = models.CharField(max_length=10)
     sistema_armotizado = models.CharField(max_length=10)
-    ciiu3 = models.ForeignKey(CIIU3, to_field='codigo')
+    ciiu3 = models.CharField(max_length=10)
     cuci3 = models.CharField(max_length=10)
 
 
 class Export_CGCE(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
-    pais = models.ForeignKey(Paises, to_field='codigo')
-    codigo = models.ForeignKey(CGCE, to_field='codigo')
+    pais = models.PositiveSmallIntegerField()
+    codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
 
@@ -61,8 +61,8 @@ class Export_CGCE(models.Model):
 class Export_CIIU3(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
-    pais = models.ForeignKey(Paises, to_field='codigo')
-    codigo = models.ForeignKey(CIIU3, to_field='codigo')
+    pais = models.PositiveSmallIntegerField()
+    codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
 
@@ -70,8 +70,8 @@ class Export_CIIU3(models.Model):
 class Export_CPC(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
-    pais = models.ForeignKey(Paises, to_field='codigo')
-    codigo = models.ForeignKey(CPC, to_field='codigo')
+    pais = models.PositiveSmallIntegerField()
+    codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
 
@@ -79,8 +79,8 @@ class Export_CPC(models.Model):
 class Export_CUODE(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
-    pais = models.ForeignKey(Paises, to_field='codigo')
-    codigo = models.ForeignKey(CUODE, to_field='codigo')
+    pais = models.PositiveSmallIntegerField()
+    codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
 
@@ -88,18 +88,18 @@ class Export_CUODE(models.Model):
 class Export_Nandina(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
-    pais = models.ForeignKey(Paises, to_field='codigo')
+    pais = models.CharField(max_length=10)
     subpartida_nandina = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
-    subpartida_key =  models.ForeignKey(Nandina, to_field='subpartida')
+    subpartida_key =  models.CharField(max_length=10)
 
 
 class Import_CGCE(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
-    pais = models.ForeignKey(Paises, to_field='codigo')
-    codigo = models.ForeignKey(CGCE, to_field='codigo')
+    pais = models.PositiveSmallIntegerField()
+    codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
     cib = models.DecimalField(decimal_places=2, max_digits=7)
@@ -108,8 +108,8 @@ class Import_CGCE(models.Model):
 class Import_CIIU3(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
-    pais = models.ForeignKey(Paises, to_field='codigo')
-    codigo = models.ForeignKey(CIIU3, to_field='codigo')
+    pais = models.PositiveSmallIntegerField()
+    codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
     cib = models.DecimalField(decimal_places=2, max_digits=7)
@@ -118,8 +118,8 @@ class Import_CIIU3(models.Model):
 class Import_CPC(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
-    pais = models.ForeignKey(Paises, to_field='codigo')
-    codigo = models.ForeignKey(CPC, to_field='codigo')
+    pais = models.PositiveSmallIntegerField()
+    codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
     cib = models.DecimalField(decimal_places=2, max_digits=7)
@@ -128,8 +128,8 @@ class Import_CPC(models.Model):
 class Import_CUODE(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
-    pais = models.ForeignKey(Paises, to_field='codigo')
-    codigo = models.ForeignKey(CUODE, to_field='codigo')
+    pais = models.PositiveSmallIntegerField()
+    codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
     cib = models.DecimalField(decimal_places=2, max_digits=7)
@@ -138,12 +138,12 @@ class Import_CUODE(models.Model):
 class Import_Nandina(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
-    pais = models.ForeignKey(Paises, to_field='codigo')
+    pais = models.PositiveSmallIntegerField()
     subpartida_nandina = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
     cib = models.DecimalField(decimal_places=2, max_digits=7)
-    subpartida_key = models.ForeignKey(Nandina, to_field='subpartida')
+    subpartida_key = models.CharField(max_length=10)
 
 
 class sqliteadmin_queries(models.Model):

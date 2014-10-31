@@ -22,12 +22,10 @@ $(document).ready(function() {
     $('#options').change(function(){
         var id = $(this).val();
         if(id == 1){
-            $('#search_by_label').show();
-            $('#search_by').show();
+            $('#search').show();
             $('#pais').show();
         }else{
-            $('#search_by_label').hide();
-            $('#search_by').hide();
+            $('#search').hide();
             $('#pais').hide();
         }
     });
@@ -43,9 +41,9 @@ $(document).ready(function() {
 
     //Evento boton
     $('#btn_search').click(function(){
-        var options = $('#options option:selected').attr('value');
+        var option = $('#options option:selected').attr('value');
         var search_by;
-        var standars;
+        var standar;
         var period;
         var txt_desde = $('#startDate').val();
         var txt_hasta = $('#endDate').val();
@@ -53,33 +51,39 @@ $(document).ready(function() {
         var txt_agregacion;
         var tab_selected = tabs;
         var bandera;
-        
-        if($("#checkbox").is(':checked')) {  
+
+        if($("#checkbox").is(':checked')) {
             bandera = 1;
-        } else {  
+        } else {
             bandera = 0;
         }
 
         if(txt_agregacion < 0){
             //Mostrar mensaje de error
         }else{
-            if(options == "1"){
+            if(option == "1"){
                 search_by = $('#search_by option:selected').attr('value');
-                standars = $('#standars option:selected').attr('value');
+                standar = $('#standars option:selected').attr('value');
                 period = $('#period option:selected').attr('value');
-                txt_patron = $('#txt_patron').val();
-                txt_agregacion = $('#txt_agregacion').val();
                 checkbox_select = bandera;
             }else{
                 search_by = 0;
-                standars = $('#standars option:selected').attr('value');
+                standar = $('#standars option:selected').attr('value');
                 period = $('#period option:selected').attr('value');
-                txt_patron = $('#txt_patron').val();
-                txt_agregacion = $('#txt_agregacion').val();
                 checkbox_select = 0;
             }
+
+            txt_patron = $('#txt_patron').val();
+            txt_agregacion = $('#txt_agregacion').val();
+
+
+            $.getJSON('/comercio/', {'tab_selected': tab_selected, 'option': option, 'search_by': search_by, 'standar': standar, 'txt_desde': txt_desde,
+                                                 'txt_hasta': txt_hasta, 'period': period, 'txt_agregacion': txt_agregacion, 'txt_patron': txt_patron, 'checkbox_select': checkbox_select},
+            function(data){
+                console.log(data);
+            });
             //Verificacion de parametros enviados al servidor
-            console.log("TAB_PESTAÑA: "+tab_selected+";"+"OPTION_CODE_PAIS: "+options+";"+"SEARCH_BY: "+search_by+";"+"ESTANDAR: "+standars+";"+"PERIODO: "+"DESDE: "+txt_desde+";"+"HASTA: "+txt_hasta+";"+period+";"+"AGREGACION_VALOR:"+txt_agregacion+";"+"SEPARAR_PAIS: "+checkbox_select);
+            // console.log("TAB_PESTAÑA: "+tab_selected+";"+"OPTION_CODE_PAIS: "+options+";"+"SEARCH_BY: "+search_by+";"+"ESTANDAR: "+standars+";"+"PERIODO: "+"DESDE: "+txt_desde+";"+"HASTA: "+txt_hasta+";"+period+";"+"AGREGACION_VALOR:"+txt_agregacion+";"+"SEPARAR_PAIS: "+checkbox_select);
         }
     });
 });

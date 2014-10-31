@@ -101,12 +101,9 @@ $('.btn-calc, #a-resultados').click( function(){
             startTime = new Date();
             table(data);
             endTime = new Date();
-            console.log('Tiempo de tabla de datos: '+((endTime - startTime)*0.001)+' sec');
-
             startTime = new Date();
             graphs(data);
             endTime = new Date();
-            console.log('Tiempo de graficos: '+((endTime - startTime)*0.001)+' sec');
             $('#content-result').show();
           }else{
             $('#content-not-result').show();
@@ -286,9 +283,10 @@ function table(data){
     }
 
     $('#scroll_table').perfectScrollbar('destroy');
-    $('#titulo').empty()
-    $('#titulo_secundario').empty()
-    $('#periodo').empty()
+    $('#titulo').empty();
+    $('#titulo_secundario').empty();
+    $('#titulo_terciario').empty();
+    $('#periodo').empty();
 
     $('#titulo').append('<th></th>');
     $('#titulo_secundario').append('<th class="text-center" rowspan="2">Periodo</th>');

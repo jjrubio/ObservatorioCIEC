@@ -1,7 +1,10 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import HttpResponse, HttpResponseRedirect, render_to_response
 from django.template.context import RequestContext
 from django.template.loader import get_template
 from models import *
+import json
+from django.core import serializers
+from json import JSONEncoder
 from django.db.models import Q
 
 def comercio_page(request):
@@ -10,14 +13,54 @@ def comercio_page(request):
 
 
 def comercio(request):
-    pass
+    tab_selected = request.GET['tab_selected']
+    option = request.GET['option']
+    search_by = request.GET['search_by']
+    standar = request.GET['standar']
+    txt_desde = request.GET['txt_desde']
+    txt_hasta = request.GET['txt_hasta']
+    period = request.GET['period']
+    txt_agregacion = request.GET['txt_agregacion']
+
+#     SELECT NANDINA.* FROM NANDINA
+# WHERE (NANDINA.SUBPARTIDA LIKE @VALUE_A) OR (NANDINA.DESCRIPCION LIKE @VALUE_B)
+
+    db = Nandina
+    db_table = "comercio_nandina"
+    valueB = '%,%'
+    valueA = None
+    # d = CGCE.objects.raw('Select * FROM %s', [db_table])
+
+    raw_select_from = (
+    "SELECT * "
+    "FROM %s "
+    ) % (db_table)
+
+    raw_where =(
+        "WHERE subpartida LIKE %s OR descripcion LIKE %s"
+    )
+
+    d = db.objects.raw(raw_select_from+raw_where, [valueA, valueB])
+
+    # d = CGCE.objects.raw('Select * FROM %s WHERE descripcion LIKE %s', tuple([db_table,value]))
+    print d
+    for x in d:
+        print x
+        print x.subpartida, x.descripcion
+
+    # result = sql_A(standar, value_A, value_B)
+
+    # print result
+    # print tab_selected+', '+option+', '+search_by+', '+standar+', '+txt_desde+', '+txt_hasta+', '+period+', '+txt_agregacion+', '+checkbox_select
+    message = json.dumps(1)
+    return HttpResponse(message, content_type='application/json')
 
 
 #estandar: Nandina, CGCE, CPC, CUODE, CIIU3
 #value_A: patron% o null segun 'BuscarPor'
 #value_B: patron% o null segun 'BuscarPor'
 def sql_A(estandar, value_A, value_B):
-    data = estandar.objects.filter(Q(subpartida=value_A) | Q(descripcion=value_B)) #5 - 9
+    data = Nandina.objects.filter(Q(subpartida=value_A) | Q(descripcion=value_B)) #5 - 9
     return data
 
 #tipo: Si es export/import
@@ -30,7 +73,7 @@ def sql_A(estandar, value_A, value_B):
 #ini_date: desde.substring(0,4)
 #fin_date: hasta.substring(0,4)
 def sql_B(tipo, estandar, clase, periodicidad, value_A, value_B, agreg, ini_date, fin_date):
-    if(tipo=='export' and periodicidad="mes"):
+    if(tipo=='export' and periodicidad=="mes"):
         print 'fd'
 
 # SELECT substr(ifnull(date(EXPORT_CPC.ANO || '-0' || EXPORT_CPC.MES || '-01', 'utc'),
