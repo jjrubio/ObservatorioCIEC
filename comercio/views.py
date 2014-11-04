@@ -133,6 +133,38 @@ def sql_B(tipo, standar_name, standar_table, standar_clase, periodicidad, value_
     return data
     # pass
 
+#standar_name: NANDINA, CGCE, CPC, CUODE, CIIU3
+#standar_table: comercio_nandina, comercio_cgce, comercio_cpc, comercio_cuode, comercio_ciiu3
+#standar_clase: subpartida o codigo
+def sql_C(standar_name, standar_table, standar_clase, standar_codigo, codigo_estandar_request, standar_equivalencia):
+    raw_body = ("SELECT * FROM %s INNER JOIN %s ON %s.subpartida=%s.nandina WHERE %s.") % (standar_table, standar_equivalencia, standar_table, standar_equivalencia, standar_equivalencia)
+    raw_where = ("cgce=%s")
+    # raw_where = ("ciiu3=codigo_estandar_request")
+    # raw_where = ("cpc=codigo_estandar_request")
+    # raw_where = ("cuode=codigo_estandar_request")
+    data = standar_name.objects.raw(raw_body+raw_where,[codigo_estandar_request])
+    return data
+
+def sql_D(tipo, export_standar_name, export_standar_table, standar_table, agreg, value_A, value_B, ini_date, fin_date, codigo_estandar_request):
+    if(tipo==1):
+        raw_body_A = ("SELECT id, %s.ano AS ANO, substr(%s.codigo,1,%s) AS CODIGO, sum(%s.peso) AS PESO, sum(%s.fob) AS SUBTOTAL_FOB FROM %s WHERE (%s.") %(export_standar_table, export_standar_table, agreg,export_standar_table, export_standar_table, export_standar_table, export_standar_table)
+        raw_where_A = ("codigo IN (")
+        raw_body_B = ("SELECT %s.codigo FROM %s WHERE (%s.codigo ") %(standar_table, standar_table, standar_table)
+        #raw_where_B = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY %s.ano, substr(%s.codigo,1,%s) HAVING(ANO>=%s) AND (ANO<=%s)")
+        raw_where_B = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO HAVING(ANO>=%s) AND (ANO<=%s)")
+        data = export_standar_name.objects.raw(raw_body_A+raw_where_A+raw_body_B+raw_where_B, [value_A, value_B, ini_date, fin_date])
+    else:
+        raw_body_A = ("SELECT id, %s.ano AS ANO, substr(%s.subpartida_nandina,1,%s) AS SUBPARTIDA, sum(%s.peso) AS PESO, sum(%s.fob) AS SUBTOTAL_FOB FROM %s WHERE (%s.") %(export_standar_table, export_standar_table, agreg,export_standar_table, export_standar_table, export_standar_table, export_standar_table)
+        raw_where_A = ("subpartida_key IN (")
+        raw_body_B = ("SELECT %s.subpartida FROM %s WHERE (%s.subpartida ") %(standar_table, standar_table, standar_table)
+        #raw_where_B = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY %s.ano, substr(%s.codigo,1,%s) HAVING(ANO>=%s) AND (ANO<=%s)")
+        raw_where_B = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO HAVING(ANO>=%s) AND (ANO<=%s)")
+        data = export_standar_name.objects.raw(raw_body_A+raw_where_A+raw_body_B+raw_where_B, [value_A, value_B, ini_date, fin_date])
+
+    return data
+
+def sql_E():
+    return data
 
 
 # Export Nandina por mes
