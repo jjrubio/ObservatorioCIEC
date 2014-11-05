@@ -163,7 +163,21 @@ def sql_D(tipo, export_standar_name, export_standar_table, standar_table, agreg,
 
     return data
 
-def sql_E():
+def sql_E(tipo, export_standar_name, export_standar_table, standar_table, pais_tabla, agreg, value_A, value_B, ini_date, fin_date):
+    #falta agregar substr al fina antes del having
+    if(tipo==1):
+        raw_body_A = ("SELECT %s.id, %s.ano AS ANO, %s.pais, substr(%s.codigo,1,%s) AS CODIGO, sum(%s.peso) AS PESO, sum(%s.fob) AS SUBTOTAL_FOB FROM %s INNER JOIN %s ON (%s.codigo=%s.pais) WHERE (%s.") %(export_standar_table, export_standar_table, pais_tabla, export_standar_table, agreg, export_standar_table, export_standar_table, export_standar_table, pais_tabla, pais_tabla, export_standar_table, export_standar_table)    
+        raw_where_A = ("codigo IN (")
+        raw_body_B = ("SELECT %s.codigo FROM %s WHERE (%s.codigo ") %(standar_table, standar_table, standar_table)
+        raw_where_B = ("LIKE %s) OR  (descripcion LIKE %s))) GROUP BY ANO, PAIS HAVING(ANO>=%s) AND (ANO<=%s)")
+        data = export_standar_name.objects.raw(raw_body_A+raw_where_A+raw_body_B+raw_where_B, [value_A,value_B,ini_date,fin_date])
+    else:
+        raw_body_A = ("SELECT %s.id, %s.ano AS ANO, %s.pais, substr(%s.subpartida_nandina,1,%s) AS SUBPARTIDA, sum(%s.peso) AS PESO, sum(%s.fob) AS SUBTOTAL_FOB FROM %s INNER JOIN %s ON (%s.codigo=%s.pais) WHERE (%s.") %(export_standar_table, export_standar_table, pais_tabla, export_standar_table, agreg, export_standar_table, export_standar_table, export_standar_table, pais_tabla, pais_tabla, export_standar_table, export_standar_table)    
+        raw_where_A = ("subpartida_key IN (")
+        raw_body_B = ("SELECT %s.subpartida FROM %s WHERE (%s.subpartida ") %(standar_table, standar_table, standar_table)
+        raw_where_B = ("LIKE %s) OR  (descripcion LIKE %s))) GROUP BY ANO, PAIS HAVING(ANO>=%s) AND (ANO<=%s)")
+        data = export_standar_name.objects.raw(raw_body_A+raw_where_A+raw_body_B+raw_where_B, [value_A,value_B,ini_date,fin_date])
+
     return data
 
 
