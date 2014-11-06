@@ -35,7 +35,7 @@ def comercio(request):
         pass
 
     if standar == '1':
-        standar_codigo = 'subpartida'
+        standar_clase = 'subpartida'
         standar_name = NANDINA
         standar_table = 'comercio_nandina'
         export_standar_name = Export_NANDINA
@@ -43,7 +43,7 @@ def comercio(request):
         import_standar_name = Import_NANDINA
         import_standar_table = 'comercio_import_nandina'
     else:
-        standar_codigo = 'codigo'
+        standar_clase = 'codigo'
         if standar == '2':
             standar_name = CGCE
             standar_table = 'comercio_cgce'
@@ -76,7 +76,7 @@ def comercio(request):
     data_result = []
     data_table_A = []
 
-    table_A = sql_A(standar_name, standar_table, standar_codigo, value_A, value_B)
+    table_A = sql_A(standar_name, standar_table, standar_clase, value_A, value_B)
 
     if standar == '1':
         for va in table_A:
@@ -109,7 +109,7 @@ def comercio(request):
 #value_A: patron% o null segun 'BuscarPor'
 #value_B: patron% o null segun 'BuscarPor'
 def sql_A(standar_name, standar_table, standar_clase, value_A, value_B):
-    raw_body = ("SELECT * FROM %s WHERE %s ") % (standar_table, standar_codigo)
+    raw_body = ("SELECT * FROM %s WHERE %s ") % (standar_table, standar_clase)
     raw_where = ("LIKE %s OR descripcion LIKE %s")
     table_A = standar_name.objects.raw(raw_body+raw_where, [value_A, value_B])
     return table_A
@@ -132,6 +132,39 @@ def sql_B(tipo, standar_name, standar_table, standar_clase, periodicidad, value_
         # data = standar_name.objects.raw(raw_body+raw_where, [value_A, value_B])
     return table_B
     # pass
+
+
+    # Export Nandina por mes
+
+# SELECT substr(ifnull(date(EXPORT_NANDINA.ANO || '-0' || EXPORT_NANDINA.MES || '-01', 'utc'),
+# date(EXPORT_NANDINA.ANO || '-' || EXPORT_NANDINA.MES || '-01', 'utc')),1,7) AS FECHA,
+# substr(EXPORT_NANDINA.SUBPARTIDA_NANDINA,1,@AGREG) AS SUBPARTIDA,
+# sum(EXPORT_NANDINA.PESO) AS PESO,
+# sum(EXPORT_NANDINA.FOB) AS SUBTOTAL_FOB
+# FROM EXPORT_NANDINA
+# WHERE (EXPORT_NANDINA.SUBPARTIDA_KEY IN
+# (SELECT NANDINA.SUBPARTIDA FROM NANDINA
+# WHERE (NANDINA.SUBPARTIDA LIKE @VALUE_A) OR (NANDINA.DESCRIPCION LIKE @VALUE_B)))
+# GROUP BY EXPORT_NANDINA.ANO,EXPORT_NANDINA.MES,substr(EXPORT_NANDINA.SUBPARTIDA_NANDINA,1,@AGREG)
+# HAVING (FECHA>=@INI_DATE) AND (FECHA<=@FIN_DATE)
+
+
+
+# Expot CPC por mes
+
+# SELECT substr(ifnull(date(EXPORT_CPC.ANO || '-0' || EXPORT_CPC.MES || '-01', 'utc'),
+# date(EXPORT_CPC.ANO || '-' || EXPORT_CPC.MES || '-01', 'utc'))1,7) AS FECHA,
+# substr(EXPORT_CPC.CODIGO,1,@AGREG) AS CODIGO,
+# sum(EXPORT_CPC.PESO) AS PESO,
+# sum(EXPORT_CPC.FOB) AS SUBTOTAL_FOB
+# FROM EXPORT_CPC
+# WHERE (EXPORT_CPC.CODIGO IN
+# (SELECT CPC.CODIGO FROM CPC
+# WHERE (CPC.CODIGO LIKE @VALUE_A) OR (CPC.DESCRIPCION LIKE @VALUE_B)))
+# GROUP BY EXPORT_CPC.ANO,EXPORT_CPC.MES,substr(EXPORT_CPC.CODIGO,1,@AGREG)
+# HAVING (FECHA>=@INI_DATE) AND (FECHA<=@FIN_DATE)
+
+
 
 #standar_name: NANDINA, CGCE, CPC, CUODE, CIIU3
 #standar_table: comercio_nandina, comercio_cgce, comercio_cpc, comercio_cuode, comercio_ciiu3
@@ -197,32 +230,3 @@ def sql_F(tipo, export_standar_name, export_standar_table, standar_table, pais_t
 
     return data
 
-# Export Nandina por mes
-
-# SELECT substr(ifnull(date(EXPORT_NANDINA.ANO || '-0' || EXPORT_NANDINA.MES || '-01', 'utc'),
-# date(EXPORT_NANDINA.ANO || '-' || EXPORT_NANDINA.MES || '-01', 'utc')),1,7) AS FECHA,
-# substr(EXPORT_NANDINA.SUBPARTIDA_NANDINA,1,@AGREG) AS SUBPARTIDA,
-# sum(EXPORT_NANDINA.PESO) AS PESO,
-# sum(EXPORT_NANDINA.FOB) AS SUBTOTAL_FOB
-# FROM EXPORT_NANDINA
-# WHERE (EXPORT_NANDINA.SUBPARTIDA_KEY IN
-# (SELECT NANDINA.SUBPARTIDA FROM NANDINA
-# WHERE (NANDINA.SUBPARTIDA LIKE @VALUE_A) OR (NANDINA.DESCRIPCION LIKE @VALUE_B)))
-# GROUP BY EXPORT_NANDINA.ANO,EXPORT_NANDINA.MES,substr(EXPORT_NANDINA.SUBPARTIDA_NANDINA,1,@AGREG)
-# HAVING (FECHA>=@INI_DATE) AND (FECHA<=@FIN_DATE)
-
-
-
-# Expot CPC por mes
-
-# SELECT substr(ifnull(date(EXPORT_CPC.ANO || '-0' || EXPORT_CPC.MES || '-01', 'utc'),
-# date(EXPORT_CPC.ANO || '-' || EXPORT_CPC.MES || '-01', 'utc'))1,7) AS FECHA,
-# substr(EXPORT_CPC.CODIGO,1,@AGREG) AS CODIGO,
-# sum(EXPORT_CPC.PESO) AS PESO,
-# sum(EXPORT_CPC.FOB) AS SUBTOTAL_FOB
-# FROM EXPORT_CPC
-# WHERE (EXPORT_CPC.CODIGO IN
-# (SELECT CPC.CODIGO FROM CPC
-# WHERE (CPC.CODIGO LIKE @VALUE_A) OR (CPC.DESCRIPCION LIKE @VALUE_B)))
-# GROUP BY EXPORT_CPC.ANO,EXPORT_CPC.MES,substr(EXPORT_CPC.CODIGO,1,@AGREG)
-# HAVING (FECHA>=@INI_DATE) AND (FECHA<=@FIN_DATE)
