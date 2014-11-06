@@ -190,7 +190,7 @@ def calc_result(request):
                 column_N = columns_2_3[6]
                 column_4 = get_column_4(data_byWhere)
 
-                models_by_period = modelo_ind(column_1,column_2,column_3,column_4, confidence_level_int)
+                models_by_period = modelo_final(column_1,column_2,column_3,column_4, confidence_level_int)
                 models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
                 data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
                 data_result.append(data_result_by_period)
@@ -251,7 +251,11 @@ def test_proc(conf=0.95,clusrobust=True):
 
 # Recordar que las filas de todos los vectores y matrices de entrada
 # deben de estar ordenados por "fexp"
-def modelo_ind(y,X,Z,fexp,conf=0.95):
+def modelo_ind(y,X,Z,fexp,conf=0.95,colin_thres=30):
+
+    # Descartar categorias base con menos del minimo de observaciones
+    X=remove_colinear_base(X, colin_thres)
+    Z=remove_colinear_base(Z, colin_thres)
 
     # Armar la regresion por OLS segun el modelo
     if not (X.any() or Z.any()):
@@ -278,49 +282,58 @@ def modelo_ind(y,X,Z,fexp,conf=0.95):
         df=n-(colX-1)-(colZ-1)-(colX-1)*(colZ-1)-1
 
     # Este procedimiento es equivalente a la "pweights regression" en Stata 13
-    fT=T
-    irow = 0
+    # validando que no existan cruces (grupos) con cruces con "pocos" elementos
+    nParams=T.shape[1]
+    nancol_T = ( np.sum(T,axis=0) <= colin_thres )
+    fy, fT , irow = float('nan')*y, float('nan')*T, 0
     for row in T:
-        fT[irow,:]=(fexp[irow]**0.5)*T[irow,:]
+        if np.sum(row[nancol_T])>0:
+            # No agregar filas que caigan en categorias con "pocos" elementos
+            pass
+        else:
+            fy[irow]=(fexp[irow]**0.5) * y[irow]
+            fT[irow,:]=(fexp[irow]**0.5) * T[irow,:]
         irow += 1
-    fy = (fexp**0.5) * y
+    fT = fT[:,~nancol_T] # Eliminar columnas con "pocos" elementos
     del y,T
 
     model=sm.OLS(fy,fT,"drop",True)
     res_ols=model.fit()
-    vcv=sms.sandwich_covariance.cov_hac(res_ols,0)
+    hac_vcv=sms.sandwich_covariance.cov_hac(res_ols,0)
+    params=float('nan')*np.ones(nParams)
+    params[~nancol_T]=res_ols.params
+    vcv=float('nan')*np.ones((nParams,nParams))
+    irow,cidx=0,0
+    while irow<nParams:
+        if not nancol_T[irow]:
+            vcv[irow,~nancol_T]=hac_vcv[cidx,:]
+            cidx+=1
+        irow+=1
 
     # Construir la salida en el formato acordado
-    output=np.zeros((nOut,4))
+    output=float('nan')*np.ones((nOut,4))
     iX,iZ=0,0
     crit=t.interval(conf,df)
-
     for iOut in range(nOut):
         # Incluir el coeficiente que corresponde a la tasa de cada combinacion y su varianza
         # que es la suma de las varianzas más 2 veces todas las covarianzas cruzadas
         if (iZ==0 and iX==0):
-            output[iOut,0]=res_ols.params[0]
+            output[iOut,0]=params[0]
             output[iOut,1]=vcv[0,0]
         elif (iZ>0 and iX==0):
             offZ=(colX-1)+iZ
-            output[iOut,0]=res_ols.params[0]+res_ols.params[offZ]
+            output[iOut,0]=params[0]+params[offZ]
             output[iOut,1]=vcv[0,0]+vcv[offZ,offZ]+(2*vcv[0,offZ])
         elif (iZ==0 and iX>0):
             offX=iX
-            output[iOut,0]=res_ols.params[0]+res_ols.params[offX]
+            output[iOut,0]=params[0]+params[offX]
             output[iOut,1]=vcv[0,0]+vcv[offX,offX]+(2*vcv[0,offX])
         else:
             offZ=(colX-1)+iZ
             offX=iX
-            offXZ=(colX-1)+(colZ-1)+(colX-1)*(iZ-1)+iX
-            output[iOut,0]=res_ols.params[0]+res_ols.params[offX]+res_ols.params[offZ]+res_ols.params[offXZ]
+            offXZ=(colX-1)+(colZ-1)+(colZ-1)*(iX-1)+iZ
+            output[iOut,0]=params[0]+params[offX]+params[offZ]+params[offXZ]
             output[iOut,1]=vcv[0,0]+vcv[offX,offX]+vcv[offZ,offZ]+vcv[offXZ,offXZ]+(2*vcv[0,offX])+(2*vcv[0,offZ])+(2*vcv[0,offXZ])+(2*vcv[offX,offZ])+(2*vcv[offX,offXZ])+(2*vcv[offZ,offXZ])
-
-        if (iZ<colZ-1):
-            iZ+=1
-        else:
-            iZ=0
-            iX+=1
 
         # Devolver la desv. estandar y no la varianza
         output[iOut,1]=output[iOut,1]**0.5
@@ -329,7 +342,100 @@ def modelo_ind(y,X,Z,fexp,conf=0.95):
         output[iOut,2]=output[iOut,0]+(crit[0]*output[iOut,1])
         output[iOut,3]=output[iOut,0]+(crit[1]*output[iOut,1])
 
+        if (iZ<colZ-1):
+            iZ+=1
+        else:
+            iZ=0
+            iX+=1
+
     return output
+
+
+def remove_colinear_base(mat, colin_thres):
+    X, icol = np.copy(mat), 0
+    while True:
+        if sum(X[:,icol])>colin_thres:
+            break
+        X=np.delete(X,icol,axis=1)
+        icol+=1
+    return X
+    return output
+
+
+def modelo_final(y, X, Z, fexp, conf = 0.95, colin_thres = 30):
+    nx = int(np.size(X, 1))
+    nz = int(np.size(Z, 1))
+    flag_x = 0
+    flag_z = 0
+    x_tot = np.sum(X, 0)
+    z_tot = np.sum(Z, 0)
+
+    x_temp = np.copy(X[:,0])
+    x_dict = np.empty((nx, 2), dtype=int)
+    x_dict[:,0] = range(nx)
+    x_dict[:,1] = range(nx)
+
+    z_temp = np.copy(Z[:,0])
+    z_dict = np.empty((nz, 2), dtype=int)
+    z_dict[:,0] = range(nz)
+    z_dict[:,1] = range(nz)
+
+    if x_tot[0] < 30:
+        flag_x += 1
+        for i in range(1, nx, 1):
+            if x_tot[i] >= 30:
+                X[:,0] = X[:,i]
+                x_dict[0,1] = i
+                x_dict[i,1] = 0
+                X[:,i] = x_temp
+
+            break
+
+    if z_tot[0] < 30:
+        flag_z += 1
+        for i in range(1, nz, 1):
+            if z_tot[i] >= 30:
+                Z[:,0] = Z[:,i]
+                z_dict[0,1] = i
+                z_dict[i,1] = 0
+                Z[:,i] = z_temp
+
+            break
+    #Calcular los predicts con input ordenado
+    P = modelo_ind(y, X, Z, fexp, conf, colin_thres)
+    #reordenar los predict
+    #reordenar si se cambio la primera columna de X y no de Z
+    if (flag_x==1 and flag_z==0):
+        sx = x_dict[0,1]
+        P_temp = np.copy(P[:nz,:])
+        s_range = range(sx*nz, sx*nz+nz)
+        P[:nz,:] = P[s_range, :]
+        P[s_range, :] = P_temp
+    #reordenar si se cambio la primera columna de Z y no de X
+    elif (flag_x==0 and flag_z==1):
+        sz = z_dict[0,1]
+        s_range_a = range(0, nz*nx, nz)
+        P_temp = np.copy(P[s_range_a])
+        s_range_b = range(sz, nz*nx, nz)
+        P[s_range_a] = P[s_range_b]
+        P[s_range_b] = P_temp
+    #reordenar si se cambiaron las primeras columnas de X y Z
+    elif (flag_x==1 and flag_z==1):
+        #reordenar el bloque base correspondiente a X
+        sx = x_dict[0,1]
+        P_temp = np.copy(P[:nz,:])
+        s_range = range(sx*nz, sx*nz+nz)
+        P[:nz,:] = P[s_range, :]
+        P[s_range, :] = P_temp
+        #reordenar las bases de Z en los diferentes bloques de X ya ordenados
+        sz = z_dict[0,1]
+        s_range_a = range(0, nz*nx, nz)
+        P_temp = np.copy(P[s_range_a])
+        s_range_b = range(sz, nz*nx, nz)
+        P[s_range_a] = P[s_range_b]
+        P[s_range_b] = P_temp
+
+    return P
 
 
 def get_column_1(data, method_int, indicator_int):
@@ -865,7 +971,7 @@ def calc_data(ind, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimE
                 column_N = columns_2_3[6]
                 column_4 = get_column_4(data_byWhere)
 
-                models_by_period = modelo_ind(column_1,column_2,column_3,column_4)
+                models_by_period = modelo_final(column_1,column_2,column_3,column_4)
                 models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
                 data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
                 data_result.append(data_result_by_period)
