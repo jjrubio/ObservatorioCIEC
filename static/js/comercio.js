@@ -49,7 +49,7 @@ $(document).ready(function() {
         var txt_hasta = $('#endDate').val();
         var txt_patron;
         var txt_agregacion;
-        var tab_selected = tabs;
+        var tipo = tabs;
         var bandera;
 
         if($("#checkbox").is(':checked')) {
@@ -65,20 +65,20 @@ $(document).ready(function() {
                 search_by = $('#search_by option:selected').attr('value');
                 standar = $('#standars option:selected').attr('value');
                 period = $('#period option:selected').attr('value');
-                checkbox_select = bandera;
+                checkbox_pais = bandera;
             }else{
                 search_by = 0;
                 standar = $('#standars option:selected').attr('value');
                 period = $('#period option:selected').attr('value');
-                checkbox_select = 0;
+                checkbox_pais = 0;
             }
 
             txt_patron = $('#txt_patron').val();
             txt_agregacion = $('#txt_agregacion').val();
 
 
-            $.getJSON('/comercio/', {'tab_selected': tab_selected, 'option': option, 'search_by': search_by, 'standar': standar, 'txt_desde': txt_desde,
-                                                 'txt_hasta': txt_hasta, 'period': period, 'txt_agregacion': txt_agregacion, 'txt_patron': txt_patron, 'checkbox_select': checkbox_select},
+            $.getJSON('/comercio/', {'tipo': tipo, 'option': option, 'search_by': search_by, 'standar': standar, 'txt_desde': txt_desde,
+                                                 'txt_hasta': txt_hasta, 'period': period, 'txt_agregacion': txt_agregacion, 'txt_patron': txt_patron, 'checkbox_pais': checkbox_pais},
             function(data){
                 console.log(data);
             });
