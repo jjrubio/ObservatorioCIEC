@@ -5,7 +5,16 @@ from models import *
 import json
 from django.core import serializers
 from json import JSONEncoder
+import pickle
 from django.db.models import Q
+
+
+class PythonObjectEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (list, dict, str, unicode, int, float, bool, type(None))):
+            return JSONEncoder.default(self, obj)
+        return {'_python_object': pickle.dumps(obj)}
+
 
 def comercio_page(request):
     template = 'comercio.html'
@@ -88,7 +97,7 @@ def comercio(request):
         for va in table_A:
             data_table_A.append([va.codigo, va.descripcion])
 
-    # data_result.append([data_table_A])
+    data_result.append([data_table_A])
 
 
     data_table_B = []
@@ -114,22 +123,61 @@ def comercio(request):
         tipo_standar_table = import_standar_table
 
     if option == '1':
-        table_B = sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_name, standar_table, standar_clase,
+        table_B = sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, standar_clase,
                                         standar_var1, standar_var2, period, value_A, value_B, agreg, ini_date, fin_date, checkbox_pais)
+
     else:
         table_B = sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standar_table, standar_clase,
                                         standar_var1, standar_var2, period, value, agreg, ini_date, fin_date)
 
-    # print table_B
-    # for vb in table_B:
-    #     print vb
-    #     print vb.FECHA
-        # print vb.subpartida
-        # print vb.PESO
-        # print vb.SUBTOTAL_FOB
-            # data_table_A.append([va.codigo, va.descripcion])
+    if checkbox_pais == '0':
+        if tipo == '1':
+            if standar == '1':
+                for vb in table_B:
+                    data_table_B.append([vb.FECHA, vb.subpartida, vb.PESO, vb.SUBTOTAL_FOB])
+            elif standar == '4':
+                for vb in table_B:
+                    data_table_B.append([vb.ANO, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB])
+            else:
+                for vb in table_B:
+                    data_table_B.append([vb.FECHA, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB])
+        else:
+            if standar == '1':
+                for vb in table_B:
+                    data_table_B.append([vb.FECHA, vb.subpartida, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
+            elif standar == '4':
+                for vb in table_B:
+                    data_table_B.append([vb.ANO, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
+            else:
+                for vb in table_B:
+                    data_table_B.append([vb.FECHA, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
 
-    message = json.dumps(data_result)
+    if checkbox_pais == '1' or option == '2':
+        if tipo == '1':
+            if standar == '1':
+                for vb in table_B:
+                    data_table_B.append([vb.FECHA, vb.PAIS, vb.subpartida, vb.PESO, vb.SUBTOTAL_FOB])
+            elif standar == '4':
+                for vb in table_B:
+                    data_table_B.append([vb.ANO, vb.PAIS, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB])
+            else:
+                for vb in table_B:
+                    data_table_B.append([vb.FECHA, vb.PAIS, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB])
+        else:
+            if standar == '1':
+                for vb in table_B:
+                    data_table_B.append([vb.FECHA, vb.PAIS, vb.subpartida, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
+            elif standar == '4':
+                for vb in table_B:
+                    data_table_B.append([vb.ANO, vb.PAIS, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
+            else:
+                for vb in table_B:
+                    data_table_B.append([vb.FECHA, vb.PAIS, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
+
+
+    data_result.append([data_table_B])
+
+    message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
 
 
@@ -156,127 +204,431 @@ def sql_A(standar_name, standar_table, standar_clase, value_A, value_B):
 #ini_date: desde.substring(0,4)
 #fin_date: hasta.substring(0,4)
 #checkbox_pais: si se separa por pais o no
-def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_name, standar_table, standar_clase,
+def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, standar_clase,
                         standar_var1, standar_var2, period, value_A, value_B, agreg, ini_date, fin_date, checkbox_pais):
 
     #subpartida/codigo por mes
     if period == '1':
-        if tipo == '1':
-            raw_body_1 = ("""SELECT id, substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7) AS FECHA,
-                                    substr(%s,1,%s) AS %s,
-                                    sum(peso) AS PESO,
-                                    sum(fob) AS SUBTOTAL_FOB
-                                    """) % (standar_var1, agreg, standar_clase)
+        if checkbox_pais == '0':
+            if tipo == '1':
+                raw_body_1 = ("""SELECT id, substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7) AS FECHA,
+                                        substr(%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB
+                                        """) % (standar_var1, agreg, standar_clase)
+            else:
+                raw_body_1 = ("""SELECT id, substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7) AS FECHA,
+                                        substr(%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB
+                                        sum(cif) AS SUBTOTAL_CIF
+                                        """) % (standar_var1, agreg, standar_clase)
+
+            raw_body_2 = ("""FROM %s
+                                        WHERE (%s IN
+                                        (SELECT %s
+                                        FROM %s
+                                        WHERE (%s
+                                    """) % (tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
+
+            raw_where_1 = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO, MES,")
+
+            raw_body_3 = ("substr(%s,1,%s)") % (standar_var1, agreg)
+
+            raw_where_2 = ("HAVING (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)>=%s) AND (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)<=%s)")
+
         else:
-            raw_body_1 = ("""SELECT V_TABLE.id,
-                                    concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
-                                    V_TABLE.PESO AS PESO,
-                                    V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB,
-                                    V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
-                                    FROM( SELECT id, ano AS ANO, ((MES-1)/3)+1 AS SEMESTRE,
-                                    substr(%s,1,%s) AS %s,
-                                    sum(peso) AS PESO,
-                                    sum(fob) AS SUBTOTAL_FOB,
-                                    sum(cif) AS SUBTOTAL_CIF
-                                   """) % (standar_var1, agreg, standar_clase)
+            if tipo == '1':
+                raw_body_1 = ("""SELECT %s.id, substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7) AS FECHA,
+                                        comercio_paises.pais AS PAIS,
+                                        substr(%s.%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB
+                                        """) % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, standar_clase)
+            else:
+                raw_body_1 = ("""SELECT %s.id, substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7) AS FECHA,
+                                        comercio_paises.pais AS PAIS,
+                                        substr(%s.%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB,
+                                        sum(cif) AS SUBTOTAL_CIF
+                                        """) % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, standar_clase)
 
-        raw_body_2 = ("""FROM %s
-                                    WHERE (%s IN
-                                    (SELECT %s
-                                    FROM %s
-                                    WHERE (%s
-                                """) % (tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
+            raw_body_2 = ("""FROM %s
+                                    INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
+                                    WHERE (%s.%s IN
+                                    (SELECT %s FROM %s WHERE (%s
+                                    """) % (tipo_standar_table, tipo_standar_table, tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
 
-        raw_where_1 = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO, MES,")
+            raw_where_1 = ("LIKE %s) OR (descripcion LIKE %s))) ")
 
-        raw_body_3 = ("substr(%s,1,%s)") % (standar_var1, agreg)
+            raw_body_3 = ("GROUP BY ano, mes, substr(%s.%s,1,%s),%s.pais ") % (tipo_standar_table, standar_var1, agreg, tipo_standar_table)
 
-        raw_where_2 = ("HAVING (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)>=%s) AND (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)<=%s)")
+            raw_where_2 = ("HAVING (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)>=%s) AND (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)<=%s)")
 
         table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B,  ini_date, fin_date])
 
+        for vb in table_B:
+            print vb.FECHA
+            print vb.PESO
+            print vb.SUBTOTAL_FOB
+
     #subpartida/codigo por trimestre
     elif period == '2':
-        if tipo == '1':
-            raw_body_1 = ("""SELECT V_TABLE.id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
-                                    V_TABLE.%s AS %s,
-                                    V_TABLE.PESO AS PESO,
-                                    V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB
-                                    FROM( SELECT id, ano AS ANO, ((MES-1)/3)+1 AS SEMESTRE,
-                                    substr(%s,1,%s) AS %s,
-                                    sum(peso) AS PESO,
-                                    sum(fob) AS SUBTOTAL_FOB
-                                   """) % (standar_clase, standar_clase, standar_var1, agreg, standar_clase)
+        if checkbox_pais == '0':
+            if tipo == '1':
+                raw_body_1 = ("""SELECT V_TABLE.id,
+                                        concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+                                        V_TABLE.%s AS %s,
+                                        V_TABLE.PESO AS PESO,
+                                        V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB
+                                        FROM( SELECT id, ano AS ANO, ((MES-1)/3)+1 AS SEMESTRE,
+                                        substr(%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB
+                                       """) % (standar_clase, standar_clase, standar_var1, agreg, standar_clase)
+            else:
+                raw_body_1 = ("""SELECT V_TABLE.id,
+                                        concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+                                        V_TABLE.%s AS %s,
+                                        V_TABLE.PESO AS PESO,
+                                        V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB,
+                                        V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
+                                        FROM( SELECT id, ano AS ANO, ((MES-1)/3)+1 AS SEMESTRE,
+                                        substr(%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB,
+                                        sum(cif) AS SUBTOTAL_CIF
+                                       """) % (standar_clase, standar_clase, standar_var1, agreg, standar_clase)
+
+            raw_body_2 = ("""FROM %s
+                                        WHERE (%s IN
+                                        (SELECT %s
+                                        FROM %s
+                                        WHERE (%s
+                                    """) % (tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
+
+            raw_where = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO, SEMESTRE) AS V_TABLE WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+
+            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where, [value_A, value_B,  ini_date, fin_date])
+
         else:
-            raw_body_1 = ("""SELECT V_TABLE.id,
-                                    concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
-                                    V_TABLE.PESO AS PESO,
-                                    V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB,
-                                    V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
-                                    FROM( SELECT id, ano AS ANO, ((MES-1)/3)+1 AS SEMESTRE,
-                                    substr(%s,1,%s) AS %s,
-                                    sum(peso) AS PESO,
-                                    sum(fob) AS SUBTOTAL_FOB,
-                                    sum(cif) AS SUBTOTAL_CIF
-                                   """) % (standar_var1, agreg, standar_clase)
+            if tipo == '1':
+                raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+                                        V_TABLE.pais AS PAIS,
+                                        V_TABLE.%s AS %s,
+                                        V_TABLE.PESO AS PESO,
+                                        V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB
+                                        FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/3)+1 AS SEMESTRE,
+                                        comercio_paises.pais AS PAIS,
+                                        substr(%s.%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB
+                                       """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
+            else:
+                raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+                                        V_TABLE.pais AS PAIS,
+                                        V_TABLE.%s AS %s,
+                                        V_TABLE.PESO AS PESO,
+                                        V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB,
+                                        V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
+                                        FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/3)+1 AS SEMESTRE,
+                                        comercio_paises.pais AS PAIS,
+                                        substr(%s.%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB,
+                                        sum(cif) AS SUBTOTAL_CIF
 
-        raw_body_2 = ("""FROM %s
-                                    WHERE (%s IN
-                                    (SELECT %s
-                                    FROM %s
-                                    WHERE (%s
-                                """) % (tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
+                                       """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
 
-        raw_where = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO, SEMESTRE) AS V_TABLE WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+            raw_body_2 = ("""FROM %s
+                                    INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
+                                    WHERE (%s.%s IN
+                                    (SELECT %s FROM %s WHERE (%s
+                                    """) % (tipo_standar_table, tipo_standar_table, tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
 
-        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where, [value_A, value_B,  ini_date, fin_date])
+            raw_where_1 = ("LIKE %s) OR (descripcion LIKE %s))) ")
+
+            raw_body_3 = ("GROUP BY ANO, SEMESTRE,substr(%s.%s,1,%s),%s.pais) AS V_TABLE ") % (tipo_standar_table, standar_var1, agreg, tipo_standar_table)
+
+            raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+
+            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B, ini_date, fin_date])
 
     #subpartida/codigo por semestre
     elif period == '3':
+        if checkbox_pais == '0':
+            if tipo == '1':
+                raw_body_1 = ("""SELECT V_TABLE.id,
+                                        concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+                                        V_TABLE.%s AS %s,
+                                        V_TABLE.PESO AS PESO,
+                                        V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB
+                                        FROM( SELECT id, ano AS ANO, ((MES-1)/6)+1 AS SEMESTRE,
+                                        substr(%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB
+                                       """) % (standar_clase, standar_clase, standar_var1, agreg, standar_clase)
+            else:
+                raw_body_1 = ("""SELECT V_TABLE.id,
+                                        concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+                                        V_TABLE.%s AS %s,
+                                        V_TABLE.PESO AS PESO,
+                                        V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB,
+                                        V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
+                                        FROM( SELECT id, ano AS ANO, ((MES-1)/6)+1 AS SEMESTRE,
+                                        substr(%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB,
+                                        sum(cif) AS SUBTOTAL_CIF
+                                       """) % (standar_clase, standar_clase, standar_var1, agreg, standar_clase)
+
+            raw_body_2 = ("""FROM %s
+                                        WHERE (%s IN
+                                        (SELECT %s
+                                        FROM %s
+                                        WHERE (%s
+                                    """) % (tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
+
+            raw_where = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO, SEMESTRE) AS V_TABLE WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+
+            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where, [value_A, value_B,  ini_date, fin_date])
+
+        else:
+            if tipo == '1':
+                raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+                                        V_TABLE.pais AS PAIS,
+                                        V_TABLE.%s AS %s,
+                                        V_TABLE.PESO AS PESO,
+                                        V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB
+                                        FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/6)+1 AS SEMESTRE,
+                                        comercio_paises.pais AS PAIS,
+                                        substr(%s.%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB
+                                       """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
+            else:
+                raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+                                        V_TABLE.pais AS PAIS,
+                                        V_TABLE.%s AS %s,
+                                        V_TABLE.PESO AS PESO,
+                                        V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB,
+                                        V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
+                                        FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/6)+1 AS SEMESTRE,
+                                        comercio_paises.pais AS PAIS,
+                                        substr(%s.%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB,
+                                        sum(cif) AS SUBTOTAL_CIF
+
+                                       """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
+
+            raw_body_2 = ("""FROM %s
+                                    INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
+                                    WHERE (%s.%s IN
+                                    (SELECT %s FROM %s WHERE (%s
+                                    """) % (tipo_standar_table, tipo_standar_table, tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
+
+            raw_where_1 = ("LIKE %s) OR (descripcion LIKE %s))) ")
+
+            raw_body_3 = ("GROUP BY ANO, SEMESTRE,substr(%s.%s,1,%s),%s.pais) AS V_TABLE ") % (tipo_standar_table, standar_var1, agreg, tipo_standar_table)
+
+            raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+
+            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B, ini_date, fin_date])
+
+    elif period == '4':
+        if checkbox_pais == '0':
+            if tipo == '1':
+                raw_body_1 = ("""SELECT id, ano AS ANO,
+                                        substr(%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB
+                                       """) % (standar_var1, agreg, standar_clase)
+            else:
+                raw_body_1 = ("""SELECT id, ano AS ANO,
+                                        substr(%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB,
+                                        sum(cif) AS SUBTOTAL_CIF
+                                       """) % (standar_var1, agreg, standar_clase)
+
+            raw_body_2 = ("""FROM %s
+                                    WHERE (%s IN
+                                    (SELECT %s FROM %s WHERE (%s
+                                    """) % (tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
+
+            raw_where = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO HAVING(ANO>=%s) AND (ANO<=%s)")
+
+            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where, [value_A, value_B,  ini_date, fin_date])
+
+        else:
+            if tipo == '1':
+                raw_body_1 = ("""SELECT %s.id, ano AS ANO,
+                                        comercio_paises.pais AS PAIS,
+                                        substr(%s.%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB
+                                       """) % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, standar_clase)
+            else:
+                raw_body_1 = ("""SELECT id, ano AS ANO,
+                                        comercio_paises.pais AS PAIS,
+                                        substr(%s,1,%s) AS %s,
+                                        sum(peso) AS PESO,
+                                        sum(fob) AS SUBTOTAL_FOB,
+                                        sum(cif) AS SUBTOTAL_CIF
+                                       """) % (standar_var1, agreg, standar_clase)
+
+            raw_body_2 = ("""FROM %s
+                                    INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
+                                    WHERE (%s.%s IN
+                                    (SELECT %s FROM %s WHERE (%s
+                                    """) % (tipo_standar_table, tipo_standar_table, tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
+
+            raw_where_1 = ("LIKE %s) OR (descripcion LIKE %s))) ")
+
+            raw_body_3 = ("GROUP BY %s.ano,substr(%s.%s,1,%s),%s.pais ") % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, tipo_standar_table)
+
+            raw_where_2 = ("HAVING (ANO>=%s) AND (ANO<=%s)")
+
+            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B, ini_date, fin_date])
+
+    return table_B
+
+
+def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standar_table, standar_clase,
+                      standar_var1, standar_var2, period, value, agreg, ini_date, fin_date):
+
+    #pais por mes
+    if period == '1':
         if tipo == '1':
-            raw_body_1 = ("""SELECT V_TABLE.id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+            raw_body_1 = ("""SELECT %s.id, substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7) AS FECHA,
+                                    comercio_paises.pais AS PAIS,
+                                    substr(%s.%s,1,%s) AS %s,
+                                    sum(peso) AS PESO,
+                                    sum(fob) AS SUBTOTAL_FOB
+                                    """) % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, standar_clase)
+        else:
+            raw_body_1 = ("""SELECT %s.id, substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7) AS FECHA,
+                                    comercio_paises.pais AS PAIS,
+                                    substr(%s.%s,1,%s) AS %s,
+                                    sum(peso) AS PESO,
+                                    sum(fob) AS SUBTOTAL_FOB,
+                                    sum(cif) AS SUBTOTAL_CIF
+                                    """) % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, standar_clase)
+
+        raw_body_2 = ("""FROM %s
+                                INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
+                                WHERE (%s.pais IN
+                                (SELECT codigo FROM comercio_paises WHERE (pais
+                                """) % (tipo_standar_table, tipo_standar_table, tipo_standar_table)
+
+        raw_where_1 = ("LIKE %s))) ")
+
+        raw_body_3 = ("GROUP BY ano, mes, substr(%s.%s,1,%s),%s.pais ") % (tipo_standar_table, standar_var1, agreg, tipo_standar_table)
+
+        raw_where_2 = ("HAVING (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)>=%s) AND (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)<=%s)")
+
+        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value, ini_date, fin_date])
+
+    #pais por trimestre
+    elif period == '2':
+        if tipo == '1':
+            raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
                                     V_TABLE.%s AS %s,
                                     V_TABLE.PESO AS PESO,
                                     V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB
-                                    FROM( SELECT id, ano AS ANO, ((MES-1)/6)+1 AS SEMESTRE,
-                                    substr(%s,1,%s) AS %s,
+                                    FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/3)+1 AS SEMESTRE,
+                                    comercio_paises.pais AS PAIS,
+                                    substr(%s.%s,1,%s) AS %s,
                                     sum(peso) AS PESO,
                                     sum(fob) AS SUBTOTAL_FOB
-                                   """) % (standar_clase, standar_clase, standar_var1, agreg, standar_clase)
+                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
         else:
-            raw_body_1 = ("""SELECT V_TABLE.id,
-                                    concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+            raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+                                    V_TABLE.pais AS PAIS,
+                                    V_TABLE.%s AS %s,
                                     V_TABLE.PESO AS PESO,
                                     V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB,
                                     V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
-                                    FROM( SELECT id, ano AS ANO, ((MES-1)/6)+1 AS SEMESTRE,
-                                    substr(%s,1,%s) AS %s,
+                                    FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/3)+1 AS SEMESTRE,
+                                    comercio_paises.pais AS PAIS,
+                                    substr(%s.%s,1,%s) AS %s,
                                     sum(peso) AS PESO,
                                     sum(fob) AS SUBTOTAL_FOB,
                                     sum(cif) AS SUBTOTAL_CIF
-                                   """) % (standar_var1, agreg, standar_clase)
+
+                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
 
         raw_body_2 = ("""FROM %s
-                                    WHERE (%s IN
-                                    (SELECT %s
-                                    FROM %s
-                                    WHERE (%s
-                                """) % (tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
+                                INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
+                                WHERE (%s.pais IN
+                                (SELECT codigo FROM comercio_paises WHERE (pais
+                                """) % (tipo_standar_table, tipo_standar_table, tipo_standar_table)
 
-        raw_where = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO, SEMESTRE) AS V_TABLE WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+        raw_where_1 = ("LIKE %s))) ")
 
-        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where, [value_A, value_B,  ini_date, fin_date])
+        raw_body_3 = ("GROUP BY ANO, SEMESTRE,substr(%s.%s,1,%s),%s.pais) AS V_TABLE ") % (tipo_standar_table, standar_var1, agreg, tipo_standar_table)
 
-    #subpartida/codigo por ano
-    elif period == '4':
+        raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+
+        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value, ini_date, fin_date])
+
+    #pais por semestre
+    elif period == '3':
         if tipo == '1':
-            raw_body_1 = ("""SELECT id, ano AS ANO,
-                                    substr(%s,1,%s) AS %s,
+            raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+                                    V_TABLE.%s AS %s,
+                                    V_TABLE.PESO AS PESO,
+                                    V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB
+                                    FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/6)+1 AS SEMESTRE,
+                                    comercio_paises.pais AS PAIS,
+                                    substr(%s.%s,1,%s) AS %s,
                                     sum(peso) AS PESO,
                                     sum(fob) AS SUBTOTAL_FOB
-                                   """) % (standar_var1, agreg, standar_clase)
+                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
+        else:
+            raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
+                                    V_TABLE.pais AS PAIS,
+                                    V_TABLE.%s AS %s,
+                                    V_TABLE.PESO AS PESO,
+                                    V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB.
+                                    V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
+                                    FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/6)+1 AS SEMESTRE,
+                                    comercio_paises.pais AS PAIS,
+                                    substr(%s.%s,1,%s) AS %s,
+                                    sum(peso) AS PESO,
+                                    sum(fob) AS SUBTOTAL_FOB,
+                                    sum(cif) AS SUBTOTAL_CIF
+
+                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
+
+        raw_body_2 = ("""FROM %s
+                                INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
+                                WHERE (%s.pais IN
+                                (SELECT codigo FROM comercio_paises WHERE (pais
+                                """) % (tipo_standar_table, tipo_standar_table, tipo_standar_table)
+
+        raw_where_1 = ("LIKE %s))) ")
+
+        raw_body_3 = ("GROUP BY ANO, SEMESTRE,substr(%s.%s,1,%s),%s.pais) AS V_TABLE ") % (tipo_standar_table, standar_var1, agreg, tipo_standar_table)
+
+        raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+
+        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value, ini_date, fin_date])
+
+    #pais por ano
+    elif period == '4':
+        if tipo == '1':
+            raw_body_1 = ("""SELECT %s.id, ano AS ANO,
+                                    comercio_paises.pais AS PAIS,
+                                    substr(%s.%s,1,%s) AS %s,
+                                    sum(peso) AS PESO,
+                                    sum(fob) AS SUBTOTAL_FOB
+                                   """) % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, standar_clase)
         else:
             raw_body_1 = ("""SELECT id, ano AS ANO,
+                                    comercio_paises.pais AS PAIS,
                                     substr(%s,1,%s) AS %s,
                                     sum(peso) AS PESO,
                                     sum(fob) AS SUBTOTAL_FOB,
@@ -284,30 +636,22 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_name, stand
                                    """) % (standar_var1, agreg, standar_clase)
 
         raw_body_2 = ("""FROM %s
-                                WHERE (%s IN
-                                (SELECT %s FROM %s WHERE (%s
-                                """) % (tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
+                                INNER JOIN comercio_paises ON comercio_paises.codigo=%s.pais
+                                WHERE (%s.pais IN
+                                (SELECT codigo FROM comercio_paises WHERE (pais
+                                """) % (tipo_standar_table, tipo_standar_table, tipo_standar_table)
 
-        raw_where = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO HAVING(ANO>=%s) AND (ANO<=%s)")
+        raw_where_1 = ("LIKE %s))) ")
 
-        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where, [value_A, value_B, ini_date, fin_date])
+        raw_body_3 = ("GROUP BY %s.ano,substr(%s.%s,1,%s),%s.pais ") % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, tipo_standar_table)
 
+        raw_where_2 = ("HAVING (ANO>=%s) AND (ANO<=%s)")
 
-
-    for da in table_B:
-        print da
+        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value, ini_date, fin_date])
 
     return table_B
 
 
-def sql_B_pais(tipo, standar_name, standar_table, standar_clase, periodicidad, value, agreg, ini_date, fin_date):
-    if(tipo=='1' and periodicidad=='1'):
-        print 'en espera'
-        raw_body = ("SELECT id"
-                            "FROM comercio_export_nandina") % (standar_table, standar_table)
-        # raw_where = ("LIKE %s OR descripcion LIKE %s")
-        table_B = standar_name.objects.raw(raw_body, [value_A, value_B])
-    return table_B
 
 
 
@@ -333,12 +677,12 @@ def sql_D(tipo, export_standar_name, export_standar_table, standar_table, agreg,
     raw_where_B = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO HAVING(ANO>=%s) AND (ANO<=%s)")
     data = export_standar_name.objects.raw(raw_body_A+raw_where_A+raw_body_B+raw_where_B, [value_A, value_B, ini_date, fin_date])
     # else:
-    #     raw_body_A = ("SELECT id, %s.ano AS ANO, substr(%s.subpartida_nandina,1,%s) AS SUBPARTIDA, sum(%s.peso) AS PESO, sum(%s.fob) AS SUBTOTAL_FOB FROM %s WHERE (%s.") %(export_standar_table, export_standar_table, agreg,export_standar_table, export_standar_table, export_standar_table, export_standar_table)
-    #     raw_where_A = ("subpartida_key IN (")
-    #     raw_body_B = ("SELECT %s.subpartida FROM %s WHERE (%s.subpartida ") %(standar_table, standar_table, standar_table)
-    #     #raw_where_B = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY %s.ano, substr(%s.codigo,1,%s) HAVING(ANO>=%s) AND (ANO<=%s)")
-    #     raw_where_B = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO HAVING(ANO>=%s) AND (ANO<=%s)")
-    #     data = export_standar_name.objects.raw(raw_body_A+raw_where_A+raw_body_B+raw_where_B, [value_A, value_B, ini_date, fin_date])
+    raw_body_A = ("SELECT id, %s.ano AS ANO, substr(%s.subpartida_nandina,1,%s) AS SUBPARTIDA, sum(%s.peso) AS PESO, sum(%s.fob) AS SUBTOTAL_FOB FROM %s WHERE (%s.") %(export_standar_table, export_standar_table, agreg,export_standar_table, export_standar_table, export_standar_table, export_standar_table)
+    raw_where_A = ("subpartida_key IN (")
+    raw_body_B = ("SELECT %s.subpartida FROM %s WHERE (%s.subpartida ") %(standar_table, standar_table, standar_table)
+    #raw_where_B = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY %s.ano, substr(%s.codigo,1,%s) HAVING(ANO>=%s) AND (ANO<=%s)")
+    raw_where_B = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO HAVING(ANO>=%s) AND (ANO<=%s)")
+    data = export_standar_name.objects.raw(raw_body_A+raw_where_A+raw_body_B+raw_where_B, [value_A, value_B, ini_date, fin_date])
 
     return data
 
@@ -427,13 +771,13 @@ def sql_H(export_standar_name, export_standar_table, standar_table, value_A, val
     data = export_standar_name.objects.raw(raw_body_A+raw_body_B+raw_where_A+raw_body_C+raw_where_B+raw_group_by_A, [value_A, value_B])
 
     #PARA NANDINA
-    # raw_body_A = ("SELECT V_TABLE.id, CONCAT(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA, V_TABLE.SUBPARTIDA AS SUBPARTIDA, V_TABLE.PESO AS PESO, V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB FROM(")
-    # raw_body_B = ("SELECT %s.id, %s.ano AS ANO, ((%s.MES-1)/3)+1 AS SEMESTRE, substr(%s.subpartida_nandina,1,%s) AS SUBPARTIDA, sum(%s.peso) AS PESO, sum(%s.fob) AS SUBTOTAL_FOB FROM %s WHERE (%s.") %(export_standar_table,export_standar_table,export_standar_table,export_standar_table,agreg,export_standar_table,export_standar_table,export_standar_table,export_standar_table)
-    # raw_where_A = ("subpartida_key IN (")
-    # raw_body_C = ("SELECT %s.subpartida FROM %s WHERE (%s.") %(standar_table,standar_table,standar_table)
-    # raw_where_B = ("subpartida LIKE %s) OR (descripcion LIKE %s))) ")
-    # raw_group_by_A = ("GROUP BY ANO, SEMESTRE) AS V_TABLE")
-    # data = export_standar_name.objects.raw(raw_body_A+raw_body_B+raw_where_A+raw_body_C+raw_where_B+raw_group_by_A, [value_A, value_B])
+    raw_body_A = ("SELECT V_TABLE.id, CONCAT(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA, V_TABLE.SUBPARTIDA AS SUBPARTIDA, V_TABLE.PESO AS PESO, V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB FROM(")
+    raw_body_B = ("SELECT %s.id, %s.ano AS ANO, ((%s.MES-1)/3)+1 AS SEMESTRE, substr(%s.subpartida_nandina,1,%s) AS SUBPARTIDA, sum(%s.peso) AS PESO, sum(%s.fob) AS SUBTOTAL_FOB FROM %s WHERE (%s.") %(export_standar_table,export_standar_table,export_standar_table,export_standar_table,agreg,export_standar_table,export_standar_table,export_standar_table,export_standar_table)
+    raw_where_A = ("subpartida_key IN (")
+    raw_body_C = ("SELECT %s.subpartida FROM %s WHERE (%s.") %(standar_table,standar_table,standar_table)
+    raw_where_B = ("subpartida LIKE %s) OR (descripcion LIKE %s))) ")
+    raw_group_by_A = ("GROUP BY ANO, SEMESTRE) AS V_TABLE")
+    data = export_standar_name.objects.raw(raw_body_A+raw_body_B+raw_where_A+raw_body_C+raw_where_B+raw_group_by_A, [value_A, value_B])
 
     return data
 
@@ -462,13 +806,13 @@ def sql_I(export_standar_name, export_standar_table, standar_table, value_A, val
     data = export_standar_name.objects.raw(raw_body_A+raw_body_B+raw_where_A+raw_body_C+raw_where_B+raw_group_by_A, [value_A])
 
     #PARA NANDINA
-    # raw_body_A = ("SELECT V_TABLE.id, CONCAT(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA, V_TABLE.PAIS AS PAIS,V_TABLE.SUBPARTIDA AS SUBPARTIDA, V_TABLE.PESO AS PESO, V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB FROM(")
-    # raw_body_B = ("SELECT %s.id, %s.ano AS ANO, ((%s.MES-1)/6)+1 AS SEMESTRE, %s.pais AS PAIS, substr(%s.subpartida_nandina,1,%s) AS SUBPARTIDA, sum(%s.peso) AS PESO, sum(%s.fob) AS SUBTOTAL_FOB FROM %s INNER JOIN %s ON %s.codigo=%s.pais WHERE (%s.") %(export_standar_table,export_standar_table,export_standar_table, tabla_pais,export_standar_table,agreg,export_standar_table,export_standar_table,export_standar_table,tabla_pais, tabla_pais,export_standar_table,export_standar_table)
-    # raw_where_A = ("pais IN (")
-    # raw_body_C = ("SELECT %s.codigo FROM %s WHERE (%s.") %(tabla_pais,tabla_pais,tabla_pais)
-    # raw_where_B = ("pais LIKE %s))) ")
-    # raw_group_by_A = ("GROUP BY ANO, SEMESTRE) AS V_TABLE")
-    # data = export_standar_name.objects.raw(raw_body_A+raw_body_B+raw_where_A+raw_body_C+raw_where_B+raw_group_by_A, [value_A])
+    raw_body_A = ("SELECT V_TABLE.id, CONCAT(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA, V_TABLE.PAIS AS PAIS,V_TABLE.SUBPARTIDA AS SUBPARTIDA, V_TABLE.PESO AS PESO, V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB FROM(")
+    raw_body_B = ("SELECT %s.id, %s.ano AS ANO, ((%s.MES-1)/6)+1 AS SEMESTRE, %s.pais AS PAIS, substr(%s.subpartida_nandina,1,%s) AS SUBPARTIDA, sum(%s.peso) AS PESO, sum(%s.fob) AS SUBTOTAL_FOB FROM %s INNER JOIN %s ON %s.codigo=%s.pais WHERE (%s.") %(export_standar_table,export_standar_table,export_standar_table, tabla_pais,export_standar_table,agreg,export_standar_table,export_standar_table,export_standar_table,tabla_pais, tabla_pais,export_standar_table,export_standar_table)
+    raw_where_A = ("pais IN (")
+    raw_body_C = ("SELECT %s.codigo FROM %s WHERE (%s.") %(tabla_pais,tabla_pais,tabla_pais)
+    raw_where_B = ("pais LIKE %s))) ")
+    raw_group_by_A = ("GROUP BY ANO, SEMESTRE) AS V_TABLE")
+    data = export_standar_name.objects.raw(raw_body_A+raw_body_B+raw_where_A+raw_body_C+raw_where_B+raw_group_by_A, [value_A])
 
     return data
 
