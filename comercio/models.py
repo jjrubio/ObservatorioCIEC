@@ -102,7 +102,7 @@ class Import_CGCE(models.Model):
     codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
-    cib = models.DecimalField(decimal_places=2, max_digits=7)
+    cif = models.DecimalField(decimal_places=2, max_digits=7)
 
 
 class Import_CIIU3(models.Model):
@@ -112,7 +112,7 @@ class Import_CIIU3(models.Model):
     codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
-    cib = models.DecimalField(decimal_places=2, max_digits=7)
+    cif = models.DecimalField(decimal_places=2, max_digits=7)
 
 
 class Import_CPC(models.Model):
@@ -122,7 +122,7 @@ class Import_CPC(models.Model):
     codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
-    cib = models.DecimalField(decimal_places=2, max_digits=7)
+    cif = models.DecimalField(decimal_places=2, max_digits=7)
 
 
 class Import_CUODE(models.Model):
@@ -132,7 +132,7 @@ class Import_CUODE(models.Model):
     codigo = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
-    cib = models.DecimalField(decimal_places=2, max_digits=7)
+    cif = models.DecimalField(decimal_places=2, max_digits=7)
 
 
 class Import_NANDINA(models.Model):
@@ -142,7 +142,7 @@ class Import_NANDINA(models.Model):
     subpartida_nandina = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=7)
     fob = models.DecimalField(decimal_places=2, max_digits=7)
-    cib = models.DecimalField(decimal_places=2, max_digits=7)
+    cif = models.DecimalField(decimal_places=2, max_digits=7)
     subpartida_key = models.CharField(max_length=10)
 
 
