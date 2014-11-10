@@ -16,6 +16,12 @@ class PythonObjectEncoder(JSONEncoder):
         return {'_python_object': pickle.dumps(obj)}
 
 
+def as_python_object(dct):
+    if '_python_object' in dct:
+        return pickle.loads(str(dct['_python_object']))
+    return dct
+
+
 def comercio_page(request):
     template = 'comercio.html'
     return render_to_response(template, context_instance = RequestContext(request,locals()))
@@ -132,48 +138,67 @@ def comercio(request):
 
     if checkbox_pais == '0':
         if tipo == '1':
-            if standar == '1':
-                for vb in table_B:
-                    data_table_B.append([vb.FECHA, vb.subpartida, vb.PESO, vb.SUBTOTAL_FOB])
-            elif standar == '4':
-                for vb in table_B:
-                    data_table_B.append([vb.ANO, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB])
+            if period == '4':
+                if standar == '1':
+                    for vb in table_B:
+                        data_table_B.append([vb.ANO, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
+                else:
+                    for vb in table_B:
+                        data_table_B.append([vb.ANO, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
             else:
-                for vb in table_B:
-                    data_table_B.append([vb.FECHA, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB])
+                if standar == '1':
+                    for vb in table_B:
+                        data_table_B.append([vb.FECHA, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
+                else:
+                    for vb in table_B:
+                        data_table_B.append([vb.FECHA, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
         else:
-            if standar == '1':
-                for vb in table_B:
-                    data_table_B.append([vb.FECHA, vb.subpartida, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
-            elif standar == '4':
-                for vb in table_B:
-                    data_table_B.append([vb.ANO, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
+            if period == '4':
+                if standar == '1':
+                    for vb in table_B:
+                        data_table_B.append([vb.ANO, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
+                else:
+                    for vb in table_B:
+                        data_table_B.append([vb.ANO, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
             else:
-                for vb in table_B:
-                    data_table_B.append([vb.FECHA, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
+                if standar == '1':
+                    for vb in table_B:
+                        data_table_B.append([vb.FECHA, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
+                else:
+                    for vb in table_B:
+                        data_table_B.append([vb.FECHA, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
 
     if checkbox_pais == '1' or option == '2':
         if tipo == '1':
-            if standar == '1':
-                for vb in table_B:
-                    data_table_B.append([vb.FECHA, vb.PAIS, vb.subpartida, vb.PESO, vb.SUBTOTAL_FOB])
-            elif standar == '4':
-                for vb in table_B:
-                    data_table_B.append([vb.ANO, vb.PAIS, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB])
+            if period == '4':
+                if standar == '1':
+                    for vb in table_B:
+                        data_table_B.append([vb.ANO, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
+                else:
+                    for vb in table_B:
+                        data_table_B.append([vb.ANO, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
             else:
-                for vb in table_B:
-                    data_table_B.append([vb.FECHA, vb.PAIS, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB])
+                if standar == '1':
+                    for vb in table_B:
+                        data_table_B.append([vb.FECHA, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
+                else:
+                    for vb in table_B:
+                        data_table_B.append([vb.FECHA, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
         else:
-            if standar == '1':
-                for vb in table_B:
-                    data_table_B.append([vb.FECHA, vb.PAIS, vb.subpartida, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
-            elif standar == '4':
-                for vb in table_B:
-                    data_table_B.append([vb.ANO, vb.PAIS, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
+            if period == '4':
+                if standar == '1':
+                    for vb in table_B:
+                        data_table_B.append([vb.ANO, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
+                else:
+                    for vb in table_B:
+                        data_table_B.append([vb.ANO, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
             else:
-                for vb in table_B:
-                    data_table_B.append([vb.FECHA, vb.PAIS, vb.codigo, vb.PESO, vb.SUBTOTAL_FOB, vb.SUBTOTAL_CIF])
-
+                if standar == '1':
+                    for vb in table_B:
+                        data_table_B.append([vb.FECHA, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
+                else:
+                    for vb in table_B:
+                        data_table_B.append([vb.FECHA, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
 
     data_result.append([data_table_B])
 
