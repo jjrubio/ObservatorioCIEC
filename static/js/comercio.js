@@ -110,9 +110,30 @@ $(document).ready(function() {
                 console.log(data);
                 console.log(data[1][0][0][0]);
                 console.log(data[1][0][0][2]);
+
+                table_A(data);
+                table_B(data);
+                $('#scroll_table').show();
             });
             //Verificacion de parametros enviados al servidor
             // console.log("TAB_PESTAÑA: "+tab_selected+";"+"OPTION_CODE_PAIS: "+options+";"+"SEARCH_BY: "+search_by+";"+"ESTANDAR: "+standars+";"+"PERIODO: "+"DESDE: "+txt_desde+";"+"HASTA: "+txt_hasta+";"+period+";"+"AGREGACION_VALOR:"+txt_agregacion+";"+"SEPARAR_PAIS: "+checkbox_select);
         }
     });
+
+    function table_A(data){
+        len = data[0][0].length;
+        
+        for(i=0;i<len;i++){
+            var datos = '<tr>'+'<td>'+data[0][0][i][0]+'</td>'+'<td>'+data[0][0][i][1]+'</td>'+'</tr>';
+            $('#datos_tabla_A').append(datos);
+        }
+    }
+
+    function table_B(data){
+        console.log(data[1]);
+        len = data[1][0].length;
+        console.log(len);
+    }
+
+
 });
