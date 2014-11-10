@@ -112,8 +112,9 @@ $(document).ready(function() {
                 console.log(data[1][0][0][2]);
 
                 table_A(data);
-                table_B(data);
+                table_B(data, bandera, period);
                 $('#scroll_table').show();
+
             });
             //Verificacion de parametros enviados al servidor
             // console.log("TAB_PESTAÑA: "+tab_selected+";"+"OPTION_CODE_PAIS: "+options+";"+"SEARCH_BY: "+search_by+";"+"ESTANDAR: "+standars+";"+"PERIODO: "+"DESDE: "+txt_desde+";"+"HASTA: "+txt_hasta+";"+period+";"+"AGREGACION_VALOR:"+txt_agregacion+";"+"SEPARAR_PAIS: "+checkbox_select);
@@ -129,11 +130,85 @@ $(document).ready(function() {
         }
     }
 
-    function table_B(data){
-        console.log(data[1]);
+    function table_B(data, bandera, period){
+
         len = data[1][0].length;
-        console.log(len);
+
+        if (len > 0){
+            $('#scroll_table_2').show();
+
+            if(period == 1){
+                if(bandera == 0){
+                    var header = '<th>AÑO-MES</th>'+'<th>CODIGO</th>'+'<th>PESO (MILES DE KILOS)</th>'+'<th>FOB (MILES DE DÓLARES)</th>';
+                    $('#headers').append(header);
+                    for(i=0;i<len;i++){
+                        var datos='<tr>'+'<td>'+data[1][0][i][0]+'</td>'+'<td>'+data[1][0][i][1]+'</td>'+'<td>'+data[1][0][i][2]+'</td>'+'<td>'+data[1][0][i][3]+'</td>'+'</tr>';
+                        $('#datos_tabla_B').append(datos);
+                    }
+                }
+                else{
+                    var header = '<th>AÑO-MES</th>'+'<th>PAIS</th>'+'<th>CODIGO</th>'+'<th>PESO (MILES DE KILOS)</th>'+'<th>FOB (MILES DE DÓLARES)</th>';
+                    $('#headers').append(header);
+                    for(i=0;i<len;i++){
+                        var datos='<tr>'+'<td>'+data[1][0][i][0]+'</td>'+'<td>'+data[1][0][i][1]+'</td>'+'<td>'+data[1][0][i][2]+'</td>'+'<td>'+data[1][0][i][3]+'</td>'+'<td>'+data[1][0][i][4]+'</td>'+'</tr>';
+                        $('#datos_tabla_B').append(datos);
+                    }
+                }
+            }else if(period == 2){
+                if(bandera == 0){
+                    var header = '<th>AÑO-TRIMESTRE</th>'+'<th>CODIGO</th>'+'<th>PESO (MILES DE KILOS)</th>'+'<th>FOB (MILES DE DÓLARES)</th>';
+                    $('#headers').append(header);
+                    for(i=0;i<len;i++){
+                        var datos='<tr>'+'<td>'+data[1][0][i][0]+'</td>'+'<td>'+data[1][0][i][1]+'</td>'+'<td>'+data[1][0][i][2]+'</td>'+'<td>'+data[1][0][i][3]+'</td>'+'</tr>';
+                        $('#datos_tabla_B').append(datos);
+                    }
+                }
+                else{
+                    var header = '<th>AÑO-TRIMESTRE</th>'+'<th>PAIS</th>'+'<th>CODIGO</th>'+'<th>PESO (MILES DE KILOS)</th>'+'<th>FOB (MILES DE DÓLARES)</th>';
+                    $('#headers').append(header);
+                    for(i=0;i<len;i++){
+                        var datos='<tr>'+'<td>'+data[1][0][i][0]+'</td>'+'<td>'+data[1][0][i][1]+'</td>'+'<td>'+data[1][0][i][2]+'</td>'+'<td>'+data[1][0][i][3]+'</td>'+'<td>'+data[1][0][i][4]+'</td>'+'</tr>';
+                        $('#datos_tabla_B').append(datos);
+                    }
+                }
+            }else if(period == 3){
+                if(bandera == 0){
+                    var header = '<th>AÑO-SEMESTRE</th>'+'<th>CODIGO</th>'+'<th>PESO (MILES DE KILOS)</th>'+'<th>FOB (MILES DE DÓLARES)</th>';
+                    $('#headers').append(header);
+                    for(i=0;i<len;i++){
+                        var datos='<tr>'+'<td>'+data[1][0][i][0]+'</td>'+'<td>'+data[1][0][i][1]+'</td>'+'<td>'+data[1][0][i][2]+'</td>'+'<td>'+data[1][0][i][3]+'</td>'+'</tr>';
+                        $('#datos_tabla_B').append(datos);
+                    }
+                }
+                else{
+                    var header = '<th>AÑO-SEMESTRE</th>'+'<th>PAIS</th>'+'<th>CODIGO</th>'+'<th>PESO (MILES DE KILOS)</th>'+'<th>FOB (MILES DE DÓLARES)</th>';
+                    $('#headers').append(header);
+                    for(i=0;i<len;i++){
+                        var datos='<tr>'+'<td>'+data[1][0][i][0]+'</td>'+'<td>'+data[1][0][i][1]+'</td>'+'<td>'+data[1][0][i][2]+'</td>'+'<td>'+data[1][0][i][3]+'</td>'+'<td>'+data[1][0][i][4]+'</td>'+'</tr>';
+                        $('#datos_tabla_B').append(datos);
+                    }
+                }
+            }else{
+                if(bandera == 0){
+                    var header = '<th>AÑO</th>'+'<th>CODIGO</th>'+'<th>PESO (MILES DE KILOS)</th>'+'<th>FOB (MILES DE DÓLARES)</th>';
+                    $('#headers').append(header);
+                    for(i=0;i<len;i++){
+                        var datos='<tr>'+'<td>'+data[1][0][i][0]+'</td>'+'<td>'+data[1][0][i][1]+'</td>'+'<td>'+data[1][0][i][2]+'</td>'+'<td>'+data[1][0][i][3]+'</td>'+'</tr>';
+                        $('#datos_tabla_B').append(datos);
+                    }
+                }
+                else{
+                    var header = '<th>AÑO</th>'+'<th>PAIS</th>'+'<th>CODIGO</th>'+'<th>PESO (MILES DE KILOS)</th>'+'<th>FOB (MILES DE DÓLARES)</th>';
+                    $('#headers').append(header);
+                    for(i=0;i<len;i++){
+                        var datos='<tr>'+'<td>'+data[1][0][i][0]+'</td>'+'<td>'+data[1][0][i][1]+'</td>'+'<td>'+data[1][0][i][2]+'</td>'+'<td>'+data[1][0][i][3]+'</td>'+'<td>'+data[1][0][i][4]+'</td>'+'</tr>';
+                        $('#datos_tabla_B').append(datos);
+                    }
+                }
+            }
+        }else{
+            $('#scroll_table_2').hide();
+            $('#div_mensajito').show();
+        }
     }
-
-
 });
