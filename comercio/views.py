@@ -105,7 +105,6 @@ def comercio(request):
 
     data_result.append([data_table_A])
 
-
     data_table_B = []
 
     if option == '1':
@@ -292,11 +291,6 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
             raw_where_2 = ("HAVING (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)>=%s) AND (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)<=%s)")
 
         table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B,  ini_date, fin_date])
-
-        for vb in table_B:
-            print vb.FECHA
-            print vb.PESO
-            print vb.SUBTOTAL_FOB
 
     #subpartida/codigo por trimestre
     elif period == '2':

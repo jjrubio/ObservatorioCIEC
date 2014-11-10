@@ -1,5 +1,9 @@
 $(document).ready(function() {
 
+    var date = new Date();
+    var year = date.getFullYear();
+    $('#endDate').attr("value", year+"/01");
+
     $.fn.datepicker.dates['es'] = {
         days: ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"],
         daysShort: ["Dom","Lun","Mar","Mié","Juv","Vie","Sáb","Dom"],
@@ -10,12 +14,35 @@ $(document).ready(function() {
         clear: "Limpiar"
     };
 
-    $('.datepicker').datepicker({
+    $('.datepickerStart').datepicker({
         language: "es",
         format: "yyyy/mm",
         viewMode:"months",
-        minViewMode:"months"
+        minViewMode:"months",
+        startDate: "1990/01",
     });
+
+    $('.datepickerEnd').datepicker({
+        language: "es",
+        format: "yyyy/mm",
+        viewMode:"months",
+        minViewMode:"months",
+        startDate: "1990/01",
+    });
+
+    // $('.datepicker').datepicker().on(picker_event, function(e){
+    //     console.log('as');
+    // });
+
+    // $( "#endDate" ).focus(function() {
+    //   console.log('as');
+    //   fecha = '2011'+'/01';
+    //   // fecha = $('#startDate').attr("value");
+    //   console.log(fecha);
+    //   $('.datepickerEnd').datepicker('setStartDate', fecha);
+    // });
+
+
 
     var tabs = 1;
 
