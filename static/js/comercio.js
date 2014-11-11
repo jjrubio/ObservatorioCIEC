@@ -107,7 +107,6 @@ $(document).ready(function() {
             $.getJSON('/comercio/', {'tipo': tipo, 'option': option, 'search_by': search_by, 'standar': standar, 'txt_desde': txt_desde,
                                                  'txt_hasta': txt_hasta, 'period': period, 'txt_agregacion': txt_agregacion, 'txt_patron': txt_patron, 'checkbox_pais': checkbox_pais},
             function(data){
-                console.log(data);
                 $('#tables').show();
                 table_A(data, standar);
                 table_B(data, option, tipo, standar, checkbox_pais);
@@ -243,6 +242,4 @@ $(document).ready(function() {
 
         $('#table_B').bootstrapTable({ data: data_B });
     }
-
-
 });
