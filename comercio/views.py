@@ -39,6 +39,17 @@ def comercio(request):
     txt_patron = request.GET['txt_patron'].encode('ascii','ignore')
     checkbox_pais = request.GET['checkbox_pais'].encode('ascii','ignore')
 
+    # tipo = '1'
+    # option = '1'
+    # search_by = '1'
+    # standar = '5'
+    # txt_desde = '2000/01'
+    # txt_hasta = '2001/01'
+    # period = '1'
+    # txt_agregacion = '4'
+    # txt_patron = ''
+    # checkbox_pais = '0'
+
     data_result = []
     data_table_A = []
 
@@ -244,7 +255,7 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
                 raw_body_1 = ("""SELECT id, substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7) AS FECHA,
                                         substr(%s,1,%s) AS %s,
                                         sum(peso) AS PESO,
-                                        sum(fob) AS SUBTOTAL_FOB
+                                        sum(fob) AS SUBTOTAL_FOB,
                                         sum(cif) AS SUBTOTAL_CIF
                                         """) % (standar_var1, agreg, standar_clase)
 

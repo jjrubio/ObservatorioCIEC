@@ -108,31 +108,140 @@ $(document).ready(function() {
                                                  'txt_hasta': txt_hasta, 'period': period, 'txt_agregacion': txt_agregacion, 'txt_patron': txt_patron, 'checkbox_pais': checkbox_pais},
             function(data){
                 console.log(data);
-                console.log(data[1][0][0][0]);
-                console.log(data[1][0][0][2]);
-
-                table_A(data);
-                table_B(data);
-                $('#scroll_table').show();
+                $('#tables').show();
+                table_A(data, standar);
+                table_B(data, option, tipo, standar, checkbox_pais);
             });
-            //Verificacion de parametros enviados al servidor
-            // console.log("TAB_PESTAÑA: "+tab_selected+";"+"OPTION_CODE_PAIS: "+options+";"+"SEARCH_BY: "+search_by+";"+"ESTANDAR: "+standars+";"+"PERIODO: "+"DESDE: "+txt_desde+";"+"HASTA: "+txt_hasta+";"+period+";"+"AGREGACION_VALOR:"+txt_agregacion+";"+"SEPARAR_PAIS: "+checkbox_select);
         }
     });
 
-    function table_A(data){
+    function table_A(data, standar){
         len = data[0][0].length;
-        
-        for(i=0;i<len;i++){
-            var datos = '<tr>'+'<td>'+data[0][0][i][0]+'</td>'+'<td>'+data[0][0][i][1]+'</td>'+'</tr>';
-            $('#datos_tabla_A').append(datos);
+
+        $('#table_A').bootstrapTable('destroy');
+        $('#code_A').empty();
+
+        if (standar == 1){
+            $('#code_A').text("Subpartida");
+        }else{
+            $('#code_A').text("Código");
         }
+
+        var data_A = [];
+        var valores = {}
+        for(var i = 0; i <len; i++)
+        {
+            valores = {}
+            valores["codigo"] = data[0][0][i][0];
+            valores["descripcion"] = data[0][0][i][1];
+            data_A.push(valores);
+        }
+
+        $('#table_A').bootstrapTable({ data: data_A });
     }
 
-    function table_B(data){
-        console.log(data[1]);
+
+    function table_B(data, option, tipo, standar, checkbox_pais){
         len = data[1][0].length;
-        console.log(len);
+
+        $('#tipoTrans').empty();
+        $('#table_B').bootstrapTable('destroy');
+        $('#table_B thead tr').empty();
+
+        if (tipo == 1){
+            $('#tipoTrans').text('DATOS DE EXPORTACIONES');
+        }else{
+            $('#tipoTrans').text('DATOS DE IMPORTACIONES');
+        }
+
+        if (standar == 1){
+            clase = 'Subpartida';
+        }else{
+            clase = 'Código';
+        }
+
+        if( checkbox_pais == 0 ){
+            if (tipo == 1){
+                $('#table_B thead tr').after('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
+                                                          '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
+                                                          '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
+                                                          '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>');
+                var data_B = [];
+                var valores = {}
+                for(var i = 0; i <len; i++)
+                {
+                    valores = {}
+                    valores["fecha"] = data[1][0][i][0];
+                    valores["codigo"] = data[1][0][i][1];
+                    valores["peso"] = data[1][0][i][2];
+                    valores["fob"] = data[1][0][i][3];
+                    data_B.push(valores);
+                }
+            }else{
+                $('#table_B_cont').after('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
+                                                          '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
+                                                          '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
+                                                          '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>'+
+                                                          '<th id="cif_B" data-field="cif" data-align="center" data-sortable="true">CIF (Miles de Dólares)</th>');
+                var data_B = [];
+                var valores = {}
+                for(var i = 0; i <len; i++)
+                {
+                    valores = {}
+                    valores["fecha"] = data[1][0][i][0];
+                    valores["codigo"] = data[1][0][i][1];
+                    valores["peso"] = data[1][0][i][2];
+                    valores["fob"] = data[1][0][i][3];
+                    valores["cif"] = data[1][0][i][4];
+                    data_B.push(valores);
+                }
+            }
+        }
+
+        if( checkbox_pais == 1 || option == 2 ){
+            if (tipo == 1){
+                $('#table_B_cont').after('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
+                                                          '<th id="pais_B" data-field="pais" data-align="center" data-sortable="true">País</th>'+
+                                                          '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
+                                                          '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
+                                                          '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>');
+                var data_B = [];
+                var valores = {}
+                for(var i = 0; i <len; i++)
+                {
+                    valores = {}
+                    valores["fecha"] = data[1][0][i][0];
+                    valores["pais"] = data[1][0][i][1];
+                    valores["codigo"] = data[1][0][i][2];
+                    valores["peso"] = data[1][0][i][3];
+                    valores["fob"] = data[1][0][i][4];
+                    data_B.push(valores);
+                }
+            }else{
+                $('#table_B_cont').after('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
+                                                          '<th id="pais_B" data-field="pais" data-align="center" data-sortable="true">País</th>'+
+                                                          '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
+                                                          '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
+                                                          '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>'+
+                                                          '<th id="cif_B" data-field="cif" data-align="center" data-sortable="true">CIF (Miles de Dólares)</th>');
+                var data_B = [];
+                var valores = {}
+                for(var i = 0; i <len; i++)
+                {
+                    valores = {}
+                    valores["fecha"] = data[1][0][i][0];
+                    valores["pais"] = data[1][0][i][1];
+                    valores["codigo"] = data[1][0][i][2];
+                    valores["peso"] = data[1][0][i][3];
+                    valores["fob"] = data[1][0][i][4];
+                    valores["cif"] = data[1][0][i][5];
+                    data_B.push(valores);
+                }
+            }
+        }
+
+
+        $('#table_B').bootstrapTable({ data: data_B });
     }
 
 
