@@ -145,8 +145,8 @@ def calc_result(request):
 
     # demorada.apply_async(countdown=5)
     # trada.delay()
-    test_proc()
-    print test_proc()
+    # test_proc()
+    # print test_proc()
 
     if not len(disintegrations) == 0:
         if len(disintegrations) == 1:
@@ -233,29 +233,13 @@ def calc_result(request):
         data_result.append(column_types_d2)
         indicator_counter = Indicator.objects.get(id=indicator_int).counter + 1
         update_indicator_counter = Indicator.objects.filter(id=indicator_int).update(counter=indicator_counter)
-        cache.set(cache_value, data_result, None)
+        # cache.set(cache_value, data_result, None)
 
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
 
 
-def test_proc(conf=0.95,clusrobust=True):
-    dirspec = "/home/jaruban/Documentos/OESE"
-    y = np.loadtxt(dirspec + "//column_1.txt",delimiter=',')
-    X = np.loadtxt(dirspec + "//column_2.txt",delimiter=',')
-    Z = np.loadtxt(dirspec + "//column_3.txt",delimiter=',')
-    fexp = np.loadtxt(dirspec + "//column_4.txt",delimiter=',')
-
-    return modelo_ind(y,X,Z,fexp,conf)
-
-
-# Recordar que las filas de todos los vectores y matrices de entrada
-# deben de estar ordenados por "fexp"
 def modelo_ind(y,X,Z,fexp,conf=0.95,colin_thres=30):
-
-    # Descartar categorias base con menos del minimo de observaciones
-    X=remove_colinear_base(X, colin_thres)
-    Z=remove_colinear_base(Z, colin_thres)
 
     # Armar la regresion por OLS segun el modelo
     if not (X.any() or Z.any()):
@@ -265,12 +249,17 @@ def modelo_ind(y,X,Z,fexp,conf=0.95,colin_thres=30):
         nOut=1
         df=n-1
     elif not Z.any():
+        # Descartar categorias base con menos del minimo de observaciones
+        X=remove_colinear_base(X, colin_thres)
         n,colX = X.shape
         colZ = 0
         T=np.concatenate((np.ones([n,1]),X[:,1:]),axis=1)  # Quitar por colinealidad 1 indicador por cada matriz
         nOut=colX
         df=n-(colX-1)-1
     else:
+        # Descartar categorias base con menos del minimo de observaciones
+        X=remove_colinear_base(X, colin_thres)
+        Z=remove_colinear_base(Z, colin_thres)
         n,colX = X.shape
         n,colZ = Z.shape
         T=np.concatenate((np.ones([n,1]),X[:,1:], Z[:,1:]),axis=1) # Quitar por colinealidad 1 indicador por cada matriz
@@ -350,7 +339,6 @@ def modelo_ind(y,X,Z,fexp,conf=0.95,colin_thres=30):
 
     return output
 
-
 def remove_colinear_base(mat, colin_thres):
     X, icol = np.copy(mat), 0
     while True:
@@ -359,81 +347,115 @@ def remove_colinear_base(mat, colin_thres):
         X=np.delete(X,icol,axis=1)
         icol+=1
     return X
-    return output
 
 
 def modelo_final(y, X, Z, fexp, conf = 0.95, colin_thres = 30):
-    nx = int(np.size(X, 1))
-    nz = int(np.size(Z, 1))
-    flag_x = 0
-    flag_z = 0
-    x_tot = np.sum(X, 0)
-    z_tot = np.sum(Z, 0)
+    if not (X.any() or Z.any()):
+        P = modelo_ind(y, X, Z, fexp, conf, colin_thres)
+    elif not Z.any():
+        nx = int(np.size(X, 1))
+        flag_x = 0
+        x_tot = np.sum(X, 0)
 
-    x_temp = np.copy(X[:,0])
-    x_dict = np.empty((nx, 2), dtype=int)
-    x_dict[:,0] = range(nx)
-    x_dict[:,1] = range(nx)
+        x_temp = np.copy(X[:,0])
+        x_dict = np.empty((nx, 2), dtype=int)
+        x_dict[:,0] = range(nx)
+        x_dict[:,1] = range(nx)
 
-    z_temp = np.copy(Z[:,0])
-    z_dict = np.empty((nz, 2), dtype=int)
-    z_dict[:,0] = range(nz)
-    z_dict[:,1] = range(nz)
+        if x_tot[0] < 30:
+            flag_x += 1
+            for i in range(1, nx, 1):
+                if x_tot[i] >= 30:
+                    X[:,0] = X[:,i]
+                    x_dict[0,1] = i
+                    x_dict[i,1] = 0
+                    X[:,i] = x_temp
 
-    if x_tot[0] < 30:
-        flag_x += 1
-        for i in range(1, nx, 1):
-            if x_tot[i] >= 30:
-                X[:,0] = X[:,i]
-                x_dict[0,1] = i
-                x_dict[i,1] = 0
-                X[:,i] = x_temp
+                break
 
-            break
+        #Calcular los predicts con input ordenado
+        P = modelo_ind(y, X, Z, fexp, conf, colin_thres)
 
-    if z_tot[0] < 30:
-        flag_z += 1
-        for i in range(1, nz, 1):
-            if z_tot[i] >= 30:
-                Z[:,0] = Z[:,i]
-                z_dict[0,1] = i
-                z_dict[i,1] = 0
-                Z[:,i] = z_temp
+        #reordenar los predict
+        #reordenar si se cambio la primera columna de X y no de Z
+        if (flag_x==1):
+            sx = x_dict[0,1]
+            P_temp = np.copy(P[0, :])
+            P[0,:] = P[sx, :]
+            P[sx,:] = P_temp
 
-            break
-    #Calcular los predicts con input ordenado
-    P = modelo_ind(y, X, Z, fexp, conf, colin_thres)
-    #reordenar los predict
-    #reordenar si se cambio la primera columna de X y no de Z
-    if (flag_x==1 and flag_z==0):
-        sx = x_dict[0,1]
-        P_temp = np.copy(P[:nz,:])
-        s_range = range(sx*nz, sx*nz+nz)
-        P[:nz,:] = P[s_range, :]
-        P[s_range, :] = P_temp
-    #reordenar si se cambio la primera columna de Z y no de X
-    elif (flag_x==0 and flag_z==1):
-        sz = z_dict[0,1]
-        s_range_a = range(0, nz*nx, nz)
-        P_temp = np.copy(P[s_range_a])
-        s_range_b = range(sz, nz*nx, nz)
-        P[s_range_a] = P[s_range_b]
-        P[s_range_b] = P_temp
-    #reordenar si se cambiaron las primeras columnas de X y Z
-    elif (flag_x==1 and flag_z==1):
-        #reordenar el bloque base correspondiente a X
-        sx = x_dict[0,1]
-        P_temp = np.copy(P[:nz,:])
-        s_range = range(sx*nz, sx*nz+nz)
-        P[:nz,:] = P[s_range, :]
-        P[s_range, :] = P_temp
-        #reordenar las bases de Z en los diferentes bloques de X ya ordenados
-        sz = z_dict[0,1]
-        s_range_a = range(0, nz*nx, nz)
-        P_temp = np.copy(P[s_range_a])
-        s_range_b = range(sz, nz*nx, nz)
-        P[s_range_a] = P[s_range_b]
-        P[s_range_b] = P_temp
+    else:
+        nx = int(np.size(X, 1))
+        nz = int(np.size(Z, 1))
+        flag_x = 0
+        flag_z = 0
+        x_tot = np.sum(X, 0)
+        z_tot = np.sum(Z, 0)
+
+        x_temp = np.copy(X[:,0])
+        x_dict = np.empty((nx, 2), dtype=int)
+        x_dict[:,0] = range(nx)
+        x_dict[:,1] = range(nx)
+
+        z_temp = np.copy(Z[:,0])
+        z_dict = np.empty((nz, 2), dtype=int)
+        z_dict[:,0] = range(nz)
+        z_dict[:,1] = range(nz)
+
+        if x_tot[0] < 30:
+            flag_x += 1
+            for i in range(1, nx, 1):
+                if x_tot[i] >= 30:
+                    X[:,0] = X[:,i]
+                    x_dict[0,1] = i
+                    x_dict[i,1] = 0
+                    X[:,i] = x_temp
+
+                break
+
+        if z_tot[0] < 30:
+            flag_z += 1
+            for i in range(1, nz, 1):
+                if z_tot[i] >= 30:
+                    Z[:,0] = Z[:,i]
+                    z_dict[0,1] = i
+                    z_dict[i,1] = 0
+                    Z[:,i] = z_temp
+
+                break
+        #Calcular los predicts con input ordenado
+        P = modelo_ind(y, X, Z, fexp, conf, colin_thres)
+        #reordenar los predict
+        #reordenar si se cambio la primera columna de X y no de Z
+        if (flag_x==1 and flag_z==0):
+            sx = x_dict[0,1]
+            P_temp = np.copy(P[:nz,:])
+            s_range = range(sx*nz, sx*nz+nz)
+            P[:nz,:] = P[s_range, :]
+            P[s_range, :] = P_temp
+        #reordenar si se cambio la primera columna de Z y no de X
+        elif (flag_x==0 and flag_z==1):
+            sz = z_dict[0,1]
+            s_range_a = range(0, nz*nx, nz)
+            P_temp = np.copy(P[s_range_a])
+            s_range_b = range(sz, nz*nx, nz)
+            P[s_range_a] = P[s_range_b]
+            P[s_range_b] = P_temp
+        #reordenar si se cambiaron las primeras columnas de X y Z
+        elif (flag_x==1 and flag_z==1):
+            #reordenar el bloque base correspondiente a X
+            sx = x_dict[0,1]
+            P_temp = np.copy(P[:nz,:])
+            s_range = range(sx*nz, sx*nz+nz)
+            P[:nz,:] = P[s_range, :]
+            P[s_range, :] = P_temp
+            #reordenar las bases de Z en los diferentes bloques de X ya ordenados
+            sz = z_dict[0,1]
+            s_range_a = range(0, nz*nx, nz)
+            P_temp = np.copy(P[s_range_a])
+            s_range_b = range(sz, nz*nx, nz)
+            P[s_range_a] = P[s_range_b]
+            P[s_range_b] = P_temp
 
     return P
 

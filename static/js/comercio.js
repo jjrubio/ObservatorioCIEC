@@ -107,6 +107,7 @@ $(document).ready(function() {
             $.getJSON('/comercio/', {'tipo': tipo, 'option': option, 'search_by': search_by, 'standar': standar, 'txt_desde': txt_desde,
                                                  'txt_hasta': txt_hasta, 'period': period, 'txt_agregacion': txt_agregacion, 'txt_patron': txt_patron, 'checkbox_pais': checkbox_pais},
             function(data){
+                console.log(data);
                 $('#tables').show();
                 table_A(data, standar);
                 table_B(data, option, tipo, standar, checkbox_pais);
@@ -116,6 +117,7 @@ $(document).ready(function() {
 
     function table_A(data, standar){
         len = data[0][0].length;
+        console.log(len);
 
         $('#table_A').bootstrapTable('destroy');
         $('#code_A').empty();
@@ -142,6 +144,7 @@ $(document).ready(function() {
 
     function table_B(data, option, tipo, standar, checkbox_pais){
         len = data[1][0].length;
+        console.log(len);
 
         $('#tipoTrans').empty();
         $('#table_B').bootstrapTable('destroy');
@@ -161,10 +164,10 @@ $(document).ready(function() {
 
         if( checkbox_pais == 0 ){
             if (tipo == 1){
-                $('#table_B thead tr').after('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
-                                                          '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
-                                                          '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
-                                                          '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>');
+                $('#table_B thead tr').append('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
+                                                             '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
+                                                             '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
+                                                             '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>');
                 var data_B = [];
                 var valores = {}
                 for(var i = 0; i <len; i++)
@@ -177,11 +180,11 @@ $(document).ready(function() {
                     data_B.push(valores);
                 }
             }else{
-                $('#table_B_cont').after('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
-                                                          '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
-                                                          '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
-                                                          '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>'+
-                                                          '<th id="cif_B" data-field="cif" data-align="center" data-sortable="true">CIF (Miles de Dólares)</th>');
+                $('#table_B thead tr').append('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
+                                                             '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
+                                                             '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
+                                                             '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>'+
+                                                             '<th id="cif_B" data-field="cif" data-align="center" data-sortable="true">CIF (Miles de Dólares)</th>');
                 var data_B = [];
                 var valores = {}
                 for(var i = 0; i <len; i++)
@@ -199,11 +202,11 @@ $(document).ready(function() {
 
         if( checkbox_pais == 1 || option == 2 ){
             if (tipo == 1){
-                $('#table_B_cont').after('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
-                                                          '<th id="pais_B" data-field="pais" data-align="center" data-sortable="true">País</th>'+
-                                                          '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
-                                                          '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
-                                                          '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>');
+                $('#table_B thead tr').append('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
+                                                             '<th id="pais_B" data-field="pais" data-align="center" data-sortable="true">País</th>'+
+                                                             '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
+                                                             '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
+                                                             '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>');
                 var data_B = [];
                 var valores = {}
                 for(var i = 0; i <len; i++)
@@ -217,12 +220,12 @@ $(document).ready(function() {
                     data_B.push(valores);
                 }
             }else{
-                $('#table_B_cont').after('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
-                                                          '<th id="pais_B" data-field="pais" data-align="center" data-sortable="true">País</th>'+
-                                                          '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
-                                                          '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
-                                                          '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>'+
-                                                          '<th id="cif_B" data-field="cif" data-align="center" data-sortable="true">CIF (Miles de Dólares)</th>');
+                $('#table_B thead tr').append('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
+                                                             '<th id="pais_B" data-field="pais" data-align="center" data-sortable="true">País</th>'+
+                                                             '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
+                                                             '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
+                                                             '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>'+
+                                                             '<th id="cif_B" data-field="cif" data-align="center" data-sortable="true">CIF (Miles de Dólares)</th>');
                 var data_B = [];
                 var valores = {}
                 for(var i = 0; i <len; i++)
@@ -238,7 +241,6 @@ $(document).ready(function() {
                 }
             }
         }
-
 
         $('#table_B').bootstrapTable({ data: data_B });
     }
