@@ -166,19 +166,19 @@
             return sprintf('Mostrando la fila %s al %s de %s filas. ', pageFrom, pageTo, totalRows);
         },
         formatSearch: function () {
-            return 'Search';
+            return 'Buscar';
         },
         formatNoMatches: function () {
             return 'No se han encontrado datos que concuerden';
         },
         formatRefresh: function () {
-            return 'Refresh';
+            return 'Refrescar';
         },
         formatToggle: function () {
-            return 'Toggle';
+            return 'Cambiar posición';
         },
         formatColumns: function () {
-            return 'Columns';
+            return 'Columnas';
         },
 
         onAll: function (name, args) {return false;},

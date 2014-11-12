@@ -4,6 +4,21 @@ $(document).ready(function() {
     var year = date.getFullYear();
     $('#endDate').attr("value", year+"/01");
 
+    $('#search_by').change(function(){
+        if ($('#search_by').val() == 1){
+            $('#filtrar_por').text('Filtrar por código');
+            $('#txt_filtro_num').attr('type','text');
+            $('#txt_filtro_text').attr('type','hidden');
+            $('#txt_filtro_text').attr('value',' ');
+        }else{
+            $('#filtrar_por').text('Filtrar por palabra clave');
+            $('#txt_filtro_num').attr('type','hidden');
+            $('#txt_filtro_num').attr('value',' ');
+            $('#txt_filtro_text').attr('type','text');
+        }
+    });
+
+
     $.fn.datepicker.dates['es'] = {
         days: ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"],
         daysShort: ["Dom","Lun","Mar","Mié","Juv","Vie","Sáb","Dom"],
@@ -29,20 +44,6 @@ $(document).ready(function() {
         minViewMode:"months",
         startDate: "1990/01",
     });
-
-    // $('.datepicker').datepicker().on(picker_event, function(e){
-    //     console.log('as');
-    // });
-
-    // $( "#endDate" ).focus(function() {
-    //   console.log('as');
-    //   fecha = '2011'+'/01';
-    //   // fecha = $('#startDate').attr("value");
-    //   console.log(fecha);
-    //   $('.datepickerEnd').datepicker('setStartDate', fecha);
-    // });
-
-
 
     var tabs = 1;
 
@@ -100,9 +101,13 @@ $(document).ready(function() {
                 checkbox_pais = 0;
             }
 
-            txt_patron = $('#txt_patron').val();
-            txt_agregacion = $('#txt_agregacion').val();
+            if ($('#search_by').val() == 1){
+                txt_patron = $('#txt_filtro_num').val();
+            }else{
+                txt_patron = $('#txt_filtro_text').val();
+            }
 
+            txt_agregacion = $('#txt_agregacion').val();
 
             $.getJSON('/comercio/', {'tipo': tipo, 'option': option, 'search_by': search_by, 'standar': standar, 'txt_desde': txt_desde,
                                                  'txt_hasta': txt_hasta, 'period': period, 'txt_agregacion': txt_agregacion, 'txt_patron': txt_patron, 'checkbox_pais': checkbox_pais},
@@ -245,3 +250,46 @@ $(document).ready(function() {
         $('#table_B').bootstrapTable({ data: data_B });
     }
 });
+
+jQuery.fn.ForceNumericOnly =
+function()
+{
+    return this.each(function()
+    {
+        $(this).keydown(function(e)
+        {
+            var key = e.charCode || e.keyCode || 0;
+            // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
+            // home, end, period, and numpad decimal
+            return (
+                key == 8 ||
+                key == 9 ||
+                key == 13 ||
+                (key >= 48 && key <= 57));
+        });
+    });
+};
+
+$("#txt_filtro_num").ForceNumericOnly();
+
+
+jQuery.fn.ForceTextOnly =
+function()
+{
+    return this.each(function()
+    {
+        $(this).keydown(function(e)
+        {
+            var key = e.charCode || e.keyCode || 0;
+            // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
+            // home, end, period, and numpad decimal
+            return (
+                key == 8 ||
+                key == 9 ||
+                key == 13 ||
+                (key >= 65 && key <= 90));
+        });
+    });
+};
+
+$("#txt_filtro_text").ForceTextOnly();
