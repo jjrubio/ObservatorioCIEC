@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-# admin.autodiscover()
+admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
@@ -40,4 +40,5 @@ urlpatterns = patterns('',
     url(r'^subir_csv/', 'ENEMDU.views.insert_data_enemdu', name='insert_data_enemdu'),
     url(r'^acceso_denegado/', 'ENEMDU.views.access_denied', name='access_denied'),
     url(r'^comercio/', 'comercio.views.comercio',name='comercio'),
+    url(r'^subir_csv_comercio/', 'comercio.views.insert_data_comercio',name='insert_data_comercio'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

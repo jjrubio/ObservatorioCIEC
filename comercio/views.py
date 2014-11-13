@@ -680,3 +680,7 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
         table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value, ini_date, fin_date])
 
     return table_B
+
+def insert_data_comercio(request):
+    template = 'insert_data_comercio.html'
+    return render_to_response(template, context_instance=RequestContext(request, locals()))

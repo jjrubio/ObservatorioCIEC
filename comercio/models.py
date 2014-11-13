@@ -149,3 +149,6 @@ class Import_NANDINA(models.Model):
 class sqliteadmin_queries(models.Model):
     name = models.TextField()
     sql1 = models.TextField()
+
+class upload_csv_file(models.Model):
+    upload = models.FileField(upload_to='csv/')
