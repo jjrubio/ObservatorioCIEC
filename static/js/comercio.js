@@ -35,6 +35,10 @@ $(document).ready(function() {
         viewMode:"months",
         minViewMode:"months",
         startDate: "1990/01",
+    }).on('changeDate',function(ev){
+        var d1 = $('#startDate').val();
+        console.log(d1);
+        $('.datepickerEnd').datepicker('setStartDate',d1);
     });
 
     $('.datepickerEnd').datepicker({
