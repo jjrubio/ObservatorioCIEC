@@ -88,7 +88,7 @@ class Export_CUODE(models.Model):
 class Export_NANDINA(models.Model):
     ano = models.PositiveSmallIntegerField()
     mes = models.PositiveSmallIntegerField()
-    pais = models.CharField(max_length=10)
+    pais = models.PositiveSmallIntegerField()
     subpartida_nandina = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=10)
     fob = models.DecimalField(decimal_places=2, max_digits=9)
