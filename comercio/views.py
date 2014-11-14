@@ -39,17 +39,6 @@ def comercio(request):
     txt_patron = request.GET['txt_patron'].encode('ascii','ignore')
     checkbox_pais = request.GET['checkbox_pais'].encode('ascii','ignore')
 
-    # tipo = '1'
-    # option = '1'
-    # search_by = '1'
-    # standar = '5'
-    # txt_desde = '2000/01'
-    # txt_hasta = '2001/01'
-    # period = '1'
-    # txt_agregacion = '4'
-    # txt_patron = ''
-    # checkbox_pais = '0'
-
     data_result = []
     data_table_A = []
 
@@ -338,9 +327,13 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
                                         WHERE (%s
                                     """) % (tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
 
-            raw_where = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO, SEMESTRE) AS V_TABLE WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+            raw_where_1 = ("LIKE %s) OR (descripcion LIKE %s))) ")
 
-            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where, [value_A, value_B,  ini_date, fin_date])
+            raw_body_3 = ("GROUP BY ANO, SEMESTRE, substr(%s.%s,1,%s)) AS V_TABLE ") % (tipo_standar_table, standar_var1, agreg)
+
+            raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+
+            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B,  ini_date, fin_date])
 
         else:
             if tipo == '1':
@@ -420,9 +413,13 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
                                         WHERE (%s
                                     """) % (tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
 
-            raw_where = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO, SEMESTRE) AS V_TABLE WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+            raw_where_1 = ("LIKE %s) OR (descripcion LIKE %s))) ")
 
-            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where, [value_A, value_B,  ini_date, fin_date])
+            raw_body_3 = ("GROUP BY ANO, SEMESTRE, substr(%s.%s,1,%s)) AS V_TABLE ") % (tipo_standar_table, standar_var1, agreg)
+
+            raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
+
+            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B,  ini_date, fin_date])
 
         else:
             if tipo == '1':
@@ -488,9 +485,13 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
                                     (SELECT %s FROM %s WHERE (%s
                                     """) % (tipo_standar_table, standar_var2, standar_clase, standar_table, standar_clase)
 
-            raw_where = ("LIKE %s) OR (descripcion LIKE %s))) GROUP BY ANO HAVING(ANO>=%s) AND (ANO<=%s)")
+            raw_where_1 = ("LIKE %s) OR (descripcion LIKE %s))) ")
 
-            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where, [value_A, value_B,  ini_date, fin_date])
+            raw_body_3 = ("GROUP BY ano, substr(%s.%s,1,%s) ") % (tipo_standar_table, standar_var1, agreg)
+
+            raw_where_2 = ("HAVING (ANO>=%s) AND (ANO<=%s)")
+
+            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B,  ini_date, fin_date])
 
         else:
             if tipo == '1':

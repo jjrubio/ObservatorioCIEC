@@ -80,6 +80,9 @@ $(document).ready(function() {
         var tipo = tabs;
         var bandera;
 
+        $("#tables").hide();
+        $("#loading").show();
+
         if($("#checkbox").is(':checked')) {
             bandera = 1;
         } else {
@@ -112,17 +115,20 @@ $(document).ready(function() {
             $.getJSON('/comercio/', {'tipo': tipo, 'option': option, 'search_by': search_by, 'standar': standar, 'txt_desde': txt_desde,
                                                  'txt_hasta': txt_hasta, 'period': period, 'txt_agregacion': txt_agregacion, 'txt_patron': txt_patron, 'checkbox_pais': checkbox_pais},
             function(data){
-                console.log(data);
                 $('#tables').show();
                 table_A(data, standar);
                 table_B(data, option, tipo, standar, checkbox_pais);
+                $('#loading').hide();
+                $('#tables').show();
             });
         }
     });
 
     function table_A(data, standar){
         len = data[0][0].length;
-        console.log(len);
+
+        $('#pie_de_tabla_nom').empty();
+        $('#pie_de_tabla_nom').text('Mostrando un total de '+ len +' filas.');
 
         $('#table_A').bootstrapTable('destroy');
         $('#code_A').empty();
@@ -149,7 +155,9 @@ $(document).ready(function() {
 
     function table_B(data, option, tipo, standar, checkbox_pais){
         len = data[1][0].length;
-        console.log(len);
+
+        $('#pie_de_tabla_ex_im').empty();
+        $('#pie_de_tabla_ex_im').text('Mostrando un total de '+ len +' filas.');
 
         $('#tipoTrans').empty();
         $('#table_B').bootstrapTable('destroy');

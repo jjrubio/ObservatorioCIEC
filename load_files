@@ -1,8 +1,8 @@
 #!/bin/bash
 echo Estos son los parametros recibidos: $*
-FILES='/home/jaruban/Documentos/OESE/CSV/CPC'
+FILES='/home/jaruban/Documentos/OESE/CSV/IMPORT_CUODE'
 for f in $FILES
 do
-    mysql -e "load data local infile '"$f"' into table $1 FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES (codigo,descripcion)"  -uroot -proot OESEdb --local-infile
+    mysql -e "load data local infile '"$f"' into table $1 FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES (ano,mes,pais,codigo,peso,fob,cif)"  -uroot -proot OESEdb --local-infile
 done
 
