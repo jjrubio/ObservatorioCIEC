@@ -20,7 +20,7 @@
                     <div class="col-lg-4"></div>
                     <div class="col-lg-4">
                         <br/><br/><br/>
-                        <span>Para subir otro archivo, por favor dar clic <a href="/subir_csv/">aquí</a></span>
+                        <span>Para subir otro archivo, por favor dar clic <a href="/subir_csv_comercio/">aquí</a></span>
                         <br/><br/><br/>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                         <div class="col-lg-4"></div>
                         <div class="col-lg-4">
                             <br/><br/><br/>
-                            <span>Error! Usted no ha seleccionado un archivo, dar clic <a href="/subir_csv/">aquí</a> para regresar</span>
+                            <span>Error! Usted no ha seleccionado un archivo, dar clic <a href="/subir_csv_comercio/">aquí</a> para regresar</span>
                             <br/><br/><br/>
                         </div>
                     </div>
@@ -45,11 +45,18 @@
                         <form id="form_upload" method="post" action="subida_csv/" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="col-lg-3">
-                                <span class="texto">Escoja que tabla desea cargar los datos: </span><br/>
+                                <span class="texto">Escoja que tabla desea actualizar los datos: </span><br/>
                             </div>
                             <select class="form-control" id="id_choices" name="choices">
-                                <option value="1">Datos 2003-4 a 2007-1</option>
-                                <option value="2">Datos 2007-2 a la actualidad</option>
+                                <option value="1">CGCE</option>
+                                <option value="2">CIIU3</option>
+                                <option value="3">CPC</option>
+                                <option value="4">CUODE</option>
+                                <option value="5">NANDINA</option>
+                                <option value="6">PAISES</option>
+                                <option value="7">EQUIVALENCIA</option>
+                                <option value="8">DATOS EXPORTACIÓN</option>
+                                <option value="9">DATOS IMPORTACIÓN</option>
                             </select>
                             <br/><br/>           
                             <div class="col-lg-3">
