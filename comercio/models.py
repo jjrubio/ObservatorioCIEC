@@ -35,7 +35,7 @@ class CUODE(models.Model):
 
 
 class NANDINA(models.Model):
-    subpartida = models.CharField(max_length=10)
+    subpartida = models.CharField(max_length=8)
     descripcion = models.TextField()
 
 
@@ -92,7 +92,7 @@ class Export_NANDINA(models.Model):
     subpartida_nandina = models.CharField(max_length=10)
     peso = models.DecimalField(decimal_places=2, max_digits=10)
     fob = models.DecimalField(decimal_places=2, max_digits=9)
-    subpartida_key =  models.CharField(max_length=10)
+    subpartida_key =  models.CharField(max_length=8)
 
 
 class Import_CGCE(models.Model):
@@ -143,7 +143,7 @@ class Import_NANDINA(models.Model):
     peso = models.DecimalField(decimal_places=2, max_digits=10)
     fob = models.DecimalField(decimal_places=2, max_digits=9)
     cif = models.DecimalField(decimal_places=2, max_digits=8)
-    subpartida_key = models.CharField(max_length=10)
+    subpartida_key = models.CharField(max_length=8)
 
 
 class sqliteadmin_queries(models.Model):

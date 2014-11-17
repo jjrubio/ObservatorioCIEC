@@ -7,6 +7,7 @@ from django.core import serializers
 from json import JSONEncoder
 import pickle
 from django.db.models import Q
+from django.db import connection
 
 
 class PythonObjectEncoder(JSONEncoder):
@@ -502,13 +503,13 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
                                         sum(fob) AS SUBTOTAL_FOB
                                        """) % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, standar_clase)
             else:
-                raw_body_1 = ("""SELECT id, ano AS ANO,
+                raw_body_1 = ("""SELECT %s.id, ano AS ANO,
                                         comercio_paises.pais AS PAIS,
-                                        substr(%s,1,%s) AS %s,
+                                        substr(%s.%s,1,%s) AS %s,
                                         sum(peso) AS PESO,
                                         sum(fob) AS SUBTOTAL_FOB,
                                         sum(cif) AS SUBTOTAL_CIF
-                                       """) % (standar_var1, agreg, standar_clase)
+                                       """) % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, standar_clase)
 
             raw_body_2 = ("""FROM %s
                                     INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
@@ -566,7 +567,7 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
     elif period == '2':
         if tipo == '1':
             raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
-                                    V_TABLE.%s AS %s,
+                                    V_TABLE.pais AS PAIS,
                                     V_TABLE.PESO AS PESO,
                                     V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB
                                     FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/3)+1 AS SEMESTRE,
@@ -574,11 +575,10 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
                                     substr(%s.%s,1,%s) AS %s,
                                     sum(peso) AS PESO,
                                     sum(fob) AS SUBTOTAL_FOB
-                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
+                                   """) % (tipo_standar_table, standar_var1, agreg, standar_clase)
         else:
             raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
                                     V_TABLE.pais AS PAIS,
-                                    V_TABLE.%s AS %s,
                                     V_TABLE.PESO AS PESO,
                                     V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB,
                                     V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
@@ -589,7 +589,7 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
                                     sum(fob) AS SUBTOTAL_FOB,
                                     sum(cif) AS SUBTOTAL_CIF
 
-                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
+                                   """) % (tipo_standar_table, standar_var1, agreg, standar_clase)
 
         raw_body_2 = ("""FROM %s
                                 INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
@@ -609,7 +609,7 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
     elif period == '3':
         if tipo == '1':
             raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
-                                    V_TABLE.%s AS %s,
+                                    V_TABLE.pais AS PAIS,
                                     V_TABLE.PESO AS PESO,
                                     V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB
                                     FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/6)+1 AS SEMESTRE,
@@ -617,11 +617,10 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
                                     substr(%s.%s,1,%s) AS %s,
                                     sum(peso) AS PESO,
                                     sum(fob) AS SUBTOTAL_FOB
-                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
+                                   """) % (tipo_standar_table, standar_var1, agreg, standar_clase)
         else:
             raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
                                     V_TABLE.pais AS PAIS,
-                                    V_TABLE.%s AS %s,
                                     V_TABLE.PESO AS PESO,
                                     V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB.
                                     V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
@@ -632,7 +631,7 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
                                     sum(fob) AS SUBTOTAL_FOB,
                                     sum(cif) AS SUBTOTAL_CIF
 
-                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
+                                   """) % (tipo_standar_table, standar_var1, agreg, standar_clase)
 
         raw_body_2 = ("""FROM %s
                                 INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
@@ -658,13 +657,13 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
                                     sum(fob) AS SUBTOTAL_FOB
                                    """) % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, standar_clase)
         else:
-            raw_body_1 = ("""SELECT id, ano AS ANO,
+            raw_body_1 = ("""SELECT %s.id, ano AS ANO,
                                     comercio_paises.pais AS PAIS,
-                                    substr(%s,1,%s) AS %s,
+                                    substr(%s.%s,1,%s) AS %s,
                                     sum(peso) AS PESO,
                                     sum(fob) AS SUBTOTAL_FOB,
                                     sum(cif) AS SUBTOTAL_CIF
-                                   """) % (standar_var1, agreg, standar_clase)
+                                   """) % (tipo_standar_table, tipo_standar_table, standar_var1, agreg, standar_clase)
 
         raw_body_2 = ("""FROM %s
                                 INNER JOIN comercio_paises ON comercio_paises.codigo=%s.pais
