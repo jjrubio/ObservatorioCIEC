@@ -694,42 +694,23 @@ def insert_data_comercio(request):
     upload_success = False
     empty = False
     arreglo = []
-
     path_upload_csv = '/home/patu/Downloads/ObservatorioCIEC-master/media/csv/'
-    path_load_file_comercio = '/home/patu/Downloads/ObservatorioCIEC-master/load_files_comercio'
-
     user = request.user
     is_super_user = user.is_superuser
 
-    if is_super_user:
+    try:
+        if is_super_user:
+            if request.method == 'POST':
+                upload_form = UploadFileForm(request.POST, request.FILES)
+                if 'file' in request.FILES:
+                    if upload_form.is_valid():
+                        file = upload_form.cleaned_data['file']
+                        choices = upload_form.cleaned_data['choices']
+                        # Subiendo el archivo seleccionado a la carpeta /media/csv/
+                        new_file_import = upload_csv_file(upload=request.FILES['file'])
+                        new_file_import.save()
 
-        if request.method == 'POST':
-            upload_form = UploadFileForm(request.POST, request.FILES)
-
-            if 'file' in request.FILES:
-                if upload_form.is_valid():
-                    file = upload_form.cleaned_data['file']
-                    choices = upload_form.cleaned_data['choices']
-
-                    # Subiendo el archivo seleccionado a la carpeta /media/csv/
-                    new_file_import = upload_csv_file(upload=request.FILES['file'])
-                    new_file_import.save()
-
-                    if choices == '1':
-                        subprocess.Popen([path_load_file_comercio,'comercio_cgce'])
-                    elif choices == '2':
-                        subprocess.Popen([path_load_file_comercio,'comercio_ciiu3'])
-                    elif choices == '3':
-                        subprocess.Popen([path_load_file_comercio,'comercio_cpc'])
-                    elif choices == '4':
-                        subprocess.Popen([path_load_file_comercio,'comercio_cuode'])
-                    elif choices == '5':
-                        subprocess.Popen([path_load_file_comercio,'comercio_nandina'])
-                    elif choices == '6':
-                        subprocess.Popen([path_load_file_comercio,'comercio_paises'])
-                    elif choices == '7':
-                        subprocess.Popen([path_load_file_comercio,'comercio_equivalencia'])
-                    elif choices == '8':
+                        # Una ves que se sube el archivo, se procede a leerlo
                         file_name = [ f for f in listdir(path_upload_csv) if isfile(join(path_upload_csv,f)) ]
                         workbook = xlrd.open_workbook(path_upload_csv+file_name[0])
                         worksheets = workbook.sheet_names()
@@ -750,74 +731,95 @@ def insert_data_comercio(request):
                                         cell_type = current_worksheet.cell_type(curr_row, curr_cell)
                                         cell_value = current_worksheet.cell_value(curr_row, curr_cell)
                                         arreglo.append(cell_value)
-                                        if (len(arreglo) == 6):
-                                            get_subpartida_nandina = str(arreglo[3])
-                                            new_subpartida_nandina = get_subpartida_nandina.split('.',1)
-                                            # Hace el insert de datos a la tabla comercio_export_nandina Export_NANDINA
-                                            new_data = Export_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],peso=arreglo[4],fob=arreglo[5])
-                                            new_data.save()
-                                            for x in arreglo[:]:
-                                                arreglo.remove(x)
-
-                        # Se realiza un update a la columna subpartida_nandina si es que el lenght es igual a 9
-                        cursor = connection.cursor()
-                        cursor.execute("UPDATE comercio_export_nandina SET subpartida_nandina=concat(subpartida_nandina,'0') WHERE LENGTH(subpartida_nandina)=9")
-                        # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
-                        cursor.execute("UPDATE comercio_export_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                                        if (len(arreglo) == 2):
+                                            new_codigo = str(arreglo[0])
+                                            new_get_codigo = new_codigo.split('.',1)
+                                            if choices == '1':
+                                                new_data = CGCE(codigo=new_get_codigo[0],descripcion=arreglo[1])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
+                                            elif choices == '2':
+                                                    new_data = CIIU3(codigo=new_get_codigo[0],descripcion=arreglo[1])
+                                                    new_data.save()
+                                                    for x in arreglo[:]:
+                                                        arreglo.remove(x)
+                                            elif choices =='3':
+                                                    new_data = CPC(codigo=new_get_codigo[0],descripcion=arreglo[1])
+                                                    new_data.save()
+                                                    for x in arreglo[:]:
+                                                        arreglo.remove(x)
+                                            elif choices == '4':
+                                                    new_data = CUODE(codigo=new_get_codigo[0],descripcion=arreglo[1])
+                                                    new_data.save()
+                                                    for x in arreglo[:]:
+                                                        arreglo.remove(x)
+                                            elif choices == '5':
+                                                    new_data = NANDINA(subpartida=new_get_codigo[0],descripcion=arreglo[1])
+                                                    new_data.save()
+                                                    for x in arreglo[:]:
+                                                        arreglo.remove(x)
+                                            elif choices == '6':
+                                                new_data = Paises(codigo=new_get_codigo[0],pais=arreglo[1])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
+                                        elif (len(arreglo) == 7):
+                                            if choices == '7':
+                                                new_data = Equivalencia(nandina=new_get_codigo[0],cpc=arreglo[1],cuode=arreglo[2],cgce=arreglo[3],sistema_armotizado=arreglo[4],ciiu3=arreglo[5],cuci3=arreglo[6])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
+                                            elif choices == '9':
+                                                get_subpartida_nandina = str(arreglo[3])
+                                                new_subpartida_nandina = get_subpartida_nandina.split('.',1)
+                                                # Hace el insert de datos a la tabla comercio_import_nandina Import_NANDINA
+                                                new_data = Import_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],peso=arreglo[4],fob=arreglo[5],cif=arreglo[6])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
+                                        elif (len(arreglo) == 6):
+                                            if choices == '8':
+                                                get_subpartida_nandina = str(arreglo[3])
+                                                new_subpartida_nandina = get_subpartida_nandina.split('.',1)
+                                                # Hace el insert de datos a la tabla comercio_export_nandina Export_NANDINA
+                                                new_data = Export_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],peso=arreglo[4],fob=arreglo[5])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
                         # Se hace un rm al archivo subido
                         os.remove(path_upload_csv+file_name[0])
-                    else:
-                        file_name = [ f for f in listdir(path_upload_csv) if isfile(join(path_upload_csv,f)) ]
-                        workbook = xlrd.open_workbook(path_upload_csv+file_name[0])
-                        worksheets = workbook.sheet_names()
-                        for worksheet_name in worksheets:
-                            current_worksheet = workbook.sheet_by_name(worksheet_name)
-                            num_rows = current_worksheet.nrows -1
-                            num_cells = current_worksheet.ncols - 1
-                            curr_row = -1
-                            while curr_row < num_rows:
-                                curr_row +=1
-                                row = current_worksheet.row(curr_row)
-                                if curr_row == 0:
-                                    pass
-                                else:
-                                    curr_cell = -1
-                                    while curr_cell < num_cells:
-                                        curr_cell += 1
-                                        cell_type = current_worksheet.cell_type(curr_row, curr_cell)
-                                        cell_value = current_worksheet.cell_value(curr_row, curr_cell)
-                                        arreglo.append(cell_value)
-                                        if (len(arreglo) == 7):
-                                            get_subpartida_nandina = str(arreglo[3])
-                                            new_subpartida_nandina = get_subpartida_nandina.split('.',1)
-                                            # Hace el insert de datos a la tabla comercio_import_nandina Import_NANDINA
-                                            new_data = Import_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],peso=arreglo[4],fob=arreglo[5],cif=arreglo[6])
-                                            new_data.save()
-                                            for x in arreglo[:]:
-                                                arreglo.remove(x)
-
-                        cursor = connection.cursor()
-                        cursor.execute("UPDATE comercio_import_nandina SET subpartida_nandina=concat(subpartida_nandina,'0') WHERE LENGTH(subpartida_nandina)=9")
-                        # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
-                        cursor.execute("UPDATE comercio_import_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
-                        # Se hace un rm al archivo subido
-                        os.remove(path_upload_csv+file_name[0])
-
+                        if choices == '8':
+                            # Se realiza un update a la columna subpartida_nandina si es que el lenght es igual a 9
+                            cursor = connection.cursor()
+                            cursor.execute("UPDATE comercio_export_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
+                            # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
+                            cursor.execute("UPDATE comercio_export_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                        elif choices == '9':
+                            cursor = connection.cursor()
+                            cursor.execute("UPDATE comercio_import_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
+                            # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
+                            cursor.execute("UPDATE comercio_import_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
                     upload_success = True
                     empty = False
                 else:
-                    pass
+                    empty = True
+                    upload_success = False
             else:
-                empty = True
+                upload_form = UploadFileForm()
                 upload_success = False
         else:
-            upload_form = UploadFileForm()
-            upload_success = False
-    else:
-        return HttpResponseRedirect('/acceso_denegado/')
-
+            os.remove(path_upload_csv+file_name[0])
+            return HttpResponseRedirect('/acceso_denegado/')
+    except Exception, e:
+        os.remove(path_upload_csv+file_name[0])
+        return HttpResponseRedirect('/error-subida/')
     return render_to_response(template, {'upload_form': upload_form, 'upload_success':upload_success, 'empty':empty}, context)
 
 def access_denied(request):
     template = 'access_denied.html'
+    return render_to_response(template, context_instance=RequestContext(request, locals()))
+
+def error_subida(request):
+    template = 'error.html'
     return render_to_response(template, context_instance=RequestContext(request, locals()))

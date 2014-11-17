@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load apptags %}
+
+{% load static from staticfiles %}
+
+{% block title %}Upload file csv{% endblock %}
+
+{% block extraCSS %}
+    <link href="{% static "css/uploadcsv.css" %}" rel="stylesheet"  />
+{% endblock %}
+
+{% block content %}
+    <div class="content-page-2">
+        <b id="title-content-page">Error subida de archivo</b>
+        <hr class="pull-left" id="separator-content-page">
+        <div class="panel-body">
+            <div class="center">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                    <br/><br/><br/>
+                    <span>Error en la subida del archivo, por favor revise que sea el archivo escogido sea un excel</span>
+                    <span>Revise que el archivo tenga las filas y columnas correctamente</span>
+                    <br/><br/><br/>
+                </div>
+                <div class="col-lg-4"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extraScripts %}
+
+{% endblock %}
