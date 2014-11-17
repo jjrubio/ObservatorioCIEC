@@ -154,6 +154,15 @@ $(document).ready(function() {
         }
 
         $('#table_A').bootstrapTable({ data: data_A });
+
+        $("#btnExportNomen").click(function(e){
+          var uri = $('#table_A').btechco_excelexport({
+            containerid: "table_A"
+            ,returnUri: true
+            ,datatype: $datatype.Table
+          });
+          $(this).attr('download', 'detalle_de_nomenclatura.xlsx').attr('href', uri).attr('target', '_blank');
+        });
     }
 
 
@@ -196,6 +205,7 @@ $(document).ready(function() {
                     valores["fob"] = data[1][0][i][3];
                     data_B.push(valores);
                 }
+                trans = "exportaciones";
             }else{
                 $('#table_B thead tr').append('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
                                                              '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
@@ -214,6 +224,7 @@ $(document).ready(function() {
                     valores["cif"] = data[1][0][i][4];
                     data_B.push(valores);
                 }
+                trans = "importaciones";
             }
         }
 
@@ -236,6 +247,7 @@ $(document).ready(function() {
                     valores["fob"] = data[1][0][i][4];
                     data_B.push(valores);
                 }
+                trans = "exportaciones";
             }else{
                 $('#table_B thead tr').append('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
                                                              '<th id="pais_B" data-field="pais" data-align="center" data-sortable="true">País</th>'+
@@ -256,10 +268,34 @@ $(document).ready(function() {
                     valores["cif"] = data[1][0][i][5];
                     data_B.push(valores);
                 }
+                trans = "importaciones";
             }
         }
 
         $('#table_B').bootstrapTable({ data: data_B });
+
+        $("#btnExportTrans").click(function(e){
+          var uri = $('#table_B').btechco_excelexport({
+            containerid: "table_B"
+            ,returnUri: true
+            ,datatype: $datatype.Table
+          });
+          $(this).attr('download', 'datos_de_'+trans+'.xlsx').attr('href', uri).attr('target', '_blank');
+        });
+
+        $('.fixed-table-toolbar:last #totales_trans').empty();
+
+        if(tipo == 1){
+            $('.fixed-table-toolbar:last').append("<div id='totales_trans'><b>Peso total:</b> "+data[2][0].toFixed(2)+" miles de kilos <br>" +
+                                                                  "<b>Total FOB:</b> "+data[2][1].toFixed(2)+" miles de dólares <br></div>");
+            $('.fixed-table-toolbar:last #totales_trans').css("padding-top", "12px");
+        }else{
+            $('.fixed-table-toolbar:last').append("<div id='totales_trans'><b>Peso total:</b> "+data[2][0].toFixed(2)+" miles de kilos <br>" +
+                                                                  "<div class='col-lg-4'><b>Total FOB:</b> "+data[2][1].toFixed(2)+" miles de dólares <br></div> " +
+                                                                  "<div class='col-lg-4'><b>Total CIF:</b> "+data[2][2].toFixed(2)+" miles de dólares</div></div>");
+            $('.fixed-table-toolbar:last #totales_trans').css("padding-top", "12px");
+            $('.fixed-table-toolbar:last #totales_trans div').css("padding-left", "0px");
+        }
     }
 });
 

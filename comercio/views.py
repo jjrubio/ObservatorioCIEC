@@ -143,36 +143,61 @@ def comercio(request):
         table_B = sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standar_table, standar_clase,
                                         standar_var1, standar_var2, period, value, agreg, ini_date, fin_date)
 
+
+    totalPeso = 0
+    totalFOB = 0
+    totalCIF = 0
+
     if checkbox_pais == '0':
         if tipo == '1':
             if period == '4':
                 if standar == '1':
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
                         data_table_B.append([vb.ANO, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
                 else:
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
                         data_table_B.append([vb.ANO, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
             else:
                 if standar == '1':
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
                         data_table_B.append([vb.FECHA, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
                 else:
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
                         data_table_B.append([vb.FECHA, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
         else:
             if period == '4':
                 if standar == '1':
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
+                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
                         data_table_B.append([vb.ANO, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
                 else:
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
+                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
                         data_table_B.append([vb.ANO, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
             else:
                 if standar == '1':
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
+                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
                         data_table_B.append([vb.FECHA, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
                 else:
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
+                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
                         data_table_B.append([vb.FECHA, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
 
     if checkbox_pais == '1' or option == '2':
@@ -180,34 +205,59 @@ def comercio(request):
             if period == '4':
                 if standar == '1':
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
                         data_table_B.append([vb.ANO, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
                 else:
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
                         data_table_B.append([vb.ANO, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
             else:
                 if standar == '1':
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
                         data_table_B.append([vb.FECHA, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
                 else:
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
                         data_table_B.append([vb.FECHA, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
         else:
             if period == '4':
                 if standar == '1':
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
+                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
                         data_table_B.append([vb.ANO, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
                 else:
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
+                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
                         data_table_B.append([vb.ANO, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
             else:
                 if standar == '1':
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
+                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
                         data_table_B.append([vb.FECHA, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
                 else:
                     for vb in table_B:
+                        totalPeso = totalPeso + float(vb.PESO)
+                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
+                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
                         data_table_B.append([vb.FECHA, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
 
     data_result.append([data_table_B])
+
+    if(tipo == 1):
+        data_result.append([totalPeso, totalFOB])
+    else:
+        data_result.append([totalPeso, totalFOB, totalCIF])
 
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
@@ -472,6 +522,7 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
 
             table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B, ini_date, fin_date])
 
+    #subpartida/codigo por anio
     elif period == '4':
         if checkbox_pais == '0':
             if tipo == '1':
@@ -654,7 +705,7 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
 
         table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value, ini_date, fin_date])
 
-    #pais por ano
+    #pais por anio
     elif period == '4':
         if tipo == '1':
             raw_body_1 = ("""SELECT %s.id, ano AS ANO,
