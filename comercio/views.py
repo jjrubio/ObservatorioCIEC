@@ -821,20 +821,44 @@ def insert_data_comercio(request):
                                                 new_data.save()
                                                 for x in arreglo[:]:
                                                     arreglo.remove(x)
-                                            elif choices == '9':
-                                                get_subpartida_nandina = str(arreglo[3])
-                                                new_subpartida_nandina = get_subpartida_nandina.split('.',1)
-                                                # Hace el insert de datos a la tabla comercio_import_nandina Import_NANDINA
-                                                new_data = Import_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],peso=arreglo[4],fob=arreglo[5],cif=arreglo[6])
-                                                new_data.save()
-                                                for x in arreglo[:]:
-                                                    arreglo.remove(x)
-                                        elif (len(arreglo) == 6):
+                                        elif (len(arreglo) == 8):
                                             if choices == '8':
                                                 get_subpartida_nandina = str(arreglo[3])
                                                 new_subpartida_nandina = get_subpartida_nandina.split('.',1)
-                                                # Hace el insert de datos a la tabla comercio_export_nandina Export_NANDINA
-                                                new_data = Export_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],peso=arreglo[4],fob=arreglo[5])
+                                                try:
+                                                    get_peso = arreglo[5]
+                                                    new_peso = get_peso.split(',',1)
+                                                    final_peso = new_peso[0]+new_peso[1]
+                                                except Exception, e:
+                                                    final_peso = arreglo[5]
+                                                try:
+                                                    get_fob = arreglo[6]
+                                                    new_fob = get_fob.split(',',1)
+                                                    final_fob = new_fob[0]+new_fob[1]                                                    
+                                                except Exception, e:
+                                                    final_fob = arreglo[6]
+                                                new_data = Export_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],descripcion=arreglo[4],peso=final_peso,fob=final_fob,total_fob=arreglo[7])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
+                                        elif (len(arreglo) == 9):
+                                            if choices == '9':
+                                                get_subpartida_nandina = str(arreglo[3])
+                                                new_subpartida_nandina = get_subpartida_nandina.split('.',1)
+                                                try:
+                                                    get_peso = arreglo[5]
+                                                    new_peso = get_peso.split(',',1)
+                                                    final_peso = new_peso[0]+new_peso[1]
+                                                except Exception, e:
+                                                    final_peso = arreglo[5]
+                                                try:
+                                                    get_fob = arreglo[6]
+                                                    new_fob = get_fob.split(',',1)
+                                                    final_fob = new_fob[0]+new_fob[1]   
+                                                except Exception, e:
+                                                    final_fob = arreglo[6]
+                                                # Hace el insert de datos a la tabla comercio_import_nandina Import_NANDINA
+                                                new_data = Import_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],descripcion=arreglo[4],peso=final_peso,fob=final_fob,cif=arreglo[7],total_fob=arreglo[8])
                                                 new_data.save()
                                                 for x in arreglo[:]:
                                                     arreglo.remove(x)
