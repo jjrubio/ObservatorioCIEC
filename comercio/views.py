@@ -7,8 +7,15 @@ from django.core import serializers
 from json import JSONEncoder
 import pickle
 from django.db.models import Q
-from django.db import connection
-
+from django.contrib import messages
+from .forms import UploadFileForm
+# import csv
+# import os
+# import subprocess
+# import xlrd
+# from os import listdir
+# from os.path import isfile, join
+# from django.db import connection
 
 class PythonObjectEncoder(JSONEncoder):
     def default(self, obj):
@@ -682,5 +689,135 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
     return table_B
 
 def insert_data_comercio(request):
+    context = RequestContext(request)
     template = 'insert_data_comercio.html'
+    upload_success = False
+    empty = False
+    arreglo = []
+
+    path_upload_csv = '/home/patu/Downloads/ObservatorioCIEC-master/media/csv/'
+    path_load_file_comercio = '/home/patu/Downloads/ObservatorioCIEC-master/load_files_comercio'
+
+    user = request.user
+    is_super_user = user.is_superuser
+
+    if is_super_user:
+
+        if request.method == 'POST':
+            upload_form = UploadFileForm(request.POST, request.FILES)
+
+            if 'file' in request.FILES:
+                if upload_form.is_valid():
+                    file = upload_form.cleaned_data['file']
+                    choices = upload_form.cleaned_data['choices']
+
+                    # Subiendo el archivo seleccionado a la carpeta /media/csv/
+                    new_file_import = upload_csv_file(upload=request.FILES['file'])
+                    new_file_import.save()
+
+                    if choices == '1':
+                        subprocess.Popen([path_load_file_comercio,'comercio_cgce'])
+                    elif choices == '2':
+                        subprocess.Popen([path_load_file_comercio,'comercio_ciiu3'])
+                    elif choices == '3':
+                        subprocess.Popen([path_load_file_comercio,'comercio_cpc'])
+                    elif choices == '4':
+                        subprocess.Popen([path_load_file_comercio,'comercio_cuode'])
+                    elif choices == '5':
+                        subprocess.Popen([path_load_file_comercio,'comercio_nandina'])
+                    elif choices == '6':
+                        subprocess.Popen([path_load_file_comercio,'comercio_paises'])
+                    elif choices == '7':
+                        subprocess.Popen([path_load_file_comercio,'comercio_equivalencia'])
+                    elif choices == '8':
+                        file_name = [ f for f in listdir(path_upload_csv) if isfile(join(path_upload_csv,f)) ]
+                        workbook = xlrd.open_workbook(path_upload_csv+file_name[0])
+                        worksheets = workbook.sheet_names()
+                        for worksheet_name in worksheets:
+                            current_worksheet = workbook.sheet_by_name(worksheet_name)
+                            num_rows = current_worksheet.nrows -1
+                            num_cells = current_worksheet.ncols - 1
+                            curr_row = -1
+                            while curr_row < num_rows:
+                                curr_row +=1
+                                row = current_worksheet.row(curr_row)
+                                if curr_row == 0:
+                                    pass
+                                else:
+                                    curr_cell = -1
+                                    while curr_cell < num_cells:
+                                        curr_cell += 1
+                                        cell_type = current_worksheet.cell_type(curr_row, curr_cell)
+                                        cell_value = current_worksheet.cell_value(curr_row, curr_cell)
+                                        arreglo.append(cell_value)
+                                        if (len(arreglo) == 6):
+                                            get_subpartida_nandina = str(arreglo[3])
+                                            new_subpartida_nandina = get_subpartida_nandina.split('.',1)
+                                            # Hace el insert de datos a la tabla comercio_export_nandina Export_NANDINA
+                                            new_data = Export_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],peso=arreglo[4],fob=arreglo[5])
+                                            new_data.save()
+                                            for x in arreglo[:]:
+                                                arreglo.remove(x)
+
+                        # Se realiza un update a la columna subpartida_nandina si es que el lenght es igual a 9
+                        cursor = connection.cursor()
+                        cursor.execute("UPDATE comercio_export_nandina SET subpartida_nandina=concat(subpartida_nandina,'0') WHERE LENGTH(subpartida_nandina)=9")
+                        # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
+                        cursor.execute("UPDATE comercio_export_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                        # Se hace un rm al archivo subido
+                        os.remove(path_upload_csv+file_name[0])
+                    else:
+                        file_name = [ f for f in listdir(path_upload_csv) if isfile(join(path_upload_csv,f)) ]
+                        workbook = xlrd.open_workbook(path_upload_csv+file_name[0])
+                        worksheets = workbook.sheet_names()
+                        for worksheet_name in worksheets:
+                            current_worksheet = workbook.sheet_by_name(worksheet_name)
+                            num_rows = current_worksheet.nrows -1
+                            num_cells = current_worksheet.ncols - 1
+                            curr_row = -1
+                            while curr_row < num_rows:
+                                curr_row +=1
+                                row = current_worksheet.row(curr_row)
+                                if curr_row == 0:
+                                    pass
+                                else:
+                                    curr_cell = -1
+                                    while curr_cell < num_cells:
+                                        curr_cell += 1
+                                        cell_type = current_worksheet.cell_type(curr_row, curr_cell)
+                                        cell_value = current_worksheet.cell_value(curr_row, curr_cell)
+                                        arreglo.append(cell_value)
+                                        if (len(arreglo) == 7):
+                                            get_subpartida_nandina = str(arreglo[3])
+                                            new_subpartida_nandina = get_subpartida_nandina.split('.',1)
+                                            # Hace el insert de datos a la tabla comercio_import_nandina Import_NANDINA
+                                            new_data = Import_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],peso=arreglo[4],fob=arreglo[5],cif=arreglo[6])
+                                            new_data.save()
+                                            for x in arreglo[:]:
+                                                arreglo.remove(x)
+
+                        cursor = connection.cursor()
+                        cursor.execute("UPDATE comercio_import_nandina SET subpartida_nandina=concat(subpartida_nandina,'0') WHERE LENGTH(subpartida_nandina)=9")
+                        # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
+                        cursor.execute("UPDATE comercio_import_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                        # Se hace un rm al archivo subido
+                        os.remove(path_upload_csv+file_name[0])
+
+                    upload_success = True
+                    empty = False
+                else:
+                    pass
+            else:
+                empty = True
+                upload_success = False
+        else:
+            upload_form = UploadFileForm()
+            upload_success = False
+    else:
+        return HttpResponseRedirect('/acceso_denegado/')
+
+    return render_to_response(template, {'upload_form': upload_form, 'upload_success':upload_success, 'empty':empty}, context)
+
+def access_denied(request):
+    template = 'access_denied.html'
     return render_to_response(template, context_instance=RequestContext(request, locals()))
