@@ -9,12 +9,12 @@ import pickle
 from django.db.models import Q
 from django.contrib import messages
 from .forms import UploadFileForm
-# import csv
-# import os
-# import subprocess
-# import xlrd
-# from os import listdir
-# from os.path import isfile, join
+import csv
+import os
+import subprocess
+import xlrd
+from os import listdir
+from os.path import isfile, join
 from django.db import connection
 
 class PythonObjectEncoder(JSONEncoder):
@@ -160,7 +160,6 @@ def comercio(request):
     else:
         data_result.append([totalPeso, totalFOB, totalCIF])
 
-
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
 
@@ -173,9 +172,6 @@ def equivalencia():
 
     j = 0
     k = 0
-    print len(tabla_trans_estandar)
-    for i in xrange(0, len(tabla_trans_estandar)):
-        print i
 
     for i in xrange(0, len(tabla_trans_estandar)):
         if k == 0:
@@ -792,7 +788,7 @@ def insert_data_comercio(request):
                                                 try:
                                                     get_fob = arreglo[6]
                                                     new_fob = get_fob.split(',',1)
-                                                    final_fob = new_fob[0]+new_fob[1]                                                    
+                                                    final_fob = new_fob[0]+new_fob[1]
                                                 except Exception, e:
                                                     final_fob = arreglo[6]
                                                 new_data = Export_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],descripcion=arreglo[4],peso=final_peso,fob=final_fob,total_fob=arreglo[7])
@@ -812,7 +808,7 @@ def insert_data_comercio(request):
                                                 try:
                                                     get_fob = arreglo[6]
                                                     new_fob = get_fob.split(',',1)
-                                                    final_fob = new_fob[0]+new_fob[1]   
+                                                    final_fob = new_fob[0]+new_fob[1]
                                                 except Exception, e:
                                                     final_fob = arreglo[6]
                                                 # Hace el insert de datos a la tabla comercio_import_nandina Import_NANDINA
