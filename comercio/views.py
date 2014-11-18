@@ -702,6 +702,7 @@ def insert_data_comercio(request):
     path_upload_csv = '/home/patu/Downloads/ObservatorioCIEC-master/media/csv/'
     user = request.user
     is_super_user = user.is_superuser
+    data_error = '##'
 
     try:
         if is_super_user:
@@ -745,21 +746,25 @@ def insert_data_comercio(request):
                                                 for x in arreglo[:]:
                                                     arreglo.remove(x)
                                             elif choices == '2':
-                                                    new_data = CIIU3(codigo=new_get_codigo[0],descripcion=arreglo[1])
-                                                    new_data.save()
-                                                    for x in arreglo[:]:
-                                                        arreglo.remove(x)
+                                                new_data = CIIU3(codigo=new_get_codigo[0],descripcion=arreglo[1])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
                                             elif choices =='3':
-                                                    new_data = CPC(codigo=new_get_codigo[0],descripcion=arreglo[1])
-                                                    new_data.save()
-                                                    for x in arreglo[:]:
-                                                        arreglo.remove(x)
+                                                new_data = CPC(codigo=new_get_codigo[0],descripcion=arreglo[1])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
                                             elif choices == '4':
-                                                    new_data = CUODE(codigo=new_get_codigo[0],descripcion=arreglo[1])
-                                                    new_data.save()
+                                                new_data = CUODE(codigo=new_get_codigo[0],descripcion=arreglo[1])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
+                                            elif choices == '5':
+                                                if data_error in arreglo[1]:
                                                     for x in arreglo[:]:
                                                         arreglo.remove(x)
-                                            elif choices == '5':
+                                                else:
                                                     new_data = NANDINA(subpartida=new_get_codigo[0],descripcion=arreglo[1])
                                                     new_data.save()
                                                     for x in arreglo[:]:
@@ -771,7 +776,19 @@ def insert_data_comercio(request):
                                                     arreglo.remove(x)
                                         elif (len(arreglo) == 7):
                                             if choices == '7':
-                                                new_data = Equivalencia(nandina=new_get_codigo[0],cpc=arreglo[1],cuode=arreglo[2],cgce=arreglo[3],sistema_armotizado=arreglo[4],ciiu3=arreglo[5],cuci3=arreglo[6])
+                                                get_cpc = str(arreglo[1])
+                                                new_get_cpc = get_cpc.split('.',1)
+                                                get_cuode = str(arreglo[2])
+                                                new_get_cuode = get_cuode.split('.',1)
+                                                get_cgce = str(arreglo[3])
+                                                new_get_cgce = get_cgce.split('.',1)
+                                                get_sist_amorti = str(arreglo[4])
+                                                new_get_sist_amorti = get_sist_amorti.split('.',1)
+                                                get_ciiu3 = str(arreglo[5])
+                                                new_get_ciiu3 = get_ciiu3.split('.',1)
+                                                get_cuci3 = str(arreglo[6])
+                                                new_get_cuci3 = get_cuci3.split('.',1)
+                                                new_data = Equivalencia(nandina=new_get_codigo[0],cpc=new_get_cpc[0],cuode=new_get_cuode[0],cgce=new_get_cgce[0],sistema_armotizado=new_get_sist_amorti[0],ciiu3=new_get_ciiu3[0],cuci3=new_get_cuci3[0])
                                                 new_data.save()
                                                 for x in arreglo[:]:
                                                     arreglo.remove(x)
@@ -788,7 +805,7 @@ def insert_data_comercio(request):
                                                 try:
                                                     get_fob = arreglo[6]
                                                     new_fob = get_fob.split(',',1)
-                                                    final_fob = new_fob[0]+new_fob[1]
+                                                    final_fob = new_fob[0]+new_fob[1]                                                    
                                                 except Exception, e:
                                                     final_fob = arreglo[6]
                                                 new_data = Export_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],descripcion=arreglo[4],peso=final_peso,fob=final_fob,total_fob=arreglo[7])
@@ -808,7 +825,7 @@ def insert_data_comercio(request):
                                                 try:
                                                     get_fob = arreglo[6]
                                                     new_fob = get_fob.split(',',1)
-                                                    final_fob = new_fob[0]+new_fob[1]
+                                                    final_fob = new_fob[0]+new_fob[1]   
                                                 except Exception, e:
                                                     final_fob = arreglo[6]
                                                 # Hace el insert de datos a la tabla comercio_import_nandina Import_NANDINA
