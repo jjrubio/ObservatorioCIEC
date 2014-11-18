@@ -15,7 +15,7 @@ from .forms import UploadFileForm
 # import xlrd
 # from os import listdir
 # from os.path import isfile, join
-# from django.db import connection
+from django.db import connection
 
 class PythonObjectEncoder(JSONEncoder):
     def default(self, obj):
@@ -65,53 +65,35 @@ def comercio(request):
         standar_clase = 'subpartida'
         standar_var1 = 'subpartida_nandina'
         standar_var2 = 'subpartida_key'
-        standar_name = NANDINA
         standar_table = 'comercio_nandina'
-        export_standar_name = Export_NANDINA
         export_standar_table = 'comercio_export_nandina'
-        import_standar_name = Import_NANDINA
         import_standar_table = 'comercio_import_nandina'
     else:
         standar_clase = standar_var1 = standar_var2 = 'codigo'
         if standar == '2':
-            standar_name = CGCE
             standar_table = 'comercio_cgce'
-            export_standar_name = Export_CGCE
             export_standar_table = 'comercio_export_cgce'
-            import_standar_name = Import_CGCE
             import_standar_table = 'comercio_import_cgce'
         elif standar == '3':
-            standar_name = CIIU3
             standar_table = 'comercio_ciiu3'
-            export_standar_name = Export_CIIU3
             export_standar_table = 'comercio_export_ciiu3'
-            import_standar_name = Import_CIIU3
             import_standar_table = 'comercio_import_ciiu3'
         elif standar == '4':
-            standar_name = CPC
             standar_table = 'comercio_cpc'
-            export_standar_name = Export_CPC
             export_standar_table = 'comercio_export_cpc'
-            import_standar_name = Import_CPC
             import_standar_table = 'comercio_import_cpc'
         elif standar == '5':
-            standar_name = CUODE
             standar_table = 'comercio_cuode'
-            export_standar_name = Export_CUODE
             export_standar_table = 'comercio_export_cuode'
-            import_standar_name = Import_CUODE
             import_standar_table = 'comercio_import_cuode'
 
-    table_A = sql_A(standar_name, standar_table, standar_clase, value_A, value_B)
+    table_A = sql_A(standar_table, standar_clase, value_A, value_B)
 
-    if standar == '1':
-        for va in table_A:
-            data_table_A.append([va.subpartida, va.descripcion])
-    else:
-        for va in table_A:
-            data_table_A.append([va.codigo, va.descripcion])
+    for va in table_A:
+        data_table_A.append([va[1], va[2]])
 
     data_result.append([data_table_A])
+
 
     data_table_B = []
 
@@ -129,20 +111,17 @@ def comercio(request):
         fin_date = txt_hasta
 
     if tipo == '1':
-        tipo_standar_name = export_standar_name
         tipo_standar_table = export_standar_table
     else:
-        tipo_standar_name = import_standar_name
         tipo_standar_table = import_standar_table
 
     if option == '1':
-        table_B = sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, standar_clase,
-                                        standar_var1, standar_var2, period, value_A, value_B, agreg, ini_date, fin_date, checkbox_pais)
+        table_B = sql_B_clase(tipo, tipo_standar_table, standar_table, standar_clase, standar_var1, standar_var2,
+                                          period, value_A, value_B, agreg, ini_date, fin_date, checkbox_pais)
 
     else:
-        table_B = sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standar_table, standar_clase,
+        table_B = sql_B_pais(tipo, tipo_standar_table, standar_table, standar_clase,
                                         standar_var1, standar_var2, period, value, agreg, ini_date, fin_date)
-
 
     totalPeso = 0
     totalFOB = 0
@@ -150,107 +129,29 @@ def comercio(request):
 
     if checkbox_pais == '0':
         if tipo == '1':
-            if period == '4':
-                if standar == '1':
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        data_table_B.append([vb.ANO, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
-                else:
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        data_table_B.append([vb.ANO, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
-            else:
-                if standar == '1':
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        data_table_B.append([vb.FECHA, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
-                else:
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        data_table_B.append([vb.FECHA, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
+            for vb in table_B:
+                totalPeso = totalPeso + float(vb[3])
+                totalFOB = totalFOB + float(vb[4])
+                data_table_B.append([vb[1], vb[2], float(vb[3]), float(vb[4])])
         else:
-            if period == '4':
-                if standar == '1':
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
-                        data_table_B.append([vb.ANO, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
-                else:
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
-                        data_table_B.append([vb.ANO, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
-            else:
-                if standar == '1':
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
-                        data_table_B.append([vb.FECHA, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
-                else:
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
-                        data_table_B.append([vb.FECHA, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
+            for vb in table_B:
+                totalPeso = totalPeso + float(vb[3])
+                totalFOB = totalFOB + float(vb[4])
+                totalCIF = totalCIF + float(vb[5])
+                data_table_B.append([vb[1], vb[2], float(vb[3]), float(vb[4]), float(vb[5])])
 
     if checkbox_pais == '1' or option == '2':
         if tipo == '1':
-            if period == '4':
-                if standar == '1':
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        data_table_B.append([vb.ANO, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
-                else:
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        data_table_B.append([vb.ANO, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
-            else:
-                if standar == '1':
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        data_table_B.append([vb.FECHA, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
-                else:
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        data_table_B.append([vb.FECHA, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB)])
+            for vb in table_B:
+                totalPeso = totalPeso + float(vb[4])
+                totalFOB = totalFOB + float(vb[5])
+                data_table_B.append([vb[1], vb[2], vb[3], float(vb[4]), float(vb[5])])
         else:
-            if period == '4':
-                if standar == '1':
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
-                        data_table_B.append([vb.ANO, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
-                else:
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
-                        data_table_B.append([vb.ANO, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
-            else:
-                if standar == '1':
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
-                        data_table_B.append([vb.FECHA, vb.PAIS, vb.subpartida, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
-                else:
-                    for vb in table_B:
-                        totalPeso = totalPeso + float(vb.PESO)
-                        totalFOB = totalFOB + float(vb.SUBTOTAL_FOB)
-                        totalCIF = totalCIF + float(vb.SUBTOTAL_CIF)
-                        data_table_B.append([vb.FECHA, vb.PAIS, vb.codigo, float(vb.PESO), float(vb.SUBTOTAL_FOB), float(vb.SUBTOTAL_CIF)])
+            for vb in table_B:
+                totalPeso = totalPeso + float(vb[4])
+                totalFOB = totalFOB + float(vb[5])
+                totalCIF = totalCIF + float(vb[6])
+                data_table_B.append([vb[1], vb[2], vb[3], float(vb[4]), float(vb[5]), float(vb[6])])
 
     data_result.append([data_table_B])
 
@@ -259,24 +160,87 @@ def comercio(request):
     else:
         data_result.append([totalPeso, totalFOB, totalCIF])
 
+
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
 
 
-#standar_name: NANDINA, CGCE, CPC, CUODE, CIIU3 (objetos)
+def equivalencia():
+    estandar = ['cgce', 'ciiu3', 'cpc', 'cuode']
+    tabla_trans_nandina = ['comercio_export_nandina', 'comercio_import_nandina']
+    tabla_trans_estandar = ['comercio_export_cgce', 'comercio_export_ciiu3', 'comercio_export_cpc', 'comercio_export_cuode',
+                                           'comercio_import_cgce', 'comercio_import_ciiu3', 'comercio_import_cpc', 'comercio_import_cuode']
+
+    j = 0
+    k = 0
+    print len(tabla_trans_estandar)
+    for i in xrange(0, len(tabla_trans_estandar)):
+        print i
+
+    for i in xrange(0, len(tabla_trans_estandar)):
+        if k == 0:
+            raw_body = ("""INSERT INTO %s (ANO, MES, PAIS, CODIGO, PESO, FOB)
+                                    SELECT ANO, MES, PAIS, CODIGO, PESO, FOB
+                                    FROM
+                                    (SELECT id, ano AS ANO,
+                                    mes AS MES,
+                                    pais AS PAIS,
+                                    codigo AS CODIGO,
+                                    peso AS PESO,
+                                    fob AS FOB
+                                    FROM(
+                                    SELECT nandina AS SUBPARTIDA,
+                                    %s AS CODIGO
+                                    FROM comercio_equivalencia)
+                                    AS MATCH_TABLE
+                                    INNER JOIN %s ON
+                                    (MATCH_TABLE.SUBPARTIDA = %s.subpartida_key)) AS VIEW
+                                """) % (tabla_trans_estandar[i], estandar[j], tabla_trans_nandina[k], tabla_trans_nandina[k])
+        else:
+            raw_body = ("""INSERT INTO %s (ANO, MES, PAIS, CODIGO, PESO, FOB, CIF)
+                                    SELECT ANO, MES, PAIS, CODIGO, PESO, FOB, CIF
+                                    FROM
+                                    (SELECT id, ano AS ANO,
+                                    mes AS MES,
+                                    pais AS PAIS,
+                                    codigo AS CODIGO,
+                                    peso AS PESO,
+                                    fob AS FOB,
+                                    cif AS CIF
+                                    FROM(
+                                    SELECT nandina AS SUBPARTIDA,
+                                    %s AS CODIGO
+                                    FROM comercio_equivalencia)
+                                    AS MATCH_TABLE
+                                    INNER JOIN %s ON
+                                    (MATCH_TABLE.SUBPARTIDA = %s.subpartida_key)) AS VIEW
+                                """) % (tabla_trans_estandar[i], estandar[j], tabla_trans_nandina[k], tabla_trans_nandina[k])
+
+        j = j + 1
+        if i== 3:
+            j = 0
+            k = 1
+
+        cursor = connection.cursor()
+        cursor.execute(raw_body)
+
+    return 1
+
 #standar_table: comercio_nandina, comercio_cgce, comercio_cpc, comercio_cuode, comercio_ciiu3 (nombre propio de la base)
 #standar_clase: subpartida o codigo
 #value_A: patron% o null segun 'BuscarPor'
 #value_B: patron% o null segun 'BuscarPor'
-def sql_A(standar_name, standar_table, standar_clase, value_A, value_B):
+def sql_A(standar_table, standar_clase, value_A, value_B):
+    cursor = connection.cursor()
+
     raw_body = ("SELECT * FROM %s WHERE %s ") % (standar_table, standar_clase)
     raw_where = ("LIKE %s OR descripcion LIKE %s")
-    table_A = standar_name.objects.raw(raw_body+raw_where, [value_A, value_B])
+    cursor.execute(raw_body+raw_where,  [value_A, value_B])
+    table_A = cursor.fetchall ()
     return table_A
 
 
 #tipo: tab_selected
-#standar_name: NANDINA, CGCE, CPC, CUODE, CIIU3 (objetos)
 #standar_table: comercio_nandina, comercio_cgce, comercio_cpc, comercio_cuode, comercio_ciiu3 (nombre propio de la base)
 #standar_clase: subpartida o codigo
 #periodicidad: mes, trimestre, semestre, anual
@@ -286,8 +250,10 @@ def sql_A(standar_name, standar_table, standar_clase, value_A, value_B):
 #ini_date: desde.substring(0,4)
 #fin_date: hasta.substring(0,4)
 #checkbox_pais: si se separa por pais o no
-def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, standar_clase,
-                        standar_var1, standar_var2, period, value_A, value_B, agreg, ini_date, fin_date, checkbox_pais):
+def sql_B_clase(tipo, tipo_standar_table, standar_table, standar_clase, standar_var1, standar_var2,
+                        period, value_A, value_B, agreg, ini_date, fin_date, checkbox_pais):
+
+    cursor = connection.cursor()
 
     #subpartida/codigo por mes
     if period == '1':
@@ -348,8 +314,6 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
 
             raw_where_2 = ("HAVING (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)>=%s) AND (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)<=%s)")
 
-        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B,  ini_date, fin_date])
-
     #subpartida/codigo por trimestre
     elif period == '2':
         if checkbox_pais == '0':
@@ -391,8 +355,6 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
 
             raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
 
-            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B,  ini_date, fin_date])
-
         else:
             if tipo == '1':
                 raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
@@ -433,8 +395,6 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
             raw_body_3 = ("GROUP BY ANO, SEMESTRE,substr(%s.%s,1,%s),%s.pais) AS V_TABLE ") % (tipo_standar_table, standar_var1, agreg, tipo_standar_table)
 
             raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
-
-            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B, ini_date, fin_date])
 
     #subpartida/codigo por semestre
     elif period == '3':
@@ -477,8 +437,6 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
 
             raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
 
-            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B,  ini_date, fin_date])
-
         else:
             if tipo == '1':
                 raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
@@ -520,8 +478,6 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
 
             raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
 
-            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B, ini_date, fin_date])
-
     #subpartida/codigo por anio
     elif period == '4':
         if checkbox_pais == '0':
@@ -549,8 +505,6 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
             raw_body_3 = ("GROUP BY ano, substr(%s.%s,1,%s) ") % (tipo_standar_table, standar_var1, agreg)
 
             raw_where_2 = ("HAVING (ANO>=%s) AND (ANO<=%s)")
-
-            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B,  ini_date, fin_date])
 
         else:
             if tipo == '1':
@@ -581,13 +535,17 @@ def sql_B_clase(tipo, tipo_standar_name, tipo_standar_table, standar_table, stan
 
             raw_where_2 = ("HAVING (ANO>=%s) AND (ANO<=%s)")
 
-            table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B, ini_date, fin_date])
+    cursor.execute(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value_A, value_B, ini_date, fin_date])
+
+    table_B = cursor.fetchall ()
 
     return table_B
 
 
-def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standar_table, standar_clase,
+def sql_B_pais(tipo, tipo_standar_table, standar_table, standar_clase,
                       standar_var1, standar_var2, period, value, agreg, ini_date, fin_date):
+
+    cursor = connection.cursor()
 
     #pais por mes
     if period == '1':
@@ -619,13 +577,12 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
 
         raw_where_2 = ("HAVING (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)>=%s) AND (substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7)<=%s)")
 
-        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value, ini_date, fin_date])
-
     #pais por trimestre
     elif period == '2':
         if tipo == '1':
             raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
                                     V_TABLE.pais AS PAIS,
+                                    V_TABLE.%s AS %s,
                                     V_TABLE.PESO AS PESO,
                                     V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB
                                     FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/3)+1 AS SEMESTRE,
@@ -633,10 +590,11 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
                                     substr(%s.%s,1,%s) AS %s,
                                     sum(peso) AS PESO,
                                     sum(fob) AS SUBTOTAL_FOB
-                                   """) % (tipo_standar_table, standar_var1, agreg, standar_clase)
+                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
         else:
             raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
                                     V_TABLE.pais AS PAIS,
+                                    V_TABLE.%s AS %s,
                                     V_TABLE.PESO AS PESO,
                                     V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB,
                                     V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
@@ -647,7 +605,7 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
                                     sum(fob) AS SUBTOTAL_FOB,
                                     sum(cif) AS SUBTOTAL_CIF
 
-                                   """) % (tipo_standar_table, standar_var1, agreg, standar_clase)
+                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
 
         raw_body_2 = ("""FROM %s
                                 INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
@@ -661,13 +619,12 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
 
         raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
 
-        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value, ini_date, fin_date])
-
     #pais por semestre
     elif period == '3':
         if tipo == '1':
             raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
                                     V_TABLE.pais AS PAIS,
+                                    V_TABLE.%s AS %s,
                                     V_TABLE.PESO AS PESO,
                                     V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB
                                     FROM( SELECT comercio_paises.id, ano AS ANO, ((MES-1)/6)+1 AS SEMESTRE,
@@ -675,10 +632,11 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
                                     substr(%s.%s,1,%s) AS %s,
                                     sum(peso) AS PESO,
                                     sum(fob) AS SUBTOTAL_FOB
-                                   """) % (tipo_standar_table, standar_var1, agreg, standar_clase)
+                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
         else:
             raw_body_1 = ("""SELECT id, concat(ANO,'-0',FLOOR(SEMESTRE)) AS FECHA,
                                     V_TABLE.pais AS PAIS,
+                                    V_TABLE.%s AS %s,
                                     V_TABLE.PESO AS PESO,
                                     V_TABLE.SUBTOTAL_FOB AS SUBTOTAL_FOB.
                                     V_TABLE.SUBTOTAL_CIF AS SUBTOTAL_CIF
@@ -689,7 +647,7 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
                                     sum(fob) AS SUBTOTAL_FOB,
                                     sum(cif) AS SUBTOTAL_CIF
 
-                                   """) % (tipo_standar_table, standar_var1, agreg, standar_clase)
+                                   """) % (standar_clase, standar_clase, tipo_standar_table, standar_var1, agreg, standar_clase)
 
         raw_body_2 = ("""FROM %s
                                 INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo
@@ -702,8 +660,6 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
         raw_body_3 = ("GROUP BY ANO, SEMESTRE,substr(%s.%s,1,%s),%s.pais) AS V_TABLE ") % (tipo_standar_table, standar_var1, agreg, tipo_standar_table)
 
         raw_where_2 = ("WHERE (concat(ANO,'-0',FLOOR(SEMESTRE))>=%s) AND (concat(ANO,'-0',FLOOR(SEMESTRE))<=%s)")
-
-        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value, ini_date, fin_date])
 
     #pais por anio
     elif period == '4':
@@ -735,7 +691,9 @@ def sql_B_pais(tipo, tipo_standar_name, tipo_standar_table, standar_name, standa
 
         raw_where_2 = ("HAVING (ANO>=%s) AND (ANO<=%s)")
 
-        table_B = tipo_standar_name.objects.raw(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value, ini_date, fin_date])
+    cursor.execute(raw_body_1 + raw_body_2 + raw_where_1 + raw_body_3 + raw_where_2, [value, ini_date, fin_date])
+
+    table_B = cursor.fetchall ()
 
     return table_B
 
