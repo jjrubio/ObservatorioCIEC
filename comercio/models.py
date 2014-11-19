@@ -1,17 +1,9 @@
 from django.db import models
 
 
-class Lista_estandares(models.Model):
-    nombre = models.CharField(max_length=10)
-
-
 class Paises(models.Model):
     codigo = models.PositiveSmallIntegerField()
     pais = models.TextField()
-
-
-class Periodicidad(models.Model):
-    nombre = models.CharField(max_length=10)
 
 
 class CGCE(models.Model):
@@ -144,6 +136,7 @@ class Import_NANDINA(models.Model):
     fob = models.DecimalField(decimal_places=2, max_digits=9)
     cif = models.DecimalField(decimal_places=2, max_digits=8)
     subpartida_key = models.CharField(max_length=8)
+
 
 class upload_csv_file(models.Model):
     upload = models.FileField(upload_to='csv/')

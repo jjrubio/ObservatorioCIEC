@@ -702,6 +702,7 @@ def insert_data_comercio(request):
     path_upload_csv = '/home/patu/Downloads/ObservatorioCIEC-master/media/csv/'
     user = request.user
     is_super_user = user.is_superuser
+    data_error = '##'
 
     try:
         if is_super_user:
@@ -745,21 +746,25 @@ def insert_data_comercio(request):
                                                 for x in arreglo[:]:
                                                     arreglo.remove(x)
                                             elif choices == '2':
-                                                    new_data = CIIU3(codigo=new_get_codigo[0],descripcion=arreglo[1])
-                                                    new_data.save()
-                                                    for x in arreglo[:]:
-                                                        arreglo.remove(x)
+                                                new_data = CIIU3(codigo=new_get_codigo[0],descripcion=arreglo[1])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
                                             elif choices =='3':
-                                                    new_data = CPC(codigo=new_get_codigo[0],descripcion=arreglo[1])
-                                                    new_data.save()
-                                                    for x in arreglo[:]:
-                                                        arreglo.remove(x)
+                                                new_data = CPC(codigo=new_get_codigo[0],descripcion=arreglo[1])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
                                             elif choices == '4':
-                                                    new_data = CUODE(codigo=new_get_codigo[0],descripcion=arreglo[1])
-                                                    new_data.save()
+                                                new_data = CUODE(codigo=new_get_codigo[0],descripcion=arreglo[1])
+                                                new_data.save()
+                                                for x in arreglo[:]:
+                                                    arreglo.remove(x)
+                                            elif choices == '5':
+                                                if data_error in arreglo[1]:
                                                     for x in arreglo[:]:
                                                         arreglo.remove(x)
-                                            elif choices == '5':
+                                                else:
                                                     new_data = NANDINA(subpartida=new_get_codigo[0],descripcion=arreglo[1])
                                                     new_data.save()
                                                     for x in arreglo[:]:
@@ -771,11 +776,24 @@ def insert_data_comercio(request):
                                                     arreglo.remove(x)
                                         elif (len(arreglo) == 7):
                                             if choices == '7':
-                                                new_data = Equivalencia(nandina=new_get_codigo[0],cpc=arreglo[1],cuode=arreglo[2],cgce=arreglo[3],sistema_armotizado=arreglo[4],ciiu3=arreglo[5],cuci3=arreglo[6])
+                                                get_cpc = str(arreglo[1])
+                                                new_get_cpc = get_cpc.split('.',1)
+                                                get_cuode = str(arreglo[2])
+                                                new_get_cuode = get_cuode.split('.',1)
+                                                get_cgce = str(arreglo[3])
+                                                new_get_cgce = get_cgce.split('.',1)
+                                                get_sist_amorti = str(arreglo[4])
+                                                new_get_sist_amorti = get_sist_amorti.split('.',1)
+                                                get_ciiu3 = str(arreglo[5])
+                                                new_get_ciiu3 = get_ciiu3.split('.',1)
+                                                get_cuci3 = str(arreglo[6])
+                                                new_get_cuci3 = get_cuci3.split('.',1)
+                                                new_data = Equivalencia(nandina=new_get_codigo[0],cpc=new_get_cpc[0],cuode=new_get_cuode[0],cgce=new_get_cgce[0],sistema_armotizado=new_get_sist_amorti[0],ciiu3=new_get_ciiu3[0],cuci3=new_get_cuci3[0])
                                                 new_data.save()
                                                 for x in arreglo[:]:
                                                     arreglo.remove(x)
                                         elif (len(arreglo) == 8):
+                                            print arreglo
                                             if choices == '8':
                                                 get_subpartida_nandina = str(arreglo[3])
                                                 new_subpartida_nandina = get_subpartida_nandina.split('.',1)
@@ -824,11 +842,18 @@ def insert_data_comercio(request):
                             cursor.execute("UPDATE comercio_export_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
                             # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
                             cursor.execute("UPDATE comercio_export_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                            try:
+                                valor_k = 0
+                                valor_equivalencia = equivalencia(valor_k)
+                            except Exception, e:
+                                return HttpResponseRedirect('/error-subida/')
+
                         elif choices == '9':
                             cursor = connection.cursor()
                             cursor.execute("UPDATE comercio_import_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
                             # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
                             cursor.execute("UPDATE comercio_import_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                            # valor_equivalencia = equivalencia(1)
                     upload_success = True
                     empty = False
                 else:
@@ -838,11 +863,11 @@ def insert_data_comercio(request):
                 upload_form = UploadFileForm()
                 upload_success = False
         else:
-            # os.remove(path_upload_csv+file_name[0])
             return HttpResponseRedirect('/acceso_denegado/')
     except Exception, e:
         # os.remove(path_upload_csv+file_name[0])
         return HttpResponseRedirect('/error-subida/')
+
     return render_to_response(template, {'upload_form': upload_form, 'upload_success':upload_success, 'empty':empty}, context)
 
 def access_denied(request):
