@@ -838,10 +838,10 @@ def insert_data_comercio(request):
                 upload_form = UploadFileForm()
                 upload_success = False
         else:
-            os.remove(path_upload_csv+file_name[0])
+            # os.remove(path_upload_csv+file_name[0])
             return HttpResponseRedirect('/acceso_denegado/')
     except Exception, e:
-        os.remove(path_upload_csv+file_name[0])
+        # os.remove(path_upload_csv+file_name[0])
         return HttpResponseRedirect('/error-subida/')
     return render_to_response(template, {'upload_form': upload_form, 'upload_success':upload_success, 'empty':empty}, context)
 

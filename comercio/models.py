@@ -90,10 +90,8 @@ class Export_NANDINA(models.Model):
     mes = models.PositiveSmallIntegerField()
     pais = models.PositiveSmallIntegerField()
     subpartida_nandina = models.CharField(max_length=10)
-    descripcion = models.TextField()
     peso = models.DecimalField(decimal_places=2, max_digits=10)
     fob = models.DecimalField(decimal_places=2, max_digits=9)
-    total_fob = models.DecimalField(decimal_places=2, max_digits=5)
     subpartida_key =  models.CharField(max_length=8)
 
 
@@ -142,17 +140,10 @@ class Import_NANDINA(models.Model):
     mes = models.PositiveSmallIntegerField()
     pais = models.PositiveSmallIntegerField()
     subpartida_nandina = models.CharField(max_length=10)
-    descripcion = models.TextField()
     peso = models.DecimalField(decimal_places=2, max_digits=10)
     fob = models.DecimalField(decimal_places=2, max_digits=9)
     cif = models.DecimalField(decimal_places=2, max_digits=8)
-    total_fob = models.DecimalField(decimal_places=2, max_digits=5)
     subpartida_key = models.CharField(max_length=8)
-
-
-class sqliteadmin_queries(models.Model):
-    name = models.TextField()
-    sql1 = models.TextField()
 
 class upload_csv_file(models.Model):
     upload = models.FileField(upload_to='csv/')

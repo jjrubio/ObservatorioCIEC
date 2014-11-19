@@ -64,11 +64,10 @@ INSTALLED_APPS = (
     'resources',
     'staff',
     'comercio',
-    # 'djcelery',
 )
 
 MIDDLEWARE_CLASSES = (
-    # 'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -76,7 +75,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
-    # 'django.middleware.cache.FetchFromCacheMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 ROOT_URLCONF = 'OSEE.urls'
@@ -124,17 +123,17 @@ STATIC_ROOT = ''
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL='/media/'
 
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'redis_cache.RedisCache',
-#         'LOCATION': 'localhost:6379',#/var/run/redis/redis.sock
-#         'OPTIONS': {
-#             'DB': 1,
-#             'PARSER_CLASS': 'redis.connection.HiredisParser'
-#         }
-#     },
-# }
-# SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',#/var/run/redis/redis.sock
+        'OPTIONS': {
+            'DB': 1,
+            'PARSER_CLASS': 'redis.connection.HiredisParser'
+        }
+    },
+}
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 #Email setup
 EMAIL_HOST = EMAIL_HOST
@@ -144,10 +143,3 @@ EMAIL_PORT = EMAIL_PORT
 
 #KEY REGISTRATION
 AUTH_PROFILE_MODULE = "registers.UserProfile"
-
-# import djcelery
-# djcelery.setup_loader()
-
-# BROKER_URL = 'redis://127.0.0.1:6379/0'
-
-# CELERY_IMPORTS = ("indicators.task",)
