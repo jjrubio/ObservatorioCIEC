@@ -793,6 +793,7 @@ def insert_data_comercio(request):
                                                 for x in arreglo[:]:
                                                     arreglo.remove(x)
                                         elif (len(arreglo) == 8):
+                                            print arreglo
                                             if choices == '8':
                                                 get_subpartida_nandina = str(arreglo[3])
                                                 new_subpartida_nandina = get_subpartida_nandina.split('.',1)
@@ -841,11 +842,18 @@ def insert_data_comercio(request):
                             cursor.execute("UPDATE comercio_export_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
                             # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
                             cursor.execute("UPDATE comercio_export_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                            try:
+                                valor_k = 0
+                                valor_equivalencia = equivalencia(valor_k)
+                            except Exception, e:
+                                return HttpResponseRedirect('/error-subida/')
+
                         elif choices == '9':
                             cursor = connection.cursor()
                             cursor.execute("UPDATE comercio_import_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
                             # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
                             cursor.execute("UPDATE comercio_import_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                            # valor_equivalencia = equivalencia(1)
                     upload_success = True
                     empty = False
                 else:
@@ -855,11 +863,11 @@ def insert_data_comercio(request):
                 upload_form = UploadFileForm()
                 upload_success = False
         else:
-            os.remove(path_upload_csv+file_name[0])
             return HttpResponseRedirect('/acceso_denegado/')
     except Exception, e:
         os.remove(path_upload_csv+file_name[0])
         return HttpResponseRedirect('/error-subida/')
+
     return render_to_response(template, {'upload_form': upload_form, 'upload_success':upload_success, 'empty':empty}, context)
 
 def access_denied(request):
