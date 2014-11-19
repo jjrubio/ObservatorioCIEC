@@ -955,14 +955,14 @@ def numero_consultas(request):
     return HttpResponse(message, content_type='application/json')
 
 
-def calc_data(ind, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value):
+def calc_data(ind, data_ENEMDU, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value):
     data_result = []
     ban = 0
     trim_1 = trimStart_aux
     trim_2 = 5
 
     for i in range(yearStart_aux, yearEnd_aux+1):
-        if i == yearEnd_int:
+        if i == yearEnd_aux:
             trim_2 = trimEnd_aux + 1
         for j in range(trim_1, trim_2):
             represent_database = str(Structure.objects.get(anio=i, trim=j))
@@ -1086,7 +1086,7 @@ def generar_cache(request):
                                             cache_value = '%s_%s_%s_%s_%s_%s_%s'%(ind.id, represent, method, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux)
                                             data_ENEMDU = data_ENEMDU_aux.objects.all()
                                             if data_result is None:
-                                                calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
+                                                calc_data(ind.id, data_ENEMDU, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
                                             # print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, disintegrations
 
                                         elif num_disintegration == 1:
@@ -1100,7 +1100,7 @@ def generar_cache(request):
                                                     data_ENEMDU = data_ENEMDU_aux.objects.all()
                                                 data_result = cache.get(cache_value)
                                                 if data_result is None:
-                                                    calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
+                                                    calc_data(ind.id, data_ENEMDU, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
                                                     print ind.id, yearStart_aux, trimStart_aux, '-' , yearEnd_aux, trimEnd_aux, dis, disintegrations
 
                                         elif num_disintegration == 2:
@@ -1116,7 +1116,7 @@ def generar_cache(request):
                                                         data_ENEMDU = data_ENEMDU_aux.objects.all()
                                                     data_result = cache.get(cache_value)
                                                     if data_result is None:
-                                                        calc_data(ind.id, data_ENEMDU, yearStart_int, yearEnd_int, trimStart_int, trimEnd_int, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
+                                                        calc_data(ind.id, data_ENEMDU, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
                                                     # print ind.id, yearStart_aux, trimStart_aux, yearEnd_aux, trimEnd_aux, dis1, dis2, disintegration_accept_list
 
                                 if trimEnd_aux == 4:
