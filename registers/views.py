@@ -91,7 +91,7 @@ def user_login(request):
 	else:
 		return render_to_response(template, {}, context)
 
-@login_required
+# @login_required
 def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect('/')
