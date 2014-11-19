@@ -798,6 +798,7 @@ def indicador_filtro(request):
     elif id_indicador == '44' or id_indicador == '45' or id_indicador == '46' or id_indicador == '47' or id_indicador == '48' or id_indicador == '49':
         disintegrations = Disintegration.objects.exclude(id__in=[7, 8, 9, 10, 11, 13, 14])
         data = serializers.serialize('json', disintegrations)
+    return HttpResponse(data, content_type='application/json')
 
 
 def indicador_desagregacion(datos,ids):
