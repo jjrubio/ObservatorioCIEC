@@ -163,59 +163,76 @@ def comercio(request):
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
 
-
-def equivalencia():
+def equivalencia(value):
     estandar = ['cgce', 'ciiu3', 'cpc', 'cuode']
     tabla_trans_nandina = ['comercio_export_nandina', 'comercio_import_nandina']
     tabla_trans_estandar = ['comercio_export_cgce', 'comercio_export_ciiu3', 'comercio_export_cpc', 'comercio_export_cuode',
                                            'comercio_import_cgce', 'comercio_import_ciiu3', 'comercio_import_cpc', 'comercio_import_cuode']
 
     j = 0
-    k = 0
+    # k = 0
+    k = value
 
-    for i in xrange(0, len(tabla_trans_estandar)):
-        if k == 0:
-            raw_body = ("""INSERT INTO %s (ANO, MES, PAIS, CODIGO, PESO, FOB)
-                                    SELECT ANO, MES, PAIS, CODIGO, PESO, FOB
-                                    FROM
-                                    (SELECT id, ano AS ANO,
-                                    mes AS MES,
-                                    pais AS PAIS,
-                                    codigo AS CODIGO,
-                                    peso AS PESO,
-                                    fob AS FOB
-                                    FROM(
-                                    SELECT nandina AS SUBPARTIDA,
-                                    %s AS CODIGO
-                                    FROM comercio_equivalencia)
-                                    AS MATCH_TABLE
-                                    INNER JOIN %s ON
-                                    (MATCH_TABLE.SUBPARTIDA = %s.subpartida_key)) AS VIEW
-                                """) % (tabla_trans_estandar[i], estandar[j], tabla_trans_nandina[k], tabla_trans_nandina[k])
+    if k == 0:
+        c=0
+    else:
+        c=4
+
+    bandera = 0
+
+    for i in xrange(c, len(tabla_trans_estandar)):
+        print "valor de i",+i
+        if bandera == 4:
+            break
         else:
-            raw_body = ("""INSERT INTO %s (ANO, MES, PAIS, CODIGO, PESO, FOB, CIF)
-                                    SELECT ANO, MES, PAIS, CODIGO, PESO, FOB, CIF
-                                    FROM
-                                    (SELECT id, ano AS ANO,
-                                    mes AS MES,
-                                    pais AS PAIS,
-                                    codigo AS CODIGO,
-                                    peso AS PESO,
-                                    fob AS FOB,
-                                    cif AS CIF
-                                    FROM(
-                                    SELECT nandina AS SUBPARTIDA,
-                                    %s AS CODIGO
-                                    FROM comercio_equivalencia)
-                                    AS MATCH_TABLE
-                                    INNER JOIN %s ON
-                                    (MATCH_TABLE.SUBPARTIDA = %s.subpartida_key)) AS VIEW
-                                """) % (tabla_trans_estandar[i], estandar[j], tabla_trans_nandina[k], tabla_trans_nandina[k])
+            if k == 0:
+                raw_body = ("""INSERT INTO %s (ANO, MES, PAIS, CODIGO, PESO, FOB)
+                                        SELECT ANO, MES, PAIS, CODIGO, PESO, FOB
+                                        FROM
+                                        (SELECT id, ano AS ANO,
+                                        mes AS MES,
+                                        pais AS PAIS,
+                                        codigo AS CODIGO,
+                                        peso AS PESO,
+                                        fob AS FOB
+                                        FROM(
+                                        SELECT nandina AS SUBPARTIDA,
+                                        %s AS CODIGO
+                                        FROM comercio_equivalencia)
+                                        AS MATCH_TABLE
+                                        INNER JOIN %s ON
+                                        (MATCH_TABLE.SUBPARTIDA = %s.subpartida_key)) AS VIEW
+                                    """) % (tabla_trans_estandar[i], estandar[j], tabla_trans_nandina[k], tabla_trans_nandina[k])
+            else:
+                raw_body = ("""INSERT INTO %s (ANO, MES, PAIS, CODIGO, PESO, FOB, CIF)
+                                        SELECT ANO, MES, PAIS, CODIGO, PESO, FOB, CIF
+                                        FROM
+                                        (SELECT id, ano AS ANO,
+                                        mes AS MES,
+                                        pais AS PAIS,
+                                        codigo AS CODIGO,
+                                        peso AS PESO,
+                                        fob AS FOB,
+                                        cif AS CIF
+                                        FROM(
+                                        SELECT nandina AS SUBPARTIDA,
+                                        %s AS CODIGO
+                                        FROM comercio_equivalencia)
+                                        AS MATCH_TABLE
+                                        INNER JOIN %s ON
+                                        (MATCH_TABLE.SUBPARTIDA = %s.subpartida_key)) AS VIEW
+                                    """) % (tabla_trans_estandar[i], estandar[j], tabla_trans_nandina[k], tabla_trans_nandina[k])
 
         j = j + 1
-        if i== 3:
-            j = 0
-            k = 1
+        # if i== 3:
+        #     break
+        #     # j = 0
+        #     # k = 1
+
+        # if bandera == 4:
+        #     break
+
+        bandera = bandera + 1
 
         cursor = connection.cursor()
         cursor.execute(raw_body)
@@ -703,6 +720,8 @@ def insert_data_comercio(request):
     user = request.user
     is_super_user = user.is_superuser
     data_error = '##'
+    coma = ','
+    actualizar = False
 
     try:
         if is_super_user:
@@ -793,23 +812,30 @@ def insert_data_comercio(request):
                                                 for x in arreglo[:]:
                                                     arreglo.remove(x)
                                         elif (len(arreglo) == 8):
-                                            print arreglo
                                             if choices == '8':
                                                 get_subpartida_nandina = str(arreglo[3])
                                                 new_subpartida_nandina = get_subpartida_nandina.split('.',1)
                                                 try:
-                                                    get_peso = arreglo[5]
+                                                    get_peso = str(arreglo[5])
                                                     new_peso = get_peso.split(',',1)
-                                                    final_peso = new_peso[0]+new_peso[1]
+                                                    if coma in new_peso[1]:
+                                                        v2 = new_peso[1].split(',',1)
+                                                        final_peso = new_peso[0]+v2[0]+v2[1]
+                                                    else:
+                                                        final_peso = new_peso[0]+new_peso[1]
                                                 except Exception, e:
-                                                    final_peso = arreglo[5]
+                                                    final_peso = str(arreglo[5])
                                                 try:
-                                                    get_fob = arreglo[6]
+                                                    get_fob = str(arreglo[6])
                                                     new_fob = get_fob.split(',',1)
-                                                    final_fob = new_fob[0]+new_fob[1]
+                                                    if coma in new_fob[1]:
+                                                        v2 = new_fob[1].split(',',1)
+                                                        final_fob = new_fob[0]+v2[0]+v2[1]
+                                                    else:
+                                                        final_fob = new_fob[0]+new_fob[1]
                                                 except Exception, e:
-                                                    final_fob = arreglo[6]
-                                                new_data = Export_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],descripcion=arreglo[4],peso=final_peso,fob=final_fob,total_fob=arreglo[7])
+                                                    final_fob = str(arreglo[6])
+                                                new_data = Export_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],peso=final_peso,fob=final_fob)
                                                 new_data.save()
                                                 for x in arreglo[:]:
                                                     arreglo.remove(x)
@@ -818,19 +844,33 @@ def insert_data_comercio(request):
                                                 get_subpartida_nandina = str(arreglo[3])
                                                 new_subpartida_nandina = get_subpartida_nandina.split('.',1)
                                                 try:
-                                                    get_peso = arreglo[5]
+                                                    get_peso = str(arreglo[5])
                                                     new_peso = get_peso.split(',',1)
-                                                    final_peso = new_peso[0]+new_peso[1]
+                                                    if coma in new_peso[1]:
+                                                        v2=new_peso[1].split(',',1)
+                                                        final_peso = new_peso[0]+v2[0]+v2[1]
+                                                    else:
+                                                        final_peso = new_peso[0]+new_peso[1]
                                                 except Exception, e:
-                                                    final_peso = arreglo[5]
+                                                    final_peso = str(arreglo[5])
                                                 try:
-                                                    get_fob = arreglo[6]
+                                                    get_fob = str(arreglo[6])
                                                     new_fob = get_fob.split(',',1)
-                                                    final_fob = new_fob[0]+new_fob[1]
+                                                    if coma in new_fob[1]:
+                                                        v2=new_fob[1].split(',',1)
+                                                        final_fob = new_fob[0]+v2[0]+v2[1]
+                                                    else:
+                                                        final_fob = new_fob[0]+new_fob[1]   
                                                 except Exception, e:
-                                                    final_fob = arreglo[6]
+                                                    final_fob = str(arreglo[6])
+                                                try:
+                                                    get_cif = str(arreglo[7])
+                                                    new_cif = get_cif.split(',',1)
+                                                    final_cif = new_cif[0]+new_cif[1]
+                                                except Exception, e:
+                                                    final_cif = str(arreglo[7])
                                                 # Hace el insert de datos a la tabla comercio_import_nandina Import_NANDINA
-                                                new_data = Import_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],descripcion=arreglo[4],peso=final_peso,fob=final_fob,cif=arreglo[7],total_fob=arreglo[8])
+                                                new_data = Import_NANDINA(ano=arreglo[0],mes=arreglo[1],pais=arreglo[2],subpartida_nandina=new_subpartida_nandina[0],peso=final_peso,fob=final_fob,cif=final_cif)
                                                 new_data.save()
                                                 for x in arreglo[:]:
                                                     arreglo.remove(x)
@@ -842,20 +882,15 @@ def insert_data_comercio(request):
                             cursor.execute("UPDATE comercio_export_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
                             # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
                             cursor.execute("UPDATE comercio_export_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
-                            try:
-                                valor_k = 0
-                                valor_equivalencia = equivalencia(valor_k)
-                            except Exception, e:
-                                return HttpResponseRedirect('/error-subida/')
 
                         elif choices == '9':
                             cursor = connection.cursor()
                             cursor.execute("UPDATE comercio_import_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
                             # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
                             cursor.execute("UPDATE comercio_import_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
-                            # valor_equivalencia = equivalencia(1)
                     upload_success = True
                     empty = False
+                    actualizar = True
                 else:
                     empty = True
                     upload_success = False
@@ -865,10 +900,10 @@ def insert_data_comercio(request):
         else:
             return HttpResponseRedirect('/acceso_denegado/')
     except Exception, e:
-        # os.remove(path_upload_csv+file_name[0])
+        os.remove(path_upload_csv+file_name[0])
         return HttpResponseRedirect('/error-subida/')
 
-    return render_to_response(template, {'upload_form': upload_form, 'upload_success':upload_success, 'empty':empty}, context)
+    return render_to_response(template, {'upload_form': upload_form, 'upload_success':upload_success, 'empty':empty, 'actualizar':actualizar}, context)
 
 def access_denied(request):
     template = 'access_denied.html'
@@ -876,4 +911,21 @@ def access_denied(request):
 
 def error_subida(request):
     template = 'error.html'
+    return render_to_response(template, context_instance=RequestContext(request, locals()))
+
+def actualizar_datos(request):
+    template = 'update.html'
+    valor_k = request.GET['valor_k']
+    if valor_k == '0':
+        print 'Se actualiza los export de los estandares'
+        try:
+            equivalencia(0)
+        except Exception, e:
+            print 'Error Export'
+    else:
+        print 'Se actualiza los import de los estandares'
+        try:
+            equivalencia(1)
+        except Exception, e:
+            print 'Error Import'
     return render_to_response(template, context_instance=RequestContext(request, locals()))

@@ -42,4 +42,5 @@ urlpatterns = patterns('',
     url(r'^comercio/', 'comercio.views.comercio',name='comercio'),
     url(r'^subir_csv_comercio/', 'comercio.views.insert_data_comercio',name='insert_data_comercio'),
     url(r'^error-subida/', 'comercio.views.error_subida', name='error_subida'),
+    url(r'^actualizar-datos/', 'comercio.views.actualizar_datos', name='actualizar_datos'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
