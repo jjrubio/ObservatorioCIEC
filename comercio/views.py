@@ -170,7 +170,6 @@ def equivalencia(value):
                                            'comercio_import_cgce', 'comercio_import_ciiu3', 'comercio_import_cpc', 'comercio_import_cuode']
 
     j = 0
-    # k = 0
     k = value
 
     if k == 0:
@@ -181,10 +180,11 @@ def equivalencia(value):
     bandera = 0
 
     for i in xrange(c, len(tabla_trans_estandar)):
-        print "valor de i",+i
         if bandera == 4:
             break
         else:
+            print i
+            print tabla_trans_estandar[i]
             if k == 0:
                 raw_body = ("""INSERT INTO %s (ANO, MES, PAIS, CODIGO, PESO, FOB)
                                         SELECT ANO, MES, PAIS, CODIGO, PESO, FOB
@@ -204,6 +204,8 @@ def equivalencia(value):
                                         (MATCH_TABLE.SUBPARTIDA = %s.subpartida_key)) AS VIEW
                                     """) % (tabla_trans_estandar[i], estandar[j], tabla_trans_nandina[k], tabla_trans_nandina[k])
             else:
+                print i
+                print tabla_trans_estandar[i]
                 raw_body = ("""INSERT INTO %s (ANO, MES, PAIS, CODIGO, PESO, FOB, CIF)
                                         SELECT ANO, MES, PAIS, CODIGO, PESO, FOB, CIF
                                         FROM
@@ -224,13 +226,6 @@ def equivalencia(value):
                                     """) % (tabla_trans_estandar[i], estandar[j], tabla_trans_nandina[k], tabla_trans_nandina[k])
 
         j = j + 1
-        # if i== 3:
-        #     break
-        #     # j = 0
-        #     # k = 1
-
-        # if bandera == 4:
-        #     break
 
         bandera = bandera + 1
 
@@ -882,15 +877,17 @@ def insert_data_comercio(request):
                             cursor.execute("UPDATE comercio_export_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
                             # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
                             cursor.execute("UPDATE comercio_export_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                            actualizar = True
 
                         elif choices == '9':
                             cursor = connection.cursor()
                             cursor.execute("UPDATE comercio_import_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
                             # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
                             cursor.execute("UPDATE comercio_import_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                            actualizar = True
                     upload_success = True
                     empty = False
-                    actualizar = True
+                    # actualizar = True
                 else:
                     empty = True
                     upload_success = False
@@ -916,16 +913,17 @@ def error_subida(request):
 def actualizar_datos(request):
     template = 'update.html'
     valor_k = request.GET['valor_k']
+    tabla_export = ['comercio_export_cgce','comercio_export_ciiu3','comercio_export_cpc','comercio_export_cuode']
     if valor_k == '0':
-        print 'Se actualiza los export de los estandares'
-        try:
-            equivalencia(0)
-        except Exception, e:
-            print 'Error Export'
+        for i in xrange(0, len(tabla_export)):
+            raw_delete = ("""DELETE FROM %s""") %(tabla_export[i])
+            cursor = connection.cursor()
+            cursor.execute(raw_delete)
+        print 'Se borro datos'
+        print 'Actualizando exports'
+        result = equivalencia(0)
     else:
-        print 'Se actualiza los import de los estandares'
-        try:
-            equivalencia(1)
-        except Exception, e:
-            print 'Error Import'
+        print 'Actualizando imports'
+        result = equivalencia(1)
+
     return render_to_response(template, context_instance=RequestContext(request, locals()))
