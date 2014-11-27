@@ -183,8 +183,6 @@ def equivalencia(value):
         if bandera == 4:
             break
         else:
-            print i
-            print tabla_trans_estandar[i]
             if k == 0:
                 raw_body = ("""INSERT INTO %s (ANO, MES, PAIS, CODIGO, PESO, FOB)
                                         SELECT ANO, MES, PAIS, CODIGO, PESO, FOB
@@ -204,8 +202,6 @@ def equivalencia(value):
                                         (MATCH_TABLE.SUBPARTIDA = %s.subpartida_key)) AS VIEW
                                     """) % (tabla_trans_estandar[i], estandar[j], tabla_trans_nandina[k], tabla_trans_nandina[k])
             else:
-                print i
-                print tabla_trans_estandar[i]
                 raw_body = ("""INSERT INTO %s (ANO, MES, PAIS, CODIGO, PESO, FOB, CIF)
                                         SELECT ANO, MES, PAIS, CODIGO, PESO, FOB, CIF
                                         FROM
@@ -231,6 +227,7 @@ def equivalencia(value):
 
         cursor = connection.cursor()
         cursor.execute(raw_body)
+        cursor.close
 
     return 1
 
@@ -808,6 +805,7 @@ def insert_data_comercio(request):
                                                     arreglo.remove(x)
                                         elif (len(arreglo) == 8):
                                             if choices == '8':
+                                                print arreglo
                                                 get_subpartida_nandina = str(arreglo[3])
                                                 new_subpartida_nandina = get_subpartida_nandina.split('.',1)
                                                 try:
@@ -836,6 +834,7 @@ def insert_data_comercio(request):
                                                     arreglo.remove(x)
                                         elif (len(arreglo) == 9):
                                             if choices == '9':
+                                                print arreglo
                                                 get_subpartida_nandina = str(arreglo[3])
                                                 new_subpartida_nandina = get_subpartida_nandina.split('.',1)
                                                 try:
@@ -877,17 +876,17 @@ def insert_data_comercio(request):
                             cursor.execute("UPDATE comercio_export_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
                             # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
                             cursor.execute("UPDATE comercio_export_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                            cursor.close
                             actualizar = True
-
                         elif choices == '9':
                             cursor = connection.cursor()
                             cursor.execute("UPDATE comercio_import_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
                             # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
                             cursor.execute("UPDATE comercio_import_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                            cursor.close
                             actualizar = True
                     upload_success = True
                     empty = False
-                    # actualizar = True
                 else:
                     empty = True
                     upload_success = False
@@ -897,7 +896,14 @@ def insert_data_comercio(request):
         else:
             return HttpResponseRedirect('/acceso_denegado/')
     except Exception, e:
+        upload_success = False
         os.remove(path_upload_csv+file_name[0])
+        if choices == '8':
+            cursor = connection.cursor()
+            cursor.execute("""DELETE FROM comercio_export_nandina WHERE subpartida_key=0""")
+        else:
+            cursor = connection.cursor()
+            cursor.execute("""DELETE FROM comercio_import_nandina WHERE subpartida_key=0""")
         return HttpResponseRedirect('/error-subida/')
 
     return render_to_response(template, {'upload_form': upload_form, 'upload_success':upload_success, 'empty':empty, 'actualizar':actualizar}, context)
@@ -912,18 +918,31 @@ def error_subida(request):
 
 def actualizar_datos(request):
     template = 'update.html'
+    return render_to_response(template, context_instance=RequestContext(request, locals()))
+
+def option(request):
+    data_result = []
     valor_k = request.GET['valor_k']
     tabla_export = ['comercio_export_cgce','comercio_export_ciiu3','comercio_export_cpc','comercio_export_cuode']
+    tabla_import = ['comercio_import_cgce','comercio_import_ciiu3','comercio_import_cpc','comercio_import_cuode']
     if valor_k == '0':
         for i in xrange(0, len(tabla_export)):
-            raw_delete = ("""DELETE FROM %s""") %(tabla_export[i])
+            print 'In'
+            raw_delete = ("""TRUNCATE TABLE %s""") %(tabla_export[i])
             cursor = connection.cursor()
             cursor.execute(raw_delete)
-        print 'Se borro datos'
-        print 'Actualizando exports'
+            cursor.close
+            print 'Out'
         result = equivalencia(0)
     else:
-        print 'Actualizando imports'
+        for i in xrange(0, len(tabla_import)):
+            print 'In'
+            raw_delete = ("""TRUNCATE TABLE %s""") %(tabla_import[i])
+            cursor = connection.cursor()
+            cursor.execute(raw_delete)
+            cursor.close
+            print 'Out'
         result = equivalencia(1)
-
-    return render_to_response(template, context_instance=RequestContext(request, locals()))
+    data_result.append([result])
+    message = json.dumps(data_result, cls=PythonObjectEncoder)
+    return HttpResponse(message, content_type='application/json')

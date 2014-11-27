@@ -4,23 +4,46 @@
 
 {% load static from staticfiles %}
 
-{% block title %}Upload file csv{% endblock %}
+{% block title %}Actualización{% endblock %}
 
 {% block extraCSS %}
     <link href="{% static "css/uploadcsv.css" %}" rel="stylesheet"  />
+    <link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
+    <link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
+    <link href="{% static "css/jquery.bootstrap-touchspin.css" %}" rel="stylesheet"  />
 {% endblock %}
 
 {% block content %}
     <div class="content-page-2">
-        <b id="title-content-page">Actualización exitosa!</b>
+        <b id="title-content-page">Actualización de los estandares</b>
         <hr class="pull-left" id="separator-content-page">
         <div class="panel-body">
             <div class="center">
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4">
                     <br/><br/><br/>
-
+                    <span>Si escoje la opción "Exportación", se actualizarán las tablas de CGCE, CIIU3, CPC y CUODE de exportaciones respectivamente</span>
+                    <br><br>
+                    <span>Si escoje la opción "Importación", se actualizarán las tablas de CGCE, CIIU3, CPC y CUODE de importaciones respectivamente</span>
+                    <br><br>
+                    <span>Escoja una opción</span>
+                    <select id="options_update" data-width="100%" class="selectpicker">
+                        <option value="0">Exportación</option>
+                        <option value="1">Importación</option>
+                    </select>
+                    <br><br>
+                    <label>
+                        <input type="button" class="btn btn-primary" value="Actualizar" id="btn_update" style="margin-left:9em;">
+                    </label>                         
                     <br/><br/><br/>
+                    <div class="text-center" id="loading" hidden>
+                        <b><i class="fa fa-spinner fa-spin fa-5x"></i></b><br><br>
+                        <b>Actualizando datos, espere por favor ...</b><br><br>
+                    </div>
+                    <div class="text-center" id="mensaje" hidden>
+                        <p><b>Datos actualizados!</p>
+                    </div>
                 </div>
                 <div class="col-lg-4"></div>
             </div>
@@ -29,5 +52,26 @@
 {% endblock %}
 
 {% block extraScripts %}
+<script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
+<script src="{% static "js/jquery.bootstrap-touchspin.js" %}" type="text/javascript"></script>
+<script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
+<script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $('.selectpicker').selectpicker();
+    $('input[type="file"]').change(function(){
+        $(this).closest('.browse-wrap').next('.upload-path').text(this.files[0].name);
+    });
+    $('#btn_update').click(function(){
+        var id_options_update = $('#options_update option:selected').attr('value');
+        console.log(id_options_update);
+        $("#loading").show();
+        $("#mensaje").hide();
 
+        $.getJSON('/data/', {'valor_k':id_options_update}, function(data){
+            console.log(data);
+            $("#loading").hide();
+            $("#mensaje").show();
+        });
+    });
+</script>
 {% endblock %}

@@ -4,7 +4,7 @@
 
 {% load static from staticfiles %}
 
-{% block title %}Upload file csv{% endblock %}
+{% block title %}Subida archivos Comercio{% endblock %}
 
 {% block extraCSS %}
     <link href="{% static "css/uploadcsv.css" %}" rel="stylesheet"  />
@@ -22,44 +22,15 @@
             <div class="panel-body">
                 <div class="center">
                     <div class="col-lg-4"></div>
-                    <!-- <div class="col-lg-4">
+                    <div class="col-lg-4">
                         <br/><br/><br/>
                         <span>Para subir otro archivo, por favor dar clic <a href="/subir_csv_comercio/">aquí</a></span>
                         <br/><br/><br/>
-                    </div> -->
-                    {% if actualizar %}
-                        <div class="col-lg-4">
+                        {% if actualizar %}
+                            <span>Si desea actualizar las exportaciones/importaciones de los diferentes estandares, dar clic <a href="/actualizar-datos/">aquí</a></span>
                             <br/><br/><br/>
-                            <span>Si desea subir más archivos, por favor dar clic <a href="/subir_csv_comercio/">aquí</a></span>
-                            <br/><br/>
-                            <span>Caso contrario, si desea actualizar las tablas de exportación o importación de los diferentes estándares, por favor escoger una opción y dar clic en el botón "Actualizar".</span>
-                            <br><br>
-                            <span>Escoja una opción</span>
-                            <select id="options_update" data-width="100%" class="selectpicker">
-                                <option value="0">Exportación</option>
-                                <option value="1">Importación</option>
-                            </select>
-                            <br><br>
-                            <label>
-                                <input type="button" class="btn btn-primary" value="Actualizar" id="btn_update" style="margin-left:9em;">
-                            </label>                         
-                            <br/><br/><br/>
-                            <div class="text-center" id="loading" hidden>
-                                <b><i class="fa fa-spinner fa-spin fa-5x"></i></b><br><br>
-                                <b>Actualizando datos, espere por favor ...</b><br><br>
-                            </div>
-                            <div class="text-center" id="mensaje" hidden>
-                                <p><b>Datos actualizados!</p>
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="col-lg-4">
-                            <br/><br/><br/>
-                            <span>Para subir otro archivo, por favor dar clic <a href="/subir_csv_comercio/">aquí</a></span>
-                            <br/><br/><br/>
-                        </div>
-
-                    {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         {% else %}
@@ -131,13 +102,13 @@
     $('#btn_update').click(function(){
         var id_options_update = $('#options_update option:selected').attr('value');
         console.log(id_options_update);
-        $("#loading").show();
-        $("#mensaje").hide();
+        // $("#loading").show();
+        // $("#mensaje").hide();
 
         $.getJSON('/actualizar-datos/', {'valor_k':id_options_update}, function(data){
             console.log(data);
-            $("#loading").hide();
-            $("#mensaje").show();
+            // $("#loading").hide();
+            // $("#mensaje").show();
         });
     });
 </script>
