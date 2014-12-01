@@ -925,24 +925,22 @@ def option(request):
     valor_k = request.GET['valor_k']
     tabla_export = ['comercio_export_cgce','comercio_export_ciiu3','comercio_export_cpc','comercio_export_cuode']
     tabla_import = ['comercio_import_cgce','comercio_import_ciiu3','comercio_import_cpc','comercio_import_cuode']
+
     if valor_k == '0':
         for i in xrange(0, len(tabla_export)):
-            print 'In'
             raw_delete = ("""TRUNCATE TABLE %s""") %(tabla_export[i])
             cursor = connection.cursor()
             cursor.execute(raw_delete)
             cursor.close
-            print 'Out'
         result = equivalencia(0)
     else:
         for i in xrange(0, len(tabla_import)):
-            print 'In'
             raw_delete = ("""TRUNCATE TABLE %s""") %(tabla_import[i])
             cursor = connection.cursor()
             cursor.execute(raw_delete)
             cursor.close
-            print 'Out'
         result = equivalencia(1)
+
     data_result.append([result])
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')

@@ -1,0 +1,49 @@
+{% extends "index.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Cambio de contraseña{% endblock %}
+
+{% block extraCSS %}
+{% endblock %}
+
+{% block content %}
+    <div class="content-page-2" >
+        <b id="title-content-page">Cambio de contraseña</b>
+        <hr class="pull-left" id="separator-content-page">
+        <br /><br /><br /><br /><br /><br />
+        <form class="text-center" id="reset_form">
+            Correo: <input type="text" name="email" value="" size="50" id="input_mail" />
+            <br />
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4">
+                <label>
+                    <input type="button" class="btn btn-primary" value="Enviar" id="btn-reset">
+                </label>
+                <br /><br />
+                <span id="mensaje_ok" hidden><b>Se ha enviado un correo con las instrucciones para cambiar su contraseña.</span>
+                <span id="mensaje_no" hidden><b>Correo no registrado.</span>
+            </div>
+            <br /><br /><br /><br />
+        </form>
+        <br /><br /><br /><br />
+    </div>
+{% endblock %}
+
+{% block extraScripts %}
+<script type="text/javascript">
+    $('#btn-reset').click(function(){
+        var correo = $('#input_mail').val();
+        $.getJSON('/reset-contrasenia/', {'correo':correo}, function(data){
+            if (data == 1){
+                $('#mensaje_ok').show();
+                $('#mensaje_no').hide();
+            }
+            else{
+                $('#mensaje_ok').hide();
+                $('#mensaje_no').show();
+            }
+        });
+    });
+</script>
+{% endblock %}

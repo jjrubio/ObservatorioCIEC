@@ -3,13 +3,30 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.context import RequestContext
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .forms import UserForm, UserProfileForm
+from .forms import UserForm, UserProfileForm, UserFormResetPassword
 from django.contrib.auth.decorators import login_required
 from registers.models import UserProfile
 from django.conf import settings
 from django.core.mail import send_mail
 import datetime, random, hashlib
 from django.utils import timezone
+import json
+from django.core import serializers
+from json import JSONEncoder
+from django.contrib import messages
+from models import *
+
+class PythonObjectEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (list, dict, str, unicode, int, float, bool, type(None))):
+            return JSONEncoder.default(self, obj)
+        return {'_python_object': pickle.dumps(obj)}
+
+
+def as_python_object(dct):
+    if '_python_object' in dct:
+        return pickle.loads(str(dct['_python_object']))
+    return dct
 
 def register(request):
 	context = RequestContext(request)
@@ -120,3 +137,87 @@ def confirm(request,activation_key):
 	user_active = User.objects.filter(username=user_profile[0].user).update(is_active=True)
 
 	return render_to_response('confirm.html', {'success':True})
+
+def form_reset(request):
+	template = 'reset.html'
+	return render_to_response(template, context_instance = RequestContext(request,locals()))
+
+def reset_password(request):
+	template = 'reset.html'
+	correo = request.GET['correo']
+	data_result = []
+
+	u = User.objects.filter(username=correo)
+
+	if not u:
+		result = 2
+	else:
+		username = u[0].username
+		user_active_key = UserProfile.objects.filter(user_id=u[0].id) #Tengo la clave de activacion
+		activation_key = user_active_key[0].activation_key
+		new_key_expires = timezone.now() + datetime.timedelta(1) #Se crea un nuevo tiempo de expiracion
+		user_key_expires_update = UserProfile.objects.filter(user_id=u[0].id).update(key_expires=new_key_expires) #Se actualiza
+		#Se manda el mail
+		email_subject = 'Cambio de contrasenia'
+		from_email = settings.EMAIL_HOST_USER
+		to_list = [correo]
+		email_body = 'Hola usuario %s, \n\n Se ha notificado que desea cambiar su contrasenia, por favor dar clic al siguiente enlace: \n\n http://localhost:8000/envio_cambio_contrasenia/%s' %(username,activation_key)
+		send_mail(email_subject,email_body,from_email,to_list,fail_silently=True)
+		result = 1
+
+	data_result.append([result])
+	message = json.dumps(data_result, cls=PythonObjectEncoder)
+	return HttpResponse(message, content_type='application/json')
+
+def confirm_reset_password(request,activation_key):
+	template = 'form_reset_password.html'
+	# expiro = False
+
+	# u = UserProfile.objects.filter(activation_key=activation_key)
+
+	# time_now = timezone.now()
+	# time_expire = UserProfile.objects.filter()
+	# time_get_database = u[0].key_expires
+	
+	# if time_get_database < time_now:
+	# 	context = {'expiro':True}
+	# else:
+	# 	user_form_reset = UserFormResetPassword()
+	# 	context = {'user_form_reset':user_form_reset, 'expiro':False}
+
+	user_form_reset = UserFormResetPassword()
+	context = {'user_form_reset':user_form_reset}
+
+	template = 'form_reset_password.html'
+	return render_to_response(template, context_instance = RequestContext(request,locals()))
+
+def form_reset_password(request):
+	template = 'form_reset_password.html'
+	correo = request.GET['correo']
+	pass1 = request.GET['pass_1']
+	pass2 = request.GET['pass_2']
+	data_result = []
+
+	u = User.objects.filter(username=correo)
+
+	if not u:
+		result = 3
+	else:
+		if pass1 == pass2:
+			if len(pass2) < 5:
+				result = 4
+			else:
+				u = User.objects.get(username__exact=correo)
+				u.set_password(pass2)
+				u.save()
+				result = 1	
+		else:
+			result = 2
+	
+	data_result.append([result])
+	message = json.dumps(data_result, cls=PythonObjectEncoder)
+	return HttpResponse(message, content_type='application/json')
+
+def reset_success(request):
+	template = 'reset_success.html'
+	return render_to_response(template, context_instance = RequestContext(request,locals()))

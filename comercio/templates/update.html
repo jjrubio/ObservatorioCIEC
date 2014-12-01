@@ -58,9 +58,6 @@
 <script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js"></script>
 <script type="text/javascript">
     $('.selectpicker').selectpicker();
-    $('input[type="file"]').change(function(){
-        $(this).closest('.browse-wrap').next('.upload-path').text(this.files[0].name);
-    });
     $('#btn_update').click(function(){
         var id_options_update = $('#options_update option:selected').attr('value');
         console.log(id_options_update);
