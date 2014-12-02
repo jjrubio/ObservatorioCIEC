@@ -171,24 +171,24 @@ def reset_password(request):
 
 def confirm_reset_password(request,activation_key):
 	template = 'form_reset_password.html'
-	# expiro = False
 
-	# u = UserProfile.objects.filter(activation_key=activation_key)
+	u = UserProfile.objects.filter(activation_key=activation_key)
 
-	# time_now = timezone.now()
-	# time_expire = UserProfile.objects.filter()
-	# time_get_database = u[0].key_expires
+	time_now = timezone.now()
+	time_expire = UserProfile.objects.filter()
+	time_get_database = u[0].key_expires
 	
-	# if time_get_database < time_now:
-	# 	context = {'expiro':True}
-	# else:
-	# 	user_form_reset = UserFormResetPassword()
-	# 	context = {'user_form_reset':user_form_reset, 'expiro':False}
+	if time_get_database < time_now:
+		return HttpResponseRedirect('/cambio-expirado/')
+	else:
+		print 'Ok'
+		user_form_reset = UserFormResetPassword()
+		context = {'user_form_reset':user_form_reset}
 
-	user_form_reset = UserFormResetPassword()
-	context = {'user_form_reset':user_form_reset}
+	# user_form_reset = UserFormResetPassword()
+	# context = {'user_form_reset':user_form_reset}
 
-	template = 'form_reset_password.html'
+	# template = 'form_reset_password.html'
 	return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 def form_reset_password(request):
@@ -220,4 +220,8 @@ def form_reset_password(request):
 
 def reset_success(request):
 	template = 'reset_success.html'
+	return render_to_response(template, context_instance = RequestContext(request,locals()))
+
+def reset_password_expires(request):
+	template = 'reset_password_expires.html'
 	return render_to_response(template, context_instance = RequestContext(request,locals()))
