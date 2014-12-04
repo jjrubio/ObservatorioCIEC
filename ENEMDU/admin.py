@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Structure, Data_from_2003_4, Data_from_2007_2, upload_csv_file
+from models import *
 
 
 class StructureAdmin(admin.ModelAdmin):
@@ -25,7 +25,10 @@ class Data_from_year_trimAdmin(admin.ModelAdmin):
         'jubil', 'estudiant', 'amaCasa', 'incapacit', 'otro',
         )
 
+class TypeAdminUpload(admin.ModelAdmin):
+    list_display  = ('upload', )
+
 admin.site.register(Structure, StructureAdmin)
 admin.site.register(Data_from_2003_4, Data_from_year_trimAdmin)
 admin.site.register(Data_from_2007_2, Data_from_year_trimAdmin)
-admin.site.register(upload_csv_file)
+admin.site.register(upload_csv_file,TypeAdminUpload)

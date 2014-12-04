@@ -177,3 +177,10 @@ class Data_from_2007_2(models.Model):
 
 class upload_csv_file(models.Model):
     upload = models.FileField(upload_to='csv/')
+
+    class Meta:
+        verbose_name = "subida archivo csv/txt"
+        verbose_name_plural = 'Subida archivos csv/txt'
+
+    def __unicode__(self):
+        return self.name

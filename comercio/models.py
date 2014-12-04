@@ -1,35 +1,71 @@
+# -*- coding: utf-8 -*-
 from django.db import models
-
 
 class Paises(models.Model):
     codigo = models.PositiveSmallIntegerField()
     pais = models.TextField()
 
+    class Meta:
+        verbose_name = "país"
+        verbose_name_plural = 'Paises'
+
+    def __unicode__(self):
+        return self.name
 
 class CGCE(models.Model):
     codigo = models.CharField(max_length=10)
     descripcion = models.TextField()
 
+    class Meta:
+        verbose_name = "cgce"
+        verbose_name_plural = 'CGCE'
+
+    def __unicode__(self):
+        return self.name
 
 class CIIU3(models.Model):
     codigo = models.CharField(max_length=10)
     descripcion = models.TextField()
 
+    class Meta:
+        verbose_name = "ciiu3"
+        verbose_name_plural = 'CIIU3'
+
+    def __unicode__(self):
+        return self.name
 
 class CPC(models.Model):
     codigo = models.CharField(max_length=10)
     descripcion = models.TextField()
 
+    class Meta:
+        verbose_name = "cpc"
+        verbose_name_plural = 'CPC'
+
+    def __unicode__(self):
+        return self.name
 
 class CUODE(models.Model):
     codigo = models.CharField(max_length=10)
     descripcion = models.TextField()
 
+    class Meta:
+        verbose_name = "cuode"
+        verbose_name_plural = 'CUODE'
+
+    def __unicode__(self):
+        return self.name
 
 class NANDINA(models.Model):
     subpartida = models.CharField(max_length=8)
     descripcion = models.TextField()
 
+    class Meta:
+        verbose_name = "nandina"
+        verbose_name_plural = 'NANDINA'
+
+    def __unicode__(self):
+        return self.name
 
 class Equivalencia(models.Model):
     nandina = models.CharField(max_length=10)
@@ -40,6 +76,12 @@ class Equivalencia(models.Model):
     ciiu3 = models.CharField(max_length=10)
     cuci3 = models.CharField(max_length=10)
 
+    class Meta:
+        verbose_name = "equivalencia"
+        verbose_name_plural = 'Equivalencia'
+
+    def __unicode__(self):
+        return self.name
 
 class Export_CGCE(models.Model):
     ano = models.PositiveSmallIntegerField()
@@ -49,6 +91,12 @@ class Export_CGCE(models.Model):
     peso = models.DecimalField(decimal_places=2, max_digits=10)
     fob = models.DecimalField(decimal_places=2, max_digits=9)
 
+    class Meta:
+        verbose_name = "exportación cgce"
+        verbose_name_plural = 'Exportaciones CGCE'
+
+    def __unicode__(self):
+        return self.name
 
 class Export_CIIU3(models.Model):
     ano = models.PositiveSmallIntegerField()
@@ -58,6 +106,12 @@ class Export_CIIU3(models.Model):
     peso = models.DecimalField(decimal_places=2, max_digits=10)
     fob = models.DecimalField(decimal_places=2, max_digits=9)
 
+    class Meta:
+        verbose_name = "exportación ciiu3"
+        verbose_name_plural = 'Exportaciones CIIU3'
+
+    def __unicode__(self):
+        return self.name
 
 class Export_CPC(models.Model):
     ano = models.PositiveSmallIntegerField()
@@ -67,6 +121,12 @@ class Export_CPC(models.Model):
     peso = models.DecimalField(decimal_places=2, max_digits=10)
     fob = models.DecimalField(decimal_places=2, max_digits=9)
 
+    class Meta:
+        verbose_name = "exportación cpc"
+        verbose_name_plural = 'Exportaciones CPC'
+
+    def __unicode__(self):
+        return self.name
 
 class Export_CUODE(models.Model):
     ano = models.PositiveSmallIntegerField()
@@ -76,6 +136,12 @@ class Export_CUODE(models.Model):
     peso = models.DecimalField(decimal_places=2, max_digits=10)
     fob = models.DecimalField(decimal_places=2, max_digits=9)
 
+    class Meta:
+        verbose_name = "exportación cuode"
+        verbose_name_plural = 'Exportaciones CUODE'
+
+    def __unicode__(self):
+        return self.name
 
 class Export_NANDINA(models.Model):
     ano = models.PositiveSmallIntegerField()
@@ -86,6 +152,12 @@ class Export_NANDINA(models.Model):
     fob = models.DecimalField(decimal_places=2, max_digits=9)
     subpartida_key =  models.CharField(max_length=8)
 
+    class Meta:
+        verbose_name = "exportación nandina"
+        verbose_name_plural = 'Exportaciones NANDINA'
+
+    def __unicode__(self):
+        return self.name
 
 class Import_CGCE(models.Model):
     ano = models.PositiveSmallIntegerField()
@@ -96,6 +168,12 @@ class Import_CGCE(models.Model):
     fob = models.DecimalField(decimal_places=2, max_digits=9)
     cif = models.DecimalField(decimal_places=2, max_digits=8)
 
+    class Meta:
+        verbose_name = "importación cgce"
+        verbose_name_plural = 'Importaciones CGCE'
+
+    def __unicode__(self):
+        return self.name
 
 class Import_CIIU3(models.Model):
     ano = models.PositiveSmallIntegerField()
@@ -106,6 +184,12 @@ class Import_CIIU3(models.Model):
     fob = models.DecimalField(decimal_places=2, max_digits=9)
     cif = models.DecimalField(decimal_places=2, max_digits=8)
 
+    class Meta:
+        verbose_name = "importación ciiu3"
+        verbose_name_plural = 'Importaciones CIIU3'
+
+    def __unicode__(self):
+        return self.name
 
 class Import_CPC(models.Model):
     ano = models.PositiveSmallIntegerField()
@@ -116,6 +200,12 @@ class Import_CPC(models.Model):
     fob = models.DecimalField(decimal_places=2, max_digits=9)
     cif = models.DecimalField(decimal_places=2, max_digits=8)
 
+    class Meta:
+        verbose_name = "importación cpc"
+        verbose_name_plural = 'Importaciones CPC'
+
+    def __unicode__(self):
+        return self.name
 
 class Import_CUODE(models.Model):
     ano = models.PositiveSmallIntegerField()
@@ -126,6 +216,12 @@ class Import_CUODE(models.Model):
     fob = models.DecimalField(decimal_places=2, max_digits=9)
     cif = models.DecimalField(decimal_places=2, max_digits=8)
 
+    class Meta:
+        verbose_name = "importación cuode"
+        verbose_name_plural = 'Importaciones CUODE'
+
+    def __unicode__(self):
+        return self.name
 
 class Import_NANDINA(models.Model):
     ano = models.PositiveSmallIntegerField()
@@ -137,6 +233,19 @@ class Import_NANDINA(models.Model):
     cif = models.DecimalField(decimal_places=2, max_digits=8)
     subpartida_key = models.CharField(max_length=8)
 
+    class Meta:
+        verbose_name = "importación nandina"
+        verbose_name_plural = 'Importaciones NANDINA'
+
+    def __unicode__(self):
+        return self.name
 
 class upload_csv_file(models.Model):
     upload = models.FileField(upload_to='csv/')
+
+    class Meta:
+        verbose_name = "subida archivo excel"
+        verbose_name_plural = 'Subida archivos excel'
+
+    def __unicode__(self):
+        return self.name
