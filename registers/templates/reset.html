@@ -5,43 +5,56 @@
 {% block title %}Cambio de contraseña{% endblock %}
 
 {% block extraCSS %}
+    <link href="{% static "css/jquery.bootstrap-touchspin.css" %}" rel="stylesheet"  />
 {% endblock %}
 
 {% block content %}
     <div class="content-page-2" >
         <b id="title-content-page">Cambio de contraseña</b>
         <hr class="pull-left" id="separator-content-page">
-        <br /><br /><br /><br /><br /><br />
+        <br /><br /><br /><br /><br /><br /><br /><br />
         <form class="text-center" id="reset_form">
             Correo: <input type="text" name="email" value="" size="50" id="input_mail" />
             <br />
             <div class="col-lg-4"></div>
             <div class="col-lg-4">
+                <br />
+                <span id="envio_instr"><b>Por favor escriba su correo para el envio de instrucciones.</b></span>
+                <br />
                 <label>
                     <input type="button" class="btn btn-primary" value="Enviar" id="btn-reset">
                 </label>
-                <br /><br />
+                <div class="text-center" id="loading" hidden>
+                    <b><i class="fa fa-spinner fa-spin fa-5x"></i></b><br><br>
+                    <b>Enviando el correo, por favor espere ...</b><br><br>
+                </div>
+                <br/><br/><br/>
                 <span id="mensaje_ok" hidden><b>Se ha enviado un correo con las instrucciones para cambiar su contraseña.</span>
                 <span id="mensaje_no" hidden><b>Correo no registrado.</span>
             </div>
-            <br /><br /><br /><br />
+            <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         </form>
         <br /><br /><br /><br />
     </div>
 {% endblock %}
 
 {% block extraScripts %}
+<script src="{% static "js/jquery.bootstrap-touchspin.js" %}" type="text/javascript"></script>
 <script type="text/javascript">
     $('#btn-reset').click(function(){
         var correo = $('#input_mail').val();
+        $('#loading').show();
         $.getJSON('/reset-contrasenia/', {'correo':correo}, function(data){
             if (data == 1){
                 $('#mensaje_ok').show();
                 $('#mensaje_no').hide();
+                $('#loading').hide();
+                $('#envio_instr').hide();
             }
             else{
                 $('#mensaje_ok').hide();
                 $('#mensaje_no').show();
+                $('#loading').hide();
             }
         });
     });

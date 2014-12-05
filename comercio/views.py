@@ -810,7 +810,6 @@ def insert_data_comercio(request):
                                                         arreglo.remove(x)
                                             elif (len(arreglo) == 8):
                                                 if choices == '8':
-                                                    print arreglo
                                                     get_subpartida_nandina = str(arreglo[3])
                                                     new_subpartida_nandina = get_subpartida_nandina.split('.',1)
                                                     try:
@@ -839,7 +838,6 @@ def insert_data_comercio(request):
                                                         arreglo.remove(x)
                                             elif (len(arreglo) == 9):
                                                 if choices == '9':
-                                                    print arreglo
                                                     get_subpartida_nandina = str(arreglo[3])
                                                     new_subpartida_nandina = get_subpartida_nandina.split('.',1)
                                                     try:
