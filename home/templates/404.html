@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Error 404{% endblock %}
+
+{% block content %}
+    <div class="content-page-2" >
+        <b id="title-content-page">Error 404</b>
+        <hr class="pull-left" id="separator-content-page">
+        <div class="panel-body">
+            <div class="center">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                    <br/><br/><br/>
+                    <span><b>La solicitud a esta página no se encuentra.</b></span>
+                    <br/><br/><br/>
+                </div>
+                <div class="col-lg-4"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extraScripts %}
+
+{% endblock %}
