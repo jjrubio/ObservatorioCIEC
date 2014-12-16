@@ -54,6 +54,6 @@ class UserProfileForm(forms.ModelForm):
         self.fields['grado_academico'].widget.attrs.update({'class' : 'selectpicker space_input show-menu-arrow', 'data-width' : "26%"})
 
 class UserFormResetPassword(forms.Form):
-    email = forms.EmailField(label="Correo Electrónico", widget=forms.TextInput(), required=True)
-    password_one = forms.CharField(label="Contraseña", widget=forms.PasswordInput(render_value=False))
-    password_two = forms.CharField(label="Confirmar contraseña", widget=forms.PasswordInput(render_value=False))
+    email = forms.EmailField(label="Correo del Usuario", widget=forms.TextInput(), required=True)
+    password_one = forms.CharField(label="Nueva Contraseña", widget=forms.PasswordInput(render_value=False))
+    password_two = forms.CharField(label="Confirmar Nueva Contraseña", widget=forms.PasswordInput(render_value=False))
