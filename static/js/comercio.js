@@ -156,10 +156,10 @@ $(document).ready(function() {
         $('#table_A').bootstrapTable({ data: data_A });
 
         $("#btnExportNomen").click(function(e){
-          var uri = $('#table_A').btechco_excelexport({
+          var uri = $('#table_A').battatech_excelexport({
             containerid: "table_A"
             ,returnUri: true
-            ,datatype: $datatype.Table
+            ,datatype: "table"
           });
           $(this).attr('download', 'detalle_de_nomenclatura.xlsx').attr('href', uri).attr('target', '_blank');
         });
@@ -275,10 +275,10 @@ $(document).ready(function() {
         $('#table_B').bootstrapTable({ data: data_B });
 
         $("#btnExportTrans").click(function(e){
-          var uri = $('#table_B').btechco_excelexport({
+          var uri = $('#table_B').battatech_excelexport({
             containerid: "table_B"
             ,returnUri: true
-            ,datatype: $datatype.Table
+            ,datatype: "table"
           });
           $(this).attr('download', 'datos_de_'+trans+'.xlsx').attr('href', uri).attr('target', '_blank');
         });

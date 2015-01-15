@@ -250,10 +250,10 @@ $('#info-method').hover(function(){
 })
 
 $("#btnExport").click(function(e){
-  var uri = $('#Exporta_a_Excel').btechco_excelexport({
+  var uri = $('#Exporta_a_Excel').battatech_excelexport({
     containerid: "Exporta_a_Excel"
     ,returnUri: true
-    ,datatype: $datatype.Table
+    ,datatype: "table"
   });
   $(this).attr('download', excel_filename_download+'.xlsx').attr('href', uri).attr('target', '_blank');
 });
@@ -289,12 +289,12 @@ function table(data){
     $('#periodo').empty();
 
     $('#titulo').append('<th></th>');
-    $('#titulo_secundario').append('<th class="text-center" rowspan="2">Periodo</th>');
+    $('#titulo_secundario').append('<th class="text-center" rowspan="2">Período</th>');
 
     for(i=0; i<nombres_desagre.length; i++){
         var th_one = '<th colspan="4" class="text-center">'+nombres_desagre[i]+'</th>';
         var th_two = '<th class="text-center" rowspan="2">'+'N'+'</th>'+'<th class="text-center" rowspan="2">'+'Indic.'+'</th>'+'<th class="text-center" colspan="2">'+'Intervalo'+'</th>';
-        var th_three = '<th class="text-center">'+'Limite inferior'+'</th>'+'<th class="text-center">'+'Limite superior'+'</th>';
+        var th_three = '<th class="text-center">'+'Límite inferior'+'</th>'+'<th class="text-center">'+'Límite superior'+'</th>';
         $('#titulo').append(th_one);
         $('#titulo_secundario').append(th_two);
         $('#titulo_terciario').append(th_three);

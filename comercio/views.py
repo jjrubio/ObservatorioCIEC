@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from django.shortcuts import HttpResponse, HttpResponseRedirect, render_to_response
 from django.template.context import RequestContext
 from django.template.loader import get_template
@@ -857,7 +859,7 @@ def insert_data_comercio(request):
                                                             v2=new_fob[1].split(',',1)
                                                             final_fob = new_fob[0]+v2[0]+v2[1]
                                                         else:
-                                                            final_fob = new_fob[0]+new_fob[1]   
+                                                            final_fob = new_fob[0]+new_fob[1]
                                                     except Exception, e:
                                                         final_fob = str(arreglo[6])
                                                     try:
