@@ -9,7 +9,7 @@
         <b id="title-content-page">Enlaces externos</b>
         <hr class="pull-left" id="separator-content-page">
         {% for cat in categories %}
-        <div class="external-link">
+        <div id="links-list" class="external-link">
             <b>{{cat.name}}</b>
             <ul>
                 {% for link in links|in_category:cat  %}

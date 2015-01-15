@@ -1,8 +1,11 @@
-.external-link {
+#links-list {
   margin-top: 30px;
 }
+#bulletins-list {
+  margin-top: 0px;
+}
 .external-link ul li {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 .external-link ul li a {
   color: #333;
