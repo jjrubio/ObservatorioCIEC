@@ -6,8 +6,11 @@ class Bulletin(models.Model):
     pdf_src = models.FileField(upload_to='pdfs/', verbose_name='Archivo de PDF')
 
     class Meta:
+        app_label = "Recursos"
+        db_table = "resources_bulletin"
         verbose_name = "boletín"
         verbose_name_plural = "Boletines"
+        db_table = 'resources_bulletin'
 
     def __unicode__(self):
         return ("Boletin Edicion no."+unicode(self.id))
@@ -17,8 +20,10 @@ class LinkCategory(models.Model):
     name = models.CharField(max_length=50, verbose_name='Nombre')
 
     class Meta:
-        verbose_name = "categoría de enlace"
-        verbose_name_plural = "Categorías de enlaces"
+        app_label = "Recursos"
+        db_table = "resources_linkcategory"
+        verbose_name = "enlace externo - definición categoría"
+        verbose_name_plural = "Enlaces externos - Definición Categoría"
 
     def __unicode__(self):
         return self.name
@@ -30,8 +35,10 @@ class Link(models.Model):
     url   = models.URLField(verbose_name='Enlace Web')
 
     class Meta:
-        verbose_name = "enlace"
-        verbose_name_plural = "Enlaces"
+        app_label = "Recursos"
+        db_table = "resources_link"
+        verbose_name = "enlace externo - definición enlace"
+        verbose_name_plural = "Enlaces externos - Definición Enlace"
 
     def __unicode__(self):
         return self.title
@@ -47,6 +54,7 @@ class Download(models.Model):
     class Meta:
         verbose_name = "descarga"
         verbose_name_plural = "Descargas"
+        db_table = 'resources_download'
 
     def __unicode__(self):
         return self.code

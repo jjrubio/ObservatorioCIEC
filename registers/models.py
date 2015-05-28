@@ -2,6 +2,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class string_with_title(str):
+    def __new__(cls, value, title):
+        instance = str.__new__(cls, value)
+        instance._title = title
+        return instance
+                            
+    def title(self):
+        return self._title
+                                        
+    __copy__ = lambda self: self
+    __deepcopy__ = lambda self, memodict: self
 
 class UserProfile(models.Model):
     AREA_CHOICES  =  (
@@ -23,6 +34,8 @@ class UserProfile(models.Model):
     key_expires = models.DateTimeField()
 
     class Meta:
+        app_label = string_with_title("registros", "Usuarios Registrados")
+        db_table = "registers_userprofile"
         verbose_name = "perfil de usuario"
         verbose_name_plural = "Perfiles de usuario"
 

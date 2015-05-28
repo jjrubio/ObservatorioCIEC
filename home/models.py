@@ -25,6 +25,7 @@ class Timeline(models.Model):
     class Meta:
         verbose_name = "suceso"
         verbose_name_plural = "Línea del tiempo"
+        db_table = 'home_timeline'
 
     def __unicode__(self):
         return self.title

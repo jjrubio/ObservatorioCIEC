@@ -2,6 +2,17 @@
 from django.db import models
 from disintegrations.models import Disintegration
 
+class string_with_title(str):
+    def __new__(cls, value, title):
+        instance = str.__new__(cls, value)
+        instance._title = title
+        return instance
+                                
+    def title(self):
+        return self._title
+    
+    __copy__ = lambda self: self
+    __deepcopy__ = lambda self, memodict: self
 
 class Category(models.Model):
     name = models.CharField(max_length=50, verbose_name='Nombre')
@@ -10,6 +21,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = "categoría"
         verbose_name_plural = "Categorías"
+        db_table = "indicators_category"
 
     def __unicode__(self):
         return self.name
@@ -46,3 +58,27 @@ class Indicator(models.Model):
     def __unicode__(self):
         return self.name
 
+class Method(models.Model):
+    fecha_1 = models.CharField(max_length=15, verbose_name='Fecha 1')
+    fecha_2 = models.CharField(max_length=15, verbose_name='Fecha 2')
+    description = models.TextField(verbose_name='Descripción')
+
+    class Meta:
+        verbose_name = "Metodología"
+        verbose_name_plural = "Metodologías"
+
+class Method_Indicator(models.Model):
+    id_method = models.ForeignKey(Method, related_name='metodología')
+    id_indicator = models.ForeignKey(Indicator, related_name='indicador')
+
+    class Meta:
+        verbose_name = "Metodología e Indicador"
+        verbose_name_plural = "Metodologías e Indicadores"
+
+class Disintegration_Indicator(models.Model):
+    id_method_indicator = models.ForeignKey(Method_Indicator, related_name='metodología_indicador')
+    id_disintegration = models.ForeignKey(Disintegration, related_name='Desagregaciones')
+
+    class Meta:
+        verbose_name = "Metodología e Indicador"
+        verbose_name_plural = "Metodologías e Indicadores"

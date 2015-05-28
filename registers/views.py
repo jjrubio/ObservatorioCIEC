@@ -226,3 +226,13 @@ def reset_success(request):
 def reset_password_expires(request):
 	template = 'reset_password_expires.html'
 	return render_to_response(template, context_instance = RequestContext(request,locals()))
+
+def is_login(request):
+	template = 'indicator_calc_html'
+	if request.user.is_authenticated():
+	        usuario = 1
+	else:
+	        usuario = 0					
+						
+	message = json.dumps(usuario, cls=PythonObjectEncoder)
+	return HttpResponse(message, content_type='application/json')

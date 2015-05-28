@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.context import RequestContext
 from django.contrib import messages
 from models import *
-from enemdu.models import *
+from ENEMDU.models import *
 from .forms import UploadFileForm
 import csv
 import os

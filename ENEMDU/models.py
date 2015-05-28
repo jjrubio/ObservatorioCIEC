@@ -1,6 +1,19 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
+class string_with_title(str):
+    def __new__(cls, value, title):
+        instance = str.__new__(cls, value)
+        instance._title = title
+        return instance
+        
+                               
+    def title(self):
+        return self._title
+        
+                           
+    __copy__ = lambda self: self
+    __deepcopy__ = lambda self, memodict: self
 
 class Structure(models.Model):
     TRIM_CHOICES  =  (
@@ -19,6 +32,8 @@ class Structure(models.Model):
     represent = models.CharField(max_length=30, choices = REPRESENT_CHOICES, default = 'Nacional', verbose_name='Representatividad', null=True)
 
     class Meta:
+        app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
+        db_table = "enemdu_structure"
         verbose_name = "estructura"
         verbose_name_plural = "Estructuras"
 
@@ -97,6 +112,8 @@ class Data_from_2003_4(models.Model):
     otro = models.PositiveSmallIntegerField(null=True, blank=True)
 
     class Meta:
+        app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
+        db_table = "enemdu_data_from_2003_4"
         verbose_name = "un dato desde 2003 - 4"
         verbose_name_plural = "Datos desde 2003 - 4"
 
@@ -172,6 +189,8 @@ class Data_from_2007_2(models.Model):
     otro = models.PositiveSmallIntegerField(null=True, blank=True)
 
     class Meta:
+        app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
+        db_table = "enemdu_data_from_2007_2"
         verbose_name = "un dato desde 2007 - 2"
         verbose_name_plural = "Datos desde 2007 - 2"
 
