@@ -59,33 +59,14 @@ class Indicator(models.Model):
         return self.name
 
 class Method(models.Model):
-    	fecha_1 = models.CharField(max_length=15, verbose_name='Fecha 1')
-    	fecha_2 = models.CharField(max_length=15, verbose_name='Fecha 2')
-    	description = models.TextField(verbose_name='Descripción')
 
-    	class Meta:
-        	verbose_name = "Metodología"
-        	verbose_name_plural = "Metodologías"
+    fecha_1 = models.CharField(max_length=15, verbose_name='Fecha 1')
+    fecha_2 = models.CharField(max_length=15, verbose_name='Fecha 2')
+    description = models.TextField(verbose_name='Descripción')
+    indicador = models.ManyToManyField(Indicator, related_name='indicador')
+    disintegrations = models.ManyToManyField(Disintegration, verbose_name='Desagregaciones')
 
-	def __unicode__(self):
-		return self.description 
+    class Meta:
+        verbose_name = "Metodología"
+        verbose_name_plural = "Metodologías"
 
-# class Method_Indicator(models.Model):
-#     id_method = models.ForeignKey(Method, related_name='metodología')
-#     id_indicator = models.ForeignKey(Indicator, related_name='indicador')
-
-#     class Meta:
-#         verbose_name = "Metodología e Indicador"
-#         verbose_name_plural = "Metodologías e Indicadores"
-
-#     def __unicode__(self):
-#         return self.id_method
-
-
-# class Disintegration_Indicator(models.Model):
-#     id_method_indicator = models.ForeignKey(Method_Indicator, related_name='metodología_indicador')
-#     id_disintegration = models.ForeignKey(Disintegration, related_name='Desagregaciones')
-
-#     class Meta:
-#         verbose_name = "Metodología e Indicador"
-#         verbose_name_plural = "Metodologías e Indicadores"
