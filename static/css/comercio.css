@@ -1,8 +1,44 @@
+.tab-content{
+	margin-top: 1em;
+}
+
+#myTabs_1 > li > a, #myTabs_2 > li > a{
+	color: #777;
+}
+
+#myTabs_1 > li.active > a, #myTabs_2 > li.active > a{
+	color: #001C43;
+	font-weight: bold;
+	outline-style: none;
+}
+
+#menu_adicional{
+	float: left;
+	margin: 30px 10px 0px 100px;
+	text-align: center;
+}
+
+#new_form{
+	margin-left: 100px;
+}
+
+#aviso_comercio{
+	color: red;
+	float: right;
+	margin: 10px 10px 0px;
+	text-align: center;
+}
+
+#aviso_comercio  span{
+	color: black;
+}
+
 #datos{
+	margin: 3em 33em 5em 35em;
+}
+
+#graph{
 	margin-top: 3em;
-	margin-right: 33em;
-	margin-left: 35em;
-	margin-bottom: 5em;
 }
 
 label{
@@ -11,12 +47,26 @@ label{
 }
 
 #btn_search{
-    width:100px;
-    margin: -20px -50px;
-    position:relative;
-    top:50%;
-    left:50%;
+	width:100px;
+	margin: -20px -50px;
+	position:relative;
+	top:50%;
+	left:50%;
 }
+
+#loading{
+	margin-top: 8em;
+}
+
+#tables{
+	margin-top: 10em;
+}
+
+#div_graph_comercio{
+	width: 75%;
+	margin: 0 auto;
+}
+
 .ui-datepicker-calendar {
 	display: none;
 }
