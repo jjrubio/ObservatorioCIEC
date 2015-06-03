@@ -40,42 +40,42 @@ GRAPPELLI_ADMIN_TITLE = "Observatorio Ecónomico - Social del Ecuador"
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.request",
-    "django.core.context_processors.i18n",
-    'django.contrib.messages.context_processors.messages',
+	"django.contrib.auth.context_processors.auth",
+    	"django.core.context_processors.request",
+    	"django.core.context_processors.i18n",
+    	"django.contrib.messages.context_processors.messages",
 )
 
 # Application definition
 INSTALLED_APPS = (
-    'grappelli',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'disintegrations',
-    'ENEMDU',
-    'features',
-    'home',
-    'indicators',
-    'registers',
-    'resources',
-    'staff',
-    'comercio',
+	'grappelli',
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
+	'disintegrations',
+	'ENEMDU',
+	'features',
+	'home',
+	'indicators',
+	'registers',
+	'resources',
+	'staff',
+'comercio',
 )
 
 MIDDLEWARE_CLASSES = (
-    #'django.middleware.cache.UpdateCacheMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.http.ConditionalGetMiddleware',
-    #'django.middleware.cache.FetchFromCacheMiddleware',
+	#'django.middleware.cache.UpdateCacheMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'django.middleware.http.ConditionalGetMiddleware',
+	#'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 ROOT_URLCONF = 'OSEE.urls'
@@ -87,14 +87,14 @@ WSGI_APPLICATION = 'OSEE.wsgi.application'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'OESEdb',
-        'USER': 'root',
-        'PASSWORD': 'jarubandb',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
+	'default': {
+		'ENGINE': 'django.db.backends.mysql',
+		'NAME': 'OESEdb',
+		'USER': 'root',
+		'PASSWORD': 'jarubandb',
+		'HOST': '127.0.0.1',
+		'PORT': '3306',
+	}
 }
 
 # Internationalization
@@ -124,15 +124,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL='/media/'
 
 CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': 'localhost:6379',#/var/run/redis/redis.sock
-        'OPTIONS': {
-            'DB': 1,
-            'PARSER_CLASS': 'redis.connection.HiredisParser'
-        }
-    },
+	'default': {
+		'BACKEND': 'redis_cache.RedisCache',
+		'LOCATION': 'localhost:6379',#/var/run/redis/redis.sock
+		'OPTIONS': {
+			'DB': 1,
+			'PARSER_CLASS': 'redis.connection.HiredisParser'
+		}
+	},
 }
+
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 #Email setup

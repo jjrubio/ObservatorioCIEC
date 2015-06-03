@@ -5,28 +5,28 @@
 {% block title %}Historia{% endblock %}
 
 {% block extraCSS %}
-<link href="{% static "css/timeline.css" %}" rel="stylesheet"  />
+	<link href="{% static "css/timeline.css" %}" rel="stylesheet"  />
 {% endblock %}
 {% block content %}
-            <div class="content-page-2">
-                <b id="title-content-page">Historia</b>
-                <hr class="pull-left" id="separator-content-page">
-                <div class="container">
-                    <ul class="timeline">
-                        {% for ev in events %}
-                        <li class="{% if forloop.counter|divisibleby:2 %} timeline-inverted {% endif %}">
-                            <div class="timeline-badge {{ev.icon_color}}"><i class="fa {{ev.icon}}"></i></div>
-                            <div class="timeline-panel">
-                                <div class="timeline-heading">
-                                    <h4 class="timeline-title">{{ev.title}}</h4><hr>
-                                </div>
-                                <div class="timeline-body text-justify">
-                                    <p>{{ev.event}}</p>
-                                </div>
-                            </div>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+            	<div class="content-page-2">
+                	<b id="title-content-page">Historia</b>
+                	<hr id="separator-content-page" class="pull-left">
+                	<div class="container">
+                    	<ul class="timeline">
+                        	{% for ev in events %}
+                        		<li class="{% if forloop.counter|divisibleby:2 %} timeline-inverted {% endif %}">
+                            		<div class="timeline-badge {{ev.icon_color}}"><i class="fa {{ev.icon}}"></i></div>
+                        			<div class="timeline-panel">
+                            			<div class="timeline-heading">
+                              				<h4 class="timeline-title">{{ev.title}}</h4><hr>
+                        				</div><!-- .timeline-heading -->
+                            			<div class="timeline-body text-justify">
+                                			<p>{{ev.event}}</p>
+                          			</div><!-- .timeline-body.text-justify -->
+                            		</div><!-- .timeline-panel -->
+                        		</li>
+                        	{% endfor %}
+                    	</ul>
+                	</div><!-- .container -->
+            	</div><!-- .content-page-2 -->
 {% endblock %}

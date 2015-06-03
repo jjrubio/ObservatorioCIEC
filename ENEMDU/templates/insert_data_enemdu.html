@@ -7,79 +7,77 @@
 {% block title %}Upload file csv{% endblock %}
 
 {% block extraCSS %}
-    <link href="{% static "css/uploadcsv.css" %}" rel="stylesheet"  />
+    	<link href="{% static "css/enemdu.css" %}" rel="stylesheet"  />
 {% endblock %}
 
 {% block content %}
-    <div class="content-page-2">
-        {% if upload_success %}
-            <b id="title-content-page">Subida de archivo Exitoso</b>
-            <hr class="pull-left" id="separator-content-page">
-            <div class="panel-body">
-                <div class="center">
-                    <div class="col-lg-4"></div>
-                    <div class="col-lg-4">
-                        <br/><br/><br/>
-                        <span>Para subir otro archivo, por favor dar clic <a href="/subir_csv/">aquí</a></span>
-                        <br/><br/><br/>
-                    </div>
-                </div>
-            </div>
-        {% else %}
-            <b id="title-content-page">Subir archivo</b>
-            <hr class="pull-left" id="separator-content-page">
-            {% if empty %}
-                <div class="panel-body">
-                    <div class="center">
-                        <div class="col-lg-4"></div>
-                        <div class="col-lg-4">
-                            <br/><br/><br/>
-                            <span>Error! Usted no ha seleccionado un archivo, dar clic <a href="/subir_csv/">aquí</a> para regresar</span>
-                            <br/><br/><br/>
-                        </div>
-                    </div>
-                </div>
-            {% else %}      
-                <div class="panel-body" id="formulario">
-                    <div class="center">
-                        <form id="form_upload" method="post" action="subida_csv/" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="col-lg-3">
-                                <span class="texto">Escoja que tabla desea cargar los datos: </span><br/>
-                            </div>
-                            <select class="form-control" id="id_choices" name="choices">
-                                <option value="1">Datos 2003-4 a 2007-1</option>
-                                <option value="2">Datos 2007-2 a la actualidad</option>
-                            </select>
-                            <br/><br/>           
-                            <div class="col-lg-3">
-                                <span class="texto">Escoja un archivo txt o csv:</span><br/>
-                            </div>
-                            <label class="btn btn-default browse-wrap">
-                                <input id="file" name="file" type="file" style="display:none;">
-                                Seleccionar archivo
-                            </label>
-                            <span class="upload-path">&nbsp;&nbsp;&nbsp;No ha seleccionado un archivo </span>
-                            <br/><br/>
-                            <div class="col-lg-4"></div>
-                            <div class="col-lg-4" id="btn-send">
-                                <input type="submit" value="Cargar archivo" class="btn btn-primary"/><br/>
-                            </div>
-                            <div class="col-lg-4"></div>
-                        </form>
-                    </div>
-                </div>
-            {% endif %}
-        {% endif %}
-    </div>
+    		<div class="content-page-2">
+        	{% if upload_success %}
+            		<b id="title-content-page">Subida de archivo Exitoso</b>
+            		<hr id="separator-content-page" class="pull-left">
+            		<div class="panel-body">
+                		<div class="center">
+                    		<div class="col-lg-4"></div><!-- .col-lg-4 -->
+                  			<div class="col-lg-4">
+                  				<br/><br/><br/>
+                        			<span>Para subir otro archivo, por favor dar clic <a href="/subir_csv/">aquí</a></span>
+                        			<br/><br/><br/>
+                    		</div><!-- .col-lg-4 -->
+                		</div><!-- .center -->
+            		</div><!-- .panel-body -->
+        	{% else %}
+            		<b id="title-content-page">Subir archivo</b>
+            		<hr id="separator-content-page" class="pull-left">
+      			{% if empty %}
+                	<div class="panel-body">
+                    	<div class="center">
+                        		<div class="col-lg-4"></div><!-- .col-lg-4 -->
+                        		<div class="col-lg-4">
+                            		<br/><br/><br/>
+                            		<span>Error! Usted no ha seleccionado un archivo, dar clic <a href="/subir_csv/">aquí</a> para regresar</span>
+                            		<br/><br/><br/>
+                        		</div><!-- .col-lg-4 -->
+                    	</div><!-- .center -->
+                	</div><!-- .panel-body -->
+            		{% else %}      
+                	<div id="formulario" class="panel-body">
+                    	<div class="center">
+                        		<form id="form_upload" method="post" action="subida_csv/" enctype="multipart/form-data">
+                            	{% csrf_token %}
+                            		<div class="col-lg-3">
+                                		<span class="texto">Escoja que tabla desea cargar los datos: </span><br/>
+                            		</div><!-- .col-lg-3 -->
+                            		<select id="id_choices" class="form-control" name="choices">
+                                		<option value="1">Datos 2003-4 a 2007-1</option>
+                                		<option value="2">Datos 2007-2 a la actualidad</option>
+                            		</select>
+                            		<br/><br/>           
+                            		<div class="col-lg-3">
+                                		<span class="texto">Escoja un archivo txt o csv:</span><br/>
+                            		</div><!-- .col-lg-3 -->
+                            		<label class="btn btn-default browse-wrap">
+                                		<input id="file" name="file" type="file">
+                              			Seleccionar archivo
+                            		</label>
+                            		<span class="upload-path">&nbsp;&nbsp;&nbsp;No ha seleccionado un archivo </span>
+                            		<br/><br/>
+                            		<div class="col-lg-4"></div><!-- .col-lg-4 -->
+                            		<div id="btn-send" class="col-lg-4">
+                                		<input type="submit" value="Cargar archivo" class="btn btn-primary"/><br/>
+                            		</div><!-- #btn-send.col-lg-4 -->
+                            		<div class="col-lg-4"></div><!-- .col-lg-4 -->
+                        		</form>
+                    	</div><!-- .center -->
+                	</div><!-- #formulario.panel-body -->
+            		{% endif %}
+        	{% endif %}
+    		</div><!-- .content-page-2 -->
 {% endblock %}
 
 {% block extraScripts %}
-
-<script type="text/javascript">
-    $('input[type="file"]').change(function(){
-        $(this).closest('.browse-wrap').next('.upload-path').text(this.files[0].name);
-    });
-</script>
-
+	<script type="text/javascript">
+	    	$('input[type="file"]').change(function(){
+	       	$(this).closest('.browse-wrap').next('.upload-path').text(this.files[0].name);
+	    	});
+	</script>
 {% endblock %}

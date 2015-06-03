@@ -7,45 +7,41 @@
 {% block title %}Definición indicador{% endblock %}
 
 {% block extraCSS %}
-    <link href="{% static "css/indicator.css" %}" rel="stylesheet"  />
-    <link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
+    	<link href="{% static "css/indicator.css" %}" rel="stylesheet"  />
+    	<link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
 {% endblock %}
 
 {% block content %}
-            <div class="content-page-2">
-                <b id="title-content-page">Definición del indicador</b>
-                <hr class="pull-left" id="separator-content-page">
-                <div id="main-panel" class="panel panel-default">
-                    <div class="panel-heading" >
-                        {% include "indicators_menu.html" %}
-                    </div>
-                    <div class="panel-body text-center">
-                        <b>{{json.2.0.name|upper}}</b>
-                        <p class="text-justify">
-                            <b>Definición.- </b><span>{{json.2.0.definition}}</span>
-                        </p>
-                        <img src="{{MEDIA_URL}}{{json.2.0.formula}}" alt="">
-                    </div>
-                    <div class="panel-footer">
-                        <div class=" pull-left">
-                            <button type="button" id="linkToCalc"  class="btn btn-success">
-                              <i class="fa fa-edit"></i>Calcular indicador
-                            </button>
-                        </div>
-                        <div class=" pull-right"><b>Unidad:</b> <span>{{json.2.0.unit}}</span></div>
-                    </div>
-                </div>
-            </div>
+          	<div class="content-page-2">
+          		<b id="title-content-page">Definición del indicador</b>
+                	<hr id="separator-content-page" class="pull-left">
+			<div id="main-panel" class="panel panel-default">
+                		<div class="panel-heading" >
+                        	{% include "indicators_menu.html" %}
+                    	</div><!-- .panel-heading -->
+                    	<div class="panel-body text-center">
+                        	<b>{{json.2.0.name|upper}}</b>
+                        	<p class="text-justify">
+                            		<b>Definición.- </b><span>{{json.2.0.definition}}</span>
+                        	</p>
+                        	<img src="{{MEDIA_URL}}{{json.2.0.formula}}" alt="">
+                    	</div><!-- .panel-body.text-center -->
+                    	<div class="panel-footer">
+                        	<div class="pull-left">
+                            		<button id="linkToCalc" class="btn btn-success" type="button">
+                              		<i class="fa fa-edit"></i>Calcular indicador
+                            		</button>
+                        	</div><!-- .pull-left -->
+          				<div class=" pull-right"><b>Unidad:</b> <span>{{json.2.0.unit}}</span></div><!-- .pull-right -->
+                  	</div><!-- .panel-footer -->
+            	</div><!-- #main-panel.panel.panel-default -->
+          	</div><!-- .content-page-2 -->
 {% endblock %}
 {% block extraScripts %}
-    <script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/indicator.js" %}" type="text/javascript"></script>
-    <script type="text/javascript">
-        var MEDIA_URL = {{MEDIA_URL}};
-        $('.selectpicker').selectpicker();
-    </script>
+    	<script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
+    	<script src="{% static "js/indicator.js" %}" type="text/javascript"></script>
+    	<script type="text/javascript">
+        	var MEDIA_URL = {{MEDIA_URL}};
+        	$('.selectpicker').selectpicker();
+    	</script>
 {% endblock %}
-// $('.panel-body b:first'). text(data[2][0].name.toUpperCase());
-        // $('.panel-body p span'). text(data[2][0].definition);
-        // $('.panel-body img').attr("src",MEDIA_URL+data[2][0].formula);
-        // $('.panel-footer .pull-right span'). text(data[2][0].unit);

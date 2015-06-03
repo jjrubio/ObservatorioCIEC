@@ -6,17 +6,17 @@
 
 {% block content %}
             <div class="content-page-2" >
-                <b id="title-content-page">Características</b>
-                <hr class="pull-left" id="separator-content-page">
-                <dl class="faq">
-                    {% for detail in description %}
-                    <dt>{{detail|truncatewords:1}}</dt>
-                    <dd>{{detail}}</dd>
-                    {% endfor %}
-                </dl>
-                <div class="separador"></div>
-            </div>
+                	<b id="title-content-page">Características</b>
+               	<hr id="separator-content-page" class="pull-left">
+                	<dl class="faq">
+                  	{% for detail in description %}
+                    	<dt>{{detail|truncatewords:1}}</dt>
+                    	<dd>{{detail}}</dd>
+                  	{% endfor %}
+                	</dl>
+              	<div class="separador"></div><!-- .separador -->
+          	</div><!-- .content-page-2 -->
 {% endblock %}
-{% block extraScripts %}
 
+{% block extraScripts %}
 {% endblock %}

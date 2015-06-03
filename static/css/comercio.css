@@ -24,17 +24,12 @@
 
 #aviso_comercio{
 	color: red;
-	float: right;
-	margin: 10px 10px 0px;
+	margin-top: 15px;
 	text-align: center;
 }
 
 #aviso_comercio  span{
 	color: black;
-}
-
-#datos{
-	margin: 3em 33em 5em 35em;
 }
 
 #graph{
@@ -73,4 +68,8 @@ label{
 
 #export-import{
 	margin-top: 50px;
+}
+
+#btn_update{
+	margin-left: 9em;
 }

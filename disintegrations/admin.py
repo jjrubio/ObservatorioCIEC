@@ -3,7 +3,7 @@ from models import Disintegration, Type
 
 
 class TypeAdmin(admin.ModelAdmin):
-    list_display  = ('name', 'disintegration', )
+	list_display  = ('name', 'disintegration', )
 
 
 admin.site.register(Disintegration)

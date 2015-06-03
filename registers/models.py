@@ -2,42 +2,43 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class string_with_title(str):
-    def __new__(cls, value, title):
-        instance = str.__new__(cls, value)
-        instance._title = title
-        return instance
+    	def __new__(cls, value, title):
+        	instance = str.__new__(cls, value)
+        	instance._title = title
+        	return instance
                             
-    def title(self):
-        return self._title
+    	def title(self):
+        	return self._title
                                         
-    __copy__ = lambda self: self
-    __deepcopy__ = lambda self, memodict: self
+    	__copy__ = lambda self: self
+    	__deepcopy__ = lambda self, memodict: self
+
 
 class UserProfile(models.Model):
-    AREA_CHOICES  =  (
-        ( 'Est' ,        'Estudiante' ),
-        ( 'Lic.' ,   'Licenciado'),
-        ( 'Ing.' ,   'Ingeniero'),
-        ( 'MSc.' ,   'Master'),
-        ( 'PhD.' ,   'Doctor'),
+    	AREA_CHOICES  =  (
+        	( 'Est' ,        'Estudiante' ),
+        	( 'Lic.' ,   'Licenciado'),
+        	( 'Ing.' ,   'Ingeniero'),
+        	( 'MSc.' ,   'Master'),
+        	( 'PhD.' ,   'Doctor'),
+    	)
+    	user = models.OneToOneField(User, verbose_name='Usuario')
+	institution = models.CharField(max_length=50, null=False, verbose_name='Institución')
+	grado_academico = models.CharField(max_length=4, choices = AREA_CHOICES , default = 'Estudiante', verbose_name='Grado académico')
+	contador_visita = models.IntegerField(default=0, verbose_name='Contador de visitas')
+	telefono = models.CharField(max_length=20, null=False, verbose_name='Teléfono')
+	direccion = models.CharField(max_length=100, null=False, verbose_name='Dirección')
+	required_css_class = 'required'
+	activation_key = models.CharField(max_length=40)
+	key_expires = models.DateTimeField()
 
-    )
-    user = models.OneToOneField(User, verbose_name='Usuario')
-    institution = models.CharField(max_length=50, null=False, verbose_name='Institución')
-    grado_academico = models.CharField(max_length=4, choices = AREA_CHOICES , default = 'Estudiante', verbose_name='Grado académico')
-    contador_visita = models.IntegerField(default=0, verbose_name='Contador de visitas')
-    telefono = models.CharField(max_length=20, null=False, verbose_name='Teléfono')
-    direccion = models.CharField(max_length=100, null=False, verbose_name='Dirección')
-    required_css_class = 'required'
-    activation_key = models.CharField(max_length=40)
-    key_expires = models.DateTimeField()
+   	class Meta:
+        	app_label = string_with_title("registros", "Usuarios Registrados")
+        	db_table = "registers_userprofile"
+        	verbose_name = "perfil de usuario"
+        	verbose_name_plural = "Perfiles de usuario"
 
-    class Meta:
-        app_label = string_with_title("registros", "Usuarios Registrados")
-        db_table = "registers_userprofile"
-        verbose_name = "perfil de usuario"
-        verbose_name_plural = "Perfiles de usuario"
-
-    def __unicode__(self):
-        return u'%s %s - %s' % (self.user.first_name, self.user.last_name, self.user.username)
+    	def __unicode__(self):
+        	return u'%s %s - %s' % (self.user.first_name, self.user.last_name, self.user.username)

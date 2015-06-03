@@ -6,6 +6,6 @@ from features.models import Description
 
 
 def features(request):
-    description = Description.objects.all()
-    template = 'features.html'
-    return render_to_response(template, context_instance = RequestContext(request,locals()))
+	description = Description.objects.all()
+	template = 'features.html'
+	return render_to_response(template, context_instance = RequestContext(request,locals()))

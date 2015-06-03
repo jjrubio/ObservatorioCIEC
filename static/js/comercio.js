@@ -3,7 +3,11 @@ $(document).ready(function() {
 	var date = new Date();
 	var year = date.getFullYear();
 	var textoFiltro = "";
+	var tabs_1 = "tab_exp";
+	var tabs_2 = "tab_codsub";
+
 	$('#endDate').attr("value", year+"/01");
+
 
 	$('#search_by').change(function(){
 		if ($('#search_by').val() == 1){
@@ -21,6 +25,7 @@ $(document).ready(function() {
 		}
 	});
 
+
 	$.fn.datepicker.dates['es'] = {
 		days: ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"],
 		daysShort: ["Dom","Lun","Mar","Mié","Juv","Vie","Sáb","Dom"],
@@ -30,6 +35,7 @@ $(document).ready(function() {
 		today: "Hoy",
 		clear: "Limpiar"
 	};
+
 
 	$('.datepickerStart').datepicker({
 		language: "es",
@@ -42,6 +48,7 @@ $(document).ready(function() {
 		$('.datepickerEnd').datepicker('setStartDate',d1);
 	});
 
+
 	$('.datepickerEnd').datepicker({
 		language: "es",
 		format: "yyyy/mm",
@@ -50,13 +57,12 @@ $(document).ready(function() {
 		startDate: "1990/01",
 	});
 
-	var tabs_1 = "tab_exp";
-	var tabs_2 = "tab_codsub";
 
 	$('#myTabs_1').on('shown.bs.tab', function(e){
 		$('#tables').hide();
 		$('#datos').show();
 	});
+
 
 	$('#myTabs_2').on('shown.bs.tab', function(e){
 		var activeTab =  $(e.target).attr('id');
@@ -78,15 +84,30 @@ $(document).ready(function() {
 		$('#datos').show();
 	});
 
+
 	$('#myTabs_1 li a').click(function () {
 		var id = $(this).attr('id');
 		tabs_1 = id;
 	});
 
+
 	$('#myTabs_2 li a').click(function () {
 		var id = $(this).attr('id');
 		tabs_2 = id;
 	});
+
+
+	$('#a-parametros').click( function(){
+    		$('#parametros').removeClass('collapse');
+		$('#parametros').addClass('collapse in');  
+	});
+
+
+	$('#a-resultados').click( function(){
+		$('#resultados').removeClass('collapse');
+		$('#resultados').addClass('collapse in');        		
+	});
+
 
 	$('#btn_search').click(function(){
 		var tipo = tabs_1;
@@ -148,6 +169,7 @@ $(document).ready(function() {
 		}
 	});
 
+
 	function table_A(data, standar){
 		len = data[0][0].length;
 
@@ -186,6 +208,7 @@ $(document).ready(function() {
 			$(this).attr('download', 'detalle_de_nomenclatura.xls').attr('href', uri).attr('target', '_blank');
 		});
 	}
+
 
 	function table_B(data, option, tipo, standar, checkbox_pais){
 		len = data[1][0].length;
@@ -321,6 +344,7 @@ $(document).ready(function() {
 	}
 });
 
+
 jQuery.fn.ForceNumericOnly =
 function()
 {
@@ -340,7 +364,9 @@ function()
 	});
 };
 
+
 $("#txt_filtro_num").ForceNumericOnly();
+
 
 jQuery.fn.ForceTextOnly =
 function()
@@ -361,7 +387,9 @@ function()
 	});
 };
 
+
 $("#txt_filtro_text").ForceTextOnly();
+
 
 function grafico(){
 	$('#div_graph_comercio').perfectScrollbar('destroy');

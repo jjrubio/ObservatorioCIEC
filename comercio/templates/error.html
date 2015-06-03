@@ -7,27 +7,27 @@
 {% block title %}Upload file csv{% endblock %}
 
 {% block extraCSS %}
-  		<link href="{% static "css/uploadcsv.css" %}" rel="stylesheet"  />
+	<link href="{% static "css/uploadcsv.css" %}" rel="stylesheet"  />
 {% endblock %}
 
 {% block content %}
 		<div class="content-page-2">
 	    		<b id="title-content-page">Error subida de archivo</b>
-		    	<hr class="pull-left" id="separator-content-page">
+		    	<hr id="separator-content-page" class="pull-left">
 		    	<div class="panel-body">
 	        		<div class="center">
-		            		<div class="col-lg-4"></div>
+		            		<div class="col-lg-4"></div><!-- .col-lg-4 -->
 		            		<div class="col-lg-4">
 			                	<br/><br/><br/>
 			                	<span>Error en la subida del archivo, por favor revise que sea el archivo escogido sea un excel</span>
 			                	<br/><br/>
 			                	<span>Revise que el archivo tenga el formato correcto.</span>
 			                	<br/><br/><br/>
-			            </div>
-					<div class="col-lg-4"></div>
-	        		</div>
-		    	</div>
-		</div>
+			            </div><!-- .col-lg-4 -->
+					<div class="col-lg-4"></div><!-- .col-lg-4 -->
+	        		</div><!-- .center -->
+		    	</div><!-- .panel-body -->
+		</div><!-- .content-page-2 -->
 {% endblock %}
 
 {% block extraScripts %}

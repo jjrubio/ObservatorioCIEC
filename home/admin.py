@@ -3,7 +3,7 @@ from models import Slider, Timeline
 
 
 class TimelineAdmin(admin.ModelAdmin):
-    list_display = ('title', 'event', )
+	list_display = ('title', 'event', )
 
 
 admin.site.register(Slider)

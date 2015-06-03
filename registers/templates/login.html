@@ -8,18 +8,18 @@
 {% endblock %}
 
 {% block content %}
-    <div class="content-page-2" >
-        <b id="title-content-page">Iniciar Sesión</b>
-        <hr class="pull-left" id="separator-content-page">
-        <form class="text-center" id="login_form" method="post" action="iniciar-sesion/">
-            {% csrf_token %}
-            Correo: <input type="text" name="username" value="" size="50" id="input_user" />
-            <br />
-            Contraseña: <input type="password" name="password" value="" size="50" />
-            <br />
-            <br />
-            <p>¿Olvidó su contraseña?, dar clic <a href="/cambio-contrasenia/">aqui</a></p>
-            <input type="submit" class="btn btn-primary btn_login" name="submit" value="Iniciar Sesión" id="btn-login" />
-        </form>
-    </div>
+    		<div class="content-page-2" >
+        		<b id="title-content-page">Iniciar Sesión</b>
+        		<hr id="separator-content-page" class="pull-left">
+        		<form id="login_form" class="text-center" method="post" action="iniciar-sesion/">
+            	{% csrf_token %}
+            		Correo: <input id="input_user" type="text" name="username" value="" size="50"/>
+            		<br />
+            		Contraseña: <input type="password" name="password" value="" size="50" />
+            		<br />
+            		<br />
+            		<p>¿Olvidó su contraseña?, dar clic <a href="/cambio-contrasenia/">aqui</a></p>
+            		<input id="btn-login" class="btn btn-primary btn_login" type="submit" name="submit" value="Iniciar Sesión"/>
+        		</form>
+    		</div><!-- .content-page-2 -->
 {% endblock %}

@@ -7,254 +7,247 @@
 {% block title %}Cálculo Indicador{% endblock %}
 
 {% block extraCSS %}
-    <link href="{% static "css/indicator.css" %}" rel="stylesheet"  />
-    <link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
-    <link href="{% static "css/perfect-scrollbar.css" %}" rel="stylesheet"  />
+	<link href="{% static "css/indicator.css" %}" rel="stylesheet"  />
+    	<link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
+    	<link href="{% static "css/perfect-scrollbar.css" %}" rel="stylesheet"  />
 {% endblock %}
 
 {% block content %}
-            <div class="content-page-2">
-                <b id="title-content-page">Cálculo del indicador</b>
-                <hr class="pull-left" id="separator-content-page">
-                <div id="main-panel" class="panel panel-default">
-                    <div class="panel-heading" >
-                    {% include "indicators_menu.html" %}
-                    </div>
-                    <div class="panel-body">
-                        <div class="panel-group" id="accordion">
-                          <div class="panel panel-default">
-                            <div class="panel-heading">
-                              <h4 class="panel-title">
-                                <a id="a-parametros" data-toggle="collapse" data-parent="#accordion" href="#parametros">
-                                Parámetros iniciales
-                                </a>
-                              </h4>
-                            </div>
-                            <div id="parametros" class="panel-collapse collapse in">
-                              <div class="panel-body">
-                                <div class="col-lg-4"></div>
-                                <div class="col-lg-4">
-                                    <form id="form-parameters" method="post" class="form-css">
-                                    {% csrf_token %}
-                                        <label>
-                                            <span>Representatividad   </span><br><br>
-                                            <select id="represent" class="selectpicker show-menu-arrow" data-width="93%">
-                                                <option value="1">Nacional</option>
-                                                <option value="2">Urbano</option>
-                                                <option value="3">Rural</option>
-                                            </select>
-                                            <i id="info-represent" class="fa fa-info-circle fa-lg pull-right"></i>
-                                        </label>
-
-                                        <label>
-                                                <span>Metodología </span><br><br>
-                                                <select id="method" class="selectpicker show-menu-arrow"  data-width="93%">
-                                                {% if method_option == 1 %}
-                                                    <option value="1">2003-4 hasta 2007-1 </option>
-                                                {% elif method_option == 2 %}
-                                                    <option value="2">2007-2 hasta la actualidad</option>
-                                                {% else %}
-                                                    <option value="1">2003-4 hasta 2007-1 </option>
-                                                    <option value="2">2007-2 hasta la actualidad</option>
-                                                {% endif %}
-                                                </select>
-                                                <i id="info-method" class="fa fa-info-circle fa-lg pull-right"></i>
-                                        </label>
-
-                                        <label>
-                                            <span>Período Inicial </span><br><br>
-                                            <span>Año: </span>
-                                            <select id="yearStart" class="selectpicker show-menu-arrow pull-left" data-size="5"  data-width="25%" >
-                                                {% if method_option == 1 or method_option == 3 %}
-                                                    {% for year in all_years.0 %}
-                                                        <option value="{{year.0}}">{{year.0}}</option>
-                                                    {% endfor %}
-                                                {% else %}
-                                                    {% for year in all_years.1 %}
-                                                        <option value="{{year.0}}">{{year.0}}</option>
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </select>
-                                            <span>Trimestre: </span>
-                                            <select id="trimStart" class="selectpicker show-menu-arrow" data-width="25%">
-                                                {% if method_option == 1 or method_option == 3 %}
-                                                    <option value="4">4</option>
-                                                {% else %}
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                {% endif %}
-                                            </select>
-                                        </label>
-
-                                        <label>
-                                            <span>Período Final </span><br><br>
-                                            <span>Año: </span>
-                                            <select id="yearEnd" class="selectpicker show-menu-arrow pull-left" data-size="5" data-width="25%" >
-                                                {% if method_option == 1 or method_option == 3 %}
-                                                    {% for year in all_years.0 %}
-                                                        {% if forloop.last %}
-                                                            <option value="{{year.0}}">{{year.0}}</option>
-                                                        {% else %}
-                                                            <option value="{{year.0}}">{{year.0}}</option>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% else %}
-                                                    {% for year in all_years.1 %}
-                                                        {% if forloop.last %}
-                                                            <option value="{{year.0}}"  selected="selected">{{year.0}}</option>
-                                                        {% else %}
-                                                            <option value="{{year.0}}">{{year.0}}</option>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </select>
-                                            <span>Trimestre: </span>
-                                            <select id="trimEnd" class="selectpicker show-menu-arrow"  data-width="25%">
-                                                {% if method_option == 1 or method_option == 3 %}
-                                                    <option value="1">1</option>
-                                                {% else %}
-                                                    {% for trim in all_years.2 %}
-                                                        {% if forloop.last %}
-                                                            <option value="{{trim.0}}"  selected="selected">{{trim.0}}</option>
-                                                        {% else %}
-                                                            <option value="{{trim.0}}">{{trim.0}}</option>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </select>
-                                        </label>
-                                        <label>
-                                            <span>Nivel de Confianza </span><br><br>
-                                             <select id="confidence_level" class="selectpicker show-menu-arrow" data-width="100%">
-                                                    <option value="90">90 %</option>
-                                                    <option value="95" selected="selected">95 %</option>
-                                                    <option value="99">99 %</option>
-                                            </select>
-                                        </label>
-                                        <label class="text-center">
-                                            <span>&nbsp;</span>
-                                            <button type="button" class="btn btn-next" data-toggle="collapse" data-target="#desagregaciones">
-                                            Siguiente
-                                            </button>
-                                        </label>
-                                    </form>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div id="meaning-parameters" class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h3 class="panel-title"></h3>
-                                        </div>
-                                        <div class="panel-body text-justify"></div>
-                                    </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="panel panel-default">
-                            <div class="panel-heading">
-                              <h4 class="panel-title">
-                                <a id="a-desagregaciones" data-toggle="collapse" data-parent="#accordion" href="#desagregaciones">
-                                Desagregaciones
-                                </a>
-                              </h4>
-                            </div>
-                            <div id="desagregaciones" class="panel-collapse collapse">
-                              <div class="panel-body">
-                                <div class="col-lg-4"></div>
-                                <div class="col-lg-4">
-                                    <form id="form-disintegrations" method="post" class="form-css">
-                                        {% csrf_token %}
-                                        <label><i class="fa fa-info-circle fa-lg"></i> Puede escoger hasta dos desagregaciones</label>
-                                        <div id="ckb"></div>
-                                        <div class="text-center buttons">
-                                            <button type="button" class="btn btn-back" data-toggle="collapse" data-target="#parametros">
-                                            Atrás
-                                            </button>
-                                            {% if user.is_authenticated or permiso %}
-                                            <button type="button" class="btn btn-calc" data-toggle="collapse" data-target="#resultado">
-                                            Calcular
-                                            </button>
-                                            {% else %}
-                                                <p>Para realizar cálculos, por favor <a href="/registro/">Registrarse</a></p>
-                                            {% endif %}
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="col-lg-4"></div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="panel panel-default">
-                            <div class="panel-heading">
-                              <h4 class="panel-title">
-                                <a id="a-resultados" data-toggle="collapse" data-parent="#accordion" href="#resultado">
-                                Resultados
-                                </a>
-                              </h4>
-                            </div>
-                            <div id="resultado" class="panel-collapse collapse">
-                              <div class="panel-body text-center">
-                                <div id="loading-result" hidden>
-                                    <br>
-                                    <p id="text-1-loading"><b>Calculando indicador, espere por favor ...</b></p>
-                                    <p id="text-2-loading" hidden><b>...renderizando tablas y gráficos</b></p>
-                                    <div class="loading-progress"></div>
-                                </div>
-
-                                <div id="content-not-result" hidden>
-                                    <b>NO HAY DATOS PARA MOSTRAR EN EL PERIODO ESCOGIDO !!!</b>
-                                </div>
-                                <div id="content-result" hidden>
-                                    <b class="title"></b><br>
-                                    <b class="years-title"></b><br><br>
-                                    <b class="data-type-name">TABLA DE DATOS</b>
-                                    <a id="btnExport" class="pull-right">Exportar tabla a Excel <img src="{{STATIC_URL}}img/Excel-icon.png" alt="excel"> </a>
-                                    <div id="scroll_table">
-                                        <table class="table table-bordered table-responsive" id="Exporta_a_Excel" >
-                                            <thead>
-                                                <tr id="titulo"></tr>
-                                                <tr id="titulo_secundario"></tr>
-                                                <tr id="titulo_terciario"></tr>
-                                            </thead>
-                                            <tbody id="periodo"></tbody>
-                                        </table>
-                                    </div>
-
-                                    <b class="data-type-name">GRÁFICOS ESTADÍSTICOS</b>
-                                    <div id="scroll_graph">
-                                        <!-- Nav tabs -->
-                                        <ul class="nav nav-tabs" id="ul_desagregaciones" role="tablist">
-                                        </ul>
-                                        <!-- Tab panes -->
-                                        <div class="tab-content text-center" id="div_desagregaciones">
-                                        </div>
-                                    </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          	<div class="content-page-2">
+                	<b id="title-content-page">Cálculo del indicador</b>
+                	<hr id="separator-content-page" class="pull-left">
+                	<div id="main-panel" class="panel panel-default">
+                    	<div class="panel-heading" >
+                    	{% include "indicators_menu.html" %}
+                    	</div><!-- .panel-heading -->
+                    	<div class="panel-body">
+                      		<div id="accordion" class="panel-group">
+                          		<div class="panel panel-default">
+                            			<div class="panel-heading">
+                            				<h4 class="panel-title">
+                              				<a id="a-parametros" data-toggle="collapse" data-parent="#accordion" href="#parametros">
+			                                		Parámetros iniciales
+                                				</a>
+                            				</h4>
+                            			</div><!-- .panel-heading -->
+                      				<div id="parametros" class="panel-collapse collapse in">
+		                              	<div class="panel-body">
+			                              	<div class="col-lg-4"></div><!-- .col-lg-4 -->
+			                              	<div class="col-lg-4">
+		                              			<form id="form-parameters" method="post" class="form-css">
+	                                    			{% csrf_token %}
+			                                      		<label>
+				                                            	<span>Representatividad   </span><br><br>
+				                                            	<select id="represent" class="selectpicker show-menu-arrow" data-width="93%">
+				                                                	<option value="1">Nacional</option>
+				                                                	<option value="2">Urbano</option>
+				                                                	<option value="3">Rural</option>
+				                                            	</select>
+				                                            	<i id="info-represent" class="fa fa-info-circle fa-lg pull-right"></i>
+				                                      	</label>
+				                                      	<label>
+					                                      	<span>Metodología </span><br><br>
+					                                      	<select id="method" class="selectpicker show-menu-arrow"  data-width="93%">
+					                                      	{% if method_option == 1 %}
+			                                          			<option value="1">2003-4 hasta 2007-1 </option>
+					                                      	{% elif method_option == 2 %}
+					                                          	<option value="2">2007-2 hasta la actualidad</option>
+					                                      	{% else %}
+					                                          	<option value="1">2003-4 hasta 2007-1 </option>
+					                                          	<option value="2">2007-2 hasta la actualidad</option>
+					                                      	{% endif %}
+					                                      	</select>
+					                                      	<i id="info-method" class="fa fa-info-circle fa-lg pull-right"></i>
+				                                      	</label>
+			                                      		<label>
+				                                      		<span>Período Inicial </span><br><br>
+				                                            	<span>Año: </span>
+					                                       	<select id="yearStart" class="selectpicker show-menu-arrow pull-left" data-size="5"  data-width="25%" >
+				                              			{% if method_option == 1 or method_option == 3 %}
+				                                                  {% for year in all_years.0 %}
+													<option value="{{year.0}}">{{year.0}}</option>
+				                                                  {% endfor %}
+				                                            	{% else %}
+				                                                  {% for year in all_years.1 %}
+				                                                  	<option value="{{year.0}}">{{year.0}}</option>
+				                                                  {% endfor %}
+				                                      		{% endif %}
+				                                            	</select>
+				                                            	<span>Trimestre: </span>
+				                                            	<select id="trimStart" class="selectpicker show-menu-arrow" data-width="25%">
+												{% if method_option == 1 or method_option == 3 %}
+				                                            		<option value="4">4</option>
+				                                            	{% else %}
+				                                                  	<option value="2">2</option>
+				                                                  	<option value="3">3</option>
+				                                                  	<option value="4">4</option>
+				                                            	{% endif %}
+				                                          	</select>
+											</label>
+				                                      	<label>
+				                              			<span>Período Final </span><br><br>
+				                                            	<span>Año: </span>
+				                                            	<select id="yearEnd" class="selectpicker show-menu-arrow pull-left" data-size="5" data-width="25%" >
+				                                            	{% if method_option == 1 or method_option == 3 %}
+				                                                  	{% for year in all_years.0 %}
+				                                                      	{% if forloop.last %}
+				                                                  	<option value="{{year.0}}">{{year.0}}</option>
+				                                                        	{% else %}
+				                                                  	<option value="{{year.0}}">{{year.0}}</option>
+				                                            			{% endif %}
+				                                                  	{% endfor %}
+				                                            	{% else %}
+				                                                  	{% for year in all_years.1 %}
+				                                                        	{% if forloop.last %}
+				                                                  	<option value="{{year.0}}"  selected="selected">{{year.0}}</option>
+				                                                        	{% else %}
+				                                                  	<option value="{{year.0}}">{{year.0}}</option>
+				                                                        	{% endif %}
+				                                                  	{% endfor %}
+				                                            	{% endif %}
+				                                            	</select>
+				                                            	<span>Trimestre: </span>
+				                                            	<select id="trimEnd" class="selectpicker show-menu-arrow"  data-width="25%">
+				                                            	{% if method_option == 1 or method_option == 3 %}
+				                                                  	<option value="1">1</option>
+				                                            	{% else %}
+				                                                  	{% for trim in all_years.2 %}
+				                                                        	{% if forloop.last %}
+				                                                  	<option value="{{trim.0}}"  selected="selected">{{trim.0}}</option>
+				                                                        	{% else %}
+				                                     	       	<option value="{{trim.0}}">{{trim.0}}</option>
+				                                                        	{% endif %}
+				                                                  	{% endfor %}
+				                                            	{% endif %}
+				                                            	</select>
+				                                      	</label>
+				                                      	<label>
+				                                            	<span>Nivel de Confianza </span><br><br>
+				                                           	<select id="confidence_level" class="selectpicker show-menu-arrow" data-width="100%">
+				                                                  	<option value="90">90 %</option>
+				                                                  	<option value="95" selected="selected">95 %</option>
+				                                                  	<option value="99">99 %</option>
+				                                            	</select>
+				                                      	</label>
+				                                      	<label class="text-center">
+				                                            	<span>&nbsp;</span>
+				                                            	<button class="btn btn-next" type="button" data-toggle="collapse" data-target="#desagregaciones">
+				                                            		Siguiente
+				                                            	</button>
+				                                      	</label>
+			                              		</form>
+			                        		</div><!-- .col-lg-4 -->
+			                                	<div class="col-lg-4">
+			                                    	<div id="meaning-parameters" class="panel panel-default">
+			                                        	<div class="panel-heading">
+			                                            		<h3 class="panel-title"></h3>
+			                                        	</div><!-- .panel-heading -->
+			                                      		<div class="panel-body text-justify"></div><!-- .panel-body.text-justify -->
+			                              		</div><!-- #meaning-parameters.panel.panel.panel-default -->
+			                        		</div><!-- .col-lg-4 -->
+			                        	</div><!-- .panel-body -->
+			            		</div><!-- #parametros.panel-collapse.collapse.in -->
+            				</div><!-- .panel.panel-default -->
+                          		<div class="panel panel-default">
+                            			<div class="panel-heading">
+                            				<h4 class="panel-title">
+			                                <a id="a-desagregaciones" data-toggle="collapse" data-parent="#accordion" href="#desagregaciones">
+			                                	Desagregaciones
+			                                </a>
+                            				</h4>
+                            			</div><!-- .panel-heading -->
+                            			<div id="desagregaciones" class="panel-collapse collapse">
+                            				<div class="panel-body">
+                                				<div class="col-lg-4"></div><!-- .col-lg-4 -->
+                                				<div class="col-lg-4">
+			                                    	<form id="form-disintegrations" method="post" class="form-css">
+                                        			{% csrf_token %}
+			                                        	<label>
+			                                        		<i class="fa fa-info-circle fa-lg"></i> Puede escoger hasta dos desagregaciones
+		                                        		</label>
+			                                        	<div id="ckb"></div><!-- #ckb -->
+		                                        		<div class="text-center buttons">
+		                                            			<button type="button" class="btn btn-back" data-toggle="collapse" data-target="#parametros">
+		                                            				Atrás
+		                                            			</button>
+		                                            			{% if user.is_authenticated or permiso %}
+	                                            				<button type="button" class="btn btn-calc" data-toggle="collapse" data-target="#resultado">
+	                                           					Calcular
+	                                            				</button>
+		                                            			{% else %}
+	                                                			<p>Para realizar cálculos, por favor <a href="/registro/">Registrarse</a></p>
+		                                            			{% endif %}
+		                                        		</div><!-- .text-center.buttons -->
+		                                    		</form>
+                                				</div><!-- .col-lg-4 -->
+                                				<div class="col-lg-4"></div><!-- .col-lg-4 -->
+                     			 		</div><!-- .panel-body -->
+	                            		</div><!-- #desagregaciones.panel-collapse.collapse -->
+                          		</div><!-- .panel.panel-default -->
+                        		<div class="panel panel-default">
+                            			<div class="panel-heading">
+                            				<h4 class="panel-title">
+			                                	<a id="a-resultados" data-toggle="collapse" data-parent="#accordion" href="#resultados">
+			                                		Resultados
+			                                	</a>
+		                              	</h4>
+                            			</div><!-- .panel-heading -->
+	                            		<div id="resultados" class="panel-collapse collapse">
+	                              		<div class="panel-body text-center">
+		                                		<div id="loading-result" hidden>
+	                                    			<br>
+			                                    	<p id="text-1-loading"><b>Calculando indicador, espere por favor ...</b></p>
+			                                    	<p id="text-2-loading" hidden><b>...renderizando tablas y gráficos</b></p>
+			                                    	<div class="loading-progress"></div><!-- .loading-progress -->
+		                                		</div><!-- #loading-result -->
+			                                	<div id="content-not-result" hidden>
+		                                    		<b>NO HAY DATOS PARA MOSTRAR EN EL PERIODO ESCOGIDO !!!</b>
+		                              		</div><!-- #content-not-result -->
+			                                	<div id="content-result" hidden>
+		                                    		<b class="title"></b><br>
+		                                    		<b class="years-title"></b><br><br>
+		                                    		<b class="data-type-name">TABLA DE DATOS</b>
+		                                    		<a id="btnExport" class="pull-right">Exportar tabla a Excel <img src="{{STATIC_URL}}img/Excel-icon.png" alt="excel"> </a>
+		                                    		<div id="scroll_table">
+		                                        		<table id="Exporta_a_Excel" class="table table-bordered table-responsive">
+		                                            			<thead>
+		                                                			<tr id="titulo"></tr>
+		                                                			<tr id="titulo_secundario"></tr>
+		                                                			<tr id="titulo_terciario"></tr>
+		                                            			</thead>
+		                                            			<tbody id="periodo"></tbody>
+		                                      			</table>
+		                                    		</div><!-- #scroll_table -->
+	                                    			<b class="data-type-name">GRÁFICOS ESTADÍSTICOS</b>
+	                                    			<div id="scroll_graph">
+	                                        			<ul id="ul_desagregaciones" class="nav nav-tabs" role="tablist"></ul>
+	                                        			<div id="div_desagregaciones" class="tab-content text-center"></div>
+	                                    			</div><!-- #scroll_graph -->
+		                                		</div><!-- #content-result -->
+	                              		</div><!-- .panel-body.text-center -->
+		                            	</div><!-- #resultados.panel-collapse.collapse -->
+                        		</div><!-- .panel.panel-default -->
+	                  	</div><!-- #accordion.panel-group -->
+	      		</div><!-- .panel-body -->
+	      	</div><!-- #main-panel.panel.panel-default -->
+		</div><!-- .content-page-2 -->
 {% endblock %}
 {% block extraScripts %}
-    <script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/jquery.progressTimer.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/jquery.mousewheel.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/perfect-scrollbar.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/indicator.js" %}" type="text/javascript"></script>
-    <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
-    <script type="text/javascript" src="http://code.highcharts.com/modules/exporting.js"></script>
-    <script type="text/javascript" src="http://cdn.datatables.net/1.10.1/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="{% static "js/jquery.battatech.excelexport.js" %}"></script>
-    <script type="text/javascript">
-        var MEDIA_URL = {{MEDIA_URL}};
-        $("#yearEnd option:last").attr("selected", "selected");
-        $('.selectpicker').selectpicker();
-        $('#scroll_table').perfectScrollbar();
-        $('#div_desagregaciones').perfectScrollbar();
-    </script>
+	<script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
+	<script src="{% static "js/jquery.progressTimer.js" %}" type="text/javascript"></script>
+	<script src="{% static "js/jquery.mousewheel.js" %}" type="text/javascript"></script>
+	<script src="{% static "js/perfect-scrollbar.js" %}" type="text/javascript"></script>
+	<script src="{% static "js/indicator.js" %}" type="text/javascript"></script>
+	<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+	<script type="text/javascript" src="http://code.highcharts.com/modules/exporting.js"></script>
+	<script type="text/javascript" src="http://cdn.datatables.net/1.10.1/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="{% static "js/jquery.battatech.excelexport.js" %}"></script>
+	<script type="text/javascript">
+		var MEDIA_URL = {{MEDIA_URL}};
+		$("#yearEnd option:last").attr("selected", "selected");
+		$('.selectpicker').selectpicker();
+		$('#scroll_table').perfectScrollbar();
+		$('#div_desagregaciones').perfectScrollbar();
+  	</script>
 {% endblock %}
 
