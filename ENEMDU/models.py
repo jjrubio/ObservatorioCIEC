@@ -8,7 +8,7 @@ class string_with_title(str):
 		return instance
 																
 	def title(self):
-			return self._title
+		return self._title
 														 
 	__copy__ = lambda self: self
 	__deepcopy__ = lambda self, memodict: self
