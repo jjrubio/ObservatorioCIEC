@@ -5,36 +5,36 @@
 {% block title %}Registro{% endblock %}
 
 {% block extraCSS %}
-	<link href="{% static "css/register.css" %}" rel="stylesheet"/>
+    <link href="{% static "css/register.css" %}" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
-          	<div class="content-page-2">
-          	{% if registered %}
-                	<b id="title-content-page">Registro exitoso</b>
-                	<hr id="separator-content-page" class="pull-left">
-                	<br><br>
-                	<div id="mensaje-alerta" class="text-center">
-                      	<b>¡ GRACIAS POR REGISTRARTE EN EL OBSERVARTORIO ECONÓMICO - SOCIAL DEL ECUADOR !</b><br><br>
-                      	<b>  REVISE SU CORREO ELECTRÓNICO PARA ACTIVAR SU USUARIO </b><br><br>
-                      	<a href="/">Ir al Inicio</a><br />
-                	</div><!-- #mensaje-alerta.text-center -->
-          	{% else %}
-                	<b id="title-content-page">Formulario de registro</b>
-                	<hr id="separator-content-page" class="pull-left">
-                	<form id="user_form" method="post" action="registro/">
-                    	{% csrf_token %}
-                      	{{ user_form.as_p }}
-                      	{{ profile_form.as_p }}
-                      	<div class="text-center">
-                      		<input class="btn btn-primary btn_login" type="submit" name="submit" value="Enviar"/>
-                      	</div><!-- .text-center -->
-                	</form>
-          	{% endif %}
-          	</div><!-- .content-page-2 -->
+        <div class="content-page-2">
+        {% if registered %}
+            <b id="title-content-page">Registro exitoso</b>
+            <hr id="separator-content-page" class="pull-left">
+            <br><br>
+            <div id="mensaje-alerta" class="text-center">
+                <b>¡ GRACIAS POR REGISTRARTE EN EL OBSERVARTORIO ECONÓMICO - SOCIAL DEL ECUADOR !</b><br><br>
+                <b>  REVISE SU CORREO ELECTRÓNICO PARA ACTIVAR SU USUARIO </b><br><br>
+                <a href="/">Ir al Inicio</a><br />
+            </div><!-- #mensaje-alerta.text-center -->
+        {% else %}
+            <b id="title-content-page">Formulario de registro</b>
+            <hr id="separator-content-page" class="pull-left">
+            <form id="user_form" method="post" action="registro/">
+                {% csrf_token %}
+                {{ user_form.as_p }}
+                {{ profile_form.as_p }}
+                <div class="text-center">
+                    <input class="btn btn-primary btn_login" type="submit" name="submit" value="Enviar"/>
+                </div><!-- .text-center -->
+            </form>
+        {% endif %}
+        </div><!-- .content-page-2 -->
 {% endblock %}
 
 {% block extraScripts %}
-    	<script src="{% static "js/register.js" %}" type="text/javascript"></script>
-    	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="{% static "js/register.js" %}" type="text/javascript"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js" type="text/javascript"></script>
 {% endblock %}

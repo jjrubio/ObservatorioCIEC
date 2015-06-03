@@ -30,11 +30,11 @@ class Structure(models.Model):
     trim = models.PositiveSmallIntegerField(choices = TRIM_CHOICES, default = 1, verbose_name='Trimestre')
     represent = models.CharField(max_length=30, choices = REPRESENT_CHOICES, default = 'Nacional', verbose_name='Representatividad', null=True)
 
-  class Meta:
-    app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
-    db_table = "enemdu_structure"
-    verbose_name = "estructura"
-    verbose_name_plural = "Estructuras"
+    class Meta:
+        app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
+        db_table = "enemdu_structure"
+        verbose_name = "estructura"
+        verbose_name_plural = "Estructuras"
 
     def __unicode__(self):
         return self.represent
@@ -137,11 +137,11 @@ class Data_from_2003_4(models.Model):
     tipoEmpleoDesag = models.CharField(max_length=5, null=True, blank=True)
     sectorEmpleo = models.CharField(max_length=5, null=True, blank=True)
       
-  class Meta:
-    app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
-    db_table = "enemdu_data_from_2003_4"
-    verbose_name = "un dato desde 2003 - 4"
-    verbose_name_plural = "Datos desde 2003 - 4"
+    class Meta:
+        app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
+        db_table = "enemdu_data_from_2003_4"
+        verbose_name = "un dato desde 2003 - 4"
+        verbose_name_plural = "Datos desde 2003 - 4"
 
 
 class Data_from_2007_2(models.Model):
@@ -241,11 +241,11 @@ class Data_from_2007_2(models.Model):
     tipoEmpleoDesag = models.CharField(max_length=5, null=True, blank=True)
     sectorEmpleo = models.CharField(max_length=5, null=True, blank=True)
 
-  class Meta:
-    app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
-    db_table = "enemdu_data_from_2007_2"
-    verbose_name = "un dato desde 2007 - 2"
-    verbose_name_plural = "Datos desde 2007 - 2"
+    class Meta:
+        app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
+        db_table = "enemdu_data_from_2007_2"
+        verbose_name = "un dato desde 2007 - 2"
+        verbose_name_plural = "Datos desde 2007 - 2"
 
 
 class upload_csv_file(models.Model):
