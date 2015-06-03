@@ -1,17 +1,17 @@
 #file{
-	display: none;
+    display: none;
 }
 
 .form-control{
-	width: 21%;
+    width: 21%;
 }
 
 #btn-send{
-	margin-left: 40%;
-    	margin-right: auto;
+    margin-left: 40%;
+        margin-right: auto;
 }
 
 .texto{
-	position:absolute;
-	margin-top: 1em;
+    position:absolute;
+    margin-top: 1em;
 }

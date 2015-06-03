@@ -9,21 +9,21 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container page">
-        <div class="submenu col-lg-3 pull-left">
-            <span class="label">RECURSOS</span>
-            <div class="option-submenu">
-                <a href="/recursos/boletines/">Boletines</a>
-                {% block arrow_bulletin %}{% endblock %}
+        <div class="container page">
+            <div class="submenu col-lg-3 pull-left">
+                <span class="label">RECURSOS</span>
+                <div class="option-submenu">
+                    <a href="/recursos/boletines/">Boletines</a>
+                    {% block arrow_bulletin %}{% endblock %}
+                </div><!-- .option-submenu -->
+                <div class="option-submenu">
+                    <a href="/recursos/enlaces-externos/">Enlaces externos</a>
+                    {% block arrow_link %}{% endblock %}
+                </div><!-- .option-submenu -->
             </div>
-            <div class="option-submenu">
-                <a href="/recursos/enlaces-externos/">Enlaces externos</a>
-                {% block arrow_link %}{% endblock %}
-            </div>
-        </div>
-        <div class="content-page col-lg-8 pull-left">
-            {% block resource %}
-            {% endblock %}
-        </div>
-    </div>
+            <div class="content-page col-lg-8 pull-left">
+                {% block resource %}
+                {% endblock %}
+            </div><!-- .content-page.col-lg-8.pull-left -->
+        </div><!-- .container.page -->
 {% endblock %}

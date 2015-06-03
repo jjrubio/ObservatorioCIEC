@@ -6,6 +6,6 @@ from staff.models import Personal_data
 
 
 def team_group(request):
-	profile = Personal_data.objects.all()
-	template = 'team.html'
-	return render_to_response(template, context_instance = RequestContext(request,locals()))
+    profile = Personal_data.objects.all()
+    template = 'team.html'
+    return render_to_response(template, context_instance = RequestContext(request,locals()))

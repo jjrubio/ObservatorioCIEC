@@ -45,9 +45,9 @@ class Link(models.Model):
 
 
 class Download(models.Model):
-    code       = models.PositiveIntegerField(verbose_name='Código')
-    name       = models.CharField(max_length=50, verbose_name='Nombre')
-    counter    = models.PositiveIntegerField(verbose_name='Contador')
+    code = models.PositiveIntegerField(verbose_name='Código')
+    name = models.CharField(max_length=50, verbose_name='Nombre')
+    counter = models.PositiveIntegerField(verbose_name='Contador')
     start_date = models.DateField(verbose_name='Fecha inicial')
     end_date   = models.DateField(verbose_name='Fecha final')
 

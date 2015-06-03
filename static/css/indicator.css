@@ -1,63 +1,63 @@
 #main-panel {
-	margin: 30px 10px 30px 10px;
-	border-color: #bebebe;
-	border-style: solid;
-	border-width: 1px;
+    margin: 30px 10px 30px 10px;
+    border-color: #bebebe;
+    border-style: solid;
+    border-width: 1px;
 }
 
 #main-panel .panel-heading .opcion-menu {
-	margin-left: 17px;
-	margin-right: 16px;
+    margin-left: 17px;
+    margin-right: 16px;
 }
 
 #main-panel .panel-body {
-  	padding-top: 50px;
+    padding-top: 50px;
 }
 
 #main-panel .panel-body p {
-	margin-top: 30px;
-	margin-right: 20%;
-	margin-bottom: 30px;
-	margin-left: 20%;
+    margin-top: 30px;
+    margin-right: 20%;
+    margin-bottom: 30px;
+    margin-left: 20%;
 }
 
 #main-panel .panel-body .panel-group {
-  	margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 #main-panel .panel-body .panel-group .panel {
-  	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 #main-panel .panel-body .panel-group .panel .panel-body {
-  	padding: 30px 0 30px 0;
+    padding: 30px 0 30px 0;
 }
 
 #main-panel .panel-body .panel-group .panel .panel-body form label span:nth-child(4) {
-  	margin-right: 10px;
+    margin-right: 10px;
 }
 
 #main-panel .panel-body .panel-group .panel .panel-body form label span:nth-last-child(3) {
-	margin-left: 44px;
-	margin-right: 10px;
+    margin-left: 44px;
+    margin-right: 10px;
 }
 
 #main-panel .panel-body #meaning-parameters {
-  	margin-top: 30px;
+    margin-top: 30px;
 }
 
 #main-panel .panel-body #meaning-parameters .panel-body {
-	padding-left: 20px;
-	padding-right: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 #main-panel .panel-body .btn-next,
 #main-panel .panel-body .btn-calc {
-	margin-top: 30px;
-	margin-bottom: 30px;
-	background-color: #428bca;
-	border-color: #357ebd;
-	color: #fff;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: #428bca;
+    border-color: #357ebd;
+    color: #fff;
 }
 
 #main-panel .panel-body .btn-next:hover,
@@ -66,102 +66,102 @@
 }
 
 #main-panel .panel-body .btn-back {
-	background-color: #ebebeb;
-	border-color: #adadad;
-	color: #333;
+    background-color: #ebebeb;
+    border-color: #adadad;
+    color: #333;
 }
 
 #main-panel .panel-footer {
-	height: 50px;
-	vertical-align: middle;
+    height: 50px;
+    vertical-align: middle;
 }
 
 #main-panel .panel-footer .pull-left button{
-	background-color: #0cb3ac;
-	border-color: #0cb3ac;
-	color: #fff;
+    background-color: #0cb3ac;
+    border-color: #0cb3ac;
+    color: #fff;
 }
 
 #main-panel .panel-footer .pull-right {
-  	margin-top: 6px;
+    margin-top: 6px;
 }
 
 .fa-info-circle {
-  	color: #39b3d7;
+    color: #39b3d7;
 }
 
 .table{
-  	margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 #scroll_table{
-	position: relative;
-	max-height: 430px;
-	overflow: hidden;
-	margin: 20px 25px 50px 25px;
+    position: relative;
+    max-height: 430px;
+    overflow: hidden;
+    margin: 20px 25px 50px 25px;
 }
 
 #btnExport{
-	margin-right: 25px;
-	color: #39b3d7;
-	font-weight: bold;
+    margin-right: 25px;
+    color: #39b3d7;
+    font-weight: bold;
 }
 #btnExport img{
-  	margin-top: -5px;
+    margin-top: -5px;
 }
 
 #scroll_graph{
-    	max-height: 460px;
-    	margin: 75px 25px 50px 25px;
+        max-height: 460px;
+        margin: 75px 25px 50px 25px;
 }
 
 #div_desagregaciones{
-	position: relative;
-	height: 460px;
-	max-height: 460px;
-	overflow: hidden;
+    position: relative;
+    height: 460px;
+    max-height: 460px;
+    overflow: hidden;
 }
 
 .tab-content {
-	border-left: 1px solid #ddd;
-	border-right: 1px solid #ddd;
-	padding: 10px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 10px;
 }
 
 .nav-tabs {
-    	margin-bottom: 0;
+        margin-bottom: 0;
 }
 
 .data-type-name {
-	float: left;
-	margin-left: 25px;
+    float: left;
+    margin-left: 25px;
 }
 
 .loading-progress{
-	margin-left: 20px;
-	margin-right: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .graph{
-	min-width:800px;
-	height: 400px;
-	margin: 30px 0 0 0;
+    min-width:800px;
+    height: 400px;
+    margin: 30px 0 0 0;
 }
 
 .form-css label {
-	display: block;
-	margin: 0px 0px 5px;
+    display: block;
+    margin: 0px 0px 5px;
 }
 
 .form-css label > span {
-	float: left;
-	margin-top: 10px;
+    float: left;
+    margin-top: 10px;
 }
 
 .fa-warning {
-  	color: #f0ad4e;
+    color: #f0ad4e;
 }
 
 .fa-info-circle {
-  	margin-top: 10px;
+    margin-top: 10px;
 }

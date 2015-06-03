@@ -3,12 +3,12 @@ from models import Indicator, Subcategory, Category
 
 
 class IndicadorAdmin(admin.ModelAdmin):
-	list_display = ('name','definition','unit','formula_src','counter','subcategory', )
-    	filter_horizontal = ('disintegrations',)
+    list_display = ('name','definition','unit','formula_src','counter','subcategory', )
+    filter_horizontal = ('disintegrations',)
 
 
 class SubcategoryAdmin(admin.ModelAdmin):
-    	list_display = ('name','category', )
+    list_display = ('name','category', )
 
 
 admin.site.register(Indicator, IndicadorAdmin)

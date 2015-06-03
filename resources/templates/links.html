@@ -7,7 +7,7 @@
 
 {% block resource %}
         <b id="title-content-page">Enlaces externos</b>
-        <hr class="pull-left" id="separator-content-page">
+        <hr id="separator-content-page" class="pull-left">
         {% for cat in categories %}
         <div id="links-list" class="external-link">
             <b>{{cat.name}}</b>
@@ -16,6 +16,6 @@
                 <li><a target="_blank" href="{{link.url}}">{{link.title}} <i class="fa fa-external-link"></i></a></li>
                 {% endfor %}
             </ul>
-        </div>
+        </div><!-- #links-list.external-link -->
         {% endfor %}
 {% endblock %}

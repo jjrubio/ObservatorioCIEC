@@ -2,31 +2,31 @@ from django.contrib import admin
 from models import *
 
 class TypeAdminPais(admin.ModelAdmin):
-  	list_display  = ('codigo', 'pais', )
+    list_display  = ('codigo', 'pais', )
 
 class TypeAdminEstandares(admin.ModelAdmin):
-  	list_display  = ('codigo', 'descripcion', )
+    list_display  = ('codigo', 'descripcion', )
 
 class TypeAdminNandina(admin.ModelAdmin):
-    	list_display  = ('subpartida', 'descripcion', )
+    list_display  = ('subpartida', 'descripcion', )
 
 class TypeAdminEquivalencia(admin.ModelAdmin):
-    	list_display  = ('nandina', 'cpc', 'cuode', 'cgce', 'sistema_armotizado', 'ciiu3', 'cuci3', )
+    list_display  = ('nandina', 'cpc', 'cuode', 'cgce', 'sistema_armotizado', 'ciiu3', 'cuci3', )
 
 class TypeAdminExportEstandares(admin.ModelAdmin):
-    	list_display  = ('ano', 'mes', 'pais', 'codigo', 'peso', 'fob', )
+    list_display  = ('ano', 'mes', 'pais', 'codigo', 'peso', 'fob', )
 
 class TypeAdminExportNandina(admin.ModelAdmin):
-    	list_display  = ('ano', 'mes', 'pais', 'subpartida_nandina', 'peso', 'fob', 'subpartida_key', )
+    list_display  = ('ano', 'mes', 'pais', 'subpartida_nandina', 'peso', 'fob', 'subpartida_key', )
 
 class TypeAdminImportEstandares(admin.ModelAdmin):
-    	list_display  = ('ano', 'mes', 'pais', 'codigo', 'peso', 'fob', 'cif', )
+    list_display  = ('ano', 'mes', 'pais', 'codigo', 'peso', 'fob', 'cif', )
 
 class TypeAdminImportNandina(admin.ModelAdmin):
-    	list_display  = ('ano', 'mes', 'pais', 'subpartida_nandina', 'peso', 'fob', 'cif', 'subpartida_key', )
+    list_display  = ('ano', 'mes', 'pais', 'subpartida_nandina', 'peso', 'fob', 'cif', 'subpartida_key', )
 
 class TypeAdminUpload(admin.ModelAdmin):
-	list_display  = ('upload', )	
+    list_display  = ('upload', )	
 
 admin.site.register(Paises, TypeAdminPais)
 admin.site.register(CGCE,TypeAdminEstandares)

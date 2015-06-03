@@ -12,24 +12,24 @@ from django.contrib.auth.decorators import login_required
 
 
 def slider(request):
-    	imagenes = Slider.objects.all()
-    	template = 'slider.html'
-    	return render_to_response(template, context_instance = RequestContext(request,locals()))
+    imagenes = Slider.objects.all()
+    template = 'slider.html'
+    return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 
 def map(request):
-    	template = 'map.html'
-    	return render_to_response(template, context_instance = RequestContext(request,locals()))
+    template = 'map.html'
+    return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 
 def contactos (request):
-    	template = 'contactos.html'
-    	return render_to_response(template, context_instance = RequestContext(request,locals()))
+    template = 'contactos.html'
+    return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 
 def timeline (request):
-    	events   = Timeline.objects.all()
-    	template = 'timeline.html'
-    	return render_to_response(template, context_instance = RequestContext(request,locals()))
+    events   = Timeline.objects.all()
+    template = 'timeline.html'
+    return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 

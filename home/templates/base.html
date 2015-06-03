@@ -2,108 +2,107 @@
 <!DOCTYPE html>
 
 <head>
-	<!-- meta -->
-    	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="">
-	<meta name="author" content="">
-	<!-- Title -->
-	<title>OESE - {% block title %}{% endblock %}</title>
-	<link rel="icon" type="image/png" href="{% static "img/favicon.png" %}" />
-	<!-- Core CSS - Include with every page -->
-	<link href="{% static "css/style.css" %}" rel="stylesheet" />
-	<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" />
-	<link href="{% static "css/datepicker.css" %}" rel="stylesheet" />
-	<link href="{% static "css/comercio.css" %}" rel="stylesheet" />
-	<!-- Page Specific CSS -->
-	{% block extraCSS %}{% endblock %}
+    <!-- meta -->
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Title -->
+    <title>OESE - {% block title %}{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static "img/favicon.png" %}" />
+    <!-- Core CSS - Include with every page -->
+    <link href="{% static "css/style.css" %}" rel="stylesheet" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" />
+    <link href="{% static "css/datepicker.css" %}" rel="stylesheet" />
+    <link href="{% static "css/comercio.css" %}" rel="stylesheet" />
+    <!-- Page Specific CSS -->
+    {% block extraCSS %}{% endblock %}
 </head>
 
 <body>
-    	<div class="container">
- 	 	<header role="banner">
-            		<div id="nav-logo" class="navbar navbar-inverse" role="navigation">
-                		<div class="navbar-header">
-                    		<a href="/"><img src="{{STATIC_URL}}img/logo-ciec.png" class="pull-left img-nav-header" alt="ciec"></a>
-                  			<a href="/" class="navbar-brand">Observatorio Económico - Social del Ecuador</a><br>
-                    		<i>“ Servir como base para investigaciones socioeconómicas. ”</i>
-                		</div><!-- .navbar-header -->
-                		{% if user.is_authenticated %}
-                		<ul id="user_data-menu" class="pull-right">
-                    		<li>
-                        			<a id="name-user" data-toggle="dropdown" href="#" class="dropdown-toggle">
-                          			<i class="fa fa-user"> Bienvenido, </i><br>
-                          			{% if user.first_name %}
-                                		<span><strong>{{user.first_name}}</strong></span>
-                                		<span><strong>{{user.last_name}}</strong></span>
-                            			{% else %}
-                               			<span><strong>{{user.username }}</strong></span>
-                            			{%endif%}
-                            			<b class="caret"></b>
-                        			</a>
-                        			<ul class="pull-right dropdown-menu" id="option-user">
-                            			<li><a href="/cerrar-sesion/"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
-                        			</ul>
-                    		</li>
-                		</ul>
-                		{% else %}
-                		<ul id="user_data-menu" class="pull-right">
-                    		<li>
-                         			<a id="name-user" class="pull-right" href="/iniciar-sesion/"><i class="fa fa-user"></i> Iniciar Sesión</a>
-                    		</li>
-                		</ul>
-                		{% endif %}
-            		</div><!-- #nav-logo.navbar.navbar-inverse -->
-        	</header>
-        	<div class="contour-main">
-          		<div id="nav-menu" class="navbar navbar-default" role="navigation">
-                		<ul id="tabs-menu" class="nav navbar-nav pull-right">
-                    		<li><a href="/inicio/">INICIO</a></li>
-                    		<li><a href="/definicion-indicador/">INDICADORES: MERCADOLABORAL</a></li>
-                    		<li><a href="/comercio-exterior/">SERIES HISTÓRICAS: COMERCIO EXTERIOR</a></li>
-                    		<li><a href="/recursos/boletines/">RECURSOS</a></li>
-                    		{% if user.is_superuser %}
-                  			<li><a href="/subir_csv/">ACTUALIZAR DATOS INDICADOR</a></li>
-                        		<li><a href="/subir_csv_comercio/">ACTUALIZAR DATOS COMERCIO</a></li>
-                        		<li><a id="cache_link" href="/cache/">CACHÉ</a></li>
-                    		{%endif%}
-                		</ul>
-            		</div><!-- #nav-mnu.navbar.navbar-default -->
-            		{% block content %}{% endblock %}
-            		<footer>
-                		<div class="contour-footer text-center">
-                    		<a target="_blank" href="http://www.ciec.espol.edu.ec/"> Website de Ciec </a>|
-                    		<a href="/contactos/"> Contáctenos </a>|
-            			</div><!-- .contour-footer.text-center -->
-                		<div class="box-footer text-center">
-                    		<p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
-                		</div><!-- .box-footer.text-center -->
-            		</footer>
-      		</div><!-- .contour-main -->
-    	</div><!-- .container -->
+    <div class="container">
+        <header role="banner">
+            <div id="nav-logo" class="navbar navbar-inverse" role="navigation">
+                <div class="navbar-header">
+                    <a href="/"><img src="{{STATIC_URL}}img/logo-ciec.png" class="pull-left img-nav-header" alt="ciec"></a>
+                    <a href="/" class="navbar-brand">Observatorio Económico - Social del Ecuador</a><br>
+                    <i>“ Servir como base para investigaciones socioeconómicas. ”</i>
+                </div><!-- .navbar-header -->
+                {% if user.is_authenticated %}
+                <ul id="user_data-menu" class="pull-right">
+                    <li>
+                        <a id="name-user" data-toggle="dropdown" href="#" class="dropdown-toggle">
+                            <i class="fa fa-user"> Bienvenido, </i><br>
+                            {% if user.first_name %}
+                            <span><strong>{{user.first_name}}</strong></span>
+                            <span><strong>{{user.last_name}}</strong></span>
+                            {% else %}
+                            <span><strong>{{user.username }}</strong></span>
+                            {%endif%}
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="pull-right dropdown-menu" id="option-user">
+                            <li><a href="/cerrar-sesion/"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
+                        </ul>
+                    </li>
+                </ul>
+                {% else %}
+                <ul id="user_data-menu" class="pull-right">
+                    <li>
+                        <a id="name-user" class="pull-right" href="/iniciar-sesion/"><i class="fa fa-user"></i> Iniciar Sesión</a>
+                    </li>
+                </ul>
+                {% endif %}
+        	</div><!-- #nav-logo.navbar.navbar-inverse -->
+        </header>
+        <div class="contour-main">
+            <div id="nav-menu" class="navbar navbar-default" role="navigation">
+                <ul id="tabs-menu" class="nav navbar-nav pull-right">
+                    <li><a href="/inicio/">INICIO</a></li>
+                    <li><a href="/definicion-indicador/">INDICADORES: MERCADOLABORAL</a></li>
+                    <li><a href="/comercio-exterior/">SERIES HISTÓRICAS: COMERCIO EXTERIOR</a></li>
+                    <li><a href="/recursos/boletines/">RECURSOS</a></li>
+                    {% if user.is_superuser %}
+                    <li><a href="/subir_csv/">ACTUALIZAR DATOS INDICADOR</a></li>
+                    <li><a href="/subir_csv_comercio/">ACTUALIZAR DATOS COMERCIO</a></li>
+                    <li><a id="cache_link" href="/cache/">CACHÉ</a></li>
+                    {%endif%}
+                </ul>
+            </div><!-- #nav-mnu.navbar.navbar-default -->
+            {% block content %}{% endblock %}
+            <footer>
+                <div class="contour-footer text-center">
+                    <a target="_blank" href="http://www.ciec.espol.edu.ec/"> Website de Ciec </a>|
+                    <a href="/contactos/"> Contáctenos </a>|
+                </div><!-- .contour-footer.text-center -->
+                <div class="box-footer text-center">
+                    <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
+                </div><!-- .box-footer.text-center -->
+            </footer>
+        </div><!-- .contour-main -->
+    </div><!-- .container -->
 
-    	<!-- Core Scripts - Include with every page -->
-    	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-    	<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    	<script>
-		$(function(){
-			setNavigation();
-		});
+    <!-- Core Scripts - Include with every page -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            setNavigation();
+        });
 
-        	function setNavigation() {
-		      var path = window.location.pathname;
-		      path = path.replace(/\?#$/, "");
-		      path = decodeURIComponent(path);
-
-            		$("#tabs-menu a").each(function () {
-                		var href = $(this).attr('href');
-            			if(path.substring(0,href.length) === href){
-                    		$(this).closest('li').addClass('active');
-                		}
-            		});
-        	}
-    	</script>
-    	<!-- Page Specific Scripts -->
-    	{% block extraScripts %}{% endblock %}
+        function setNavigation() {
+            var path = window.location.pathname;
+            path = path.replace(/\?#$/, "");
+            path = decodeURIComponent(path);
+	$("#tabs-menu a").each(function () {
+                var href = $(this).attr('href');
+                if(path.substring(0,href.length) === href){
+                    $(this).closest('li').addClass('active');
+                }
+	});
+        }
+    </script>
+    <!-- Page Specific Scripts -->
+    {% block extraScripts %}{% endblock %}
 </body>
 </html>

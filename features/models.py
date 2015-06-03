@@ -11,5 +11,5 @@ class Description(models.Model):
         verbose_name_plural = "Descripciones"
         db_table = 'features_description'
 
-        def __unicode__(self):
-            return self.detail
+    def __unicode__(self):
+        return self.detail
