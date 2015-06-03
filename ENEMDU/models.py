@@ -2,42 +2,42 @@
 from django.db import models
 
 class string_with_title(str):
-    	def __new__(cls, value, title):
+	def __new__(cls, value, title):
 		instance = str.__new__(cls, value)
 		instance._title = title
 		return instance
-                                
-    	def title(self):
-        	return self._title
-                             
-    	__copy__ = lambda self: self
-    	__deepcopy__ = lambda self, memodict: self
+																
+	def title(self):
+			return self._title
+														 
+	__copy__ = lambda self: self
+	__deepcopy__ = lambda self, memodict: self
 
 
 class Structure(models.Model):
-    	TRIM_CHOICES  =  (
-        	( 1 , 1 ),
-        	( 2 , 2 ),
-        	( 3 , 3 ),
-        	( 4,  4 ),
-    	)
-    	REPRESENT_CHOICES  =  (
-       	( 'Nacional' ,  'Nacional' ),
-        	( 'Urbana' ,  'Urbana' ),
-        	( 'Rural' ,  'Rural' ),
-    	)
+	TRIM_CHOICES  =  (
+		( 1 , 1 ),
+		( 2 , 2 ),
+		( 3 , 3 ),
+		( 4,  4 ),
+	)
+	REPRESENT_CHOICES  =  (
+		( 'Nacional' ,  'Nacional' ),
+		( 'Urbana' ,  'Urbana' ),
+		( 'Rural' ,  'Rural' ),
+	)
 	anio = models.PositiveSmallIntegerField(verbose_name='Año')
 	trim = models.PositiveSmallIntegerField(choices = TRIM_CHOICES, default = 1, verbose_name='Trimestre')
 	represent = models.CharField(max_length=30, choices = REPRESENT_CHOICES, default = 'Nacional', verbose_name='Representatividad', null=True)
 
-    	class Meta:
+	class Meta:
 		app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
 		db_table = "enemdu_structure"
 		verbose_name = "estructura"
 		verbose_name_plural = "Estructuras"
 
-    	def __unicode__(self):
-        	return self.represent
+		def __unicode__(self):
+			return self.represent
 
 
 class Data_from_2003_4(models.Model):
@@ -136,8 +136,8 @@ class Data_from_2003_4(models.Model):
 	tipoEmpleo = models.CharField(max_length=5, null=True, blank=True)
 	tipoEmpleoDesag = models.CharField(max_length=5, null=True, blank=True)
 	sectorEmpleo = models.CharField(max_length=5, null=True, blank=True)
-      
-    	class Meta:
+			
+	class Meta:
 		app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
 		db_table = "enemdu_data_from_2003_4"
 		verbose_name = "un dato desde 2003 - 4"
@@ -241,7 +241,7 @@ class Data_from_2007_2(models.Model):
 	tipoEmpleoDesag = models.CharField(max_length=5, null=True, blank=True)
 	sectorEmpleo = models.CharField(max_length=5, null=True, blank=True)
 
-    	class Meta:
+	class Meta:
 		app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
 		db_table = "enemdu_data_from_2007_2"
 		verbose_name = "un dato desde 2007 - 2"
@@ -249,13 +249,13 @@ class Data_from_2007_2(models.Model):
 
 
 class upload_csv_file(models.Model):
-    	upload = models.FileField(upload_to='csv/')
+	upload = models.FileField(upload_to='csv/')
 
-    	class Meta:
+	class Meta:
 		app_label = string_with_title("ENEMDU", "ENEMDU (Indicadores) - Datos")
 		db_table = "enemdu_upload_csv_file"
 		verbose_name = "archivo subido txt/csv"
 		verbose_name_plural = 'Archivos subidos txt/csv'
 
-    	def __unicode__(self):
-        	return self.name
+		def __unicode__(self):
+			return self.name
