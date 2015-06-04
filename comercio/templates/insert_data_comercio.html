@@ -7,102 +7,102 @@
 {% block title %}Subida archivos Comercio{% endblock %}
 
 {% block extraCSS %}
-	<link href="{% static "css/enemdu.css" %}" rel="stylesheet"  />
-	<link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
-	<link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
-	<link href="{% static "css/jquery.bootstrap-touchspin.css" %}" rel="stylesheet"  />
+    <link href="{% static "css/enemdu.css" %}" rel="stylesheet"  />
+    <link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
+    <link href="{% static "css/bootstrap-select.min.css" %}" rel="stylesheet"  />
+    <link href="{% static "css/jquery.bootstrap-touchspin.css" %}" rel="stylesheet"  />
 {% endblock %}
 
 {% block content %}
-		<div class="content-page-2">
-		{% if upload_success %}
-            		<b id="title-content-page">Subida de archivo Exitoso</b>
-            		<hr id="separator-content-page" class="pull-left">
-            		<div class="panel-body">
-                		<div class="center">
-                    		<div class="col-lg-4"></div><!-- .col-lg-4 -->
-                    		<div class="col-lg-4">
-	                        		<br/><br/><br/>
-	                        		<span>Para subir otro archivo, por favor dar clic <a href="/subir_csv_comercio/">aquí</a></span>
-	                        		<br/><br/><br/>
-	                        		{% if actualizar %}
-	                            	<span>Si desea actualizar las exportaciones/importaciones de los diferentes estandares, dar clic <a href="/actualizar-datos/">aquí</a></span>
-	                            	<br/><br/><br/>
-	                        		{% endif %}
-                    		</div><!-- .col-lg-4 -->
-                		</div><!-- .center -->
-			</div><!-- .panel-body -->
-        	{% else %}
-	            	<b id="title-content-page">Subir archivo</b>
-	            	<hr id="separator-content-page" class="pull-left">
-            		{% if empty %}
-	            	<div class="panel-body">
-				<div class="center">
-	                        	<div class="col-lg-4"></div><!-- .col-lg-4 -->
-	                        	<div class="col-lg-4">
-	                            	<br/><br/><br/>
-	                            	<span>Error! Usted no ha seleccionado un archivo, dar clic <a href="/subir_csv_comercio/">aquí</a> para regresar</span>
-	                            	<br/><br/><br/>
-	                        	</div><!-- .col-lg-4 -->
-	                  	</div><!-- .center -->
-	            	</div><!-- .panel-body -->
-	            {% else %}      
-	            	<div id="formulario" class="panel-body">
-	            		<div class="center">
-	     		     		<form id="form_upload" method="post" action="subida_csv/" enctype="multipart/form-data">
-	                           	{% csrf_token %}
-		                   		<div class="col-lg-3">
-		                          	<span class="texto">Escoja que tabla desea actualizar los datos: </span><br/>
-						</div><!-- .col-lg-3 -->
-	                          	<select id="id_choices" class="form-control" name="choices">
-		                                <option value="1">CGCE</option>
-		                                <option value="2">CIIU3</option>
-		                                <option value="3">CPC</option>
-		                                <option value="4">CUODE</option>
-		                                <option value="5">NANDINA</option>
-		                                <option value="6">PAISES</option>
-		                                <option value="7">EQUIVALENCIA</option>
-		                                <option value="8">DATOS EXPORTACIÓN NANDINA</option>
-		                                <option value="9">DATOS IMPORTACIÓN NANDINA</option>
-	                          	</select>
-	                        		<br/><br/>           
-	                        		<div class="col-lg-3">
-		                                <span class="texto">Escoja un archivo de excel:</span><br/>
-	                          	</div><!-- .col-lg-3 -->
-	                          	<label class="btn btn-default browse-wrap">
-		                                <input id="file" name="file" type="file">
-		                                Seleccionar archivo
-	                          	</label>
-	                          	<span class="upload-path">&nbsp;&nbsp;&nbsp;No ha seleccionado un archivo </span>
-	                          	<br/><br/>
-	                        		<div class="col-lg-4"></div><!-- .col-lg-4 -->
-	                        		<div id="btn-send" class="col-lg-4">
-		                                <input class="btn btn-primary" type="submit" value="Cargar archivo"/><br/>
-	                        		</div><!-- .col-lg-4 -->
-	                        		<div class="col-lg-4"></div><!-- .col-lg-4 -->
-	                    	</form>
-	                  	</div><!-- .center -->
-	            	</div><!-- #formlario.panel-body -->
-	            {% endif %}
-      		{% endif %}
-    		</div><!-- .content-page-2 -->
+        <div class="content-page-2">
+        {% if upload_success %}
+            <b id="title-content-page">Subida de archivo Exitoso</b>
+            <hr id="separator-content-page" class="pull-left">
+            <div class="panel-body">
+                <div class="center">
+                    <div class="col-lg-4"></div><!-- .col-lg-4 -->
+                    <div class="col-lg-4">
+                        <br/><br/><br/>
+                        <span>Para subir otro archivo, por favor dar clic <a href="/subir_csv_comercio/">aquí</a></span>
+                        <br/><br/><br/>
+                        {% if actualizar %}
+                        <span>Si desea actualizar las exportaciones/importaciones de los diferentes estandares, dar clic <a href="/actualizar-datos/">aquí</a></span>
+                        <br/><br/><br/>
+                        {% endif %}
+                    </div><!-- .col-lg-4 -->
+                </div><!-- .center -->
+            </div><!-- .panel-body -->
+            {% else %}
+            <b id="title-content-page">Subir archivo</b>
+            <hr id="separator-content-page" class="pull-left">
+            {% if empty %}
+            <div class="panel-body">
+                <div class="center">
+                    <div class="col-lg-4"></div><!-- .col-lg-4 -->
+                    <div class="col-lg-4">
+                        <br/><br/><br/>
+                        <span>Error! Usted no ha seleccionado un archivo, dar clic <a href="/subir_csv_comercio/">aquí</a> para regresar</span>
+                        <br/><br/><br/>
+                    </div><!-- .col-lg-4 -->
+                </div><!-- .center -->
+            </div><!-- .panel-body -->
+            {% else %}      
+            <div id="formulario" class="panel-body">
+                <div class="center">
+                    <form id="form_upload" method="post" action="subida_csv/" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-lg-3">
+                            <span class="texto">Escoja que tabla desea actualizar los datos: </span><br/>
+                        </div><!-- .col-lg-3 -->
+                        <select id="id_choices" class="form-control" name="choices">
+                            <option value="1">CGCE</option>
+                            <option value="2">CIIU3</option>
+                            <option value="3">CPC</option>
+                            <option value="4">CUODE</option>
+                            <option value="5">NANDINA</option>
+                            <option value="6">PAISES</option>
+                            <option value="7">EQUIVALENCIA</option>
+                            <option value="8">DATOS EXPORTACIÓN NANDINA</option>
+                            <option value="9">DATOS IMPORTACIÓN NANDINA</option>
+                        </select>
+                            <br/><br/>           
+                            <div class="col-lg-3">
+                                <span class="texto">Escoja un archivo de excel:</span><br/>
+                            </div><!-- .col-lg-3 -->
+                        <label class="btn btn-default browse-wrap">
+                            <input id="file" name="file" type="file">
+                            Seleccionar archivo
+                        </label>
+                        <span class="upload-path">&nbsp;&nbsp;&nbsp;No ha seleccionado un archivo </span>
+                        <br/><br/>
+                            <div class="col-lg-4"></div><!-- .col-lg-4 -->
+                            <div id="btn-send" class="col-lg-4">
+                                <input class="btn btn-primary" type="submit" value="Cargar archivo"/><br/>
+                            </div><!-- .col-lg-4 -->
+                            <div class="col-lg-4"></div><!-- .col-lg-4 -->
+                    </form>
+                </div><!-- .center -->
+            </div><!-- #formlario.panel-body -->
+            {% endif %}
+        {% endif %}
+        </div><!-- .content-page-2 -->
 {% endblock %}
 
 {% block extraScripts %}
-	<script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
-	<script src="{% static "js/jquery.bootstrap-touchspin.js" %}" type="text/javascript"></script>
-	<script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
-	<script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js"></script>
-	<script type="text/javascript">
-		$('.selectpicker').selectpicker();
-	    	$('input[type="file"]').change(function(){
-	      		$(this).closest('.browse-wrap').next('.upload-path').text(this.files[0].name);
-	    	});
-	    	$('#btn_update').click(function(){
-	        	var id_options_update = $('#options_update option:selected').attr('value');
-	        	console.log(id_options_update);
-	        	$.getJSON('/actualizar-datos/', {'valor_k':id_options_update}, function(data){});
-	    	});
-	</script>
+    <script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/jquery.bootstrap-touchspin.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
+    <script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $('.selectpicker').selectpicker();
+        $('input[type="file"]').change(function(){
+            $(this).closest('.browse-wrap').next('.upload-path').text(this.files[0].name);
+        });
+        $('#btn_update').click(function(){
+            var id_options_update = $('#options_update option:selected').attr('value');
+            console.log(id_options_update);
+            $.getJSON('/actualizar-datos/', {'valor_k':id_options_update}, function(data){});
+        });
+    </script>
 {% endblock %}

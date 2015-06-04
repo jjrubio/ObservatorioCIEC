@@ -255,8 +255,8 @@ def modelo_ind(y,X,Z,fexp,conf=0.95,colin_thres=30):
         for iX in range(colX-1):
             for iZ in range(colZ-1):
                 T=np.concatenate((T,(X[:,iX+1]*Z[:,iZ+1]).reshape(n,1)),axis=1)
-    nOut=colX*colZ
-    df=n-(colX-1)-(colZ-1)-(colX-1)*(colZ-1)-1
+        nOut=colX*colZ
+        df=n-(colX-1)-(colZ-1)-(colX-1)*(colZ-1)-1
 
     # Este procedimiento es equivalente a la "pweights regression" en Stata 13
     # validando que no existan cruces (grupos) con cruces con "pocos" elementos
@@ -400,7 +400,7 @@ def modelo_final(y, X, Z, fexp, conf = 0.95, colin_thres = 30):
                     x_dict[i,1] = 0
                     X[:,i] = x_temp
                     
-                    break
+                break
 
         if z_tot[0] < 30:
             flag_z += 1
@@ -411,7 +411,7 @@ def modelo_final(y, X, Z, fexp, conf = 0.95, colin_thres = 30):
                     z_dict[i,1] = 0
                     Z[:,i] = z_temp
 
-                    break
+                break
         #Calcular los predicts con input ordenado
         P = modelo_ind(y, X, Z, fexp, conf, colin_thres)
         #reordenar los predict
@@ -491,7 +491,7 @@ def get_column_2_3(data, disintegrations, represent_int):
 
         for i in range(0, len(filter_column_2_by)):
             if column_2_aux[i] == None:
-                    pass
+                pass
             else:
                 column_2_array[i] = [1 if x == column_2_aux[i] else 0 for x in types_option_1]
 
