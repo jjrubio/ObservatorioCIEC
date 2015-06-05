@@ -307,6 +307,8 @@ class upload_csv_file(models.Model):
     upload = models.FileField(upload_to='csv/')
 
     class Meta:
+        app_label = string_with_title ("Comercio","Comercio Exterior - Datos") 
+        db_table = "upload_csv_file"
         verbose_name = "subida archivo excel"
         verbose_name_plural = 'Subida archivos excel'
 

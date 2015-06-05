@@ -10,7 +10,6 @@ class Bulletin(models.Model):
         db_table = "resources_bulletin"
         verbose_name = "boletín"
         verbose_name_plural = "Boletines"
-        db_table = 'resources_bulletin'
 
     def __unicode__(self):
         return ("Boletin Edicion no."+unicode(self.id))

@@ -35,8 +35,9 @@ class Subcategory(models.Model):
     category = models.ForeignKey(Category, verbose_name='Categoría')
 
     class Meta:
+        db_table = 'indicators_subcategory'
         verbose_name = "subcategoría"
-    verbose_name_plural = "Subcategorías"
+        verbose_name_plural = "Subcategorías"
 
     def __unicode__(self):
         return self.name
@@ -50,9 +51,9 @@ class Indicator(models.Model):
     icon = models.CharField(max_length=20, verbose_name='Nombre del ícono')
     subcategory = models.ForeignKey(Subcategory, verbose_name='Subcategoría')
     counter = models.PositiveIntegerField(verbose_name='# de veces calculada')
-    disintegrations = models.ManyToManyField(Disintegration, verbose_name='Desagregaciones')
 
     class Meta:
+        db_table = 'indicators_indicator'
         verbose_name = "indicador"
         verbose_name_plural = "Indicadores"
         ordering = ["-counter"]
@@ -65,9 +66,13 @@ class Method(models.Model):
     fecha_1 = models.CharField(max_length=15, verbose_name='Fecha 1')
     fecha_2 = models.CharField(max_length=15, verbose_name='Fecha 2')
     description = models.TextField(verbose_name='Descripción')
-    indicador = models.ManyToManyField(Indicator, related_name='indicador')
-    disintegrations = models.ManyToManyField(Disintegration, verbose_name='Desagregaciones')
+    indicator = models.ManyToManyField(Indicator, through='Metodologia_Indicator')
 
     class Meta:
         verbose_name = "Metodología"
         verbose_name_plural = "Metodologías"
+
+class Metodologia_Indicator(models.Model):
+    method = models.ForeignKey(Method)
+    indicator = models.ForeignKey(Indicator)
+    disintegration = models.ForeignKey(Disintegration)
