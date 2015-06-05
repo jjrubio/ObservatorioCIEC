@@ -609,89 +609,31 @@ def list_by_no_denied(request):
     id_desagre = request.GET['id_desagregacion']
     datos = request.GET.getlist('data_filters[]')
 
-    #Validacion entre desagregaciones
-    if id_desagre == '1':
-        disintegrations = Disintegration.objects.exclude(id__in=[2, 4])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '2':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[1, 4, 5, 6, 8, 10, 14])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '3':
-        disintegrations = Disintegration.objects.all()
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '4':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[1, 2, 5, 6, 8, 10, 14])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '5':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[2, 4, 6, 8, 9, 10, 14])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '6':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[2, 4, 5, 8, 9, 10, 14])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '7':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[8, 11, 13, 14])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '8':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[2, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '9':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[5, 6, 8, 10, 11, 13, 14])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '10':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[2, 4, 5, 6, 8, 9, 11, 12, 13, 14])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '11':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[7, 8, 9, 10, 12, 13, 14])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '12':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[8, 10, 11, 13, 14])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '13':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[7, 8, 9, 10, 11, 12, 14])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
-    elif id_desagre == '14':
-        disintegrations = Disintegration.objects.exclude(
-            id__in=[2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
-        ids_value_list = disintegrations.values_list('id', flat=True)
-        result = indicador_desagregacion(datos, ids_value_list)
-        data = serializers.serialize('json', result)
+    desa = int(id_desagre)
+    result  = []
+    result_data = []
+
+    by_id_denied = Validation.objects.values_list('by_id_negado_id', flat=True).filter(by_id_id=desa)
+
+    for i in range(0, len(by_id_denied)):
+        result.append(int(by_id_denied[i]))
+
+    if not result:
+        for j in range(0, len(datos)):
+            result_data.append(int(datos[j]))
+        result_data.append(desa)
+        disin = Disintegration.objects.filter(id__in=result_data)
+    else:
+        for i in range(0, len(result)):
+            for j in range(0, len(datos)):
+                if result[i] == int(datos[j]):
+                    result_data.append(int(datos[j]))
+        result_data.append(desa)
+        
+
+    disin = Disintegration.objects.filter(id__in=result_data)
+    data = serializers.serialize('json', disin)
+    
     return HttpResponse(data, content_type='application/json')
 
 
@@ -787,34 +729,17 @@ def get_filter():
 
 def indicador_filtro(request):
     id_indicador = request.GET['id_indicator']
+    indicador_escogido = int(id_indicador)
+    result_id_disintegration = []
 
-    if id_indicador == '1':
-        disintegrations = Disintegration.objects.exclude(id__in=[4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
-        data = serializers.serialize('json', disintegrations)
-    elif id_indicador == '2' or id_indicador == '3' or id_indicador == '4' or id_indicador == '5' or id_indicador == '6' or id_indicador == '7' or id_indicador == '8' or id_indicador == '9' or id_indicador == '10' or id_indicador == '11' or id_indicador == '12' or id_indicador == '13' or id_indicador == '14' or id_indicador == '15' or id_indicador == '16' or id_indicador == '17' or id_indicador == '18' or id_indicador == '19' or id_indicador == '20' or id_indicador == '21' or id_indicador == '22' or id_indicador == '23' or id_indicador == '24' or id_indicador == '25' or id_indicador == '26' or id_indicador == '43':
-        disintegrations = Disintegration.objects.exclude(id__in=[7, 8, 9, 10, 11, 12, 13, 14])
-        data = serializers.serialize('json', disintegrations)
-    elif id_indicador == '27':
-        disintegrations = Disintegration.objects.exclude(id__in=[7, 8, 9, 11, 12, 13, 14])
-        data = serializers.serialize('json', disintegrations)
-    elif id_indicador == '28' or id_indicador == '29' or id_indicador == '30' or id_indicador == '31':
-        disintegrations = Disintegration.objects.exclude(id__in=[11, 12, 13, 14])
-        data = serializers.serialize('json', disintegrations)
-    elif id_indicador == '32':
-        disintegrations = Disintegration.objects.exclude(id__in=[11, 13, 14])
-        data = serializers.serialize('json', disintegrations)
-    elif id_indicador == '33' or id_indicador == '34' or id_indicador == '35' or id_indicador == '36' or id_indicador == '37' or id_indicador == '38':
-        disintegrations = Disintegration.objects.exclude(id__in=[10, 11, 13, 14])
-        data = serializers.serialize('json', disintegrations)
-    elif id_indicador == '39' or id_indicador == '40' or id_indicador == '41':
-        disintegrations = Disintegration.objects.exclude(id__in=[6, 7, 8, 9, 10])
-        data = serializers.serialize('json', disintegrations)
-    elif id_indicador == '42':
-        disintegrations = Disintegration.objects.exclude(id__in=[2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
-        data = serializers.serialize('json', disintegrations)
-    elif id_indicador == '44' or id_indicador == '45' or id_indicador == '46' or id_indicador == '47' or id_indicador == '48' or id_indicador == '49':
-        disintegrations = Disintegration.objects.exclude(id__in=[7, 8, 9, 10, 11, 13, 14])
-        data = serializers.serialize('json', disintegrations)
+    #Borrar, solo por prueba temporal
+    method_id_escogido = 3
+    #End
+
+    disintegrations = Metodologia_Indicator.objects.values_list('disintegration', flat=True).filter(indicator=indicador_escogido).filter(method=method_id_escogido)
+    result_final = Disintegration.objects.filter(id__in=disintegrations)
+    data = serializers.serialize('json', result_final)
+
     return HttpResponse(data, content_type='application/json')
 
 
