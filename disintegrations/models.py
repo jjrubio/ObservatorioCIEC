@@ -34,3 +34,4 @@ class Validation(models.Model):
     class Meta:
         verbose_name = 'validación'
         verbose_name_plural = 'Validaciones'
+        db_table = 'disintegrations_validation'
