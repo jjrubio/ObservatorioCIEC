@@ -12,6 +12,16 @@
     outline-style: none;
 }
 
+#ul_graph_comercio > li > a{
+    color: #777;
+}
+
+#ul_graph_comercio > li.active > a{
+    color: #001C43;
+    font-weight: bold;
+    outline-style: none;
+}
+
 #menu_adicional{
     float: left;
     margin: 30px 10px 0px 100px;
@@ -50,11 +60,12 @@ label{
 }
 
 #loading{
-    margin-top: 8em;
+    color: black;
+    margin: 5em;
 }
 
 #tables{
-    margin-top: 10em;
+    /*margin-top: 10em;*/
 }
 
 #div_graph_comercio{

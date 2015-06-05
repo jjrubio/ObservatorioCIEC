@@ -7,6 +7,7 @@ $(document).ready(function() {
     var tabs_2 = "tab_codsub";
 
     $('#endDate').attr("value", year+"/01");
+    // $("#loading").css("display","none");
 
 
     $('#search_by').change(function(){
@@ -98,15 +99,22 @@ $(document).ready(function() {
 
 
     $('#a-parametros').click( function(){
-            $('#parametros').removeClass('collapse');
-        $('#parametros').addClass('collapse in');  
+        $('#parametros').removeClass('collapse');
+        $('#parametros').addClass('collapse in'); 
+        $('#parametros').removeClass('collapse in');
+        $('#parametros').addClass('collapse');    
+
+
     });
 
 
-    $('#a-resultados').click( function(){
-        $('#resultados').removeClass('collapse');
-        $('#resultados').addClass('collapse in');               
-    });
+    // $('#a-resultados').click( function(){
+
+    //     $('#resultados').removeClass('collapse');
+    //     $('#resultados').addClass('collapse in'); 
+    //     $('#parametros').removeClass('collapse in');
+    //     $('#parametros').addClass('collapse');            
+    // });
 
 
     $('#btn_search').click(function(){
@@ -121,14 +129,21 @@ $(document).ready(function() {
         var txt_agregacion;
         var bandera;
 
-        $("#datos").hide();
+        $('#resultados').removeClass('collapse');
+        $('#resultados').addClass('collapse in'); 
+        $('#parametros').removeClass('collapse in');
+        $('#parametros').addClass('collapse');    
+
+        // $("#loading").show();
+        // $("#loading").css("visibility","visible");
+        $("#loading").css("display","inline");
         $("#tables").hide();
-        $("#loading").show();
+        $('#graph').hide();
 
         if($("#checkbox").is(':checked')) {
-                bandera = 1;
+            bandera = 1;
         } else {
-                bandera = 0;
+            bandera = 0;
         }
 
         if(txt_agregacion < 0){
@@ -159,12 +174,13 @@ $(document).ready(function() {
             function(data){
                 table_A(data, standar);
                 table_B(data, option, tipo, standar, checkbox_pais);
-                $('#loading').hide();
+                
                 $('#tables').show();
                 $('#graph').show();
-                $('#menu_adicional').show();
 
                 grafico();
+                // $('#loading').hide();
+                $("#loading").css("display","none");
             });
         }
     });

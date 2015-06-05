@@ -313,7 +313,6 @@ function table(data){
                     if(data[i][2][j] == 0){
                         $('#periodo tr:last-child td:last-child').after('<td>   </td>');
                     }else{
-                        console.log(data);
                         $('#periodo tr:last-child td:last-child').after('<td>'+data[i][3][j][k].toFixed(6)+'</td>');
                     }
                 }

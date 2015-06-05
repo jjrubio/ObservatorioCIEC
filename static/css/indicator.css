@@ -165,3 +165,13 @@
 .fa-info-circle {
     margin-top: 10px;
 }
+
+#ul_desagregaciones > li > a{
+    color: #777;
+}
+
+#ul_desagregaciones > li.active > a{
+    color: #001C43;
+    font-weight: bold;
+    outline-style: none;
+}
