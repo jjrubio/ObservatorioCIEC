@@ -395,7 +395,6 @@ function graphs(data){
 
         //Validar que se grafica
         if(totalFexp != 0){
-
                 var typeID = "#"+type[i].replace(/ /g,"_")
                 $(typeID).append('<div id="'+type_desagre[j].replace(/ /g,"_")+'_'+(i+1)+'" class="graph text-center" ></div>');
 

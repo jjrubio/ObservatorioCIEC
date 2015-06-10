@@ -1,10 +1,10 @@
-$(document).ready(function() {
+var tabs_1 = "tab_exp";
+var tabs_2 = "tab_codsub";
 
+$(document).ready(function() {
     var date = new Date();
     var year = date.getFullYear();
     var textoFiltro = "";
-    var tabs_1 = "tab_exp";
-    var tabs_2 = "tab_codsub";
 
     $('#endDate').attr("value", year+"/01");
     // $("#loading").css("display","none");
@@ -107,16 +107,6 @@ $(document).ready(function() {
 
     });
 
-
-    // $('#a-resultados').click( function(){
-
-    //     $('#resultados').removeClass('collapse');
-    //     $('#resultados').addClass('collapse in'); 
-    //     $('#parametros').removeClass('collapse in');
-    //     $('#parametros').addClass('collapse');            
-    // });
-
-
     $('#btn_search').click(function(){
         var tipo = tabs_1;
         var option = tabs_2;
@@ -134,8 +124,6 @@ $(document).ready(function() {
         $('#parametros').removeClass('collapse in');
         $('#parametros').addClass('collapse');    
 
-        // $("#loading").show();
-        // $("#loading").css("visibility","visible");
         $("#loading").css("display","inline");
         $("#tables").hide();
         $('#graph').hide();
@@ -178,8 +166,7 @@ $(document).ready(function() {
                 $('#tables').show();
                 $('#graph').show();
 
-                grafico();
-                // $('#loading').hide();
+                grafico(data);
                 $("#loading").css("display","none");
             });
         }
@@ -407,31 +394,97 @@ function()
 $("#txt_filtro_text").ForceTextOnly();
 
 
-function grafico(){
+function grafico(data){
+    total_productos = data[0][0].length;
+    total_datos = data[1][0].length;
+    tipo = tabs_1;
+
+    $('#graph').perfectScrollbar('destroy');
     $('#div_graph_comercio').perfectScrollbar('destroy');
-    $('#div_graph_comercio').empty()
-    $('#div_graph_comercio').perfectScrollbar();
+    $('#div_graph_comercio').empty();
+    $('#ul_graph_comercio').empty();
 
-    graph_valuesX = ["1990-02", "1990-03"];
-    data_ind_serie = [3, 4];
+    if(total_datos > 0){
+        fecha_inicial = data[1][0][0][0];
+        fecha_final = data[1][0][total_datos-1][0];
 
+        num_productos = 0;
+        num_productos_con_datos = 0;
+
+        do{
+            for(var i=0; i < total_productos; i++)
+            {
+                producto = data[0][0][i][0];
+                productoFechas = [];
+                productoFOBs = [];
+
+                for(var j=0; j < total_datos; j++){
+                    subpartida = data[1][0][j][1];
+                    fecha_sub = data[1][0][j][0];
+                    fob_sub = data[1][0][j][3];
+
+                    if(producto == (subpartida.substring(0, subpartida.length - 2)))
+                    {
+                        productoFechas.push(fecha_sub);
+                        productoFOBs.push(fob_sub);
+                    }
+                }
+
+                if(productoFechas.length > 0)
+                {
+                    num_productos_con_datos++;
+                    link_ul = "producto"+(num_productos_con_datos);
+                    $("#ul_graph_comercio").append('<li><a href="#'+link_ul+'" role="tab" data-toggle="tab"> Producto #' +num_productos_con_datos+'</a></li>')
+                    $("#div_graph_comercio").append('<div class="tab-pane text-center" id="'+link_ul+'"></div>');
+                    graph_title = "Exportación de "  + data[0][0][i][1];  
+                    graph_subtitle = "desde " + fecha_inicial + " hasta " + fecha_final;
+
+                    if (productoFechas.length  <= 12) 
+                    {
+                        graph_width = 900;
+                    }else{
+                        graph_width = productoFechas.length * 75;
+                    }
+
+                    graph_valuesX = productoFechas;
+                    graph_valuesY = productoFOBs;
+
+                    dibujar_grafico(link_ul, graph_title, graph_subtitle, graph_width, graph_valuesX, graph_valuesY);
+
+                    if (num_productos_con_datos == 8){
+                        break;
+                    }
+                }
+            }
+
+            $("#ul_graph_comercio li:first-child").addClass( "active" );
+            $("#div_graph_comercio .tab-pane:first-child").addClass( "active" );
+            $('#graph').perfectScrollbar();
+            $('#div_graph_comercio').perfectScrollbar();
+
+        }while(false);
+    }
+}
+
+
+function dibujar_grafico(div, title, subtitle, width, valuesX, valuesY){
     var options = {
         chart: {
-            renderTo: "div_graph_comercio",
+            renderTo: div,
             type: 'spline',
-            width: 800,
+            width: width,
             animation: false,
         },
         title: {
-            text: "Fecha vs FOB",
+            text: title,
             x: -20
         },
         subtitle: {
-            text: "none",
+            text: subtitle,
             x: -20
         },
         xAxis: {
-            categories: graph_valuesX,
+            categories: valuesX,
             title: {
                 enabled: true,
                 text: 'Fecha',
@@ -464,8 +517,8 @@ function grafico(){
             },
         },
         series: [{
-            name: "Fechas",
-            data: data_ind_serie,
+            name: "Producción",
+            data: valuesY,
             dataLabels: {
                 enabled: true,
                 color: 'black',
