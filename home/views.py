@@ -32,4 +32,6 @@ def timeline (request):
     template = 'timeline.html'
     return render_to_response(template, context_instance = RequestContext(request,locals()))
 
-
+def about(request):
+    template = 'about.html'
+    return render_to_response(template, context_instance = RequestContext(request,locals()))  
