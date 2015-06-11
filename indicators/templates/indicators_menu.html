@@ -41,4 +41,16 @@
                       	{% endfor %}
                       	</select>
                 	</div><!-- .opcion-menu.pull-left -->
+                  <div class="opcion-menu pull-left">
+                    <b>Metodología</b><br>
+                    <select id="method" class="selectpicker show-menu-arrow span2"  data-live-search="true">
+                        {% for m in json.3 %}
+                            {% if json.4.0.selected_method == m.id %}
+                                <option id="{{m.id}}" value="{{forloop.counter}}" selected="selected" >{{m.description}}</option>
+                            {% else %}
+                                <option id="{{m.id}}" value="{{forloop.counter}}" >{{m.description}}</option>
+                            {% endif %}
+                        {% endfor %}
+                     </select>
+                </div>
           	</div><!-- .row -->

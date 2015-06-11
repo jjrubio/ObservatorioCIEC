@@ -33,6 +33,7 @@ class Subcategory(models.Model):
     name = models.CharField(max_length=50, verbose_name='Nombre')
     icon = models.CharField(max_length=20, verbose_name='Nombre del ícono')
     category = models.ForeignKey(Category, verbose_name='Categoría')
+    num_max_desagregations = models.PositiveSmallIntegerField()
 
     class Meta:
         db_table = 'indicators_subcategory'

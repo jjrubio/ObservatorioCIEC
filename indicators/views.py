@@ -18,7 +18,7 @@ from django.core.cache import cache
 import time
 from datetime import datetime
 from django.contrib.sessions.models import Session
-from django.db.models import Sum
+from django.db.models import Sum, Count
 
 
 class PythonObjectEncoder(JSONEncoder):
@@ -33,20 +33,24 @@ def as_python_object(dct):
     return dct
 
 
-def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1'):
+def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1', method_id='1'):
     json = indicators_detail(cat_id, subcat_id, ind_id)
     indicators = Indicator.objects.all()
     subcategories = Subcategory.objects.all()
     categories = Category.objects.all()
+    method = Method.objects.all()
     template = "indicator_def.html"
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
 
-def indicators_detail(cat_id, subcat_id, ind_id):
+def indicators_detail(cat_id, subcat_id, ind_id, method_id):
     message = []
     subcategoriesArray = []
     indicatorsArray = []
     indicatorSelectArray = []
+    id_method = []
+    methodArray = []
+    methodSelectArray = []
 
     posSubcat = int(subcat_id)
     posInd = int(ind_id)
@@ -54,6 +58,14 @@ def indicators_detail(cat_id, subcat_id, ind_id):
     subcategories = Subcategory.objects.filter(category_id=cat_id)
     indicators = Indicator.objects.filter(subcategory_id=subcategories[posSubcat - 1].id)
     indicatorSelect = Indicator.objects.get(id=indicators[posInd - 1].id)
+    method = Metodologia_Indicator.objects.values_list('method', flat=True).filter(indicator=indicators[posInd - 1].id).annotate(contador=Count('method'))
+
+    if not method:
+        method_allow = Method.objects.all()
+    else:
+        for i in range(0, len(method)):
+            id_method.append(method[i])
+        method_allow = Method.objects.filter(id__in=id_method)
 
     for subcat in subcategories:
         dict_subcat = {}
@@ -69,6 +81,16 @@ def indicators_detail(cat_id, subcat_id, ind_id):
         dict_ind['icon'] = ind.icon
         indicatorsArray.append(dict_ind)
 
+    for m in method_allow:
+        dict_method = {}
+        dict_method['id'] = m.id
+        dict_method['description'] = m.description
+        methodArray.append(dict_method)
+
+    dict_methodSelect = {}    
+    dict_methodSelect['selected_method'] = int(method_id)
+    methodSelectArray.append(dict_methodSelect)
+
     dict_indSelect = {}
     dict_indSelect['id'] = indicatorSelect.id
     dict_indSelect['name'] = indicatorSelect.name
@@ -82,9 +104,11 @@ def indicators_detail(cat_id, subcat_id, ind_id):
     message.append(subcategoriesArray)
     message.append(indicatorsArray)
     message.append(indicatorSelectArray)
+    message.append(methodArray)
+    message.append(methodSelectArray)
     return message
 
-def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
+def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1', method_id='1'):
     permiso = False
     if request.session.get('last_visit'):
         last_visit_time = request.session.get('last_visit')
@@ -111,7 +135,8 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1'):
     subcategories = Subcategory.objects.all()
     categories = Category.objects.all()
     disintegrations = Disintegration.objects.all()
-    method_option = get_method_option(json[2][0]['id'])
+    method = Method.objects.all()
+    # method_option = get_method_option(json[2][0]['id'])
     all_years = get_years_list()
     template = "indicator_calc.html"
     return render_to_response(template, context_instance=RequestContext(request, locals()))
@@ -139,6 +164,7 @@ def calc_result(request):
     trimEnd = request.GET['trimEnd']
     confidence_level = request.GET['confidence_level']
     disintegrations = request.GET.getlist('disintegrations[]')
+    age = request.GET['age']
 
     indicator_int = int(indicator)
     represent_int = int(represent)
@@ -148,6 +174,7 @@ def calc_result(request):
     yearEnd_int = int(yearEnd)
     trimEnd_int = int(trimEnd)
     confidence_level_int = float(confidence_level)/100
+    age_int = int(age)
 
     if method_int == 1:
         data_ENEMDU = Data_from_2003_4
@@ -156,19 +183,19 @@ def calc_result(request):
 
     if not len(disintegrations) == 0:
         if len(disintegrations) == 1:
-            cache_value = '%s_%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, disintegrations[0])
+            cache_value = '%s_%s_%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, disintegrations[0]. age_int)
             if(int(disintegrations[0]) == 2):
                 data_ENEMDU = get_data_by_represent(data_ENEMDU, represent_int)
             else:
                 data_ENEMDU = data_ENEMDU.objects.all()
         else:
-            cache_value = '%s_%s_%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, disintegrations[0], disintegrations[1])
+            cache_value = '%s_%s_%s_%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, disintegrations[0], disintegrations[1],age_int)
             if(int(disintegrations[0]) == 2 or int(disintegrations[1]) == 2):
                 data_ENEMDU = get_data_by_represent(data_ENEMDU, represent_int)
             else:
                 data_ENEMDU = data_ENEMDU.objects.all()
     else:
-        cache_value = '%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int)
+        cache_value = '%s_%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, age_int)
         data_ENEMDU = data_ENEMDU.objects.all()
 
     data_result = cache.get(cache_value)
@@ -187,7 +214,7 @@ def calc_result(request):
                 if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
                     or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
 
-                    data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][2]).exclude(**get_filter()[indicator_int][3]).order_by('fexp')
+                    data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][3]).filter(edad__gte=age_int).exclude(**get_filter()[indicator_int][4]).order_by('fexp')
                     column_1 = get_column_1(data_byWhere, method_int, indicator_int)
                     columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
                     column_2 = columns_2_3[0]
@@ -467,16 +494,16 @@ def modelo_final(y, X, Z, fexp, conf = 0.95, colin_thres = 30):
 
 def get_column_1(data, method_int, indicator_int):
     if method_int == 1:
-        if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18):
+        if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18 or indicator_int == 74 or indicator_int == 75):
             column_1_a = data.values_list(get_filter()[indicator_int][0], flat=True)
-            column_1_b = data.values_list(get_filter()[indicator_int][4], flat=True)
+            column_1_b = data.values_list(get_filter()[indicator_int][5], flat=True)
             column_1 = [(x * y) for x, y in zip(column_1_a, column_1_b)]
         else:
             column_1 = data.values_list(get_filter()[indicator_int][0], flat=True)
     else:
-        if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18):
+        if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18 or indicator_int == 74 or indicator_int == 75):
             column_1_a = data.values_list(get_filter()[indicator_int][1], flat=True)
-            column_1_b = data.values_list(get_filter()[indicator_int][4], flat=True)
+            column_1_b = data.values_list(get_filter()[indicator_int][5], flat=True)
             column_1 = [(x * y) for x, y in zip(column_1_a, column_1_b)]
         else:
             column_1 = data.values_list(get_filter()[indicator_int][1], flat=True)
@@ -666,6 +693,16 @@ def get_column_name_option(id_desagregation):
         result = 'tipo_deso'
     elif id_desagregation == 14:
         result = 'condInact'
+    elif id_desagregation == 15:
+        result = 'zonaPlanificacion'
+    elif id_desagregation == 16:
+        result = 'jefeHogar'
+    elif id_desagregation == 17:
+        result = 'tipoEmpleo'
+    elif id_desagregation == 18:
+        result = 'tipoEmpleoDesag'
+    elif id_desagregation == 19:
+        result = 'sectorEmpleo'
     else:
         result = ''
     return result
@@ -674,67 +711,97 @@ def get_column_name_option(id_desagregation):
 def get_filter():
 
     data ={
-        1: ['pet', 'pet', {}, {}],
-        2: ['pea', 'pea', {}, {'pea' : None}],
-        3: ['pea', 'pea', {'pet' : '1'}, {}],
-        4: ['pei', 'pei', {'pet' : '1'}, {}],
-        5: ['ocupa', 'ocupa', {'pet' : '1'}, {}],
-        6: ['ocupa', 'ocupa', {'pea' : '1'}, {}],
-        7: ['oplenos', 'oplenos', {'pea' : '1'}, {}],
-        8: ['', 'ocupa', {'pea' : '1'}, {}, 'sect_formal'],
-        9: ['ocupa', 'ocupa', {'pea' : '1'}, {}, 'sect_informal'],
-        10: ['ocupa', 'ocupa', {'pea' : '1'}, {}, 'sect_srvdom'],
-        11: ['suboc', 'suboc', {'pea' : '1'}, {}],
-        12: ['suboc1', 'suboc1', {'pea' : '1'}, {}],
-        13: ['', 'suboc2', {'pea' : '1'}, {}],
-        14: ['sub_inv', '', {'pea' : '1'}, {}],
-        15: ['sub_informal', '', {'pea' : '1'}, {}],
-        16: ['suboc', '', {'pea' : '1'}, {}, 'sect_moderno'],
-        17: ['sub_inv', '', {'pea' : '1'}, {}, 'sect_moderno'],
-        18: ['suboc1', '', {'pea' : '1'}, {}, 'sect_moderno'],
-        19: ['deso', 'deso', {'pea' : '1'}, {}],
-        20: ['', 'deaboc1', {'pea' : '1'}, {}],
-        21: ['', 'deaboc2', {'pea' : '1'}, {}],
-        22: ['deso1', 'deso1', {'pea' : '1'}, {}],
-        23: ['deso2', 'deso2', {'pea' : '1'}, {}],
-        24: ['rentista', 'rentista', {'pei' : '1'}, {'rentista' : None}],
-        25: ['jubil', 'jubil', {'pei' : '1'}, {'jubil' : None}],
-        26: ['estudiant', 'estudiant', {'pei' : '1'}, {'estudiant' : None}],
-        27: ['amaCasa', 'amaCasa', {'pei' : '1'}, {'amaCasa' : None}],
-        28: ['incapacit', 'incapacit', {'pei' : '1'}, {'incapacit' : None}],
-        29: ['otro', 'otro', {'pei' : '1'}, {'otro' : None}],
-        30: ['oplenos', 'oplenos', {'ocupa' : '1'}, {}],
-        31: ['suboc', 'suboc', {'ocupa' : '1'}, {}],
-        32: ['ingrl', 'ingrl', {'ocupa' : '1'}, {'ingrl' : None}],
-        33: ['', 'satis_laboral', {'ocupa' : '1'}, {'satis_laboral' : None}],
-        34: ['', 'descon_bajos_ingresos', {'ocupa' : '1'}, {'descon_bajos_ingresos' : None}],
-        35: ['', 'descon_horarios', {'ocupa' : '1'}, {'descon_horarios' : None}],
-        36: ['', 'descon_estabil', {'ocupa' : '1'}, {'descon_estabil' : None}],
-        37: ['', 'descon_amb_laboral', {'ocupa' : '1'}, {'descon_amb_laboral' : None}],
-        38: ['', 'descon_activ', {'ocupa' : '1'}, {'descon_activ' : None}],
-        39: ['anosaprob', 'anosaprob', {}, {'anosaprob' : None}],
-        40: ['analfabeta', 'analfabeta', {}, {'analfabeta' : None}],
-        41: ['experiencia', 'experiencia', {}, {'experiencia' : None}],
-        42: ['migracion_extranjera', 'migracion_extranjera', {}, {'migracion_extranjera' : None}],
-        43: ['migracion_rural_urbano', 'migracion_rural_urbano', {}, {'migracion_rural_urbano' : None}],
-        44: ['tamano_hogar', 'tamano_hogar', {'rela_jef' : '1'}, {}],
-        45: ['hogar_completo', 'hogar_completo', {'rela_jef' : '1'}, {}],
-        46: ['hogar_noFamiliar', 'hogar_noFamiliar', {'rela_jef' : '1'}, {}],
-        47: ['ingreso_hogar', 'ingreso_hogar', {'rela_jef' : '1'}, {}],
-        48: ['part_quehaceres', 'part_quehaceres', {}, {'part_quehaceres' : None}],
-        49: ['horas_part_quehaceres', 'horas_part_quehaceres', {}, {'horas_part_quehaceres' : None}],
+        1: ['pet', 'pet', 'pet', {}, {}],
+        2: ['pea', 'pea', 'pea', {}, {}],
+        3: ['pea', 'pea', 'pea', {'pet' : '1'}, {}],
+        4: ['pei', 'pei', 'pei', {'pet' : '1'}, {}],
+        5: ['empleo', 'empleo', 'empleo', {'pet' : '1'},{}],
+        6: ['empleo', 'empleo', 'empleo', {'pea' : '1'},{}],
+        7: ['oplenos', 'oplenos', '', {'pea' : '1'},{}],
+        8: ['', 'empleo', 'empleo', {'pea' : '1'}, {}, 'sect_formal'],
+        9: ['empleo', 'empleo', 'empleo', {'pea' : '1'}, {}, 'sect_informal'],
+        10: ['empleo', 'empleo', 'empleo', {'pea' : '1'}, {}, 'sect_srvdom'],
+        11: ['suboc', 'suboc', '', {'pea' : '1'}, {}],
+        12: ['suboc1', 'suboc1', '', {'pea' : '1'}, {}],
+        13: ['', 'suboc2', '', {'pea' : '1'}, {}],
+        14: ['sub_inv', '', '', {'pea' : '1'}, {}],
+        15: ['sub_informal', '', '', {'pea' : '1'}, {}],
+        16: ['empleo', '', '', {'pea' : '1'}, {}, 'sect_moderno'],
+        17: ['sub_inv', '', '', {'pea' : '1'}, {}, 'sect_moderno'],
+        18: ['suboc1', '', '', {'pea' : '1'}, {}, 'sect_moderno'],
+        19: ['desempleo', 'desempleo', 'desempleo', {'pea' : '1'}, {}],
+        20: ['', 'desemab', 'desemab', {'pea' : '1'}, {}],
+        21: ['', 'desemoc', 'desemoc', {'pea' : '1'}, {}],
+        22: ['cesantes', 'cesantes', 'cesantes', {'pea' : '1'}, {}],
+        23: ['desm_nuevo', 'desm_nuevo', 'desm_nuevo', {'pea' : '1'}, {}],
+        24: ['oplenos', 'oplenos', '', {'empleo' : '1'}, {}],
+        25: ['suboc', 'suboc', '', {'empleo' : '1'}, {}],
+        26: ['ingrl', 'ingrl', 'ingrl', {'empleo' : '1'}, {'ingrl' : None}],
+        27: ['', 'satis_laboral', 'satis_laboral', {'empleo' : '1'}, {'satis_laboral' : None}],
+        28: ['anosaprob', 'anosaprob', 'anosaprob', {}, {'anosaprob' : None}],
+        29: ['experiencia', 'experiencia', 'experiencia', {}, {'experiencia' : None}],
+        30: ['', '', 'migracion_extranjera', {}, {}],
+        31: ['mig_noprin_prin', 'mig_noprin_prin', 'mig_noprin_prin', {}, {}],
+        32: ['tamano_hogar', 'tamano_hogar', 'tamano_hogar', {'rela_jef' : '1'}, {}],
+        33: ['hogar_completo', 'hogar_completo', 'hogar_completo', {'rela_jef' : '1'}, {}],
+        34: ['hogar_noFamiliar', 'hogar_noFamiliar', 'hogar_noFamiliar', {'rela_jef' : '1'}, {}],
+        35: ['ingreso_hogar', 'ingreso_hogar', 'ingreso_hogar', {'rela_jef' : '1'}, {}],
+        36: ['part_quehaceres', 'part_quehaceres', 'part_quehaceres', {'rela_jef' : '1'}, {}],
+        37: ['horas_part_quehaceres', 'horas_part_quehaceres', 'horas_part_quehaceres', {'rela_jef' : '1'}, {}],
+        38: ['', 'descon_bajos_ingresos', 'descon_bajos_ingresos', {'empleo' : '1'}, {'descon_bajos_ingresos' : None}],
+        39: ['', 'descon_horarios', 'descon_horarios', {'empleo' : '1'}, {'descon_horarios' : None}],
+        40: ['', 'descon_estabil', 'descon_estabil', {'empleo' : '1'}, {'descon_estabil' : None}],
+        41: ['', 'descon_amb_laboral', 'descon_amb_laboral', {'empleo' : '1'}, {'descon_amb_laboral' : None}],
+        42: ['', 'descon_activ', 'descon_activ', {'empleo' : '1'}, {'descon_activ' : None}],
+        43: ['rentista', 'rentista', 'rentista', {'pei' : '1'}, {}],
+        44: ['jubil', 'jubil', 'jubil', {'pei' : '1'}, {}],
+        45: ['estudiant', 'estudiant', 'estudiant', {'pei' : '1'}, {}],
+        46: ['amaCasa', 'amaCasa', 'amaCasa', {'pei' : '1'}, {}],
+        47: ['incapacit', 'incapacit', 'incapacit', {'pei' : '1'}, {}],
+        48: ['otro', 'otro', 'otro', {'pei' : '1'}, {}],
+        49: ['', 'analfabeta', 'analfabeta', {}, {'analfabeta' : None}],
+        50: ['', 'desemab', 'desemab', {'desempleo' : '1'}, {}],
+        51: ['', 'desemoc', 'desemoc', {'desempleo' : '1'}, {}],
+        52: ['cesantes', 'cesantes', 'cesantes', {'desempleo' : '1'}, {}],
+        53: ['desm_nuevo', 'desm_nuevo', 'desm_nuevo', {'desempleo' : '1'}, {}],
+        54: ['', 'semanas_busc_trab', 'semanas_busc_trab', {'desempleo' : '1'}, {}],
+        55: ['pobreza', 'pobreza', 'pobreza', {'rela_jef' : '1'}, {}],
+        56: ['pobreza_extrema', 'pobreza_extrema', 'pobreza_extrema', {'rela_jef' : '1'}, {}],
+        57: ['asisteClases', 'asisteClases', 'asisteClases', {}, {'asisteClases' : None}],
+        58: ['hablaEspaniol', 'hablaEspaniol', 'hablaEspaniol', {}, {'hablaEspaniol' : None}],
+        59: ['hablaIndigena', 'hablaIndigena', 'hablaIndigena', {}, {'hablaIndigena' : None}],
+        60: ['hablaExtranjero', 'hablaExtranjero', 'hablaExtranjero', {}, {'hablaExtranjero' : None}],
+        61: ['', 'haceDeportes','haceDeportes', {}, {'haceDeportes' : None}],
+        62: ['', 'horasDeportes','horasDeportes', {}, {'haceDeportes' : None}],
+        63: ['', '','empleoAdecuado', {'empleo' : '1'}, {'empleoAdecuado' : None}],
+        64: ['', '','empleoInadecuado', {'empleo' : '1'}, {'empleoInadecuado' : None}],
+        65: ['', '','empleoNoclasificado', {'empleo' : '1'}, {'empleoNoclasificado' : None}],
+        66: ['', '','empleoAdecuado', {'pea' : '1'}, {}],
+        67: ['', '','empleoInadecuado', {'pea' : '1'}, {}],
+        68: ['', '','empleoNoclasificado', {'pea' : '1'}, {}],
+        69: ['', '','subempleo', {'empleo' : '1'}, {'subempleo' : None}],
+        70: ['', '','subempleoXhoras', {'empleo' : '1'}, {'subempleoXhoras' : None}],
+        71: ['', '','subempleoXingreso', {'empleo' : '1'}, {'subempleoXingreso' : None}],
+        72: ['', '','otroEmpleoInadec', {'empleo' : '1'}, {'otroEmpleoInadec' : None}],
+        73: ['', '','empleoNoremunerado', {'empleo' : '1'}, {'empleoNoremunerado' : None}],
+        74: ['empleo', '', '', {'pea' : '1'}, {}, 'sect_agricola'],
+        75: ['', 'empleo', 'empleo', {'pea' : '1'}, {}, 'nocla_sector'],
+        76: ['hombre', 'hombre', 'hombre', {}, {'hombre' : None}],
+        77: ['edad', 'edad', 'edad', {}, {'edad' : None}],
+        78: ['desoNoBusca', 'desoNoBusca', 'desoNoBusca', {'desempleo' : '1'}, {}],
+        79: ['mig_prin_noprin', 'mig_prin_noprin', 'mig_prin_noprin', {}, {}],
+        80: ['mig_prin_prin', 'mig_prin_prin', 'mig_prin_prin', {}, {}],
+        81: ['mig_noprin_noprin', 'mig_noprin_noprin', 'mig_noprin_noprin', {}, {}],
     }
     return data
 
 
 def indicador_filtro(request):
     id_indicador = request.GET['id_indicator']
+    id_method = request.GET['id_method']
     indicador_escogido = int(id_indicador)
+    method_id_escogido = int(id_method)
     result_id_disintegration = []
-
-    #Borrar, solo por prueba temporal
-    method_id_escogido = 3
-    #End
 
     disintegrations = Metodologia_Indicator.objects.values_list('disintegration', flat=True).filter(indicator=indicador_escogido).filter(method=method_id_escogido)
     result_final = Disintegration.objects.filter(id__in=disintegrations)
@@ -1158,3 +1225,14 @@ def cache_page(request):
 def access_denied(request):
     template = 'access_denied.html'
     return render_to_response(template, context_instance=RequestContext(request, locals()))
+
+def filter_by(request):
+    id_indicador = request.GET['id_indicador']
+    indicador_int = int(id_indicador)
+
+    ind = Indicator.objects.filter(id=indicador_int)
+    num = Subcategory.objects.filter(id=ind[0].subcategory_id)
+
+    data = serializers.serialize('json', num)
+    
+    return HttpResponse(data, content_type='application/json')
