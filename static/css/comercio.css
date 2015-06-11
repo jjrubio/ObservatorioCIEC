@@ -2,6 +2,10 @@
     margin-top: 1em;
 }
 
+#nomenclatura{
+    margin-top: 15px;
+}
+
 #myTabs_1 > li > a, #myTabs_2 > li > a{
     color: #777;
 }
@@ -34,7 +38,6 @@
 
 #aviso_comercio{
     color: red;
-    margin-top: 15px;
     text-align: center;
 }
 

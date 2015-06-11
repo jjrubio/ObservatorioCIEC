@@ -156,29 +156,33 @@
 
         rowStyle: function (row, index) {return {};},
 
+
         formatLoadingMessage: function () {
-            return 'Loading, please wait…';
+            return 'Cargando, espere por favor...';
         },
         formatRecordsPerPage: function (pageNumber) {
-            return sprintf('%s records per page', pageNumber);
+            return pageNumber + ' registros por página';
         },
         formatShowingRows: function (pageFrom, pageTo, totalRows) {
-            return sprintf('Showing %s to %s of %s rows', pageFrom, pageTo, totalRows);
+            return 'Mostrando ' + pageFrom + ' a ' + pageTo + ' de ' + totalRows + ' filas';
         },
         formatSearch: function () {
-            return 'Search';
+            return 'Buscar';
         },
         formatNoMatches: function () {
-            return 'No matching records found';
+            return 'No se encontraron registros';
+        },
+        formatAllRows: function () {
+            return 'Todo';
         },
         formatRefresh: function () {
-            return 'Refresh';
+            return 'Refrescar';
         },
         formatToggle: function () {
-            return 'Toggle';
+            return 'Alternar';
         },
         formatColumns: function () {
-            return 'Columns';
+            return 'Columnas';
         },
 
         onAll: function (name, args) {return false;},

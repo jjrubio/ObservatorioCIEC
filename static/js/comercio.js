@@ -7,8 +7,6 @@ $(document).ready(function() {
     var textoFiltro = "";
 
     $('#endDate').attr("value", year+"/01");
-    // $("#loading").css("display","none");
-
 
     $('#search_by').change(function(){
         if ($('#search_by').val() == 1){
@@ -430,6 +428,7 @@ function grafico(data){
                     }
                 }
 
+                console.log("prod:" + productoFechas);
                 if(productoFechas.length > 0)
                 {
                     num_productos_con_datos++;
@@ -463,6 +462,8 @@ function grafico(data){
             $('#div_graph_comercio').perfectScrollbar();
 
         }while(false);
+    }else{
+        $("#div_graph_comercio").append('No se encontraron registros');
     }
 }
 
