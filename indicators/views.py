@@ -34,7 +34,7 @@ def as_python_object(dct):
 
 
 def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1', method_id='1'):
-    json = indicators_detail(cat_id, subcat_id, ind_id)
+    json = indicators_detail(cat_id, subcat_id, ind_id, method_id)
     indicators = Indicator.objects.all()
     subcategories = Subcategory.objects.all()
     categories = Category.objects.all()
@@ -131,7 +131,7 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1', method_id='1'
         #request.session['visits'] = 1
         permiso = True
 
-    json = indicators_detail(cat_id, subcat_id, ind_id)
+    json = indicators_detail(cat_id, subcat_id, ind_id, method_id)
     subcategories = Subcategory.objects.all()
     categories = Category.objects.all()
     disintegrations = Disintegration.objects.all()
