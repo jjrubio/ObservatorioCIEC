@@ -91,14 +91,17 @@ def user_login(request):
         user = authenticate(username=username, password=password)
         if user:
             if user.is_active:
-                login(request, user)
+                if user.is_superuser:
+                    pass
+                else:
+                    login(request, user)
 
-                counter = UserProfile.objects.filter(user_id=user.id)
-                suma = counter[0].contador_visita
-                suma += 1
-                user_by_id = UserProfile.objects.filter(user_id=user.id).update(contador_visita = suma)
+                    counter = UserProfile.objects.filter(user_id=user.id)
+                    suma = counter[0].contador_visita
+                    suma += 1
+                    user_by_id = UserProfile.objects.filter(user_id=user.id).update(contador_visita = suma)
 
-                return HttpResponseRedirect('/definicion-indicador/')
+                    return HttpResponseRedirect('/definicion-indicador/')
             else:
                 return HttpResponseRedirect('/acceso-denegado/')
         else:
