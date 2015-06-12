@@ -101,7 +101,7 @@ def user_login(request):
                     suma += 1
                     user_by_id = UserProfile.objects.filter(user_id=user.id).update(contador_visita = suma)
 
-                    return HttpResponseRedirect('/definicion-indicador/')
+                return HttpResponseRedirect('/definicion-indicador/')
             else:
                 return HttpResponseRedirect('/acceso-denegado/')
         else:
