@@ -183,7 +183,7 @@ def calc_result(request):
 
     if not len(disintegrations) == 0:
         if len(disintegrations) == 1:
-            cache_value = '%s_%s_%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, disintegrations[0]. age_int)
+            cache_value = '%s_%s_%s_%s_%s_%s_%s_%s_%s'%(indicator_int, represent_int, method_int, yearStart_int, trimStart_int, yearEnd_int, trimEnd_int, disintegrations[0], age_int)
             if(int(disintegrations[0]) == 2):
                 data_ENEMDU = get_data_by_represent(data_ENEMDU, represent_int)
             else:
