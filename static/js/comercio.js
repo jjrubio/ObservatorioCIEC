@@ -428,7 +428,6 @@ function grafico(data){
                     }
                 }
 
-                console.log("prod:" + productoFechas);
                 if(productoFechas.length > 0)
                 {
                     num_productos_con_datos++;
