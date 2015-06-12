@@ -1,22 +1,35 @@
 var last_year;
 var last_trim;
 var excel_filename_download;
+var flag;
+var num_max_G;
 
 $(document).ready(function() {
+    var id_indicator = $('#indicator option:selected').attr('id');
     $.getJSON('/last-full-year/',function(data){
         last_year = data[0];
         last_trim = data[1];
     });
+    if($('#method option:selected').attr('id') == 1){
+        cambio_anios_trim($('#method option:selected').attr('id'));
+    }
+    if(id_indicator == 3 ||  id_indicator == 4 || id_indicator == 5 || id_indicator == 6 || id_indicator == 7 || id_indicator == 8 || id_indicator == 9 || id_indicator == 10 || id_indicator == 11 || id_indicator == 12 || id_indicator == 13 || id_indicator == 14 || id_indicator == 15 || id_indicator == 16 || id_indicator == 17 || id_indicator == 18 || id_indicator == 19 || id_indicator == 20 || id_indicator == 21 || id_indicator == 22 || id_indicator == 23 || id_indicator == 24 || id_indicator == 25 || id_indicator == 26 || id_indicator == 27 || id_indicator == 38 || id_indicator == 39  || id_indicator == 40 || id_indicator == 41 || id_indicator == 42 || id_indicator == 43 || id_indicator == 44 || id_indicator == 45 || id_indicator == 46 || id_indicator == 47 || id_indicator == 48 || id_indicator == 50 || id_indicator == 51 || id_indicator == 52 || id_indicator == 53 || id_indicator == 54 || id_indicator == 63 || id_indicator == 64 || id_indicator == 65 || id_indicator == 66 || id_indicator == 67 || id_indicator == 68 || id_indicator == 69 || id_indicator == 70 || id_indicator == 71 || id_indicator == 72 || id_indicator == 73 || id_indicator == 74 || id_indicator == 75 || id_indicator == 78){
+        $("#edad").show();
+        flag = 1;
+    }else{
+        $("#edad").hide();
+        flag = 0;
+    }
 });
 
-function getMenu(cat, subcat, ind){
+function getMenu(cat, subcat, ind, method_id){
     var url = location.href;
     var arrayURL = location.href.split('/');
 
     if(arrayURL[3] == 'calculo-indicador'){
-        history.pushState(null, "", "/calculo-indicador/"+cat+"/"+subcat+"/"+ind+"/");
+        history.pushState(null, "", "/calculo-indicador/"+cat+"/"+subcat+"/"+ind+"/"+$('#method option:selected').attr('id')+"/");
     }else{
-        history.pushState(null, "", "/definicion-indicador/"+cat+"/"+subcat+"/"+ind+"/");
+        history.pushState(null, "", "/definicion-indicador/"+cat+"/"+subcat+"/"+ind+"/"+$('#method option:selected').attr('id')+"/");
     }
     window.location.reload();
 }
@@ -26,20 +39,20 @@ $(window).bind("popstate", function(e) {
 });
 
 $('#linkToCalc').click(function(){
-    history.pushState(null, "", "/calculo-indicador/"+$("#category").val()+"/"+$("#subcategory").val()+"/"+$("#indicator").val()+"/");
+    history.pushState(null, "", "/calculo-indicador/"+$("#category").val()+"/"+$("#subcategory").val()+"/"+$("#indicator").val()+"/"+$('#method option:selected').attr('id')+"/");
     window.location.reload();
 });
 
 $('#category').change( function() {
-    getMenu($(this).val(), 1, 1);
+    getMenu($(this).val(), 1, 1, 1);
 });
 
 $('#subcategory').change( function() {
-    getMenu($("#category").val(), $(this).val(), 1);
+    getMenu($("#category").val(), $(this).val(), 1, 1);
 });
 
 $('#indicator').change( function() {
-    getMenu($("#category").val(), $("#subcategory").val(), $(this).val());
+    getMenu($("#category").val(), $("#subcategory").val(), $(this).val(), 1);
 });
 
 $('#accordion').on('show.bs.collapse', function () {
@@ -49,13 +62,36 @@ $('#accordion').on('show.bs.collapse', function () {
 $('.btn-next, #a-desagregaciones').click( function(){
     $('#desagregaciones').collapse('show');
     var id_indicator = $('#indicator option:selected').attr('id');
-    indicador_desagregacion_filtro(id_indicator);
+    indicador_desagregacion_filtro(id_indicator, $('#method option:selected').attr('id'));
+    filter_num_max_desagregacion(id_indicator);
 });
 //
 $('.btn-back, #a-parametros').click( function(){
     $('#parametros').collapse('show');
+    $('#mensaje_desagregacion').empty();
 });
 
+function cambio_anios_trim(method_id){
+    $('#yearStart').empty();
+    $('#trimStart').empty();
+    $('#yearEnd').empty();
+    $('#trimEnd').empty();
+    if(method_id == 1){
+        modificarPeriodo($('#yearStart'), 2003, 2007);
+        modificarPeriodo($('#yearEnd'), 2003, 2007);
+        modificarPeriodo($('#trimStart'), 4, 4);
+        modificarPeriodo($('#trimEnd'), 1, 1);
+        $('#yearEnd option[value='+2007+']').attr("selected","selected");
+    }else{
+        modificarPeriodo($('#yearStart'), 2007, last_year);
+        modificarPeriodo($('#yearEnd'), 2007, last_year);
+        modificarPeriodo($('#trimStart'), 2, 4);
+        modificarPeriodo($('#trimEnd'), 1, last_trim);
+        $('#yearEnd option[value='+last_year+']').attr("selected","selected");
+        $('#trimEnd option:last').attr("selected","selected");
+    }
+    $('.selectpicker').selectpicker('refresh');
+}
 
 $('.btn-calc, #a-resultados').click( function(){
     $('#resultados').collapse('show');
@@ -79,7 +115,13 @@ $('.btn-calc, #a-resultados').click( function(){
     var trimEnd = $('#trimEnd').val();
     var confidence_level = $('#confidence_level').val();
 
-    $.getJSON('/numero_consultas/', {'represent': represent, 'yearStart': yearStart, 'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd},
+    if(flag == 1){
+        var age = $('#age').val();
+    }else{
+        var age = 0;
+    }
+
+    $.getJSON('/numero_consultas/', {'represent': represent, 'yearStart': yearStart, 'trimStart': trimStart, 'yearEnd': yearEnd, 'trimEnd': trimEnd, 'age':age},
     function(number){
         timeData = number*25;
         var progress = $(".loading-progress").progressTimer({
@@ -94,7 +136,7 @@ $('.btn-calc, #a-resultados').click( function(){
     });
 
     $.getJSON('/result/', {'indicator': indicator, 'represent': represent, 'method': method, 'yearStart': yearStart, 'trimStart': trimStart,
-                                    'yearEnd': yearEnd, 'trimEnd': trimEnd, 'confidence_level': confidence_level, 'disintegrations[]': selected},
+                                    'yearEnd': yearEnd, 'trimEnd': trimEnd, 'confidence_level': confidence_level, 'disintegrations[]': selected, 'age':age},
     function(data){
         if(data.length>0){
             startTime = new Date();
@@ -133,6 +175,8 @@ $('#method').change(function(){
         $('#trimEnd option:last').attr("selected","selected");
     }
     $('.selectpicker').selectpicker('refresh');
+
+    indicador_desagregacion_filtro(indicator, method);
 });
 
 //Cambio en el año del periodo inicial
@@ -566,8 +610,8 @@ function graphs(data){
     }
 }
 
-function indicador_desagregacion_filtro(id_indicador){
-    $.getJSON('/indicadorFiltro/', {'id_indicator': id_indicador},
+function indicador_desagregacion_filtro(id_indicador, id_method){
+    $.getJSON('/indicadorFiltro/', {'id_indicator': id_indicador, 'id_method' : id_method},
             function(data){
             $('#ckb').children().remove();
                 $.each(data, function(index, item){
@@ -582,23 +626,29 @@ function indicador_desagregacion_filtro(id_indicador){
 function init(data){
     $(":checkbox").click(function(){
         var validos_selec = [];
-
         $('input:checkbox').each(function(){
             if($(this).is(':checked')){
                 validos_selec.push($(this).attr('id'));
-        }
+            }
         });
 
-        if(validos_selec.length == 0){
-        var id_indicator = $('#indicator option:selected').attr('id');
-        indicador_desagregacion_filtro(id_indicator);
-        }
-        else if(validos_selec.length == 1){
-        filter(validos_selec[0],data);
-        }
-        else if(validos_selec.length > 2){
-        $(this).prop('checked',false);
-        }
+        if(num_max_G == 2){
+            if(validos_selec.length == 0){
+                var id_indicator = $('#indicator option:selected').attr('id');
+                indicador_desagregacion_filtro(id_indicator, $('#method option:selected').attr('id'));
+            }
+            else if(validos_selec.length == 1){
+                filter(validos_selec[0],data);
+            }
+            else if(validos_selec.length > 2){
+                $(this).prop('checked',false);
+            }
+        }else{
+            if(validos_selec.length > 1){
+                $(this).prop('checked',false);
+                validos_selec.pop($(this).attr('id'));
+            }
+        }       
     });
 }
 
@@ -620,5 +670,26 @@ function filter(id_1,data_filter){
             }
             init(data_filter);
         });
+    });
+}
+
+function filter_num_max_desagregacion(id_indicador){
+    $.getJSON('/filter_by/', {'id_indicador': id_indicador},
+        function(data){
+            $('#mensaje_desagregacion').children().remove();
+            $.each(data, function(index, item){
+                var num_max = item.fields.num_max_desagregations
+                if(num_max == '0'){
+                    var tmpHTML = "<i class=\"fa fa-info-circle fa-lg\"></i> Para el indicador escogido, no existen desagregaciones válidas";
+                    $('#mensaje_desagregacion').append(tmpHTML);
+                }else if(num_max == '1'){
+                    var tmpHTML = "<i class=\"fa fa-info-circle fa-lg\"></i> Para el indicador escogido, puede elegir una desagregación";
+                    $('#mensaje_desagregacion').append(tmpHTML);
+                }else{
+                    var tmpHTML = "<i class=\"fa fa-info-circle fa-lg\"></i> Para el indicador escogido, puede elegir hasta 2 desagregaciones";
+                    $('#mensaje_desagregacion').append(tmpHTML);
+                }
+                num_max_G = num_max;
+            });
     });
 }
