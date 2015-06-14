@@ -92,10 +92,9 @@ def user_login(request):
         if user:
             if user.is_active:
                 if user.is_superuser:
-                    pass
+                    login(request, user)
                 else:
                     login(request, user)
-
                     counter = UserProfile.objects.filter(user_id=user.id)
                     suma = counter[0].contador_visita
                     suma += 1
