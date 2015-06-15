@@ -183,9 +183,7 @@
                                             <div class="col-lg-4">
                                                 <form id="form-disintegrations" method="post" class="form-css">
                                                 {% csrf_token %}
-                                                    <label>
-                                                        <i class="fa fa-info-circle fa-lg"></i> Puede escoger hasta dos desagregaciones
-                                                    </label>
+                                                    <label id="mensaje_desagregacion"></label>
                                                     <div id="ckb"></div><!-- #ckb -->
                                                     <div class="text-center buttons">
                                                             <button type="button" class="btn btn-back" data-toggle="collapse" data-target="#parametros">
