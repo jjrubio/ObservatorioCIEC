@@ -235,6 +235,17 @@ def calc_result(request):
                         column_types_d1 = columns_2_3[4]
                         column_types_d2 = columns_2_3[5]
 
+                        if column_types_d1[0] == 0:
+                            column_types_d1.append('Jefe de Hogar con valores 0')
+                            column_types_d1.append('Jefe de Hogar con valores 1')
+                            column_types_d1.remove(0)
+                            column_types_d1.remove(1)
+                        elif column_types_d2[0] == 0:
+                            column_types_d2.append('Jefe de Hogar con valores 0')
+                            column_types_d2.append('Jefe de Hogar con valores 1')
+                            column_types_d2.remove(0)
+                            column_types_d2.remove(1)
+
                         disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
                         if(column_dimensions[0] == 0):
                             title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
@@ -528,6 +539,10 @@ def get_column_2_3(data, disintegrations, represent_int):
         option_1 = get_column_name_option(int(disintegrations[0]))
         filter_column_2_by = data.values_list(option_1, flat=True)
         types_option_1 = get_type_by_represent(disintegrations[0], represent_int)
+        if types_option_1[0] == 'Jefe de Hogar':
+            types_option_1.append(0)
+            types_option_1.append(1)
+            types_option_1.remove('Jefe de Hogar')
         column_2_array = np.array([], 'float')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
         column_2_aux = list(filter_column_2_by)
@@ -561,6 +576,15 @@ def get_column_2_3(data, disintegrations, represent_int):
 
         types_option_1 = get_type_by_represent(disintegrations[0], represent_int)
         types_option_2 = get_type_by_represent(disintegrations[1], represent_int)
+
+        if types_option_1[0] == 'Jefe de Hogar':
+            types_option_1.append(0)
+            types_option_1.append(1)
+            types_option_1.remove('Jefe de Hogar')
+        elif types_option_2[0] == 'Jefe de Hogar':
+            types_option_2.append(0)
+            types_option_2.append(1)
+            types_option_2.remove('Jefe de Hogar')
 
         column_2_array = np.array([], 'float')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
@@ -848,6 +872,8 @@ def get_type_by_represent(disintegrations_pos, represent_int):
             types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).exclude(name='Resto Pais Urbano').values_list('name', flat=True)
         else:
             types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).values_list('name', flat=True)
+    elif(int(disintegrations_pos) == 16):
+        types_option = list(Type.objects.filter(disintegration_id = int(disintegrations_pos)).values_list('name', flat=True))
     else:
         types_option = Type.objects.filter(disintegration_id = int(disintegrations_pos)).values_list('name', flat=True)
     return types_option
