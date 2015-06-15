@@ -178,7 +178,7 @@ $('#method').change(function(){
     }
     $('.selectpicker').selectpicker('refresh');
 
-    indicador_desagregacion_filtro(indicator, method);
+    indicador_desagregacion_filtro($('#indicator option:selected').attr('id'), $('#method option:selected').attr('id'));
 });
 
 //Cambio en el año del periodo inicial
