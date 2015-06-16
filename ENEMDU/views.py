@@ -50,6 +50,7 @@ def insert_data_enemdu(request):
                     if ext_val == 'txt' or ext_val == 'csv':
                         #Luego de haber subido el archivo se corre el load_files.sh
                         p = subprocess.Popen(['/home/patu/Desktop/oese/load_files',dbtable])
+                        alert = p.communicate()
                         upload_success = True
                         empty = False
                     else:
