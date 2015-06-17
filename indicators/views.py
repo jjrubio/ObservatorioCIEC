@@ -19,7 +19,7 @@ import time
 from datetime import datetime
 from django.contrib.sessions.models import Session
 from django.db.models import Sum, Count
-
+import unicodedata
 
 class PythonObjectEncoder(JSONEncoder):
     def default(self, obj):
@@ -235,16 +235,8 @@ def calc_result(request):
                         column_types_d1 = columns_2_3[4]
                         column_types_d2 = columns_2_3[5]
 
-                        if column_types_d1[0] == 0:
-                            column_types_d1.append('Jefe de Hogar con valores 0')
-                            column_types_d1.append('Jefe de Hogar con valores 1')
-                            column_types_d1.remove(0)
-                            column_types_d1.remove(1)
-                        elif column_types_d2[0] == 0:
-                            column_types_d2.append('Jefe de Hogar con valores 0')
-                            column_types_d2.append('Jefe de Hogar con valores 1')
-                            column_types_d2.remove(0)
-                            column_types_d2.remove(1)
+                        column_types_d1_new = insert_accents(column_types_d1)
+                        column_types_d2_new = insert_accents(column_types_d2)
 
                         disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
                         if(column_dimensions[0] == 0):
@@ -273,8 +265,8 @@ def calc_result(request):
             data_result.append(column_dimensions)
             data_result.append(column_name_d1)
             data_result.append(column_name_d2)
-            data_result.append(column_types_d1)
-            data_result.append(column_types_d2)
+            data_result.append(column_types_d1_new)
+            data_result.append(column_types_d2_new)
             indicator_counter = Indicator.objects.get(id=indicator_int).counter + 1
             update_indicator_counter = Indicator.objects.filter(id=indicator_int).update(counter=indicator_counter)
             cache.set(cache_value, data_result, None)
@@ -539,31 +531,28 @@ def get_column_2_3(data, disintegrations, represent_int):
         option_1 = get_column_name_option(int(disintegrations[0]))
         filter_column_2_by = data.values_list(option_1, flat=True)
         types_option_1 = get_type_by_represent(disintegrations[0], represent_int)
-        if types_option_1[0] == 'Jefe de Hogar':
-            types_option_1.append(0)
-            types_option_1.append(1)
-            types_option_1.remove('Jefe de Hogar')
+        types_option_1_new = remove_accents(types_option_1)
         column_2_array = np.array([], 'float')
-        column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
+        column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1_new)))
         column_2_aux = list(filter_column_2_by)
 
         for i in range(0, len(filter_column_2_by)):
             if column_2_aux[i] == None:
                 pass
             else:
-                column_2_array[i] = [1 if x == column_2_aux[i] else 0 for x in types_option_1]
+                column_2_array[i] = [1 if x == column_2_aux[i] else 0 for x in types_option_1_new]
 
         column_3_array = np.array([])
-        column_dimensions = [len(types_option_1), 0]
+        column_dimensions = [len(types_option_1_new), 0]
         title_1 = Disintegration.objects.get(id=disintegrations[0]).name.encode('utf-8')
         column_titles = [title_1, '']
         column_types_d1 = []
-        for d1 in types_option_1:
+        for d1 in types_option_1_new:
             column_types_d1.append(d1)
         column_types_d2 = ['']
 
         column_N = []
-        for option in types_option_1:
+        for option in types_option_1_new:
             sumaFexp = int(math.ceil(sum(data.filter(**{option_1:option}).exclude(**{option_1:None}).values_list('fexp', flat=True))))
             column_N.append(sumaFexp)
 
@@ -577,34 +566,28 @@ def get_column_2_3(data, disintegrations, represent_int):
         types_option_1 = get_type_by_represent(disintegrations[0], represent_int)
         types_option_2 = get_type_by_represent(disintegrations[1], represent_int)
 
-        if types_option_1[0] == 'Jefe de Hogar':
-            types_option_1.append(0)
-            types_option_1.append(1)
-            types_option_1.remove('Jefe de Hogar')
-        elif types_option_2[0] == 'Jefe de Hogar':
-            types_option_2.append(0)
-            types_option_2.append(1)
-            types_option_2.remove('Jefe de Hogar')
+        types_option_1_new = remove_accents(types_option_1)
+        types_option_2_new = remove_accents(types_option_2)
 
         column_2_array = np.array([], 'float')
-        column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1)))
+        column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1_new)))
         column_2_aux = list(filter_column_2_by)
         for i in range(0, len(filter_column_2_by)):
             if column_2_aux[i] == None:
                 pass
             else:
-                column_2_array[i] = [1 if x == column_2_aux[i] else 0 for x in types_option_1]
+                column_2_array[i] = [1 if x == column_2_aux[i] else 0 for x in types_option_1_new]
 
         column_3_array = np.array([], 'float')
-        column_3_array = np.zeros((len(filter_column_3_by),len(types_option_2)))
+        column_3_array = np.zeros((len(filter_column_3_by),len(types_option_2_new)))
         column_3_aux = list(filter_column_3_by)
         for i in range(0, len(filter_column_3_by)):
             if column_2_aux[i] == None:
                 pass
             else:
-                column_3_array[i] = [1 if x == column_3_aux[i] else 0 for x in types_option_2]
+                column_3_array[i] = [1 if x == column_3_aux[i] else 0 for x in types_option_2_new]
 
-        column_dimensions = [len(types_option_1), len(types_option_2)]
+        column_dimensions = [len(types_option_1_new), len(types_option_2_new)]
         title_1 = Disintegration.objects.get(id=disintegrations[0]).name.encode('utf-8')
         title_2 = Disintegration.objects.get(id=disintegrations[1]).name.encode('utf-8')
         column_titles = [title_1, title_2]
@@ -614,21 +597,55 @@ def get_column_2_3(data, disintegrations, represent_int):
         # for optionA in types_option_1:
         #     column_N = [int(math.ceil(sum(data.filter(**{option_1:optionA}).filter(**{option_2:optionB}).values_list('fexp', flat=True)))) for optionB in types_option_2]
         column_N = []
-        for optionA in types_option_1:
-            for optionB in types_option_2:
+        for optionA in types_option_1_new:
+            for optionB in types_option_2_new:
                 sumaFexp = int(math.ceil(sum(data.filter(**{option_1:optionA}).filter(**{option_2:optionB}).exclude(**{option_1:None}).exclude(**{option_2:None}).values_list('fexp', flat=True))))
                 column_N.append(sumaFexp)
 
         column_types_d1 = []
         column_types_d2 = []
-        for d1 in types_option_1:
+        for d1 in types_option_1_new:
             column_types_d1.append(d1)
-        for d2 in types_option_2:
+        for d2 in types_option_2_new:
             column_types_d2.append(d2)
 
     columns = [column_2_array, column_3_array, column_dimensions, column_titles, column_types_d1, column_types_d2, column_N]
     return columns
 
+def remove_accents(input_str):
+    result = []
+    for n,i in enumerate(input_str):
+        text = unicodedata.normalize("NFKD", i)
+        clean_text = text.encode("ascii", "ignore")
+        clean_text_2 = u"".join([ch for ch in text if not unicodedata.combining(ch)])
+        result.append(clean_text_2)
+    return result
+
+def insert_accents(input_str):
+    for n,i in enumerate(input_str):
+        if i == 'Amazonia':
+            input_str[n] = 'Amazonía'
+        elif i == 'Resto Pais Urbano':
+            input_str[n] = 'Resto País Urbano'
+        elif i == 'Resto Pais Rural':
+            input_str[n] = 'Resto País Rural'
+        elif i == 'Indigena':
+            input_str[n] = 'Indígena'
+        elif i == 'Profesionales cientificos e intelectuales':
+            input_str[n] =  'Profesionales científicos e intelectuales'
+        elif i == 'Tecnicos y profesionales de nivel medio':
+            input_str[n] =  'Técnicos y profesionales de nivel medio'
+        elif i == 'Operadores de instalac. maquinas y ensambla.':
+            input_str[n] =  'Operadores de instalac. máquinas y ensambla.'
+        elif i == 'Construccion':
+            input_str[n] =  'Construcción'
+        elif i == 'Jornalero o Peon':
+            input_str[n] =  'Jornalero o Peón'
+        elif i == 'Empleado Domestico':
+            input_str[n] =  'Empleado Doméstico'
+        elif i == 'Servicio Domestico':
+            input_str[n] =  'Servicio Doméstico'
+    return input_str
 
 def get_column_4(data):
     column_4 = data.values_list("fexp", flat=True)
