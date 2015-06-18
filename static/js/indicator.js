@@ -14,10 +14,12 @@ $(document).ready(function() {
         cambio_anios_trim($('#method option:selected').attr('id'));
     }
     if(id_indicator == 3 ||  id_indicator == 4 || id_indicator == 5 || id_indicator == 6 || id_indicator == 7 || id_indicator == 8 || id_indicator == 9 || id_indicator == 10 || id_indicator == 11 || id_indicator == 12 || id_indicator == 13 || id_indicator == 14 || id_indicator == 15 || id_indicator == 16 || id_indicator == 17 || id_indicator == 18 || id_indicator == 19 || id_indicator == 20 || id_indicator == 21 || id_indicator == 22 || id_indicator == 23 || id_indicator == 24 || id_indicator == 25 || id_indicator == 26 || id_indicator == 27 || id_indicator == 38 || id_indicator == 39  || id_indicator == 40 || id_indicator == 41 || id_indicator == 42 || id_indicator == 43 || id_indicator == 44 || id_indicator == 45 || id_indicator == 46 || id_indicator == 47 || id_indicator == 48 || id_indicator == 50 || id_indicator == 51 || id_indicator == 52 || id_indicator == 53 || id_indicator == 54 || id_indicator == 63 || id_indicator == 64 || id_indicator == 65 || id_indicator == 66 || id_indicator == 67 || id_indicator == 68 || id_indicator == 69 || id_indicator == 70 || id_indicator == 71 || id_indicator == 72 || id_indicator == 73 || id_indicator == 74 || id_indicator == 75 || id_indicator == 78){
-        $("#edad").show();
+        $("#lv_age_2").show();
+        $("#lv_age_1").hide();
         flag = 1;
     }else{
-        $("#edad").hide();
+        $("#lv_age_2").hide();
+        $("#lv_age_1").show();
         flag = 0;
     }
 });
@@ -57,6 +59,7 @@ $('#indicator').change( function() {
 
 $('#accordion').on('show.bs.collapse', function () {
     $('#accordion .in').collapse('hide');
+    $('#mensaje_desagregacion').empty();
 });
 
 $('.btn-next, #a-desagregaciones').click( function(){
@@ -179,7 +182,7 @@ $('#method').change(function(){
     }
     $('.selectpicker').selectpicker('refresh');
 
-    indicador_desagregacion_filtro(indicator, method);
+    indicador_desagregacion_filtro($('#indicator option:selected').attr('id'), $('#method option:selected').attr('id'));
 });
 
 //Cambio en el año del periodo inicial

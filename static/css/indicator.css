@@ -175,3 +175,13 @@
     font-weight: bold;
     outline-style: none;
 }
+
+#lv_age_2{
+    display: block;
+    margin-left: -1.5em;
+    margin-top: 0.5em;
+}
+
+#edad{
+    margin-left: -0.7em;
+}
