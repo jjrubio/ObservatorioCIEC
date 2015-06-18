@@ -214,7 +214,39 @@ def calc_result(request):
                 if ((represent_int == 1 and represent_database == 'Nacional') or (represent_int == 2 and represent_database == 'Nacional')
                     or (represent_int == 2 and represent_database == 'Urbana') or (represent_int == 3 and represent_database == 'Nacional')):
 
-                    data_byWhere = data_ENEMDU.filter(anio=i, trimestre=j,**get_filter_area(represent_int)).filter(**get_filter()[indicator_int][3]).filter(edad__gte=age_int).exclude(**get_filter()[indicator_int][4]).order_by('fexp')
+                    if (len(disintegrations) == 1):
+                        data_byWhere = data_ENEMDU.only('anio','trimestre','area','edad','fexp','pet','pea','empleo','rela_jef','pei','desempleo'
+                        ).filter(anio=i, trimestre=j,**get_filter_area(represent_int)
+                        ).filter(**get_filter()[indicator_int][3]
+                        ).filter(edad__gte=age_int
+                        ).exclude(**get_filter()[indicator_int][4]
+                        ).exclude(**get_disintegration_option()[int(disintegrations[0])][1]
+                        ).exclude(**get_disintegration_option()[int(disintegrations[0])][2]
+                        ).order_by('fexp')
+
+                    elif (len(disintegrations) == 2):
+                        data_byWhere = data_ENEMDU.only('anio','trimestre','area','edad','fexp','pet','pea','empleo','rela_jef','pei','desempleo'
+                        ).filter(anio=i, trimestre=j,**get_filter_area(represent_int)
+                        ).filter(**get_filter()[indicator_int][3]
+                        ).filter(edad__gte=age_int
+                        ).exclude(**get_filter()[indicator_int][4]
+                        ).exclude(**get_disintegration_option()[int(disintegrations[0])][1]
+                        ).exclude(**get_disintegration_option()[int(disintegrations[0])][2]
+                        ).exclude(**get_disintegration_option()[int(disintegrations[1])][1]
+                        ).exclude(**get_disintegration_option()[int(disintegrations[1])][2]
+                        ).order_by('fexp')
+                        
+                    else:
+                        data_byWhere = data_ENEMDU.only('anio','trimestre','area','edad','fexp','pet','pea','empleo','rela_jef','pei','desempleo'
+                        ).filter(anio=i, trimestre=j,**get_filter_area(represent_int)
+                        ).filter(**get_filter()[indicator_int][3]
+                        ).filter(edad__gte=age_int
+                        ).exclude(**get_filter()[indicator_int][4]
+                        ).order_by('fexp')
+
+                    print "hola es :"
+                    print (data_byWhere.count())
+
                     column_1 = get_column_1(data_byWhere, method_int, indicator_int)
                     columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
                     column_2 = columns_2_3[0]
@@ -495,18 +527,18 @@ def modelo_final(y, X, Z, fexp, conf = 0.95, colin_thres = 30):
 def get_column_1(data, method_int, indicator_int):
     if method_int == 1:
         if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18 or indicator_int == 74 or indicator_int == 75):
-            column_1_a = data.values_list(get_filter()[indicator_int][0], flat=True)
-            column_1_b = data.values_list(get_filter()[indicator_int][5], flat=True)
+            column_1_a = data.only(get_filter()[indicator_int][0]).values_list(get_filter()[indicator_int][0], flat=True)
+            column_1_b = data.only(get_filter()[indicator_int][5]).values_list(get_filter()[indicator_int][5], flat=True)
             column_1 = [(x * y) for x, y in zip(column_1_a, column_1_b)]
         else:
-            column_1 = data.values_list(get_filter()[indicator_int][0], flat=True)
+            column_1 = data.only(get_filter()[indicator_int][0]).values_list(get_filter()[indicator_int][0], flat=True)
     else:
         if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18 or indicator_int == 74 or indicator_int == 75):
-            column_1_a = data.values_list(get_filter()[indicator_int][1], flat=True)
-            column_1_b = data.values_list(get_filter()[indicator_int][5], flat=True)
+            column_1_a = data.only(get_filter()[indicator_int][1]).values_list(get_filter()[indicator_int][1], flat=True)
+            column_1_b = data.only(get_filter()[indicator_int][5]).values_list(get_filter()[indicator_int][5], flat=True)
             column_1 = [(x * y) for x, y in zip(column_1_a, column_1_b)]
         else:
-            column_1 = data.values_list(get_filter()[indicator_int][1], flat=True)
+            column_1 = data.only(get_filter()[indicator_int][1]).values_list(get_filter()[indicator_int][1], flat=True)
     column_1_array = np.array(list(column_1), 'float')
     return column_1_array
 
@@ -525,7 +557,7 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_N = [sumaFexp]
 
     elif disintegrations_size == 1:
-        option_1 = get_column_name_option(int(disintegrations[0]))
+        option_1 = get_disintegration_option()[int(disintegrations[0])][0]
         filter_column_2_by = data.values_list(option_1, flat=True)
         types_option_1 = get_type_by_represent(disintegrations[0], represent_int)
         column_2_array = np.array([], 'float')
@@ -553,8 +585,8 @@ def get_column_2_3(data, disintegrations, represent_int):
             column_N.append(sumaFexp)
 
     elif disintegrations_size == 2:
-        option_1 = get_column_name_option(int(disintegrations[0]))
-        option_2 = get_column_name_option(int(disintegrations[1]))
+        option_1 = get_disintegration_option()[int(disintegrations[0])][0]
+        option_2 = get_disintegration_option()[int(disintegrations[1])][0]
 
         filter_column_2_by = data.values_list(option_1, flat=True)
         filter_column_3_by = data.values_list(option_2, flat=True)
@@ -607,7 +639,7 @@ def get_column_2_3(data, disintegrations, represent_int):
 
 
 def get_column_4(data):
-    column_4 = data.values_list("fexp", flat=True)
+    column_4 = data.only('fexp').values_list("fexp", flat=True)
     column_4_array = np.array(list(column_4), 'float')
     return column_4_array
 
@@ -664,48 +696,30 @@ def list_by_no_denied(request):
     return HttpResponse(data, content_type='application/json')
 
 
-def get_column_name_option(id_desagregation):
-    if id_desagregation == 1:
-        result = 'region_natural'
-    elif id_desagregation == 2:
-        result = 'ciudad_ind'
-    elif id_desagregation == 3:
-        result = 'genero'
-    elif id_desagregation == 4:
-        result = 'etnia'
-    elif id_desagregation == 5:
-        result = 'edad_group'
-    elif id_desagregation == 6:
-        result = 'nivinst'
-    elif id_desagregation == 7:
-        result = 'seguro'
-    elif id_desagregation == 8:
-        result = 'grupo_ocup_1'
-    elif id_desagregation == 9:
-        result = 'rama_act_2'
-    elif id_desagregation == 10:
-        result = 'categ_ocupa'
-    elif id_desagregation == 11:
-        result = 'condact'
-    elif id_desagregation == 12:
-        result = 'tipo_ocupa'
-    elif id_desagregation == 13:
-        result = 'tipo_deso'
-    elif id_desagregation == 14:
-        result = 'condInact'
-    elif id_desagregation == 15:
-        result = 'zonaPlanificacion'
-    elif id_desagregation == 16:
-        result = 'jefeHogar'
-    elif id_desagregation == 17:
-        result = 'tipoEmpleo'
-    elif id_desagregation == 18:
-        result = 'tipoEmpleoDesag'
-    elif id_desagregation == 19:
-        result = 'sectorEmpleo'
-    else:
-        result = ''
-    return result
+def get_disintegration_option():
+
+    option = {
+        1: ['region_natural', {'region_natural__isnull' : True}, {'region_natural__exact' : ''}],
+        2: ['ciudad_ind', {'ciudad_ind__isnull' : True}, {'ciudad_ind__exact' : ''}],
+        3: ['genero', {'genero__isnull' : True}, {'genero__exact' : ''}],
+        4: ['etnia', {'etnia__isnull' : True}, {'etnia__exact' : ''}],
+        5: ['edad_group', {'edad_group__isnull' : True}, {'edad_group__exact' : ''}],
+        6: ['nivinst', {'nivinst__isnull' : True}, {'nivinst__exact' : ''}],
+        7: ['seguro', {'seguro__isnull' : True}, {'seguro__exact' : ''}],
+        8: ['grupo_ocup_1', {'grupo_ocup_1__isnull' : True}, {'grupo_ocup_1__exact' : ''}],
+        9: ['rama_act_2', {'rama_act_2__isnull' : True}, {'rama_act_2__exact' : ''}],
+        10: ['categ_ocupa', {'categ_ocupa__isnull' : True}, {'categ_ocupa__exact' : ''}],
+        11: ['condact', {'condact__isnull' : True}, {'condact__exact' : ''}],
+        12: ['tipo_ocupa', {'tipo_ocupa__isnull' : True}, {'tipo_ocupa__exact' : ''}],
+        13: ['tipo_deso', {'tipo_deso__isnull' : True}, {'tipo_deso__exact' : ''}],
+        14: ['condInact', {'condInact__isnull' : True}, {'condInact__exact' : ''}],
+        15: ['zonaPlanificacion', {'zonaPlanificacion__isnull' : True}, {'zonaPlanificacion__exact' : ''}],
+        16: ['jefeHogar', {'jefeHogar__isnull' : True}, {'jefeHogar__exact' : ''}],
+        17: ['tipoEmpleo', {'tipoEmpleo__isnull' : True}, {'tipoEmpleo__exact' : ''}],
+        18: ['tipoEmpleoDesag', {'tipoEmpleoDesag__isnull' : True}, {'tipoEmpleoDesag__exact' : ''}],
+        19: ['sectorEmpleo', {'sectorEmpleo__isnull' : True}, {'sectorEmpleo__exact' : ''}],
+    }
+    return option
 
 
 def get_filter():
@@ -1110,7 +1124,7 @@ def generar_cache(request):
                                                 data_result = cache.get(cache_value)
                                                 if data_result is None:
                                                     calc_data(ind.id, data_ENEMDU, yearStart_aux, yearEnd_aux, trimStart_aux, trimEnd_aux, represent, method, disintegrations, cache_value)
-                                                    print ind.id, yearStart_aux, trimStart_aux, '-' , yearEnd_aux, trimEnd_aux, dis, disintegrations
+                                                    # print ind.id, yearStart_aux, trimStart_aux, '-' , yearEnd_aux, trimEnd_aux, dis, disintegrations
 
                                         elif num_disintegration == 2:
                                             for dis1 in indicator_filter_list(ind.id):
@@ -1196,23 +1210,23 @@ def total_consultas(request):
 
                                         if num_disintegration == 0:
                                                 numqueries += 1
-                                                print numqueries
+                                                # print numqueries
                                         elif num_disintegration == 1:
                                             for dis in indicator_filter_list(ind.id):
                                                 numqueries += 1
-                                                print numqueries
+                                                # print numqueries
                                         elif num_disintegration == 2:
                                             for dis1 in indicator_filter_list(ind.id):
                                                 disintegration_accept_list = set(indicator_filter_list(ind.id)) - set(disintegration_denied_list(dis1)) - set([dis1])
                                                 for dis2 in disintegration_accept_list:
                                                    numqueries += 1
-                                                   print numqueries
+                                                   # print numqueries
 
                                 if trimEnd_aux == 4:
                                     trimEnd_aux1 = 1
                         if trimStart_aux == 4:
                             trimStart_aux1 = 1
-        print numqueries
+        # print numqueries
     message = json.dumps(numqueries)
     return HttpResponse(message, content_type='application/json')
 

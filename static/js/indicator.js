@@ -138,7 +138,10 @@ $('.btn-calc, #a-resultados').click( function(){
     $.getJSON('/result/', {'indicator': indicator, 'represent': represent, 'method': method, 'yearStart': yearStart, 'trimStart': trimStart,
                                     'yearEnd': yearEnd, 'trimEnd': trimEnd, 'confidence_level': confidence_level, 'disintegrations[]': selected, 'age':age},
     function(data){
+        console.log(data);
         if(data.length>0){
+
+
             startTime = new Date();
             table(data);
             endTime = new Date();
