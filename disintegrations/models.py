@@ -15,7 +15,7 @@ class Disintegration(models.Model):
 
 
 class Type(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Nombre')
+    name = models.CharField(max_length=60, verbose_name='Nombre')
     disintegration = models.ForeignKey(Disintegration, verbose_name='Desagregación')
 
     class Meta:

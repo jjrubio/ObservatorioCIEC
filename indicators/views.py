@@ -531,7 +531,7 @@ def get_column_2_3(data, disintegrations, represent_int):
         option_1 = get_column_name_option(int(disintegrations[0]))
         filter_column_2_by = data.values_list(option_1, flat=True)
         types_option_1 = get_type_by_represent(disintegrations[0], represent_int)
-        types_option_1_new = remove_accents(types_option_1)
+        types_option_1_new = remove_accents(types_option_1, int(disintegrations[0]))
         column_2_array = np.array([], 'float')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1_new)))
         column_2_aux = list(filter_column_2_by)
@@ -566,8 +566,8 @@ def get_column_2_3(data, disintegrations, represent_int):
         types_option_1 = get_type_by_represent(disintegrations[0], represent_int)
         types_option_2 = get_type_by_represent(disintegrations[1], represent_int)
 
-        types_option_1_new = remove_accents(types_option_1)
-        types_option_2_new = remove_accents(types_option_2)
+        types_option_1_new = remove_accents(types_option_1, int(disintegrations[0]))
+        types_option_2_new = remove_accents(types_option_2, int(disintegrations[1]))
 
         column_2_array = np.array([], 'float')
         column_2_array = np.zeros((len(filter_column_2_by),len(types_option_1_new)))
@@ -619,6 +619,9 @@ def remove_accents(input_str):
         clean_text = text.encode("ascii", "ignore")
         clean_text_2 = u"".join([ch for ch in text if not unicodedata.combining(ch)])
         result.append(clean_text_2)
+    if int_desag == 6:
+        result[0] = 'Mas 3 anios de educacion superior'
+        result[1] = 'Hasta 3 anios de educacion superior'
     return result
 
 def insert_accents(input_str):
@@ -645,6 +648,10 @@ def insert_accents(input_str):
             input_str[n] =  'Empleado Doméstico'
         elif i == 'Servicio Domestico':
             input_str[n] =  'Servicio Doméstico'
+        elif i == 'Mas 3 anios de educacion superior':
+            input_str[n] =  'Más 3 años de educación superior'
+        elif i == 'Hasta 3 anios de educacion superior':
+            input_str[n] =  'Hasta 3 años de educación superior'
     return input_str
 
 def get_column_4(data):

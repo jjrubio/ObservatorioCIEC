@@ -45,7 +45,7 @@ class Subcategory(models.Model):
 
 
 class Indicator(models.Model):
-    name = models.CharField(max_length=75, verbose_name='Nombre')
+    name = models.CharField(max_length=100, verbose_name='Nombre')
     definition = models.TextField(verbose_name='Definición')
     unit = models.CharField(max_length=10, verbose_name='Unidad')
     formula_src = models.ImageField(upload_to='formulas/', verbose_name='Imagen fórmula')

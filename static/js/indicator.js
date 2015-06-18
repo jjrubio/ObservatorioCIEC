@@ -59,6 +59,7 @@ $('#indicator').change( function() {
 
 $('#accordion').on('show.bs.collapse', function () {
     $('#accordion .in').collapse('hide');
+    $('#mensaje_desagregacion').empty();
 });
 
 $('.btn-next, #a-desagregaciones').click( function(){
