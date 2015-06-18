@@ -1,0 +1,11 @@
+.form-control{
+        width: 21%;
+}
+#btn-send{
+        margin-left: 40%;
+    margin-right: auto;
+}
+.texto{
+        position:absolute;
+        margin-top: 1em;
+}
