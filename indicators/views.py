@@ -244,9 +244,6 @@ def calc_result(request):
                         ).exclude(**get_filter()[indicator_int][4]
                         ).order_by('fexp')
 
-                    print "hola es :"
-                    print (data_byWhere.count())
-
                     column_1 = get_column_1(data_byWhere, method_int, indicator_int)
                     columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
                     column_2 = columns_2_3[0]
@@ -652,8 +649,8 @@ def remove_accents(input_str, int_desag):
         clean_text_2 = u"".join([ch for ch in text if not unicodedata.combining(ch)])
         result.append(clean_text_2)
     if int_desag == 6:
-        result[0] = 'Mas 3 anios de educacion superior'
-        result[1] = 'Hasta 3 anios de educacion superior'
+        result[0] = 'Mas de 3 anios de educacion superior'
+        result[1] = 'Hasta 3 anios de Educacion Superior'
     return result
 
 def insert_accents(input_str):

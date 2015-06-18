@@ -141,10 +141,7 @@ $('.btn-calc, #a-resultados').click( function(){
     $.getJSON('/result/', {'indicator': indicator, 'represent': represent, 'method': method, 'yearStart': yearStart, 'trimStart': trimStart,
                                     'yearEnd': yearEnd, 'trimEnd': trimEnd, 'confidence_level': confidence_level, 'disintegrations[]': selected, 'age':age},
     function(data){
-        console.log(data);
         if(data.length>0){
-
-
             startTime = new Date();
             table(data);
             endTime = new Date();
@@ -396,8 +393,8 @@ function graphs(data){
     $('#div_desagregaciones').empty()
 
     if(valor_dim_2 == 0){
-        $("#ul_desagregaciones").append('<li><a href="#'+name_desagre_1.replace(/ /g,"_")+'" role="tab" data-toggle="tab">'+name_desagre_1+'</a></li>')
-        $("#div_desagregaciones").append('<div class="tab-pane" id="'+name_desagre_1.replace(/ /g,"_")+'"></div>');4
+        $("#ul_desagregaciones").append('<li><a href="#'+name_desagre_1.replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '')+'" role="tab" data-toggle="tab">'+name_desagre_1+'</a></li>')
+        $("#div_desagregaciones").append('<div class="tab-pane" id="'+name_desagre_1.replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '')+'"></div>');4
         number_tabs = 1;
         type_desagre = type_desagre_1;
         if(valor_dim_1 == 0){
@@ -413,9 +410,9 @@ function graphs(data){
         }
 
         for(i=0; i<type_desagre_1.length; i++){
-            $("#ul_desagregaciones").append('<li><a href="#'+type_desagre_1[i].replace(/ /g,"_")+'" role="tab" data-toggle="tab">'+type_desagre_1[i]+'</a></li>')
-            $("#div_desagregaciones").append('<div class="tab-pane" id="'+type_desagre_1[i].replace(/ /g,"_")+'"></div>');
-            $("#"+type_desagre_1[i].replace(/ /g,"_")).append('<b>'+name_desagre_1+': '+type_desagre_1[i]+' según '+name_desagre_2+'</b>');
+            $("#ul_desagregaciones").append('<li><a href="#'+type_desagre_1[i].replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '')+'" role="tab" data-toggle="tab">'+type_desagre_1[i]+'</a></li>')
+            $("#div_desagregaciones").append('<div class="tab-pane" id="'+type_desagre_1[i].replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '')+'"></div>');
+            $("#"+type_desagre_1[i].replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '')).append('<b>'+name_desagre_1+': '+type_desagre_1[i]+' según '+name_desagre_2+'</b>');
         }
 
         number_tabs = type_desagre_1.length;
@@ -445,10 +442,10 @@ function graphs(data){
 
         //Validar que se grafica
         if(totalFexp != 0){
-                var typeID = "#"+type[i].replace(/ /g,"_")
-                $(typeID).append('<div id="'+type_desagre[j].replace(/ /g,"_")+'_'+(i+1)+'" class="graph text-center" ></div>');
+                var typeID = "#"+type[i].replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '');
+                $(typeID).append('<div id="'+type_desagre[j].replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '')+'_'+(i+1)+'" class="graph text-center" ></div>');
 
-                graph_render = type_desagre[j].replace(/ /g,"_")+'_'+(i+1);
+                graph_render = type_desagre[j].replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '')+'_'+(i+1);
                 if(number_tabs > 1){
                     graph_subtitle = type[i]+' - '+type_desagre[j];
                 }else{
