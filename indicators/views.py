@@ -612,7 +612,7 @@ def get_column_2_3(data, disintegrations, represent_int):
     columns = [column_2_array, column_3_array, column_dimensions, column_titles, column_types_d1, column_types_d2, column_N]
     return columns
 
-def remove_accents(input_str):
+def remove_accents(input_str, int_desag):
     result = []
     for n,i in enumerate(input_str):
         text = unicodedata.normalize("NFKD", i)
