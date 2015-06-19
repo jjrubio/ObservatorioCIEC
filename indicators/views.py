@@ -798,7 +798,7 @@ def get_filter():
         27: ['', 'satis_laboral', 'satis_laboral', {'empleo' : '1'}, {'satis_laboral' : None}],
         28: ['anosaprob', 'anosaprob', 'anosaprob', {}, {'anosaprob' : None}],
         29: ['experiencia', 'experiencia', 'experiencia', {}, {'experiencia' : None}],
-        30: ['', '', 'migracion_extranjera', {}, {}],
+        30: ['migracion_extranjera', 'migracion_extranjera', 'migracion_extranjera', {}, {}],
         31: ['mig_noprin_prin', 'mig_noprin_prin', 'mig_noprin_prin', {}, {}],
         32: ['tamano_hogar', 'tamano_hogar', 'tamano_hogar', {'rela_jef' : '1'}, {}],
         33: ['hogar_completo', 'hogar_completo', 'hogar_completo', {'rela_jef' : '1'}, {}],
