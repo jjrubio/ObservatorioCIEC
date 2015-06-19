@@ -244,45 +244,46 @@ def calc_result(request):
                         ).exclude(**get_filter()[indicator_int][4]
                         ).order_by('fexp')
 
-                    column_1 = get_column_1(data_byWhere, method_int, indicator_int)
-                    columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
-                    column_2 = columns_2_3[0]
-                    column_3 = columns_2_3[1]
-                    column_dimensions = columns_2_3[2]
-                    column_N = columns_2_3[6]
-                    column_4 = get_column_4(data_byWhere)
+                    if (data_byWhere.count() > 0):
+                        column_1 = get_column_1(data_byWhere, method_int, indicator_int)
+                        columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
+                        column_2 = columns_2_3[0]
+                        column_3 = columns_2_3[1]
+                        column_dimensions = columns_2_3[2]
+                        column_N = columns_2_3[6]
+                        column_4 = get_column_4(data_byWhere)
 
-                    models_by_period = modelo_final(column_1,column_2,column_3,column_4, confidence_level_int)
-                    models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
-                    data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
-                    data_result.append(data_result_by_period)
+                        models_by_period = modelo_final(column_1,column_2,column_3,column_4, confidence_level_int)
+                        models_by_period_none = np.where(np.isnan(models_by_period), 0, models_by_period)
+                        data_result_by_period = [i, j, column_N, models_by_period_none.tolist()]
+                        data_result.append(data_result_by_period)
 
-                    if (ban == 0):
-                        column_titles = columns_2_3[3]
-                        column_name_d1 = column_titles[0]
-                        column_name_d2 = column_titles[1]
-                        column_types_d1 = columns_2_3[4]
-                        column_types_d2 = columns_2_3[5]
+                        if (ban == 0):
+                            column_titles = columns_2_3[3]
+                            column_name_d1 = column_titles[0]
+                            column_name_d2 = column_titles[1]
+                            column_types_d1 = columns_2_3[4]
+                            column_types_d2 = columns_2_3[5]
 
-                        column_types_d1_new = insert_accents(column_types_d1)
-                        column_types_d2_new = insert_accents(column_types_d2)
+                            column_types_d1_new = insert_accents(column_types_d1)
+                            column_types_d2_new = insert_accents(column_types_d2)
 
-                        disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
-                        if(column_dimensions[0] == 0):
-                            title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
-                        elif(column_dimensions[1] == 0):
-                            title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
-                        else:
-                            title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
+                            disintegration = (Indicator.objects.get(id=indicator_int).name).encode('utf-8')
+                            if(column_dimensions[0] == 0):
+                                title = disintegration+' '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                            elif(column_dimensions[1] == 0):
+                                title = disintegration+' por '+column_titles[0] +' a nivel '+get_area_name(represent_int)
+                            else:
+                                title = disintegration+' por '+column_titles[0]+' - '+column_titles[1]+' a nivel '+get_area_name(represent_int)
 
-                        if(yearStart_int == yearEnd_int):
-                            years_title = str(yearStart_int)
-                        else:
-                            years_title = str(yearStart_int)+' - '+str(yearEnd_int)
+                            if(yearStart_int == yearEnd_int):
+                                years_title = str(yearStart_int)
+                            else:
+                                years_title = str(yearStart_int)+' - '+str(yearEnd_int)
 
-                        unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
+                            unit = Indicator.objects.get(id = indicator_int).unit.encode('utf-8')
 
-                        ban = 1
+                            ban = 1
 
                 if j == 4:
                     trim_1 = 1
@@ -304,7 +305,6 @@ def calc_result(request):
     return HttpResponse(message, content_type='application/json')
 
 def modelo_ind(y,X,Z,fexp,conf=0.95,colin_thres=30):
-
     # Armar la regresion por OLS segun el modelo
     if not (X.any() or Z.any()):
         n = y.shape[0]
@@ -734,7 +734,6 @@ def list_by_no_denied(request):
                     result_data.append(int(datos[j]))
         result_data.append(desa)
         
-
     disin = Disintegration.objects.filter(id__in=result_data)
     data = serializers.serialize('json', disin)
     
