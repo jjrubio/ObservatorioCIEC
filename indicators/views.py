@@ -109,27 +109,20 @@ def indicators_detail(cat_id, subcat_id, ind_id, method_id):
     return message
 
 def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1', method_id='1'):
-    permiso = False
-    if request.session.get('last_visit'):
-        last_visit_time = request.session.get('last_visit')
-        visits = request.session.get('visits', '0')
-        count = request.session.get('visits')
-        if (datetime.now() - datetime.strptime(last_visit_time[:-7], "%Y-%m-%d %H:%M:%S")).days > 0:
-#            request.session['visits'] = visits + 1
-#            request.session['last_visit'] = str(datetime.now())
-            request.session.flush()
-            permiso=True
-        else:
-            if count > 0:
-                permiso = False
-            else:
-                permiso = True
-                request.session['visits'] = visits + 1
-                request.session['last_visit'] = str(datetime.now())
-    else:
-        #request.session['last_visit'] = str(datetime.now())
-        #request.session['visits'] = 1
-        permiso = True
+    permiso = True
+
+    # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    # fecha_now = str(datetime.now())
+    # if x_forwarded_for:
+    #     ip = x_forwarded_for.split(',')[0]
+    # else:
+    #     ip = request.META.get('REMOTE_ADDR')
+    # get_ip = Ip_controller.objects.filter(ip=ip)
+    # if not get_ip:
+    #     permiso = True
+    # else:
+    #     if ( datetime.strptime(fecha_now[:-7], "%Y-%m-%d %H:%M:%S") -  datetime.strptime(get_ip[0].fecha_actual[:-7], "%Y-%m-%d %H:%M:%S")).days > 0:
+    #         permiso = True
 
     json = indicators_detail(cat_id, subcat_id, ind_id, method_id)
     subcategories = Subcategory.objects.all()
@@ -142,18 +135,19 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1', method_id='1'
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
 def calc_result(request):
+    # permiso = False
 
-    if request.session.get('last_visit'):
-        last_visit_time = request.session.get('last_visit')
-        visits = request.session.get('visits', '0')
-        count = request.session.get('visits')                  
-        
-        if (datetime.now() - datetime.strptime(last_visit_time[:-7], "%Y-%m-%d %H:%M:%S")).days > 0:
-            request.session['visits'] = visits + 1
-            request.session['last_visit'] = str(datetime.now())
-    else:
-        request.session['last_visit'] = str(datetime.now())
-        request.session['visits'] = 1
+    # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    # fecha_now = str(datetime.now())
+    # if x_forwarded_for:
+    #     ip = x_forwarded_for.split(',')[0]
+    # else:
+    #     ip = request.META.get('REMOTE_ADDR')
+    # get_ip = Ip_controller.objects.filter(ip=ip)
+    # if not get_ip:
+    #     ip_save = Ip_controller(ip=ip, fecha_actual = fecha_now)
+    #     ip_save.save()
+    #     permiso = True
     
     indicator = request.GET['indicator']
     represent = request.GET['represent']

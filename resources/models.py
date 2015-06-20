@@ -57,3 +57,15 @@ class Download(models.Model):
 
     def __unicode__(self):
         return self.code
+
+# class Ip_controller(models.Model):
+#     ip = models.CharField(max_length=20, verbose_name='Dirección IP')
+#     fecha_actual = models.CharField(max_length=50, verbose_name='Fecha actual', null=True, blank=True)
+
+#     class Meta:
+#         verbose_name = "Controlador de IP"
+#         verbose_name_plural = "Controlador de IP's"
+#         db_table = 'resources_ip_controller'
+
+#     def __unicode__(self):
+#         return self.ip
