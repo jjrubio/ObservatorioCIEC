@@ -1,6 +1,7 @@
 from django.contrib import admin
 from models import *
 
+
 class TypeAdminPais(admin.ModelAdmin):
     list_display  = ('codigo', 'pais', )
 
@@ -26,7 +27,7 @@ class TypeAdminImportNandina(admin.ModelAdmin):
     list_display  = ('ano', 'mes', 'pais', 'subpartida_nandina', 'peso', 'fob', 'cif', 'subpartida_key', )
 
 class TypeAdminUpload(admin.ModelAdmin):
-    list_display  = ('upload', )	
+    list_display  = ('upload', )    
 
 admin.site.register(Paises, TypeAdminPais)
 admin.site.register(CGCE,TypeAdminEstandares)

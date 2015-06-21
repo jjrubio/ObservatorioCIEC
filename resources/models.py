@@ -6,7 +6,6 @@ class Bulletin(models.Model):
     pdf_src = models.FileField(upload_to='pdfs/', verbose_name='Archivo de PDF')
 
     class Meta:
-        app_label = "Recursos"
         db_table = "resources_bulletin"
         verbose_name = "boletín"
         verbose_name_plural = "Boletines"
@@ -19,7 +18,6 @@ class LinkCategory(models.Model):
     name = models.CharField(max_length=50, verbose_name='Nombre')
 
     class Meta:
-        app_label = "Recursos"
         db_table = "resources_linkcategory"
         verbose_name = "enlace externo - definición categoría"
         verbose_name_plural = "Enlaces externos - Definición Categoría"
@@ -34,7 +32,6 @@ class Link(models.Model):
     url   = models.URLField(verbose_name='Enlace Web')
 
     class Meta:
-        app_label = "Recursos"
         db_table = "resources_link"
         verbose_name = "enlace externo - definición enlace"
         verbose_name_plural = "Enlaces externos - Definición Enlace"
