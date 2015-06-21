@@ -186,15 +186,15 @@
                                                     <label id="mensaje_desagregacion"></label>
                                                     <div id="ckb"></div><!-- #ckb -->
                                                     <div class="text-center buttons">
+                                                            {% if user.is_authenticated or permiso %}
                                                             <button type="button" class="btn btn-back" data-toggle="collapse" data-target="#parametros">
                                                                 Atrás
                                                             </button>
-                                                            {% if user.is_authenticated or permiso %}
                                                             <button type="button" class="btn btn-calc" data-toggle="collapse" data-target="#resultado">
                                                             Calcular
                                                             </button>
                                                             {% else %}
-                                                            <p>Para realizar cálculos, por favor <a href="/registro/">Registrarse</a></p>
+                                                            <p>Para realizar cálculos, por favor <a href="/registro/">Registrarse</a> ó <a href="/iniciar-sesion/">Inicie Sesión</a></p>
                                                             {% endif %}
                                                     </div><!-- .text-center.buttons -->
                                                 </form>
@@ -203,6 +203,7 @@
                                     </div><!-- .panel-body -->
                                     </div><!-- #desagregaciones.panel-collapse.collapse -->
                             </div><!-- .panel.panel-default -->
+                            {% if user.is_authenticated or permiso %}
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
@@ -246,6 +247,7 @@
                                     </div><!-- .panel-body.text-center -->
                                 </div><!-- #resultados.panel-collapse.collapse -->
                             </div><!-- .panel.panel-default -->
+                            {% endif %}
                         </div><!-- #accordion.panel-group -->
                     </div><!-- .panel-body -->
                 </div><!-- #main-panel.panel.panel-default -->
