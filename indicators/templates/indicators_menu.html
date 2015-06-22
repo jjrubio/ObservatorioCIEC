@@ -1,46 +1,46 @@
 {% load apptags %}
 
 {% load static from staticfiles %}
-		<div class="row">
-                	<div class="opcion-menu pull-left">
-				<b>Categoria</b>
-				<br>
-                      	<select id ="category" class="selectpicker show-menu-arrow span2"   data-live-search="true" >
-                      	{% for cat in categories %}
-                            	{% if cat.id == json.2.0.category.id %}
-                            	<option value="{{forloop.counter}}" selected="selected" data-icon="fa {{cat.icon}}">{{cat.name}}</option>
-                            	{% else %}
-                            	<option value="{{forloop.counter}}" data-icon="fa {{cat.icon}}">{{cat.name}}</option>
-                      		{% endif %}
-                      	{% endfor %}
-                      	</select>
-                	</div><!-- .opcion-menu.pull-left -->
-                	<div class="opcion-menu pull-left">
-          			<b>Subcategoria</b>
-                      	<br>
-                      	<select id="subcategory" class="selectpicker show-menu-arrow span2"  data-live-search="true" >
-               		{%  for subcat in json.0 %}
-                            	{% if subcat.id == json.2.0.subcategory.id %}
-                            	<option value="{{forloop.counter}}" selected="selected" data-icon="fa {{subcat.icon}}">{{subcat.name}}</option>
-                            	{% else %}
-                            	<option value="{{forloop.counter}}" data-icon="fa {{subcat.icon}}">{{subcat.name}}</option>
-                            	{% endif %}
-                      	{% endfor %}
-                      	</select>
-                	</div><!-- .opcion-menu.pull-left -->
-                	<div class="opcion-menu pull-left">
-                      	<b>Indicador</b>
-                      	<br>
-                		<select id="indicator" class="selectpicker show-menu-arrow span2"  data-live-search="true" >
-                      	{%  for ind in json.1 %}
-                            	{% if ind.id == json.2.0.id %}
-                            	<option id="{{ind.id}}" value="{{forloop.counter}}" selected="selected" data-icon="fa {{ind.icon}}">{{ind.name}}</option>
-                            	{% else %}
-                            	<option id="{{ind.id}}" value="{{forloop.counter}}" data-icon="fa {{ind.icon}}">{{ind.name}}</option>
-                            	{% endif %}
-                      	{% endfor %}
-                      	</select>
-                	</div><!-- .opcion-menu.pull-left -->
+        <div class="row">
+                    <div class="opcion-menu pull-left">
+                <b>Categoria</b>
+                <br>
+                        <select id ="category" class="selectpicker show-menu-arrow span2"   data-live-search="true" >
+                        {% for cat in categories %}
+                                {% if cat.id == json.2.0.category.id %}
+                                <option value="{{forloop.counter}}" selected="selected" data-icon="fa {{cat.icon}}">{{cat.name}}</option>
+                                {% else %}
+                                <option value="{{forloop.counter}}" data-icon="fa {{cat.icon}}">{{cat.name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                        </select>
+                    </div><!-- .opcion-menu.pull-left -->
+                    <div class="opcion-menu pull-left">
+                    <b>Subcategoria</b>
+                        <br>
+                        <select id="subcategory" class="selectpicker show-menu-arrow span2"  data-live-search="true" >
+                    {%  for subcat in json.0 %}
+                                {% if subcat.id == json.2.0.subcategory.id %}
+                                <option value="{{forloop.counter}}" selected="selected" data-icon="fa {{subcat.icon}}">{{subcat.name}}</option>
+                                {% else %}
+                                <option value="{{forloop.counter}}" data-icon="fa {{subcat.icon}}">{{subcat.name}}</option>
+                                {% endif %}
+                        {% endfor %}
+                        </select>
+                    </div><!-- .opcion-menu.pull-left -->
+                    <div class="opcion-menu pull-left">
+                        <b>Indicador</b>
+                        <br>
+                        <select id="indicator" class="selectpicker show-menu-arrow span2"  data-live-search="true" >
+                        {%  for ind in json.1 %}
+                                {% if ind.id == json.2.0.id %}
+                                <option id="{{ind.id}}" value="{{forloop.counter}}" selected="selected" data-icon="fa {{ind.icon}}">{{ind.name}}</option>
+                                {% else %}
+                                <option id="{{ind.id}}" value="{{forloop.counter}}" data-icon="fa {{ind.icon}}">{{ind.name}}</option>
+                                {% endif %}
+                        {% endfor %}
+                        </select>
+                    </div><!-- .opcion-menu.pull-left -->
                   <div class="opcion-menu pull-left">
                     <b>Metodología</b><br>
                     <select id="method" class="selectpicker show-menu-arrow span2"  data-live-search="true">
@@ -53,4 +53,4 @@
                         {% endfor %}
                      </select>
                 </div>
-          	</div><!-- .row -->
+            </div><!-- .row -->

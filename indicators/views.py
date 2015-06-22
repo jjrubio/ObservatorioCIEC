@@ -524,14 +524,14 @@ def get_column_1(data, method_int, indicator_int):
         if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18 or indicator_int == 74 or indicator_int == 75):
             column_1_a = data.only(get_filter()[indicator_int][0]).values_list(get_filter()[indicator_int][0], flat=True)
             column_1_b = data.only(get_filter()[indicator_int][5]).values_list(get_filter()[indicator_int][5], flat=True)
-            column_1 = [(x * y) for x, y in zip(column_1_a, column_1_b)]
+            column_1 = [(int(x) * int(y)) for x, y in zip(column_1_a, column_1_b)]
         else:
             column_1 = data.only(get_filter()[indicator_int][0]).values_list(get_filter()[indicator_int][0], flat=True)
     else:
         if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18 or indicator_int == 74 or indicator_int == 75):
             column_1_a = data.only(get_filter()[indicator_int][1]).values_list(get_filter()[indicator_int][1], flat=True)
             column_1_b = data.only(get_filter()[indicator_int][5]).values_list(get_filter()[indicator_int][5], flat=True)
-            column_1 = [(x * y) for x, y in zip(column_1_a, column_1_b)]
+            column_1 = [(int(x) * int(y)) for x, y in zip(column_1_a, column_1_b)]
         else:
             column_1 = data.only(get_filter()[indicator_int][1]).values_list(get_filter()[indicator_int][1], flat=True)
     column_1_array = np.array(list(column_1), 'float')
