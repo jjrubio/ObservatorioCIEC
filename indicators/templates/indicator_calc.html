@@ -39,26 +39,16 @@
                                                 <label>
                                                     <span>Representatividad   </span><br><br>
                                                     <select id="represent" class="selectpicker show-menu-arrow" data-width="93%">
+                                                        {% if json.2.0.id == 80 %}
+                                                        <option value="2">Urbano</option>
+                                                        {% else %}
                                                         <option value="1">Nacional</option>
                                                         <option value="2">Urbano</option>
                                                         <option value="3">Rural</option>
+                                                        {% endif %}
                                                     </select>
                                                     <i id="info-represent" class="fa fa-info-circle fa-lg pull-right"></i>
                                                 </label>
-                                                <!-- <label>
-                                                    <span>Metodología </span><br><br>
-                                                    <select id="method" class="selectpicker show-menu-arrow"  data-width="93%">
-                                                    {% if method_option == 1 %}
-                                                        <option value="1">2003-4 hasta 2007-1 </option>
-                                                    {% elif method_option == 2 %}
-                                                        <option value="2">2007-2 hasta la actualidad</option>
-                                                    {% else %}
-                                                        <option value="1">2003-4 hasta 2007-1 </option>
-                                                        <option value="2">2007-2 hasta la actualidad</option>
-                                                    {% endif %}
-                                                    </select>
-                                                    <i id="info-method" class="fa fa-info-circle fa-lg pull-right"></i>
-                                                </label> -->
                                                 <label>
                                                     <span>Período Inicial </span><br><br>
                                                         <span>Año: </span>
