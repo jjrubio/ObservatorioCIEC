@@ -123,6 +123,7 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1', method_id='1'
     #     permiso = True
     # else:
     #     if ( datetime.strptime(fecha_now[:-7], "%Y-%m-%d %H:%M:%S") -  datetime.strptime(get_ip[0].fecha_actual[:-7], "%Y-%m-%d %H:%M:%S")).days > 0:
+            # update_ip = Ip_controller.objects.filter(ip=get_ip[0].ip).update(fecha_actual=fecha_now)
     #         permiso = True
 
     json = indicators_detail(cat_id, subcat_id, ind_id, method_id)

@@ -687,13 +687,13 @@ function filter_num_max_desagregacion(id_indicador){
             $.each(data, function(index, item){
                 var num_max = item.fields.num_max_desagregations
                 if(num_max == '0'){
-                    var tmpHTML = "<i class=\"fa fa-info-circle fa-lg\"></i> Para el indicador escogido, no existen desagregaciones válidas";
+                    var tmpHTML = "<i class=\"fa fa-info-circle fa-lg\"></i> No existen desagregaciones válidas";
                     $('#mensaje_desagregacion').append(tmpHTML);
                 }else if(num_max == '1'){
-                    var tmpHTML = "<i class=\"fa fa-info-circle fa-lg\"></i> Para el indicador escogido, puede elegir una desagregación";
+                    var tmpHTML = "<i class=\"fa fa-info-circle fa-lg\"></i> Puede elegir hasta una desagregación";
                     $('#mensaje_desagregacion').append(tmpHTML);
                 }else{
-                    var tmpHTML = "<i class=\"fa fa-info-circle fa-lg\"></i> Para el indicador escogido, puede elegir hasta 2 desagregaciones";
+                    var tmpHTML = "<i class=\"fa fa-info-circle fa-lg\"></i> Puede elegir hasta dos desagregaciones";
                     $('#mensaje_desagregacion').append(tmpHTML);
                 }
                 num_max_G = num_max;
