@@ -101,9 +101,8 @@ $(document).ready(function() {
         $('#parametros').addClass('collapse in'); 
         $('#parametros').removeClass('collapse in');
         $('#parametros').addClass('collapse');    
-
-
     });
+
 
     $('#btn_search').click(function(){
         var tipo = tabs_1;
@@ -397,6 +396,8 @@ function grafico(data){
     total_datos = data[1][0].length;
     tipo = tabs_1;
 
+    console.log(data);
+
     $('#graph').perfectScrollbar('destroy');
     $('#div_graph_comercio').perfectScrollbar('destroy');
     $('#div_graph_comercio').empty();
@@ -415,40 +416,81 @@ function grafico(data){
                 producto = data[0][0][i][0];
                 productoFechas = [];
                 productoFOBs = [];
+                if(tipo == "tab_imp"){
+                    productoCIFs = [];
+                }
 
                 for(var j=0; j < total_datos; j++){
                     subpartida = data[1][0][j][1];
                     fecha_sub = data[1][0][j][0];
                     fob_sub = data[1][0][j][3];
+                    if(tipo == "tab_imp"){
+                        cif_sub = data[1][0][j][4];
+                    }
 
                     if(producto == (subpartida.substring(0, subpartida.length - 2)))
                     {
                         productoFechas.push(fecha_sub);
                         productoFOBs.push(fob_sub);
+                        if(tipo == "tab_imp"){
+                            productoCIFs.push(cif_sub);
+                        }
                     }
                 }
 
                 if(productoFechas.length > 0)
                 {
                     num_productos_con_datos++;
-                    link_ul = "producto"+(num_productos_con_datos);
-                    $("#ul_graph_comercio").append('<li><a href="#'+link_ul+'" role="tab" data-toggle="tab"> Producto #' +num_productos_con_datos+'</a></li>')
-                    $("#div_graph_comercio").append('<div class="tab-pane text-center" id="'+link_ul+'"></div>');
-                    graph_title = "Exportación de "  + data[0][0][i][1];  
-                    graph_subtitle = "desde " + fecha_inicial + " hasta " + fecha_final;
 
-                    if (productoFechas.length  <= 12) 
-                    {
-                        graph_width = 900;
+                    if(tipo == "tab_exp"){
+                        num_ope = 1;
                     }else{
-                        graph_width = productoFechas.length * 75;
+                        num_ope = 2;
                     }
 
-                    graph_valuesX = productoFechas;
-                    graph_valuesY = productoFOBs;
+                    link_ul = "producto"+(num_productos_con_datos);
 
-                    dibujar_grafico(link_ul, graph_title, graph_subtitle, graph_width, graph_valuesX, graph_valuesY);
+                    $("#ul_graph_comercio").append('<li><a href="#'+link_ul+'" role="tab" data-toggle="tab"> Producto #' +num_productos_con_datos+'</a></li>')
+                    $("#div_graph_comercio").append('<div class="tab-pane text-center" id="'+link_ul+'"></div>');
 
+                    for(var k=0; k<num_ope; k++)
+                    {
+                        if(k == 0){
+                            div_name = "producto"+(num_productos_con_datos)+"_fob";
+                        }else{
+                            div_name = "producto"+(num_productos_con_datos)+"_cif";
+                        }
+                        
+                        $('#'+link_ul).append('<div id="'+div_name+'" class="graph text-center" ></div>');
+
+                        if(num_ope == 1){
+                            graph_title = "Exportación de "  + data[0][0][i][1];  
+                        }else{
+                            graph_title = "Importación de "  + data[0][0][i][1];  
+                        }
+                        
+                        graph_subtitle = "desde " + fecha_inicial + " hasta " + fecha_final;
+
+                        if (productoFechas.length  <= 12) 
+                        {
+                            graph_width = 900;
+                        }else{
+                            graph_width = productoFechas.length * 75;
+                        }
+
+                        graph_valuesX = productoFechas;
+                        
+                        if(k == 0){
+                            name_Yaxis = "FOB (Miles de Dólares)";
+                            graph_valuesY = productoFOBs;
+                        }else{
+                            name_Yaxis = "CIF (Miles de Dólares)";
+                            graph_valuesY = productoCIFs;
+                        }
+
+                        dibujar_grafico(div_name, graph_title, graph_subtitle, graph_width, graph_valuesX, name_Yaxis, graph_valuesY);
+                    }
+                    
                     if (num_productos_con_datos == 8){
                         break;
                     }
@@ -467,7 +509,7 @@ function grafico(data){
 }
 
 
-function dibujar_grafico(div, title, subtitle, width, valuesX, valuesY){
+function dibujar_grafico(div, title, subtitle, width, valuesX, name_Yaxis, valuesY){
     var options = {
         chart: {
             renderTo: div,
@@ -493,7 +535,7 @@ function dibujar_grafico(div, title, subtitle, width, valuesX, valuesY){
         yAxis: {
             title: {
                 enabled: true,
-                text: "FOB (Miles de Dólares)",
+                text: name_Yaxis,
             },
             min: 0,
             lineWidth: 1,
