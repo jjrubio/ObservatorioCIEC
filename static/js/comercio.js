@@ -396,8 +396,6 @@ function grafico(data){
     total_datos = data[1][0].length;
     tipo = tabs_1;
 
-    console.log(data);
-
     $('#graph').perfectScrollbar('destroy');
     $('#div_graph_comercio').perfectScrollbar('destroy');
     $('#div_graph_comercio').empty();
