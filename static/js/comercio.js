@@ -76,6 +76,9 @@ $(document).ready(function() {
             $('#search').hide();
             $('#pais').hide();
             $('#filtrar_por').text('Escriba el nombre del país');
+            $('#txt_filtro_num').attr('type','hidden');
+            $('#txt_filtro_num').attr('value',' ');
+            $('#txt_filtro_text').attr('type','text');
         }
 
         $('#tables').hide();
