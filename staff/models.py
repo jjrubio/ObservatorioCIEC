@@ -13,6 +13,7 @@ class Personal_data(models.Model):
     nombre = models.CharField(max_length=50, verbose_name='Nombre')
     apellido = models.CharField(max_length=50, verbose_name='Apellido')
     grado_academico = models.CharField(max_length=5, choices = GRADO_ACADEMICO_CHOOSE , default = 'Economista' , verbose_name='Grado académico')
+    cargo = models.CharField(max_length=150, verbose_name='Cargo')
     correo = models.EmailField(verbose_name='Correo')
     resumen = models.TextField(verbose_name='Resumen')
 
