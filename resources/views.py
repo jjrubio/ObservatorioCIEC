@@ -22,3 +22,12 @@ def pdf_view(request, bulletin_id):
         response['Content-Disposition'] = 'inline;filename=Observatorio_Economico_Social_Edicion_'+bulletin_id+'.pdf'
         return response
     pdf.closed
+
+def search(request):
+    data_result = []
+    template = 'bulletins.html'
+    text = request.GET['txt_search'].encode('ascii','ignore')
+    text_int = int(text)
+    bulletins_filtrados = Bulletin.objects.filter(id__contains=text_int)
+    data = serializers.serialize('json', bulletins_filtrados)
+    return HttpResponse(data, content_type='application/json')
