@@ -3,6 +3,22 @@ from django.shortcuts import HttpResponse, render, render_to_response, HttpRespo
 from django.template.context import RequestContext
 from models import *
 from django.shortcuts import get_object_or_404
+import pickle
+import json
+from json import JSONEncoder
+from django.core import serializers
+
+
+class PythonObjectEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (list, dict, str, unicode, int, float, bool, type(None))):
+            return JSONEncoder.default(self, obj)
+        return {'_python_object': pickle.dumps(obj)}
+        
+def as_python_object(dct):
+    if '_python_object' in dct:
+        return pickle.loads(str(dct['_python_object']))
+    return dct
 
 def links(request):
     links = Link.objects.all()
