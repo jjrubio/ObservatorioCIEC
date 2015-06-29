@@ -6,13 +6,41 @@
 {% block arrow_link %}<i class="fa fa-chevron-left pull-right"></i>{% endblock %}
 
 {% block resource %}
-    <b id="title-content-page">Boletines</b>
-    <hr class="pull-left">
+    <div class="row">
+        <div class="col-lg-6 pull-left"><b id="title-content-page">Boletines</b></div>  
+        <div class="col-lg-6 pull-right">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar
+                por número de boletín" name="search" id="texto">
+                <div class="input-group-btn">
+                    <button class="btn btn-default btn-search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </div> 
+   
+    <hr class="pull-left" id="separator-content-page"> 
     <div id="bulletins-list" class="external-link pull-left">
         <ul>
             {% for bulletin in bulletins %}
                 <li><a target="_blank" href="/boletin/{{bulletin.id}}/">Boletín Edición no. {{bulletin.id}} <i class="fa fa-external-link"></i></a></li>
             {% endfor %}
         </ul>
-    </div><!-- #bulletins-list.external-link.pull-left -->
+    </div>
+
+{% endblock %}
+
+{% block extraScripts %}   
+    <script type="text/javascript">
+        $('.btn-search').click(function(){
+            var text = $('#texto').val();
+            $('#bulletins-list').children().remove();
+            $.getJSON('/busqueda/',{'txt_search':text},function(data){
+            $.each(data,function(index,item){
+                var tmp ='<li><a style="color:black;" target="_blank" href="/boletin/'+item.pk+'/">Boletín Edición no.'+item.pk+' <i class="fa fa-external-link"></i></a></li><br/>';
+                $('#bulletins-list').append(tmp);
+            });
+        });
+     });
+     </script>
 {% endblock %}
