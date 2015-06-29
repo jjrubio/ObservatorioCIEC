@@ -137,7 +137,12 @@ $(document).ready(function() {
         var standar;
         var period;
         var desde = $('#startDate').val().split("/");
-        var txt_desde = desde[0]+"/0"+(parseInt(desde[1])-1).toString();
+        if(parseInt(desde[1]) < 10){
+            desde_mes = "/0"+(parseInt(desde[1])-1).toString();
+        }else{
+            desde_mes = "/"+(parseInt(desde[1])-1).toString();
+        }
+        var txt_desde = desde[0]+desde_mes;
         var txt_hasta = $('#endDate').val();
         var txt_patron;
         var txt_agregacion;
@@ -593,7 +598,7 @@ function grafico_2(data, f_inicial, f_final){
     mes2 = parseInt(f_final.split("/")[1]);
     mes1_aux = mes1;
 
-    graph_subtitle = "desde " + f_inicial + " hasta " + f_final;
+    graph_subtitle = "desde " + anio1+"/"+mes1 + " hasta " + f_final;
 
     for(var i = 0; i < paises_escogidos.length; i++){
         
@@ -603,12 +608,12 @@ function grafico_2(data, f_inicial, f_final){
         nombre_pais = paises_escogidos[i].replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '');
         graph_title = "Exportación de productos de "+paises_escogidos[i];
 
-        $("#ul_graph_comercio").append('<li><a href="#'+nombre_pais+'" role="tab" data-toggle="tab">' +nombre_pais+'</a></li>')
+        $("#ul_graph_comercio").append('<li><a href="#'+nombre_pais+'" role="tab" data-toggle="tab">' +paises_escogidos[i]+'</a></li>')
         $("#div_graph_comercio").append('<div class="tab-pane text-center" id="'+nombre_pais+'"></div>');
 
         for(var op = 0; op < ope; op++){
 
-            if(ope == 1){
+            if(op == 0){
                 div_name = nombre_pais+"_fob";
             }else{
                 div_name = nombre_pais+"_cif";
@@ -625,7 +630,12 @@ function grafico_2(data, f_inicial, f_final){
                 }
 
                 for(var k = mes1_aux; k <= mes2_aux; k++){
-                    fecha_aux = j +"-0"+ k;
+                    if(k < 10){
+                        fecha_aux = j +"-0"+ k;
+                    }else{
+                        fecha_aux = j +"-"+ k;
+                    }
+                    
                     suma_fob = 0.0;
                     suma_cif = 0.0;
                     for(var l=0; l<data[1][0].length; l++){
@@ -644,6 +654,7 @@ function grafico_2(data, f_inicial, f_final){
                         fechas_grafico.push(fecha_aux);
                         CIFs_grafico.push(Math.round (suma_cif*100) / 100);
                     }
+                    // console.log("fecha: " + j + "-"+k);
                 }
                 mes1_aux = 1;
             }
@@ -658,7 +669,7 @@ function grafico_2(data, f_inicial, f_final){
 
             graph_valuesX = fechas_grafico;
         
-            if(ope == 1){
+            if(op == 0){
                 name_Yaxis = "FOB (Miles de Dólares)";
                 graph_valuesY = FOBs_grafico;
             }else{
