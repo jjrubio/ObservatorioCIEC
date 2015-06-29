@@ -14,12 +14,12 @@ $(document).ready(function() {
             $('#filtrar_por').text(textoFiltro);
             $('#txt_filtro_num').attr('type','text');
             $('#txt_filtro_text').attr('type','hidden');
-            $('#txt_filtro_text').attr('value',' ');
+            $('#txt_filtro_text').attr('value','');
         }else{
             textoFiltro = "Palabras clave a buscar en la descripción de la partida/subpartida";
             $('#filtrar_por').text(textoFiltro);
             $('#txt_filtro_num').attr('type','hidden');
-            $('#txt_filtro_num').attr('value',' ');
+            $('#txt_filtro_num').attr('value','');
             $('#txt_filtro_text').attr('type','text');
         }
     });
@@ -60,6 +60,11 @@ $(document).ready(function() {
     $('#myTabs_1').on('shown.bs.tab', function(e){
         $('#tables').hide();
         $('#datos').show();
+
+        $('#parametros').removeClass('collapse');
+        $('#parametros').addClass('collapse in'); 
+        $('#resultados').removeClass('collapse in');
+        $('#resultados').addClass('collapse');  
     });
 
 
@@ -70,6 +75,20 @@ $(document).ready(function() {
             $('#search').show();
             $('#pais').show();
             $('#filtrar_por').text(textoFiltro);
+            if ($('#search_by').val() == 1){
+                textoFiltro = "Filtrar por código";
+                $('#filtrar_por').text(textoFiltro);
+                $('#txt_filtro_num').attr('type','text');
+                $('#txt_filtro_text').attr('type','hidden');
+                $('#txt_filtro_text').attr('value','');
+            }else{
+                textoFiltro = "Palabras clave a buscar en la descripción de la partida/subpartida";
+                $('#filtrar_por').text(textoFiltro);
+                $('#txt_filtro_num').attr('type','hidden');
+                $('#txt_filtro_num').attr('value','');
+                $('#txt_filtro_text').attr('value','');
+                $('#txt_filtro_text').attr('type','text');
+            }
         }
 
         if(activeTab == "tab_pais"){
@@ -77,9 +96,15 @@ $(document).ready(function() {
             $('#pais').hide();
             $('#filtrar_por').text('Escriba el nombre del país');
             $('#txt_filtro_num').attr('type','hidden');
-            $('#txt_filtro_num').attr('value',' ');
+            $('#txt_filtro_num').attr('value','');
+            $('#txt_filtro_text').attr('value','');
             $('#txt_filtro_text').attr('type','text');
         }
+
+        $('#parametros').removeClass('collapse');
+        $('#parametros').addClass('collapse in'); 
+        $('#resultados').removeClass('collapse in');
+        $('#resultados').addClass('collapse');  
 
         $('#tables').hide();
         $('#graph').hide();
@@ -102,27 +127,26 @@ $(document).ready(function() {
     $('#a-parametros').click( function(){
         $('#parametros').removeClass('collapse');
         $('#parametros').addClass('collapse in'); 
-        $('#parametros').removeClass('collapse in');
-        $('#parametros').addClass('collapse');    
+        $('#resultados').removeClass('collapse in');
+        $('#resultados').addClass('collapse');     
     });
 
 
     $('#btn_search').click(function(){
-        var tipo = tabs_1;
-        var option = tabs_2;
         var search_by;
         var standar;
         var period;
-        var txt_desde = $('#startDate').val();
+        var desde = $('#startDate').val().split("/");
+        var txt_desde = desde[0]+"/0"+(parseInt(desde[1])-1).toString();
         var txt_hasta = $('#endDate').val();
         var txt_patron;
         var txt_agregacion;
         var bandera;
 
-        $('#resultados').removeClass('collapse');
-        $('#resultados').addClass('collapse in'); 
         $('#parametros').removeClass('collapse in');
-        $('#parametros').addClass('collapse');    
+        $('#parametros').addClass('collapse'); 
+        $('#resultados').removeClass('collapse');
+        $('#resultados').addClass('collapse in');  
 
         $("#loading").css("display","inline");
         $("#tables").hide();
@@ -137,7 +161,7 @@ $(document).ready(function() {
         if(txt_agregacion < 0){
                 //Mostrar mensaje de error
         }else{
-            if(option == "tab_codsub"){
+            if(tabs_2 == "tab_codsub"){
                 search_by = $('#search_by option:selected').attr('value');
                 standar = $('#standars option:selected').attr('value');
                 period = $('#period option:selected').attr('value');
@@ -157,16 +181,36 @@ $(document).ready(function() {
 
             txt_agregacion = $('#txt_agregacion').val();
 
+            if(tabs_1 == "tab_exp"){
+                tipo = 1;
+            }else{
+                tipo = 2;
+            }
+
+            if(tabs_2 == "tab_codsub"){
+                option = 1;
+            }else{
+                option = 2;
+            }
+
+
             $.getJSON('/comercio/', {'tipo': tipo, 'option': option, 'search_by': search_by, 'standar': standar, 'txt_desde': txt_desde,
                                      'txt_hasta': txt_hasta, 'period': period, 'txt_agregacion': txt_agregacion, 'txt_patron': txt_patron, 'checkbox_pais': checkbox_pais},
             function(data){
                 table_A(data, standar);
-                table_B(data, option, tipo, standar, checkbox_pais);
+                table_B(data, tabs_1, tabs_2, standar, checkbox_pais);
                 
                 $('#tables').show();
                 $('#graph').show();
 
-                grafico(data);
+                if (option == 1 && checkbox_pais == 0 ){
+                    grafico_1(data);
+                }
+
+                if (option == 2 || (option == 1 && checkbox_pais == 1 ) ){
+                    grafico_2(data, txt_desde, txt_hasta);
+                }
+
                 $("#loading").css("display","none");
             });
         }
@@ -213,7 +257,7 @@ $(document).ready(function() {
     }
 
 
-    function table_B(data, option, tipo, standar, checkbox_pais){
+    function table_B(data, tipo, option, standar, checkbox_pais){
         len = data[1][0].length;
 
         $('#pie_de_tabla_ex_im').empty();
@@ -235,7 +279,7 @@ $(document).ready(function() {
             clase = 'Código';
         }
 
-        if( checkbox_pais == 0 ){
+        if( option == "tab_codsub" && checkbox_pais == 0){
             if (tipo == "tab_exp"){
                 $('#table_B thead tr').append('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
                                              '<th id="code_B" data-field="codigo" data-align="center" data-sortable="true">'+clase+'</th>'+
@@ -275,7 +319,7 @@ $(document).ready(function() {
             }
         }
 
-        if( checkbox_pais == 1 || option == "tab_pais" ){
+        if( (option == "tab_codsub" && checkbox_pais == 1) || option == "tab_pais" ){
             if (tipo == "tab_exp"){
                 $('#table_B thead tr').append('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
                                              '<th id="pais_B" data-field="pais" data-align="center" data-sortable="true">País</th>'+
@@ -286,13 +330,13 @@ $(document).ready(function() {
                 var valores = {}
                 for(var i = 0; i <len; i++)
                 {
-                        valores = {}
-                        valores["fecha"] = data[1][0][i][0];
-                        valores["pais"] = data[1][0][i][1];
-                        valores["codigo"] = data[1][0][i][2];
-                        valores["peso"] = data[1][0][i][3];
-                        valores["fob"] = data[1][0][i][4];
-                        data_B.push(valores);
+                    valores = {}
+                    valores["fecha"] = data[1][0][i][0];
+                    valores["pais"] = data[1][0][i][1];
+                    valores["codigo"] = data[1][0][i][2];
+                    valores["peso"] = data[1][0][i][3];
+                    valores["fob"] = data[1][0][i][4];
+                    data_B.push(valores);  
                 }
                 trans = "exportaciones";
             }else{
@@ -306,19 +350,18 @@ $(document).ready(function() {
                 var valores = {}
                 for(var i = 0; i <len; i++)
                 {
-                        valores = {}
-                        valores["fecha"] = data[1][0][i][0];
-                        valores["pais"] = data[1][0][i][1];
-                        valores["codigo"] = data[1][0][i][2];
-                        valores["peso"] = data[1][0][i][3];
-                        valores["fob"] = data[1][0][i][4];
-                        valores["cif"] = data[1][0][i][5];
-                        data_B.push(valores);
+                    valores = {}
+                    valores["fecha"] = data[1][0][i][0];
+                    valores["pais"] = data[1][0][i][1];
+                    valores["codigo"] = data[1][0][i][2];
+                    valores["peso"] = data[1][0][i][3];
+                    valores["fob"] = data[1][0][i][4];
+                    valores["cif"] = data[1][0][i][5];
+                    data_B.push(valores); 
                 }
                 trans = "importaciones";
             }
         }
-
         $('#table_B').bootstrapTable({ data: data_B });
 
         $("#btnExportTrans").click(function(e){
@@ -394,7 +437,7 @@ function()
 $("#txt_filtro_text").ForceTextOnly();
 
 
-function grafico(data){
+function grafico_1(data){
     total_productos = data[0][0].length;
     total_datos = data[1][0].length;
     tipo = tabs_1;
@@ -507,6 +550,130 @@ function grafico(data){
     }else{
         $("#div_graph_comercio").append('No se encontraron registros');
     }
+}
+
+
+function grafico_2(data, f_inicial, f_final){
+    var paises_escogidos = [];
+    var escoger = 0;
+    tipo = tabs_1;
+
+    $('#graph').perfectScrollbar('destroy');
+    $('#div_graph_comercio').perfectScrollbar('destroy');
+    $('#div_graph_comercio').empty();
+    $('#ul_graph_comercio').empty();
+
+    if(tipo == "tab_exp"){
+        ope = 1;
+    }else{
+        ope = 2;
+    }
+
+    for(var l=0; l<data[1][0].length; l++){
+        for (var m=0; m<=paises_escogidos.length; m++){
+            if(data[1][0][l][1] == paises_escogidos[m]){
+                escoger --;
+            }
+        }
+        
+        if(escoger == 0){
+            paises_escogidos.push(data[1][0][l][1]);
+        }
+
+        escoger = 0;
+
+        if(paises_escogidos.length == 5){
+            break;
+        }
+    }
+
+    anio1 = parseInt(f_inicial.split("/")[0]);
+    mes1 = parseInt(f_inicial.split("/")[1])+1;
+    anio2 = parseInt(f_final.split("/")[0]);
+    mes2 = parseInt(f_final.split("/")[1]);
+    mes1_aux = mes1;
+
+    graph_subtitle = "desde " + f_inicial + " hasta " + f_final;
+
+    for(var i = 0; i < paises_escogidos.length; i++){
+        
+        fechas_grafico = [];
+        FOBs_grafico = [];
+        CIFs_grafico = [];
+        nombre_pais = paises_escogidos[i].replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '');
+        graph_title = "Exportación de productos de "+paises_escogidos[i];
+
+        $("#ul_graph_comercio").append('<li><a href="#'+nombre_pais+'" role="tab" data-toggle="tab">' +nombre_pais+'</a></li>')
+        $("#div_graph_comercio").append('<div class="tab-pane text-center" id="'+nombre_pais+'"></div>');
+
+        for(var op = 0; op < ope; op++){
+
+            if(ope == 1){
+                div_name = nombre_pais+"_fob";
+            }else{
+                div_name = nombre_pais+"_cif";
+            }
+            
+            $('#'+nombre_pais).append('<div id="'+div_name+'" class="graph text-center" ></div>');
+
+            for(var j = anio1; j  <= anio2; j++){
+            
+                if(j == anio2){
+                    mes2_aux = mes2;
+                }else{
+                    mes2_aux = 12;
+                }
+
+                for(var k = mes1_aux; k <= mes2_aux; k++){
+                    fecha_aux = j +"-0"+ k;
+                    suma_fob = 0.0;
+                    suma_cif = 0.0;
+                    for(var l=0; l<data[1][0].length; l++){
+                        if(fecha_aux == data[1][0][l][0] && paises_escogidos[i] == data[1][0][l][1]){
+                            if(op == 0){
+                                suma_fob = suma_fob + parseFloat(data[1][0][l][4]);
+                            }else{
+                                suma_cif = suma_cif + parseFloat(data[1][0][l][5]);
+                            }
+                        }
+                    }
+                    if(op == 0){
+                        fechas_grafico.push(fecha_aux);
+                        FOBs_grafico.push(Math.round (suma_fob*100) / 100);
+                    }else{
+                        fechas_grafico.push(fecha_aux);
+                        CIFs_grafico.push(Math.round (suma_cif*100) / 100);
+                    }
+                }
+                mes1_aux = 1;
+            }
+            mes1_aux = mes1;
+
+            if (fechas_grafico.length  <= 12) 
+            {
+                graph_width = 900;
+            }else{
+                graph_width = fechas_grafico.length * 75;
+            }
+
+            graph_valuesX = fechas_grafico;
+        
+            if(ope == 1){
+                name_Yaxis = "FOB (Miles de Dólares)";
+                graph_valuesY = FOBs_grafico;
+            }else{
+                name_Yaxis = "CIF (Miles de Dólares)";
+                graph_valuesY = CIFs_grafico;
+            }
+
+            dibujar_grafico(div_name, graph_title, graph_subtitle, graph_width, graph_valuesX, name_Yaxis, graph_valuesY);
+        }
+    }
+
+    $("#ul_graph_comercio li:first-child").addClass( "active" );
+    $("#div_graph_comercio .tab-pane:first-child").addClass( "active" );
+    $('#graph').perfectScrollbar();
+    $('#div_graph_comercio').perfectScrollbar();
 }
 
 
