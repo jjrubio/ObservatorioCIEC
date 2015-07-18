@@ -534,7 +534,7 @@ def get_column_1(data, method_int, indicator_int):
             column_1_b = data.only(get_filter()[indicator_int][5]).values_list(get_filter()[indicator_int][5], flat=True)
             column_1 = [(int(x) * int(y)) for x, y in zip(column_1_a, column_1_b)]
         else:
-            column_1 = data.only(get_filter()[indicator_int][1]).values_list(get_filter()[indicator_int][1], flat=True)
+            column_1 = data.only(get_filter()[indicator_int][2]).values_list(get_filter()[indicator_int][2], flat=True)
     column_1_array = np.array(list(column_1), 'float')
     return column_1_array
 
