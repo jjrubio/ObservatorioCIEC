@@ -27,19 +27,25 @@
                         	<li><a href="/historia/">Reseña del Observatorio</a></li>
                         	<li><a href="/caracteristicas/">Características del Observatorio</a></li>
                         </ul>
-                        </li>
+                    </li>
                         {% if user.is_authenticated %}
-                        <li><a href="/definicion-indicador/" class="navbar-brand">Ingresa al Sitio</a></li>
+                            <li><a href="/definicion-indicador/" class="navbar-brand">Ingresa al Sitio</a></li>
                         {% else %}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Ingresa al Sitio<b class="caret"></b></a>
-                            <ul class="dropdown-menu text-left">
-                                <li><a href="/definicion-indicador/">Sin registro</a></li>
-                                <li><a href="/iniciar-sesion/">Con registro</a></li>
-                            </ul>
-                        </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Ingresa al Sitio<b class="caret"></b></a>
+                                <ul class="dropdown-menu text-left">
+                                    <li><a href="/definicion-indicador/">Sin registro</a></li>
+                                    <li><a href="/iniciar-sesion/">Con registro</a></li>
+                                </ul>
+                            </li>
                         {% endif %}
-                    <li><a href="/equipo-trabajo/" class="navbar-brand">Equipo de Trabajo</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Acerca de<b class="caret"></b></a>
+                        <ul class="dropdown-menu text-left">
+                            <li><a href="/equipo-trabajo/">Equipo de Trabajo</a></li>
+                            <li><a href="/acerca-de/">Desarrolladores</a></li>
+                        </ul>
+                    </li>
                     <li><a href="/recursos/boletines/" class="navbar-brand">Boletines</a></li>
             	</ul>
             	{% if user.is_authenticated %}
@@ -73,7 +79,6 @@
                 <div class="contour-footer text-center">
                     <a target="_blank" href="http://www.ciec.espol.edu.ec/"> Website de Ciec </a>|
                     <a href="/contactos/"> Contáctenos </a>|
-                    <a href="/acerca-de/"> Acerca de </a>|
                 </div><!-- .contour-footer.text-center -->
                 <div class="box-footer text-center">
                     <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
