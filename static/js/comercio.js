@@ -4,9 +4,11 @@ var tabs_2 = "tab_codsub";
 $(document).ready(function() {
     var date = new Date();
     var year = date.getFullYear();
+    var month = date.getMonth();
+    var yearMonth = year+"/0"+month;
     var textoFiltro = "";
 
-    $('#endDate').attr("value", year+"/01");
+    $('#endDate').attr("value", yearMonth);
 
     $('#search_by').change(function(){
         if ($('#search_by').val() == 1){
@@ -42,6 +44,7 @@ $(document).ready(function() {
         viewMode:"months",
         minViewMode:"months",
         startDate: "1990/01",
+        endDate: yearMonth,
     }).on('changeDate',function(ev){
         var d1 = $('#startDate').val();
         $('.datepickerEnd').datepicker('setStartDate',d1);
@@ -54,6 +57,7 @@ $(document).ready(function() {
         viewMode:"months",
         minViewMode:"months",
         startDate: "1990/01",
+        endDate: yearMonth,
     });
 
 
@@ -198,7 +202,6 @@ $(document).ready(function() {
                 option = 2;
             }
 
-
             $.getJSON('/comercio/', {'tipo': tipo, 'option': option, 'search_by': search_by, 'standar': standar, 'txt_desde': txt_desde,
                                      'txt_hasta': txt_hasta, 'period': period, 'txt_agregacion': txt_agregacion, 'txt_patron': txt_patron, 'checkbox_pais': checkbox_pais},
             function(data){
@@ -209,7 +212,7 @@ $(document).ready(function() {
                 $('#graph').show();
 
                 if (option == 1 && checkbox_pais == 0 ){
-                    grafico_1(data);
+                    grafico_1(data, standar);
                 }
 
                 if (option == 2 || (option == 1 && checkbox_pais == 1 ) ){
@@ -442,7 +445,12 @@ function()
 $("#txt_filtro_text").ForceTextOnly();
 
 
-function grafico_1(data){
+function OrdenarPorFOB(a, b){
+    return b.fob - a.fob;
+}
+
+
+function grafico_1(data, standar){
     total_productos = data[0][0].length;
     total_datos = data[1][0].length;
     tipo = tabs_1;
@@ -452,106 +460,111 @@ function grafico_1(data){
     $('#div_graph_comercio').empty();
     $('#ul_graph_comercio').empty();
 
+    var arrayCodigoFOB = new Array();
+
+    for(var i=0; i < total_productos; i++){
+        arrayCodigoFOB.push({codigo: data[0][0][i][0], nombre: data[0][0][i][1], fob: 0});
+    }
+
+
+    for (var j=0; j<arrayCodigoFOB.length; j++) {
+        for(var k=0; k < total_datos; k++){
+            if(data[1][0][k][1] == arrayCodigoFOB[j].codigo){
+                arrayCodigoFOB[j].fob = arrayCodigoFOB[j].fob + data[1][0][k][3];
+            }
+        }
+    }
+    
+    arraySortCodigoFOB = arrayCodigoFOB.sort(OrdenarPorFOB);
+
+    arrayTopFOB = arraySortCodigoFOB.slice(0,5);
+
     if(total_datos > 0){
         fecha_inicial = data[1][0][0][0];
         fecha_final = data[1][0][total_datos-1][0];
 
-        num_productos = 0;
-        num_productos_con_datos = 0;
+        for(var i=0; i<arrayTopFOB.length; i++){
+            productoFechas = [];
+            productoFOBs = [];
+            productoCIFs = [];
 
-        do{
-            for(var i=0; i < total_productos; i++)
-            {
-                producto = data[0][0][i][0];
-                productoFechas = [];
-                productoFOBs = [];
+            for(var j=0; j < total_datos; j++){
+                subpartida = data[1][0][j][1];
+                fecha_sub = data[1][0][j][0];
+                fob_sub = data[1][0][j][3];
                 if(tipo == "tab_imp"){
-                    productoCIFs = [];
+                    cif_sub = data[1][0][j][4];
                 }
 
-                for(var j=0; j < total_datos; j++){
-                    subpartida = data[1][0][j][1];
-                    fecha_sub = data[1][0][j][0];
-                    fob_sub = data[1][0][j][3];
+                if(arrayTopFOB[i].codigo == subpartida){
+                    productoFechas.push(fecha_sub);
+                    productoFOBs.push(fob_sub);
                     if(tipo == "tab_imp"){
-                        cif_sub = data[1][0][j][4];
-                    }
-
-                    if(producto == (subpartida.substring(0, subpartida.length - 2)))
-                    {
-                        productoFechas.push(fecha_sub);
-                        productoFOBs.push(fob_sub);
-                        if(tipo == "tab_imp"){
-                            productoCIFs.push(cif_sub);
-                        }
-                    }
-                }
-
-                if(productoFechas.length > 0)
-                {
-                    num_productos_con_datos++;
-
-                    if(tipo == "tab_exp"){
-                        num_ope = 1;
-                    }else{
-                        num_ope = 2;
-                    }
-
-                    link_ul = "producto"+(num_productos_con_datos);
-
-                    $("#ul_graph_comercio").append('<li><a href="#'+link_ul+'" role="tab" data-toggle="tab"> Producto #' +num_productos_con_datos+'</a></li>')
-                    $("#div_graph_comercio").append('<div class="tab-pane text-center" id="'+link_ul+'"></div>');
-
-                    for(var k=0; k<num_ope; k++)
-                    {
-                        if(k == 0){
-                            div_name = "producto"+(num_productos_con_datos)+"_fob";
-                        }else{
-                            div_name = "producto"+(num_productos_con_datos)+"_cif";
-                        }
-                        
-                        $('#'+link_ul).append('<div id="'+div_name+'" class="graph text-center" ></div>');
-
-                        if(num_ope == 1){
-                            graph_title = "Exportación de "  + data[0][0][i][1];  
-                        }else{
-                            graph_title = "Importación de "  + data[0][0][i][1];  
-                        }
-                        
-                        graph_subtitle = "desde " + fecha_inicial + " hasta " + fecha_final;
-
-                        if (productoFechas.length  <= 12) 
-                        {
-                            graph_width = 900;
-                        }else{
-                            graph_width = productoFechas.length * 75;
-                        }
-
-                        graph_valuesX = productoFechas;
-                        
-                        if(k == 0){
-                            name_Yaxis = "FOB (Miles de Dólares)";
-                            graph_valuesY = productoFOBs;
-                        }else{
-                            name_Yaxis = "CIF (Miles de Dólares)";
-                            graph_valuesY = productoCIFs;
-                        }
-
-                        dibujar_grafico(div_name, graph_title, graph_subtitle, graph_width, graph_valuesX, name_Yaxis, graph_valuesY);
-                    }
-                    
-                    if (num_productos_con_datos == 8){
-                        break;
+                        productoCIFs.push(cif_sub);
                     }
                 }
             }
 
-            $("#ul_graph_comercio li:first-child").addClass( "active" );
-            $("#div_graph_comercio .tab-pane:first-child").addClass( "active" );
-            $('#graph').perfectScrollbar();
-            $('#div_graph_comercio').perfectScrollbar();
+            if(tipo == "tab_exp"){
+                num_ope = 1;
+            }else{
+                num_ope = 2;
+            }
 
-        }while(false);
+            link_ul = "producto"+(i+1);
+
+            $("#ul_graph_comercio").append('<li><a href="#'+link_ul+'" role="tab" data-toggle="tab">' +arrayTopFOB[i].codigo+'</a></li>')
+            $("#div_graph_comercio").append('<div class="tab-pane text-center" id="'+link_ul+'"></div>');
+
+            for(var k=0; k<num_ope; k++)
+            {
+                if(k == 0){
+                    div_name = "producto"+(i+1)+"_fob";
+                }else{
+                    div_name = "producto"+(i+1)+"_cif";
+                }
+                
+                $('#'+link_ul).append('<div id="'+div_name+'" class="graph text-center" ></div>');
+
+                if(num_ope == 1){
+                    $("#guia-grafico").text(" (Se muestra los productos con mayor exportación de miles de dólares.)");
+                    graph_title = "Exportación miles de dólares FOB de "  + arrayTopFOB[i].nombre; 
+                }else{
+                    $("#guia-grafico").text(" (Se muestra los productos con mayor importación de miles de dólares.)");
+                    if(k == 0){
+                        graph_title = "Importación miles de dólares FOB de "  + arrayTopFOB[i].nombre; 
+                    }else{
+                        graph_title = "Importación miles de dólares CIF de "  + arrayTopFOB[i].nombre;  
+                    } 
+                }
+                
+                graph_subtitle = "desde " + fecha_inicial + " hasta " + fecha_final;
+
+                if (productoFechas.length  <= 12) 
+                {
+                    graph_width = 900;
+                }else{
+                    graph_width = productoFechas.length * 75;
+                }
+
+                graph_valuesX = productoFechas;
+                
+                if(k == 0){
+                    name_Yaxis = "FOB (Miles de Dólares)";
+                    graph_valuesY = productoFOBs;
+                }else{
+                    name_Yaxis = "CIF (Miles de Dólares)";
+                    graph_valuesY = productoCIFs;
+                }
+                
+                dibujar_grafico(div_name, graph_title, graph_subtitle, graph_width, graph_valuesX, name_Yaxis, graph_valuesY);
+            }
+        }
+
+        $("#ul_graph_comercio li:first-child").addClass( "active" );
+        $("#div_graph_comercio .tab-pane:first-child").addClass( "active" );
+        $('#graph').perfectScrollbar();
+        $('#div_graph_comercio').perfectScrollbar();
     }else{
         $("#div_graph_comercio").append('No se encontraron registros');
     }
@@ -559,8 +572,8 @@ function grafico_1(data){
 
 
 function grafico_2(data, f_inicial, f_final){
-    var paises_escogidos = [];
-    var escoger = 0;
+    total_productos = data[0][0].length;
+    total_datos = data[1][0].length;
     tipo = tabs_1;
 
     $('#graph').perfectScrollbar('destroy');
@@ -574,23 +587,46 @@ function grafico_2(data, f_inicial, f_final){
         ope = 2;
     }
 
-    for(var l=0; l<data[1][0].length; l++){
-        for (var m=0; m<=paises_escogidos.length; m++){
-            if(data[1][0][l][1] == paises_escogidos[m]){
-                escoger --;
+    console.log(data);
+
+    // arraySortFOB = data[1][0].sort(ComparatorFOBPais);
+
+    // var arraySortUniqueFOB = [];
+    // $.each(arraySortFOB, function(i, el){
+    //     if($.inArray(el[1], arraySortUniqueFOB) === -1) arraySortUniqueFOB.push(el[1]);
+    // });
+
+    // arrayTopFOB = arraySortUniqueFOB.slice(0,5);
+
+
+
+    var paises = [];
+    $.each(data[1][0], function(i, el){
+        if($.inArray(el[1], paises) === -1) paises.push(el[1]);
+    });
+
+    var arrayPaisFOB = new Array();
+
+    for(var i=0; i < paises.length; i++){
+        arrayPaisFOB.push({pais: paises[i], fob: 0});
+    }
+
+    console.log(arrayPaisFOB);
+
+    for (var j=0; j<arrayPaisFOB.length; j++) {
+        for(var k=0; k < total_datos; k++){
+            if(data[1][0][k][1] == arrayPaisFOB[j].pais){
+                arrayPaisFOB[j].fob = arrayPaisFOB[j].fob + data[1][0][k][4];
             }
         }
-        
-        if(escoger == 0){
-            paises_escogidos.push(data[1][0][l][1]);
-        }
-
-        escoger = 0;
-
-        if(paises_escogidos.length == 5){
-            break;
-        }
     }
+    
+    arraySortPaisFOB = arrayPaisFOB.sort(OrdenarPorFOB);
+
+    arrayTopFOB = arraySortPaisFOB.slice(0,5);
+
+    console.log(arrayPaisFOB);
+    console.log(arrayTopFOB);
 
     anio1 = parseInt(f_inicial.split("/")[0]);
     mes1 = parseInt(f_inicial.split("/")[1])+1;
@@ -600,23 +636,31 @@ function grafico_2(data, f_inicial, f_final){
 
     graph_subtitle = "desde " + anio1+"/"+mes1 + " hasta " + f_final;
 
-    for(var i = 0; i < paises_escogidos.length; i++){
+    for(var i = 0; i < arrayTopFOB.length; i++){
         
         fechas_grafico = [];
         FOBs_grafico = [];
         CIFs_grafico = [];
-        nombre_pais = paises_escogidos[i].replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '');
-        graph_title = "Exportación de productos de "+paises_escogidos[i];
-
-        $("#ul_graph_comercio").append('<li><a href="#'+nombre_pais+'" role="tab" data-toggle="tab">' +paises_escogidos[i]+'</a></li>')
+        nombre_pais = arrayTopFOB[i].pais.replace(/ /g,"_").replace(/\(/g, '_').replace(/\)/g, '');
+        
+        $("#ul_graph_comercio").append('<li><a href="#'+nombre_pais+'" role="tab" data-toggle="tab">' +arrayTopFOB[i].pais+'</a></li>')
         $("#div_graph_comercio").append('<div class="tab-pane text-center" id="'+nombre_pais+'"></div>');
 
         for(var op = 0; op < ope; op++){
 
-            if(op == 0){
+            if(ope == 1){
+                $("#guia-grafico").text(" (Se muestra los países con mayor exportación de miles de dólares.)");
                 div_name = nombre_pais+"_fob";
+                graph_title = "Exportación miles de dólares FOB a "  + arrayTopFOB[i].pais; 
             }else{
-                div_name = nombre_pais+"_cif";
+                $("#guia-grafico").text(" (Se muestra los países con mayor importación de miles de dólares.)");
+                if(op == 0){
+                    div_name = nombre_pais+"_fob";
+                    graph_title = "Importación miles de dólares FOB desde "  + arrayTopFOB[i].pais; 
+                }else{
+                    div_name = nombre_pais+"_cif";
+                    graph_title = "Importación miles de dólares CIF desde "  + arrayTopFOB[i].pais;  
+                } 
             }
             
             $('#'+nombre_pais).append('<div id="'+div_name+'" class="graph text-center" ></div>');
@@ -639,7 +683,7 @@ function grafico_2(data, f_inicial, f_final){
                     suma_fob = 0.0;
                     suma_cif = 0.0;
                     for(var l=0; l<data[1][0].length; l++){
-                        if(fecha_aux == data[1][0][l][0] && paises_escogidos[i] == data[1][0][l][1]){
+                        if(fecha_aux == data[1][0][l][0] && arrayTopFOB[i].pais == data[1][0][l][1]){
                             if(op == 0){
                                 suma_fob = suma_fob + parseFloat(data[1][0][l][4]);
                             }else{
@@ -654,7 +698,6 @@ function grafico_2(data, f_inicial, f_final){
                         fechas_grafico.push(fecha_aux);
                         CIFs_grafico.push(Math.round (suma_cif*100) / 100);
                     }
-                    // console.log("fecha: " + j + "-"+k);
                 }
                 mes1_aux = 1;
             }
