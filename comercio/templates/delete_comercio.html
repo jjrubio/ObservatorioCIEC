@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% load apptags %}
+
+{% load static from staticfiles %}
+
+{% block title %}Subida archivos Comercio{% endblock %}
+
+{% block extraCSS %}
+    <link href="{% static "css/enemdu.css" %}" rel="stylesheet"  />
+{% endblock %}
+
+{% block content %}
+<div class="content-page-2">
+    <b id="title-content-page">Eliminar datos Comercio</b>
+    <hr id="separator-content-page" class="pull-left">
+    <div class="panel-body">
+        <div class="center">
+            {% if user.is_authenticated %}
+                <label>Escoja la tabla que desea eliminar los datos: </label>
+                <select id="id_choices" class="form-control" name="choices" data-width="100%">
+                    <option value="1">DATOS EXPORTACIÓN NANDINA</option>
+                    <option value="2">DATOS IMPORTACIÓN NANDINA</option>
+                </select>
+                <br><label>Escriba el código del país que desea eliminar los datos: </label>
+                <input id="code" type="text" class="form-control">
+                <label id="msg_1"></label>
+                <p>* Para ver los códigos de los países, dar clic <a href="#">aquí</a></p>
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                    <button id="btn-delete" class="btn btn-primary">Eliminar datos</button>
+                    <br><br><label id="msg_2"></label><br>
+                </div>
+                <div class="col-lg-4"></div>
+            {% else %}
+                <label>USTED NO TIENE PERMISOS PARA ACCEDER A ESTA PÁGINA.</label>
+            {% endif %}
+        </div><!-- .center -->
+    </div><!-- .panel-body -->
+</div><!-- .content-page-2 -->
+{% endblock %}
+
+{% block extraScripts %}
+    <script src="{% static "js/comercio.js" %}" type="text/javascript"></script>
+    <script type="text/javascript" src="{% static "js/jquery.bootstrap-touchspin.js" %}"></script>
+{% endblock %}

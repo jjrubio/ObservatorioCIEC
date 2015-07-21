@@ -58,5 +58,7 @@ urlpatterns = patterns('',
     url(r'^error-subida/', 'comercio.views.error_subida', name='error_subida'),
     url(r'^actualizar-datos/', 'comercio.views.actualizar_datos', name='actualizar_datos'),
     url(r'^data/', 'comercio.views.option', name='datos'),
+    url(r'^eliminar_datos_comercio/', 'comercio.views.eliminar_datos_comercio', name='eliminar_datos_comercio'),
+    url(r'^eliminar_comercio/', 'comercio.views.eliminar_comercio', name='eliminar_comercio'),
     url(r'^acerca-de/', 'home.views.about', name='acerca_de'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
