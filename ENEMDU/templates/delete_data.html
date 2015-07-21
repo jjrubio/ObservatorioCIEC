@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% load apptags %}
+
+{% load static from staticfiles %}
+
+{% block title %}Delete Data ENEMDU{% endblock %}
+
+{% block extraCSS %}
+    <link href="{% static "css/enemdu.css" %}" rel="stylesheet"  />
+{% endblock %}
+
+{% block content %}
+    <div class="content-page-2">
+        <b id="title-content-page">Eliminar datos ENEMDU</b>
+            <hr id="separator-content-page" class="pull-left">
+            <div class="panel-body">
+                <div class="center">
+                    {% if user.is_authenticated %}
+                        <div class="col-lg-3">
+                            <span class="texto">Escoja que tabla desea eliminar los datos: </span><br/>
+                        </div><!-- .col-lg-3 -->
+                        <select id="id_choices" class="form-control" name="choices">
+                            <option value="1" selected="selected">Enemdu_2003_4</option>
+                            <option value="2">Enemdu_2007_2</option>
+                        </select>
+                        <br/><br/>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#delete_1" data-toggle="tab">Eliminación de datos por año y trimestre</a></li>
+                            <li><a href="#delete_3" data-toggle="tab">Eliminación de datos por año y rango de trimestres </a></li>
+                            <li><a href="#delete_2" data-toggle="tab">Eliminación de datos por rango de años y rango de trimestres </a></li>
+                        </ul>
+                        <br/>
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="delete_1">
+                                <div class="col-lg-1">
+                                    <label>Año: </label>
+                                </div>
+                                <div class="col-lg-11">
+                                    <input id="anio" type="text" class="form-control">
+                                    <label id="msg_1"></label>
+                                    <br>
+                                </div>
+                                <div class="col-lg-1">
+                                    <label>Trimestre: </label>
+                                </div>
+                                <div class="col-lg-11">
+                                    <input id="tri" type="text" class="form-control">
+                                    <label id="msg_2"></label>
+                                </div>
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-4">
+                                    <button id="btn-delete" class="btn btn-primary">Eliminar datos</button>
+                                    <br><br><label id="msg_3"></label>
+                                </div>
+                                <div class="col-lg-4"></div>
+                            </div>
+                            <!-- Por rangos de años y trimestres -->
+                            <div class="tab-pane fade" id="delete_2">
+                                <h4>Rango de años </h4>
+                                <div id="range_year">
+                                    <label>Año Inicial</label>
+                                    <input id="anio_1" type="text" class="form-control">
+                                    <label id="msg_4"></label>
+                                    <label>Año Final</label>
+                                    <input id="anio_2" type="text" class="form-control">
+                                    <label id="msg_5"></label>
+                                    <br>
+                                </div>
+                                <h4>Rango de trimestres </h4>
+                                <div id="range_tri">
+                                    <label>Trimestre Inicial</label>
+                                    <input id="tri_1" type="text" class="form-control">
+                                    <label id="msg_6"></label>
+                                    <label>Trimestre Final</label>
+                                    <input id="tri_2" type="text" class="form-control">
+                                    <label id="msg_7"></label>
+                                </div>
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-4">
+                                    <button id="btn-delete-range" class="btn btn-primary">Eliminar datos</button>
+                                    <br><br><label id="msg_8"></label>
+                                </div>
+                                <div class="col-lg-4"></div>
+                            </div>
+                            <!-- Por año y rango de trimestres -->
+                            <div class="tab-pane fade" id="delete_3">
+                                <div class="col-lg-1">
+                                    <label>Año: </label>
+                                </div>
+                                <div class="col-lg-11">
+                                    <input id="year" type="text" class="form-control">
+                                    <label id="msg_9"></label><br>
+                                </div>
+                                <div class="col-lg-1">
+                                    <label>Trimestre Inicial</label>
+                                </div>
+                                <div class="col-lg-11">
+                                    <input id="trimestre_1" type="text" class="form-control">
+                                    <label id="msg_10"></label><br>
+                                </div>
+                                <div class="col-lg-1">
+                                    <label>Trimestre Final</label>
+                                </div>
+                                <div class="col-lg-11">
+                                    <input id="trimestre_2" type="text" class="form-control">
+                                    <label id="msg_11"></label>
+                                </div>
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-4">
+                                    <button id="btn-delete-year-range" class="btn btn-primary">Eliminar datos</button>
+                                    <br><br><label id="msg_12"></label><br>
+                                </div>
+                                <div class="col-lg-4"></div>
+                            </div>
+                        </div>
+
+                        <!-- LOADING -->
+                    {% else %}
+                        <label>USTED NO TIENE PERMISOS PARA ACCEDER A ESTA PÁGINA.</label>
+                    {% endif %}
+                </div>
+            </div>
+    </div>
+{% endblock %}
+
+{% block extraScripts %}
+    <script src="{% static "js/enemdu.js" %}" type="text/javascript"></script>
+    <script type="text/javascript" src="{% static "js/jquery.bootstrap-touchspin.js" %}"></script>
+{% endblock %}
