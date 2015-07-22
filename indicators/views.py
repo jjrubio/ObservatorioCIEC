@@ -125,7 +125,7 @@ def indicator_calc(request, method_id='1', cat_id='1', subcat_id='1', ind_id='1'
             # update_ip = Ip_controller.objects.filter(ip=get_ip[0].ip).update(fecha_actual=fecha_now)
     #         permiso = True
 
-    json = indicators_detail(cat_id, subcat_id, ind_id, method_id)
+    json = indicators_detail(method_id, cat_id, subcat_id, ind_id)
     subcategories = Subcategory.objects.all()
     categories = Category.objects.all()
     disintegrations = Disintegration.objects.all()
