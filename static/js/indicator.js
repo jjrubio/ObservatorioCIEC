@@ -24,14 +24,14 @@ $(document).ready(function() {
     }
 });
 
-function getMenu(cat, subcat, ind, method){
+function getMenu(method, cat, subcat, ind){
     var url = location.href;
     var arrayURL = location.href.split('/');
 
     if(arrayURL[3] == 'calculo-indicador'){
-        history.pushState(null, "", "/calculo-indicador/"+cat+"/"+subcat+"/"+ind+"/"+method+"/");
+        history.pushState(null, "", "/calculo-indicador/"+method+"/"+cat+"/"+subcat+"/"+ind+"/");
     }else{
-        history.pushState(null, "", "/definicion-indicador/"+cat+"/"+subcat+"/"+ind+"/"+method+"/");
+        history.pushState(null, "", "/definicion-indicador/"+method+"/"+cat+"/"+subcat+"/"+ind+"/");
     }
     window.location.reload();
 }
@@ -41,24 +41,24 @@ $(window).bind("popstate", function(e) {
 });
 
 $('#linkToCalc').click(function(){
-    history.pushState(null, "", "/calculo-indicador/"+$("#category").val()+"/"+$("#subcategory").val()+"/"+$("#indicator").val()+"/"+$("#method").val()+"/");
+    history.pushState(null, "", "/calculo-indicador/"+$("#method").val()+"/"+$("#category").val()+"/"+$("#subcategory").val()+"/"+$("#indicator").val()+"/");
     window.location.reload();
 });
 
-$('#category').change( function() {
+$('#method').change( function() {
     getMenu($(this).val(), 1, 1, 1);
 });
 
+$('#category').change( function() {
+    getMenu($("#method").val(), $(this).val(), 1, 1);
+});
+
 $('#subcategory').change( function() {
-    getMenu($("#category").val(), $(this).val(), 1, 1);
+    getMenu($("#method").val(), $("#category").val(), $(this).val(), 1);
 });
 
 $('#indicator').change( function() {
-    getMenu($("#category").val(), $("#subcategory").val(), $(this).val(), 1);
-});
-
-$('#method').change( function() {
-    getMenu($("#category").val(), $("#subcategory").val(), $("#indicator").val(), $(this).val());
+    getMenu($("#method").val(), $("#category").val(), $("#subcategory").val(), $(this).val());
 });
 
 $('#accordion').on('show.bs.collapse', function () {
