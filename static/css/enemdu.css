@@ -15,3 +15,11 @@
     position:absolute;
     margin-top: 1em;
 }
+
+#delete_2{
+	margin-left: 1em;
+}
+
+#range_year, #range_tri{
+	margin-left: 2em;	
+}

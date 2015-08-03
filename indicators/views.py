@@ -34,8 +34,8 @@ def as_python_object(dct):
     return dct
 
 
-def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1', method_id='1'):
-    json = indicators_detail(cat_id, subcat_id, ind_id, method_id)
+def indicator_def(request, method_id='1', cat_id='1', subcat_id='1', ind_id='1'):
+    json = indicators_detail(method_id, cat_id, subcat_id, ind_id)
     indicators = Indicator.objects.all()
     subcategories = Subcategory.objects.all()
     categories = Category.objects.all()
@@ -43,30 +43,35 @@ def indicator_def(request, cat_id='1', subcat_id='1', ind_id='1', method_id='1')
     template = "indicator_def.html"
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
-
-def indicators_detail(cat_id, subcat_id, ind_id, method_id):
+def indicators_detail(method_id, cat_id, subcat_id, ind_id):
     message = []
     subcategoriesArray = []
     indicatorsArray = []
     indicatorSelectArray = []
-    id_method = []
-    methodArray = []
     methodSelectArray = []
+    result = []
+    test = []
+    test_2 = []
 
     posSubcat = int(subcat_id)
     posInd = int(ind_id)
 
     subcategories = Subcategory.objects.filter(category_id=cat_id)
     indicators = Indicator.objects.filter(subcategory_id=subcategories[posSubcat - 1].id)
-    indicatorSelect = Indicator.objects.get(id=indicators[posInd - 1].id)
-    method = Metodologia_Indicator.objects.values_list('method', flat=True).filter(indicator=indicators[posInd - 1].id).annotate(contador=Count('method'))
+    
+    method_indicator = Metodologia_Indicator.objects.values_list('indicator', flat= True).filter(method=method_id).annotate(dcount=Count('indicator'))
 
-    if not method:
-        method_allow = Method.objects.all()
+    for i in indicators:
+        for j in method_indicator:
+            if i.id == j:
+                result.append(i.id)
+
+    if not result:
+        indicators = Indicator.objects.filter(subcategory_id=subcategories[posSubcat - 1].id)
     else:
-        for i in range(0, len(method)):
-            id_method.append(method[i])
-        method_allow = Method.objects.filter(id__in=id_method)
+        indicators = Indicator.objects.filter(id__in=result)  
+
+    indicatorSelect = Indicator.objects.get(id=indicators[posInd - 1].id)
 
     for subcat in subcategories:
         dict_subcat = {}
@@ -81,12 +86,6 @@ def indicators_detail(cat_id, subcat_id, ind_id, method_id):
         dict_ind['name'] = ind.name
         dict_ind['icon'] = ind.icon
         indicatorsArray.append(dict_ind)
-
-    for m in method_allow:
-        dict_method = {}
-        dict_method['id'] = m.id
-        dict_method['description'] = m.description
-        methodArray.append(dict_method)
 
     dict_methodSelect = {}    
     dict_methodSelect['selected_method'] = int(method_id)
@@ -105,11 +104,11 @@ def indicators_detail(cat_id, subcat_id, ind_id, method_id):
     message.append(subcategoriesArray)
     message.append(indicatorsArray)
     message.append(indicatorSelectArray)
-    message.append(methodArray)
     message.append(methodSelectArray)
+
     return message
 
-def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1', method_id='1'):
+def indicator_calc(request, method_id='1', cat_id='1', subcat_id='1', ind_id='1'):
     permiso = True
 
     # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -126,7 +125,7 @@ def indicator_calc(request, cat_id='1', subcat_id='1', ind_id='1', method_id='1'
             # update_ip = Ip_controller.objects.filter(ip=get_ip[0].ip).update(fecha_actual=fecha_now)
     #         permiso = True
 
-    json = indicators_detail(cat_id, subcat_id, ind_id, method_id)
+    json = indicators_detail(method_id, cat_id, subcat_id, ind_id)
     subcategories = Subcategory.objects.all()
     categories = Category.objects.all()
     disintegrations = Disintegration.objects.all()

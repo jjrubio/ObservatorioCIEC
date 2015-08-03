@@ -66,3 +66,26 @@ class Download(models.Model):
 
 #     def __unicode__(self):
 #         return self.ip
+
+class IP(models.Model):
+    ip = models.CharField(max_length=20, verbose_name='Dirección IP')
+    fecha = models.CharField(max_length=50, verbose_name='Fecha', null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Registro IP"
+        verbose_name_plural = "Registros IP"
+        db_table = 'resources_ip'
+
+    def __unicode__(self):
+        return self.ip
+
+class Counter(models.Model):
+    counter = models.PositiveIntegerField(verbose_name='Contador Visita')
+
+    class Meta:
+        verbose_name = "Contador visita"
+        verbose_name_plural = "Contador de visitas"
+        db_table = 'resources_counter'
+
+    def __unicode__(self):
+        return self.counter

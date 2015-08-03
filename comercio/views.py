@@ -952,3 +952,41 @@ def option(request):
     data_result.append([result])
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
+
+def eliminar_datos_comercio(request):
+    template = 'delete_comercio.html'
+    return render_to_response(template, context_instance=RequestContext(request, locals()))
+
+def eliminar_comercio(request):
+    txt_code = request.GET['txt_code']
+    txt_choice = request.GET['txt_choice']
+    permiso = True
+
+    if txt_code == "":
+        flag = [0]
+    else:
+        try:
+            txt_code_int = int(txt_code)
+        except ValueError:
+            permiso = False
+            flag = [1]
+        
+        if permiso:
+            txt_code_int = int(txt_code)
+            txt_choice_int = int(txt_choice)
+
+            if txt_choice_int == 1:
+                db_comercio = Export_NANDINA
+            else:
+                db_comercio = Import_NANDINA
+
+            buscar_existe_pais = db_comercio.objects.filter(pais=txt_code_int)
+
+            if buscar_existe_pais.count() > 0:
+                buscar_existe_pais.delete()
+                flag = [3]
+            else:
+                flag = [2]
+
+    message = json.dumps(flag, cls=PythonObjectEncoder)
+    return HttpResponse(message, content_type='application/json')
