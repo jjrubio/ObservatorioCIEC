@@ -905,7 +905,10 @@ def insert_data_comercio(request):
             return HttpResponseRedirect('/acceso_denegado/')
     except Exception, e:
         upload_success = False
-        os.remove(path_upload_csv+file_name[0])
+        try:
+            os.remove(path_upload_csv+file_name[0])
+        except Exception,e:
+            pass
         if choices == '8':
             cursor = connection.cursor()
             cursor.execute("""DELETE FROM comercio_export_nandina WHERE subpartida_key=0""")

@@ -280,7 +280,8 @@ textarea {
   line-height: inherit;
 }
 a {
-  color: #428bca;
+  /*color: #428bca;*/
+  color: black;
   text-decoration: none;
 }
 a:hover,
@@ -5433,7 +5434,7 @@ button.close {
 .carousel-inner {
   position: relative;
   overflow: hidden;
-  width: 100%;
+  width: 136%;
 }
 .carousel-inner > .item {
   display: none;
@@ -5554,21 +5555,21 @@ button.close {
 }
 .carousel-indicators li {
   display: inline-block;
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
   margin: 1px;
   text-indent: -999px;
   border: 1px solid #ffffff;
   border-radius: 10px;
   cursor: pointer;
-  background-color: #000 \9;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: #e3bc5f;
+  background-color: #e3bc5f;
 }
 .carousel-indicators .active {
   margin: 0;
-  width: 12px;
-  height: 12px;
-  background-color: #ffffff;
+  width: 15px;
+  height: 15px;
+  background-color: #0CB3AC;
 }
 .carousel-caption {
   position: absolute;
@@ -5836,7 +5837,7 @@ body header #nav-logo .navbar-header i {
   color: #FFF;
 }
 body header #nav-logo #user_data-menu {
-  margin: 70px 5px 0px 0px;
+  margin: 87px 5px 0px 0px;
 }
 body header #nav-logo #user_data-menu #name-user {
   font-size: 13px;
@@ -5929,8 +5930,12 @@ body .content-page hr#separator-content-page {
   width: 97%;
 }
 body .content-page-2 {
-  margin: 50px 0 0 0;
+  margin: 0 0 0 0;
 }
+body #home-page {
+  margin: 130px 0 0 0;
+}
+
 body .content-page-2 #title-content-page {
   color: #003A6F;
   font-size: 18px;

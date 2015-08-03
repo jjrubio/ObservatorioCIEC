@@ -2,38 +2,60 @@
 
 {% load static from staticfiles %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Inicio{% endblock %}
 
 {% block extraCSS %}
+<style>
+    .carousel-inner > .item > img,
+    .carousel-inner > .item > a > img{
+        margin: auto;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-        <div class="content-page-2" >
-            <b id="title-content-page">Inicio</b>
-            <hr id="separator-content-page" class="pull-left">
+        <div class="content-page-2" id="home-page">
+            <b id="title-content-page"></b>
             <div id="text-home-1" class="row">
-                <div class=" col-lg-9">
-                   	<div class="col-lg-4">
-                        <p align="justify">
-                            El Observatorio Económico Social es un esfuerzo del Centro de Investigaciones Económicas de la Escuela Superior Politécnica del Litoral que busca entregar a la comunidad académica, estudiantil y sociedad en general; una herramienta interactiva que permita calcular diversos indicadores económicos y sociales que contribuyan a la discusión sobre la realidad nacional y sus políticas públicas.
-                        </p><br/>
-                        <p align="justify">
-                            Los indicadores que se pueden calcular a través de esta plataforma se enfocan en el Mercado Laboral Ecuatoriano, analizando a la Población Económicamente Activa en base a variables socio-demográficas como: edad, género, etnia, zona urbana, zona rural,
-                        </p>
-                    </div><!-- .col-lg-4 -->
-                    <div class="col-lg-5 carousel slide"  data-ride="carousel" >
-                        <div class="carousel-inner">
+                <div class=" col-lg-12">
+                   <div class="col-lg-4" id="parrafos">
+                       <p align="justify">
+                       Descargue las series históricas de 80+ indicadores
+                       socioeconómicos y de mercado laboral. Datos tomados
+                       de la ENEMDU del INEC, que mostrarán intervalos de
+                       confianza específicos en hasta 19 variables
+                       desagregadas.
+                       </p>
+                       <hr id="separador-parrafo">
+                       <p align="justify">
+                       Observatorio de la evolución histórica del comercio
+                       exterior ecuatoriano por producto, país y frecuencia
+                       temporal.
+                       </p>
+                       <hr id="separador-parrafo">
+                       <p>
+                       Boletines bimensuales de análisis coyuntural de
+                       distintas variables socioeconómicas.
+                       </p>
+                   </div><!-- .col-lg-4 -->
+                   <div id="myslide" class="col-lg-8 carousel slide"  data-ride="carousel" id="myslide" >
+                        <ol class="carousel-indicators" id="botones_control">
+                            <li data-target="#myslide" data-slide-to="0" class="active"></li>
+                            <li data-target="#myslide" data-slide-to="1"></li>
+                            <li data-target="#myslide" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner" role="listbox">
                         {% if imagenes %}
                             {% for imag in imagenes %}
                                 {% if forloop.first %}
                             <div class='item active'>
                                 <img class="img-slider" src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" />
                             </div><!-- .item.active -->
-        		  {% else %}
+                  {% else %}
                             <div class='item'>
                                 <img class="img-slider" src="{{ MEDIA_URL }}{{ imag.img_src }}" alt="My image" />
                             </div><!-- .item -->
-        		  {% endif %}
+                  {% endif %}
                             {% endfor %}
                         {% else %}
                             <div id="noavailable" class='item active'>
@@ -41,27 +63,55 @@
                             </div><!-- #noavailable.ite.active -->
                         {% endif %}
                         </div><!-- .carousel-inner -->
-                        <a href="#myslide" data-slide="prev" class="carousel-control left"><i class="fa fa-arrow-circle-left fa-3x arrow"></i></a>
-                        <a href="#myslide" data-slide="next" class="carousel-control right"><i class="fa fa-arrow-circle-right fa-3x arrow"></i></a>
-                    </div><!-- .col-lg-5.carousel.slider -->
-                    <div id="text-home-2" class="col-lg-12">
-                        <p align="justify">
-                            educación, ingresos, entre otras;  que parten de la Encuesta Nacional de Empleo, Desempleo y Subempleo (ENEMDU) del Instituto Nacional de Estadísticas y Censos del Ecuador.  Creemos que la principal contribución de nuestra página es la de poder calcular estimadores estadísticos que sirvan para probar diferentes tipos de hipótesis sobre nuestra sociedad, y así incentivar la investigación científica sobre estos temas.
-
-                            Invitamos a los usuarios a que también revisen nuestros boletines bimensuales, en donde estaremos presentando relaciones interesantes para las diferentes variables socio-demográficas de nuestro país.
-                        </p><br/>
-                        <p align="justify">
-                            Bienvenidos,
-                        </p><br/>
-                        <b>Centro de Investigaciones Económicas</b><br/>
-                        <b>ESPOL</b><br/>
-                    </div><!-- #text-home-2.col-lg-12 -->
+                   </div>
                 </div><!-- .col-lg-9 -->
+            </div>
+            <br /><br/><br />
+            <hr id="separator-content-page" class="pull-left"> 
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-1">
+                    <div id="parrafo_intro">   
+                <p align="justify">
+                    El Observatorio Económico Social es un esfuerzo del Centro de Investigaciones Económicas de la Escuela Superior Politécnica del Litoral
+                        que buscar entregar a la comunidad académica, estudiantil y sociedad en general; una herramienta interactiva que permita calcular diversos indicadores económicos y sociales
+                    que contribuyan a la discusión sobre la realidad nacional y sus políticas públicas.
+                    </p>
+                    <a id="more_info">Más información >></a>
+                    <p id="parrafo_mas_info" align="justify" hidden>
+                    Los indicadores que se pueden calcular a través de
+                    esta plataforma se enfocan en el Mercado Laboral
+                    Ecuatoriano, analizando a la Población
+                    Económicamente Activa en base a variables
+                    socio-demográficas como: edad, género, etnia, zona
+                    urbana, zona rural,educación, ingresos, entre otras;
+                    que parten de la Encuesta Nacional de Empleo,
+                    Desempleo y Subempleo (ENEMDU) del Instituto
+                    Nacional de Estadísticas y Censos del Ecuador.
+                    Creemos que la principal contribución de nuestra
+                    página es la de poder calcular estimadores
+                    estadísticos que sirvan para probar diferentes tipos
+                    de hipótesis sobre nuestra sociedad, y así
+                    incentivar la investigación científica sobre estos
+                    temas. Invitamos a los usuarios a que también
+                    revisen nuestros boletines bimensuales, en donde
+                    estaremos presentando relaciones interesantes para
+                    las diferentes variables socio-demográficas de
+                    nuestro país.
+                    </p><br/><br />
+                    <p id="bienvenidos" hidden>Bienvenidos,</p>
+                    <br /><br />
+                    <b>Centro de Investigaciones Económicas</b><br/>
+                    <b>ESPOL</b><br/>
+                    </div>
+                </div>
                 <div id="twitter" class="col-lg-3">
-                    <a class="twitter-timeline" width="250" height="520" href="https://twitter.com/CIEC_ESPOL" data-widget-id="496376936218624000">Tweets por @CIEC_ESPOL</a>
-                    <br><br><h4><b>Visita número: {% for visita in contador %}{{visita.counter}}{% endfor %}</b></h4>
-                </div><!-- .col-lg-3 -->
-            </div><!-- #text-home-1.row -->
+                   <div id="twitter_div">
+                       <a class="twitter-timeline" width="250" height="520" href="https://twitter.com/CIEC_ESPOL" data-widget-id="496376936218624000">Tweets por @CIEC_ESPOL</a>
+                       <br><br><h4 id="visita"><b>Visita número: {% for visita in contador %}{{visita.counter}}{% endfor %}</b></h4>
+                   </div>
+                </div>
+            </div>
+            
             <div id="titulo-footer" class="text-center">
                 <div class="col-md-3 col-lg-2">
                     <img src="{{ STATIC_URL }}img/logo-ciec.png" alt="My image" class="imagen-logo"/>

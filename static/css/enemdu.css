@@ -3,12 +3,12 @@
 }
 
 .form-control{
-    width: 21%;
+    width: 27%;
 }
 
 #btn-send{
     margin-left: 40%;
-        margin-right: auto;
+    margin-right: auto;
 }
 
 .texto{
@@ -22,4 +22,15 @@
 
 #range_year, #range_tri{
 	margin-left: 2em;	
+}
+#search{
+    width: 100%;
+}
+
+#my_select{
+    width: 100%;
+}
+
+.center_button{
+    margin-left: 6em;
 }

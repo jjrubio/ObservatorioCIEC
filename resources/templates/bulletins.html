@@ -34,13 +34,26 @@
     <script type="text/javascript">
         $('.btn-search').click(function(){
             var text = $('#texto').val();
-            $('#bulletins-list').children().remove();
-            $.getJSON('/busqueda/',{'txt_search':text},function(data){
-            $.each(data,function(index,item){
-                var tmp ='<li><a style="color:black;" target="_blank" href="/boletin/'+item.pk+'/">Boletín Edición no.'+item.pk+' <i class="fa fa-external-link"></i></a></li><br/>';
-                $('#bulletins-list').append(tmp);
-            });
-        });
+            $('#bulletins-list').empty();
+            if(!text){
+                $('#bulletins-list').empty();
+                var msj = "No hay datos que mostrar";
+                $('#bulletins-list').append(msj);
+            }else{
+                $.getJSON('/busqueda/',{'txt_search':text},function(data){
+                    if(data.length == 0){
+                        $('#bulletins-list').empty();
+                        var msg = "No hay datos que mostrar con el número de boletín"+' '+'#'+text;
+                        $('#bulletins-list').append(msg);
+                    }else{
+                        $('#bulletins-list').empty();
+                        $.each(data,function(index,item){
+                            var tmp ='<li><a style="color:black;" target="_blank" href="/boletin/'+item.pk+'/">Boletín Edición no.'+item.pk+' <i class="fa fa-external-link"></i></a></li><br/>';
+                            $('#bulletins-list').append(tmp);
+                        });
+                    }
+                });
+            }
      });
      </script>
 {% endblock %}

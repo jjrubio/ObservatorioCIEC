@@ -14,18 +14,56 @@
 </head>
 <body>
     <header>
-        <div class="container">
+       <div class="container">
             <div class="navbar navbar-inverse navbar-fixed-top text-center">
                 <div id="menu" class="navbar-header">
-                        <a href='/inicio/'><img id="logo-navbar" src="{{ STATIC_URL }}img/logo-ciec.png" alt="My image" /></a>
+                     <!--div class="row"-->
+                            <div class="col-lg-12">
+                                <div class="col-lg-6">
+                                     <a href='/inicio/'><img id="logo-navbar" src="{{ STATIC_URL }}img/logo-ciec.png" alt="My image" /></a>
+                                </div>
+                                <div class="col-lg-2"></div>
+                                <div class="col-lg-4" id="redes-sociales">
+                                    {% if user.is_authenticated %}
+                                        <!--ul id="logged-in" class="pull-right text-left">
+                                            <li-->
+                                                <a id="name-user" class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                                    <i class="fa fa-user"> Bienvenido, </i>
+                                                    {% if user.first_name %}
+                                                        <span><strong>{{user.first_name}}</strong></span>
+                                                        <span><strong>{{user.last_name}}</strong></span>
+                                                    {% else %}
+                                                        <span><strong>{{user.username }}</strong></span>
+                                                    {%endif%}
+                                                    <b class="caret"></b>&nbsp;&nbsp;&nbsp;
+                                                </a>
+                                                <ul class="pull-right dropdown-menu" id="log-out">
+                                                    <li><a href="/cerrar-sesion/"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
+                                                </ul>
+                                            <!--/li>
+                                        </ul-->    
+                                    {% else %}
+                                        <a href="/registro" id="register"><i class="fa fa-user">  Regístrate</i></a>&nbsp;&nbsp;&nbsp;
+                                    {% endif %}
+                                    <a href="https://www.facebook.com/ESPOL.FCSH"><img id="fb_logo_ciec" src="{{STATIC_URL}}img/fblogo.png" alt="fb_logo_ciec"/></a>&nbsp;&nbsp;
+                                    <a href="https://twitter.com/FCSHEspol"><img id="twitter_logo_ciec" src="{{STATIC_URL}}img/twitterlogo.png" alt="twitter_logo_ciec"/></a>
+                               </div>
+                          </div>
+                        <!--a id="logged-out" class="pull-right" href="/registro"><i class="fa fa-user">Regístrate</i></a-->
                 </div><!-- #menu.navbar-header -->
+            </div>
+        </div>
+        
+        <div class="navbar navbar-fixed-top second-navbar text-center">
+            <div class="container">
+                <div class="navbar-header">
                 <ul id="top-nav" class="nav navbar-nav">
                     <li><a href="/inicio/" class="navbar-brand">Inicio</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Información<b class="caret"></b></a>
                         <ul class="dropdown-menu text-left">
-                        	<li><a href="/historia/">Reseña del Observatorio</a></li>
-                        	<li><a href="/caracteristicas/">Características del Observatorio</a></li>
+                            <li><a href="/historia/">Reseña del Observatorio</a></li>
+                            <li><a href="/caracteristicas/">Características del Observatorio</a></li>
                         </ul>
                     </li>
                         {% if user.is_authenticated %}
@@ -47,30 +85,9 @@
                         </ul>
                     </li>
                     <li><a href="/recursos/boletines/" class="navbar-brand">Boletines</a></li>
-            	</ul>
-            	{% if user.is_authenticated %}
-            	<ul id="logged-in" class="pull-right text-left">
-                    <li>
-                        <a id="name-user" class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-user"> Bienvenido, </i><br>
-                            {% if user.first_name %}
-                            <span><strong>{{user.first_name}}</strong></span>
-                            <span><strong>{{user.last_name}}</strong></span>
-                            {% else %}
-                            <span><strong>{{user.username }}</strong></span>
-                            {%endif%}
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="pull-right dropdown-menu" id="option-user">
-                            <li><a href="/cerrar-sesion/"><i class="fa fa-power-off">  Cerrar Sesión</i></a></li>
-                        </ul>
-                    </li>
                 </ul>
-                {% else %}
-                <a id="logged-out" class="pull-right" href="/registro"><i class="fa fa-user"></i> Regístrate</a>
-                {% endif %}
             </div><!-- .navbar.navbar-inverse.navbar-fixed-top.text-center -->
-        </div><!-- .container -->
+        </div><!-- .container --></div>
     </header>
     <div class="container">
         <div class="contour-main">
@@ -79,23 +96,25 @@
                 <div class="contour-footer text-center">
                     <a target="_blank" href="http://www.ciec.espol.edu.ec/"> Website de Ciec </a>|
                     <a href="/contactos/"> Contáctenos </a>|
+                    <a href="/acerca-de/">Acerca de </a>|
                 </div><!-- .contour-footer.text-center -->
                 <div class="box-footer text-center">
                     <p>Escuela Superior Politécnica del Litoral - Guayaquil - Ecuador Campus Gustavo Galindo</p>
                 </div><!-- .box-footer.text-center-->
-    	</footer>
+        </footer>
     </div><!-- .contour-main -->
     </div><!-- .container -->
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="{% static "js/bootstrap-select.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/index.js" %}" type="text/javascript"></script>
     <script type="text/javascript">
         $('.selectpicker').selectpicker();
 
         $().ready(function(){
             $("#myslide").carousel({
-                interval: 7000,
+                interval: 5000,
                 pause: "hover",
             });
             setTimeout(function(){

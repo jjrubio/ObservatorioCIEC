@@ -49,7 +49,8 @@
 }
 
 .active{
-    background-color:black;
+/*    background-color:black;*/
+      background-color:white;
 }
 
 .titulo-secundario{
@@ -196,10 +197,61 @@ body{
     margin-top: 0.5em;
 }
 
+.second-navbar{
+    top: 119px;
+    background-color: #e3bc5f;
+    border-color: #e3bc5f;
+    z-index: 1;
+}
+
+#top-nav > li{
+    padding-left: 17px;
+    /*paddinf-right: 90px;*/
+}
+
+#top-nav > li a:hover{
+    color: #0cb3ac;
+}
+
 #logo-navbar{
-    width: 50px;
-    margin-left: 4em;
-    margin-top: -4em;
+    width: 90px;
+    margin-left: -2em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+#parrafo_intro{
+    margin-left: -4.5em;
+    margin-right: 3em;
+    font-size: 15px;
+}
+
+#separador-parrafo{
+    border-color: rgb(0,29,65);
+    border-style: solid;
+    border-width: 2px;
+}
+
+#botones_control{
+    top: 27.8em;
+    left: 13em;
+}
+
+#parrafos{
+    font-size: 15px;
+    color: rgb(0,29,65);
+}
+
+p #parrafos:hover{
+    color: blue;
+}
+
+#visita{
+    font-size: 15px;
+}
+
+#more_info{
+    color: rgb(211,89,76);
 }
 
 #titulo-footer{
@@ -214,6 +266,28 @@ body{
 
 #welcome{
     padding-top: 20px;
+}
+
+#fb_logo_ciec{
+    width: 5%;
+}
+#twitter_logo_ciec{
+    width: 5%;
+}
+
+#register{
+   color: white;
+}
+
+#redes-sociales{
+   top: 87px;
+   left: 140px;
+}
+
+#log-out{
+    margin-top: 0.3em;
+    margin-right: 15em;
+    z-index: 2;
 }
 
 @media only screen and (min-width : 1361px){
@@ -292,8 +366,8 @@ body{
 
     #logged-out{
         color: #fff;
-        margin-top: 5px;
-        margin-right: 110px;
+        margin-top: -3em;
+        margin-left: 90em;
     }
 
     #option-user{

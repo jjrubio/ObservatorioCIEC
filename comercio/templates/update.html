@@ -63,10 +63,11 @@
             var id_options_update = $('#options_update option:selected').attr('value');
             $("#loading").show();
             $("#mensaje").hide();
-
+            $(this).attr('disabled','disabled');
             $.getJSON('/data/', {'valor_k':id_options_update}, function(data){
                     $("#loading").hide();
                     $("#mensaje").show();
+                    $('#btn_update').removeAttr("disabled");
             });
         });
     </script>

@@ -9,18 +9,20 @@
 {% endblock %}
 
 {% block content %}
-        <div class="content-page-2">
-        {% if registered %}
-            <b id="title-content-page">Registro exitoso</b>
-            <hr id="separator-content-page" class="pull-left">
-            <br><br>
-            <div id="mensaje-alerta" class="text-center">
-                <b>¡ GRACIAS POR REGISTRARTE EN EL OBSERVARTORIO ECONÓMICO - SOCIAL DEL ECUADOR !</b><br><br>
-                <b>  REVISE SU CORREO ELECTRÓNICO PARA ACTIVAR SU USUARIO </b><br><br>
-                <a href="/">Ir al Inicio</a><br />
-            </div><!-- #mensaje-alerta.text-center -->
+        <div class="content-page-2"id="home-page">
+            <br /><br />
+            {% if registered %}
+                <b id="title-content-page">Registro exitoso</b>
+                <hr id="separator-content-page" class="pull-left">
+                <br><br>
+                <div id="mensaje-alerta" class="text-center">
+                    <b>¡ GRACIAS POR REGISTRARTE EN EL OBSERVARTORIO ECONÓMICO - SOCIAL DEL ECUADOR !</b><br><br>
+                    <b>  REVISE SU CORREO ELECTRÓNICO PARA ACTIVAR SU USUARIO </b><br><br>
+                    <a href="/">Ir al Inicio</a><br />
+                </div><!-- #mensaje-alerta.text-center -->
         {% else %}
             <b id="title-content-page">Formulario de registro</b>
+            <br /><br />
             <hr id="separator-content-page" class="pull-left">
             <form id="user_form" method="post" action="registro/">
                 {% csrf_token %}
