@@ -587,19 +587,6 @@ function grafico_2(data, f_inicial, f_final){
         ope = 2;
     }
 
-    console.log(data);
-
-    // arraySortFOB = data[1][0].sort(ComparatorFOBPais);
-
-    // var arraySortUniqueFOB = [];
-    // $.each(arraySortFOB, function(i, el){
-    //     if($.inArray(el[1], arraySortUniqueFOB) === -1) arraySortUniqueFOB.push(el[1]);
-    // });
-
-    // arrayTopFOB = arraySortUniqueFOB.slice(0,5);
-
-
-
     var paises = [];
     $.each(data[1][0], function(i, el){
         if($.inArray(el[1], paises) === -1) paises.push(el[1]);
@@ -610,8 +597,6 @@ function grafico_2(data, f_inicial, f_final){
     for(var i=0; i < paises.length; i++){
         arrayPaisFOB.push({pais: paises[i], fob: 0});
     }
-
-    console.log(arrayPaisFOB);
 
     for (var j=0; j<arrayPaisFOB.length; j++) {
         for(var k=0; k < total_datos; k++){
@@ -624,9 +609,6 @@ function grafico_2(data, f_inicial, f_final){
     arraySortPaisFOB = arrayPaisFOB.sort(OrdenarPorFOB);
 
     arrayTopFOB = arraySortPaisFOB.slice(0,5);
-
-    console.log(arrayPaisFOB);
-    console.log(arrayTopFOB);
 
     anio1 = parseInt(f_inicial.split("/")[0]);
     mes1 = parseInt(f_inicial.split("/")[1])+1;
