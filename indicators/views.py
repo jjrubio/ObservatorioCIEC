@@ -20,7 +20,24 @@ from datetime import datetime
 from django.contrib.sessions.models import Session
 from django.db.models import Sum, Count
 import unicodedata
+import time     
 # from resources.models import Ip_controller
+
+def timeit(method):
+
+    def timed(*args, **kw):
+        ts = time.time()
+        result = method(*args, **kw)
+        te = time.time()
+
+        # print '%r (%r, %r) %2.2f sec' % \
+        #       (method.__name__, args, kw, te-ts)
+        print '%r - %2.2f sec' % \
+              (method.__name__, te-ts)
+        return result
+
+    return timed
+
 
 class PythonObjectEncoder(JSONEncoder):
     def default(self, obj):
@@ -43,6 +60,7 @@ def indicator_def(request, method_id='1', cat_id='1', subcat_id='1', ind_id='1')
     template = "indicator_def.html"
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
+@timeit
 def indicators_detail(method_id, cat_id, subcat_id, ind_id):
     message = []
     subcategoriesArray = []
@@ -135,6 +153,8 @@ def indicator_calc(request, method_id='1', cat_id='1', subcat_id='1', ind_id='1'
     template = "indicator_calc.html"
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
+
+@timeit
 def calc_result(request):
     # permiso = False
 
@@ -239,6 +259,9 @@ def calc_result(request):
                         ).exclude(**get_filter()[indicator_int][4]
                         ).order_by('fexp')
 
+                    print("aqui!!!");
+                    print(len(data_byWhere));
+
                     if (data_byWhere.count() > 0):
                         column_1 = get_column_1(data_byWhere, method_int, indicator_int)
                         columns_2_3 = get_column_2_3(data_byWhere, disintegrations, represent_int)
@@ -299,6 +322,7 @@ def calc_result(request):
     message = json.dumps(data_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
 
+@timeit
 def modelo_ind(y,X,Z,fexp,conf=0.95,colin_thres=30):
     # Armar la regresion por OLS segun el modelo
     if not (X.any() or Z.any()):
@@ -398,6 +422,7 @@ def modelo_ind(y,X,Z,fexp,conf=0.95,colin_thres=30):
 
     return output
 
+@timeit
 def remove_colinear_base(mat, colin_thres):
     X, icol = np.copy(mat), 0
     while True:
@@ -408,6 +433,7 @@ def remove_colinear_base(mat, colin_thres):
     return X
 
 
+@timeit
 def modelo_final(y, X, Z, fexp, conf = 0.95, colin_thres = 30):
     if not (X.any() or Z.any()):
         P = modelo_ind(y, X, Z, fexp, conf, colin_thres)
@@ -518,7 +544,7 @@ def modelo_final(y, X, Z, fexp, conf = 0.95, colin_thres = 30):
 
     return P
 
-
+@timeit
 def get_column_1(data, method_int, indicator_int):
     if method_int == 1:
         if(indicator_int == 8 or indicator_int == 9 or indicator_int == 10 or indicator_int == 16 or indicator_int == 17 or indicator_int == 18 or indicator_int == 74 or indicator_int == 75):
@@ -537,7 +563,7 @@ def get_column_1(data, method_int, indicator_int):
     column_1_array = np.array(list(column_1), 'float')
     return column_1_array
 
-
+@timeit
 def get_column_2_3(data, disintegrations, represent_int):
     disintegrations_size = len(disintegrations)
 
@@ -678,6 +704,7 @@ def insert_accents(input_str):
             input_str[n] =  'Hasta 3 años de educación superior'
     return input_str
 
+@timeit
 def get_column_4(data):
     column_4 = data.only('fexp').values_list("fexp", flat=True)
     column_4_array = np.array(list(column_4), 'float')
@@ -990,7 +1017,7 @@ def disintegration_denied_list(dis):
         denied = [2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
     return denied
 
-
+@timeit
 def numero_consultas(request):
     represent = request.GET['represent']
     yearStart = request.GET['yearStart']
