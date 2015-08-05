@@ -50,8 +50,11 @@ def indicators_detail(method_id, cat_id, subcat_id, ind_id):
     indicatorSelectArray = []
     methodSelectArray = []
     result = []
-    test = []
-    test_2 = []
+    id_metodo_indicador = []
+    indicator_subcategory = []
+    all_subcategory_id = []
+    subcategory_id_all = []
+    id_subcategory_filter = []
 
     posSubcat = int(subcat_id)
     posInd = int(ind_id)
@@ -72,6 +75,26 @@ def indicators_detail(method_id, cat_id, subcat_id, ind_id):
         indicators = Indicator.objects.filter(id__in=result)  
 
     indicatorSelect = Indicator.objects.get(id=indicators[posInd - 1].id)
+
+    for j in method_indicator:
+        id_metodo_indicador.append(j)
+    one = Indicator.objects.values_list('subcategory',flat=True).filter(id__in=id_metodo_indicador).annotate(dcount=Count('subcategory'))
+    for j in one:
+        indicator_subcategory.append(j)
+    two = Subcategory.objects.filter(id__in=indicator_subcategory)
+    for j in two:
+        all_subcategory_id.append(j.id)
+    for j in subcategories:
+        subcategory_id_all.append(j.id)
+    for i in all_subcategory_id:
+        for j in subcategory_id_all:
+            if i == j:
+                id_subcategory_filter.append(j)
+
+    if cat_id == '3':
+        id_subcategory_filter.append(7)
+    
+    subcategories = Subcategory.objects.filter(id__in=id_subcategory_filter)
 
     for subcat in subcategories:
         dict_subcat = {}
