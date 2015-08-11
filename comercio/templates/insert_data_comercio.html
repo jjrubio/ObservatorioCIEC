@@ -25,6 +25,12 @@
                     <div class="col-lg-4"></div><!-- .col-lg-4 -->
                     <div class="col-lg-4">
                         <br/><br/><br/>
+                        {% if files_failed %}
+                            {% for files in files_failed %}
+                                <span>Estos archivos no se subieron con exito: {{files}}</span>
+                                <br/>
+                            {%  endfor%}
+                        {% endif %}
                         <span>Para subir otro archivo, por favor dar clic <a href="/subir_csv_comercio/">aquí</a></span>
                         <br/><br/><br/>
                         {% if actualizar %}
@@ -72,7 +78,7 @@
                                 <span class="texto">Escoja un archivo de excel:</span><br/>
                             </div><!-- .col-lg-3 -->
                         <label class="btn btn-default browse-wrap">
-                            <input id="file" name="file" type="file">
+                            <input id="file" name="file" type="file" multiple>
                             Seleccionar archivo
                         </label>
                         <span class="upload-path">&nbsp;&nbsp;&nbsp;No ha seleccionado un archivo </span>
