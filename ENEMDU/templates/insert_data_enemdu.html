@@ -20,6 +20,15 @@
                     <div class="col-lg-4"></div><!-- .col-lg-4 -->
                     <div class="col-lg-4">
                         <br/><br/><br/>
+                        {% if files_failed %}
+                            {% for files in files_failed %}
+                                <span>Estos archivos no se subieron con exito: {{files}}</span>
+                                <br/>
+                            {% endfor %}
+                            <br/><br/>
+                            <span>Esto es debido a error en el formato. Por favor verfique que el formato sea el correcto antes de subirlo.</span>
+                        {% endif %}
+                        <br/><br/><br/>
                         <span>Para subir otro archivo, por favor dar clic <a href="/subir_csv/">aquí</a></span>
                         <br/><br/><br/>
                     </div><!-- .col-lg-4 -->
@@ -56,7 +65,7 @@
                             <span class="texto">Escoja un archivo txt o csv:</span><br/>
                         </div><!-- .col-lg-3 -->
                         <label class="btn btn-default browse-wrap">
-                            <input id="file" name="file" type="file">
+                            <input id="file" name="file" type="file" multiple>
                             Seleccionar archivo
                         </label>
                         <span class="upload-path">&nbsp;&nbsp;&nbsp;No ha seleccionado un archivo </span>
