@@ -825,9 +825,8 @@ def insert_data_comercio(request):
                                 if len(files_failed) > 0:
                                     for afile in files_failed:
                                         os.remove(path_upload_csv+str(afile))
-                                # Se ejecuta el scrip ṕhp
                                 if len(files_failed) == len(file_list):
-                                    upload_success = False
+                                    return HttpResponseRedirect('/error/')
                                 else:
                                     proc = subprocess.Popen("php /home/patu/Downloads/ObservatorioCIEC-master/load_files_export_comercio.php", shell=True, stdout=subprocess.PIPE)
                                     alert = proc.communicate()
@@ -940,9 +939,8 @@ def insert_data_comercio(request):
                                 if len(files_failed) > 0:
                                     for afile in files_failed:
                                         os.remove(path_upload_csv+str(afile))
-                                # Se ejecuta el scrip ṕhp
                                 if len(files_failed) == len(file_list):
-                                    upload_success = False
+                                    return HttpResponseRedirect('/error/')
                                 else:
                                     proc = subprocess.Popen("php /home/patu/Downloads/ObservatorioCIEC-master/load_files_import_comercio.php", shell=True, stdout=subprocess.PIPE)
                                     alert = proc.communicate()
