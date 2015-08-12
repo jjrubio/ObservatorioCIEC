@@ -260,6 +260,7 @@ def calc_result(request):
                         ).exclude(**get_filter()[indicator_int][4]
                         ).exclude(**get_disintegration_option()[int(disintegrations[0])][1]
                         ).exclude(**get_disintegration_option()[int(disintegrations[0])][2]
+                        ).exclude(**exclude_is_null()[indicator_int][0]
                         ).order_by('fexp')
 
                     elif (len(disintegrations) == 2):
@@ -272,6 +273,7 @@ def calc_result(request):
                         ).exclude(**get_disintegration_option()[int(disintegrations[0])][2]
                         ).exclude(**get_disintegration_option()[int(disintegrations[1])][1]
                         ).exclude(**get_disintegration_option()[int(disintegrations[1])][2]
+                        ).exclude(**exclude_is_null()[indicator_int][0]
                         ).order_by('fexp')
                         
                     else:
@@ -280,6 +282,7 @@ def calc_result(request):
                         ).filter(**get_filter()[indicator_int][3]
                         ).filter(edad__gte=age_int
                         ).exclude(**get_filter()[indicator_int][4]
+                        ).exclude(**exclude_is_null()[indicator_int][0]
                         ).order_by('fexp')
 
                     print("aqui!!!");
@@ -898,7 +901,94 @@ def get_filter():
     }
     return data
 
+def exclude_is_null():
 
+    data ={
+        1: [{'pet__isnull' : True}],
+        2: [{'pea__isnull' : True}],
+        3: [{'pea__isnull' : True}],
+        4: [{'pei__isnull' : True}],
+        5: [{'empleo__isnull' : True}],
+        6: [{'empleo__isnull' : True}],
+        7: [{'oplenos__isnull' : True}],
+        8: [{'empleo__isnull' : True}],
+        9: [{'empleo__isnull' : True}],
+        10: [{'empleo__isnull' : True}],
+        11: [{'suboc__isnull' : True}],
+        12: [{'suboc1__isnull' : True}],
+        13: [{'suboc2__isnull' : True}],
+        14: [{'sub_inv__isnull' : True}],
+        15: [{'sub_informal__isnull' : True}],
+        16: [{'empleo__isnull' : True}],
+        17: [{'sub_inv__isnull' : True}],
+        18: [{'suboc1__isnull' : True}],
+        19: [{'desempleo__isnull' : True}],
+        20: [{'desemab__isnull' : True}],
+        21: [{'desemoc__isnull' : True}],
+        22: [{'cesantes__isnull' : True}],
+        23: [{'desm_nuevo__isnull' : True}],
+        24: [{'oplenos__isnull' : True}],
+        25: [{'suboc__isnull' : True}],
+        26: [{'ingrl__isnull' : True}],
+        27: [{'satis_laboral__isnull' : True}],
+        28: [{'anosaprob__isnull' : True}],
+        29: [{'experiencia__isnull' : True}],
+        30: [{'migracion_extranjera__isnull' : True}],
+        31: [{'mig_noprin_prin__isnull' : True}],
+        32: [{'tamano_hogar__isnull' : True}],
+        33: [{'hogar_completo__isnull' : True}],
+        34: [{'hogar_noFamiliar__isnull' : True}],
+        35: [{'ingreso_hogar__isnull' : True}],
+        36: [{'part_quehaceres__isnull' : True}],
+        37: [{'horas_part_quehaceres__isnull' : True}],
+        38: [{'descon_bajos_ingresos__isnull' : True}],
+        39: [{'descon_horarios__isnull' : True}],
+        40: [{'descon_estabil__isnull' : True}],
+        41: [{'descon_amb_laboral__isnull' : True}],
+        42: [{'descon_activ__isnull' : True}],
+        43: [{'rentista__isnull' : True}],
+        44: [{'jubil__isnull' : True}],
+        45: [{'estudiant__isnull' : True}],
+        46: [{'amaCasa__isnull' : True}],
+        47: [{'incapacit__isnull' : True}],
+        48: [{'otro__isnull' : True}],
+        49: [{'analfabeta__isnull' : True}],
+        50: [{'desemab__isnull' : True}],
+        51: [{'desemoc__isnull' : True}],
+        52: [{'cesantes__isnull' : True}],
+        53: [{'desm_nuevo__isnull' : True}],
+        54: [{'semanas_busc_trab__isnull' : True}],
+        55: [{'pobreza__isnull' : True}],
+        56: [{'pobreza_extrema__isnull' : True}],
+        57: [{'asisteClases__isnull' : True}],
+        58: [{'hablaEspaniol__isnul' : True}],
+        59: [{'hablaIndigena__isnull' : True}],
+        60: [{'hablaExtranjero__isnull' : True}],
+        61: [{'haceDeportes__isnull' : True}],
+        62: [{'horasDeportes__isnull' : True}],
+        63: [{'empleoAdecuado__isnull' : True}],
+        64: [{'empleoInadecuado__isnull' : True}],
+        65: [{'empleoNoclasificado__isnull' : True}],
+        66: [{'empleoAdecuado__isnull' : True}],
+        67: [{'empleoInadecuado__isnull' : True}],
+        68: [{'empleoNoclasificado__isnull' : True}],
+        69: [{'subempleo__isnull' : True}],
+        70: [{'subempleoXhoras__isnull' : True}],
+        71: [{'subempleoXingreso__isnull' : True}],
+        72: [{'otroEmpleoInadec__isnull' : True}],
+        73: [{'empleoNoremunerado__isnull' : True}],
+        74: [{'empleo__isnull' : True}],
+        75: [{'empleo__isnull' : True}],
+        76: [{'hombre__isnull' : True}],
+        77: [{'edad__isnull' : True}],
+        78: [{'desoNoBusca__isnull' : True}],
+        79: [{'mig_prin_noprin__isnull' : True}],
+        80: [{'mig_prin_prin__isnull' : True}],
+        81: [{'mig_noprin_noprin__isnull' : True}],
+    }
+    return data
+
+    
 def indicador_filtro(request):
     id_indicador = request.GET['id_indicator']
     id_method = request.GET['id_method']
