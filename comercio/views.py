@@ -1109,6 +1109,7 @@ def option(request):
 
 def eliminar_datos_comercio(request):
     template = 'delete_comercio.html'
+    data_paises = Paises.objects.all()
     return render_to_response(template, context_instance=RequestContext(request, locals()))
 
 def eliminar_comercio(request):

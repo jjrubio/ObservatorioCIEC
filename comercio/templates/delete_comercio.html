@@ -29,6 +29,33 @@
                 <input id="code" type="text" class="form-control">
                 <label id="msg_1"></label>
                 <p>* Para ver los códigos de los países, dar clic <a href="#">aquí</a></p>
+                <div class="container" id="div_tabla" hidden >
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <table id="tabla_codigo_paises" class="table table-hover" >
+                                <thead>
+                                    <tr>
+                                        <th>CÓDIGO</th>
+                                        <th>PAISES</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if data_paises %}
+                                        {% for data in data_paises %}
+                                            <tr>
+                                                <td>{{data.codigo}}</td>
+                                                <td>{{data.pais}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                </div>
+                <br/><br/>
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4">
                     <button id="btn-delete" class="btn btn-primary">Eliminar datos</button>
