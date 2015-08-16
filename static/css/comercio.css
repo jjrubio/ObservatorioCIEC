@@ -55,7 +55,7 @@
 
 label{
     display: block;
-    margin: 5px 0px 5px;
+    margin-bottom: 0.5em;
 }
 
 #btn_search{
