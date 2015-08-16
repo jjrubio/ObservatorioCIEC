@@ -941,7 +941,7 @@ def insert_data_enemdu(request):
                         for afile in files_failed:
                             os.remove(path_dir+str(afile))
                     if len(files_failed) == len(file_list):
-                        upload_success = False
+                        return HttpResponseRedirect('/error/')
                     else:
                         #Luego se corre el load_files.sh
                         p = subprocess.Popen(['/home/patu/Downloads/ObservatorioCIEC-master/load_files',dbtable])
@@ -1140,3 +1140,7 @@ def eliminar_anio_rango_trim(request):
 
     message = json.dumps(flag, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
+
+def error(request):
+    template = 'error_all.html'
+    return render_to_response(template, context_instance=RequestContext(request, locals()))
