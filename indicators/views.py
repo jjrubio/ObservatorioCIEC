@@ -658,7 +658,7 @@ def get_column_2_3(data, disintegrations, represent_int):
         column_3_array = np.zeros((len(filter_column_3_by),len(types_option_2_new)))
         column_3_aux = list(filter_column_3_by)
         for i in range(0, len(filter_column_3_by)):
-            if column_2_aux[i] == None:
+            if column_3_aux[i] == None:
                 pass
             else:
                 column_3_array[i] = [1 if x == column_3_aux[i] else 0 for x in types_option_2_new]
