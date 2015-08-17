@@ -33,6 +33,7 @@ def as_python_object(dct):
 
 
 def comercio_page(request):
+    paises = Paises.objects.all()
     template = 'comercio.html'
     return render_to_response(template, context_instance = RequestContext(request,locals()))
 
@@ -89,7 +90,7 @@ def comercio(request):
             export_standar_table = 'comercio_export_cuode'
             import_standar_table = 'comercio_import_cuode'
 
-    table_A = sql_A(standar_table, standar_clase, value_A, value_B)
+    table_A = sql_A(option, standar_table, standar_clase, standar_var2, export_standar_table, value_A, value_B)
 
     for va in table_A:
         data_table_A.append([va[1], va[2]])
@@ -237,14 +238,28 @@ def equivalencia(value):
 #standar_clase: subpartida o codigo
 #value_A: patron% o null segun 'BuscarPor'
 #value_B: patron% o null segun 'BuscarPor'
-def sql_A(standar_table, standar_clase, value_A, value_B):
+def sql_A(option, standar_table, standar_clase, standar_var2, export_standar_table, value_A, value_B):
     cursor = connection.cursor()
 
-    raw_body = ("SELECT * FROM %s WHERE %s ") % (standar_table, standar_clase)
-    raw_where = ("LIKE %s OR descripcion LIKE %s")
-    cursor.execute(raw_body+raw_where,  [value_A, value_B])
-    table_A = cursor.fetchall ()
-    return table_A
+    if(option == '1'):
+        raw_body = ("SELECT * FROM %s WHERE %s ") % (standar_table, standar_clase)
+        raw_where = ("LIKE %s OR descripcion LIKE %s")
+        cursor.execute(raw_body+raw_where,  [value_A, value_B])
+        table_A = cursor.fetchall ()
+        return table_A
+    else:
+        raw_body = ("""SELECT DISTINCT %s.id, %s.%s, descripcion 
+                                FROM %s
+                                INNER JOIN %s ON %s.%s=%s.%s 
+                                INNER JOIN comercio_paises ON %s.pais=comercio_paises.codigo 
+                                WHERE comercio_paises.pais """) % (standar_table, export_standar_table, standar_var2, 
+                                                                                       export_standar_table, 
+                                                                                       standar_table, export_standar_table, standar_var2, standar_table, standar_clase, 
+                                                                                       export_standar_table)
+        raw_where = ("LIKE %s")
+        cursor.execute(raw_body + raw_where, [value_B])
+        table_A = cursor.fetchall ()
+        return table_A
 
 
 #tipo: tab_selected

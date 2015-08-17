@@ -58,7 +58,7 @@ def indicator_def(request, method_id='1', cat_id='1', subcat_id='1', ind_id='1')
     categories = Category.objects.all()
     method = Method.objects.all()
     template = "indicator_def.html"
-    return render_to_response(template, context_instance=RequestContext(request, locals()))
+    return render_to_response(template, context_instance = RequestContext(request, locals()))
 
 @timeit
 def indicators_detail(method_id, cat_id, subcat_id, ind_id):

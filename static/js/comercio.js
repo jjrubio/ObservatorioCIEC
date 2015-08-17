@@ -8,8 +8,10 @@ $(document).ready(function() {
     var yearMonth = year+"/0"+month;
     var textoFiltro = "";
 
-    $('#endDate').attr("value", yearMonth);
+    $('#select_pais').selectpicker('val', '0');
 
+    $('#endDate').attr("value", yearMonth);
+    
     $('#search_by').change(function(){
         if ($('#search_by').val() == 1){
             textoFiltro = "Filtrar por código";
@@ -25,7 +27,6 @@ $(document).ready(function() {
             $('#txt_filtro_text').attr('type','text');
         }
     });
-
 
     $.fn.datepicker.dates['es'] = {
         days: ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"],
@@ -78,7 +79,9 @@ $(document).ready(function() {
         if(activeTab == "tab_codsub"){
             $('#search').show();
             $('#pais').show();
-            $('#filtrar_por').text(textoFiltro);
+            $('#label_filtro').show();
+            $('#label_pais').hide();
+
             if ($('#search_by').val() == 1){
                 textoFiltro = "Filtrar por código";
                 $('#filtrar_por').text(textoFiltro);
@@ -98,14 +101,11 @@ $(document).ready(function() {
         if(activeTab == "tab_pais"){
             $('#search').hide();
             $('#pais').hide();
-            $('#filtrar_por').text('Escriba el nombre del país');
-            $('#txt_filtro_num').attr('type','hidden');
-            $('#txt_filtro_num').attr('value','');
-            $('#txt_filtro_text').attr('value','');
-            $('#txt_filtro_text').attr('type','text');
+            $('#label_filtro').hide();
+            $('#label_pais').show();
         }
 
-        $('#parametros').removeClass('collapse');
+        $('#parametros').removeClass('collapse'); 
         $('#parametros').addClass('collapse in'); 
         $('#resultados').removeClass('collapse in');
         $('#resultados').addClass('collapse');  
@@ -175,19 +175,23 @@ $(document).ready(function() {
                 standar = $('#standars option:selected').attr('value');
                 period = $('#period option:selected').attr('value');
                 checkbox_pais = bandera;
+
+                if ($('#search_by').val() == 1){
+                    txt_patron = $('#txt_filtro_num').val();
+                }else{
+                    txt_patron = $('#txt_filtro_text').val();
+                }
             }else{
                 search_by = 0;
                 standar = $('#standars option:selected').attr('value');
                 period = $('#period option:selected').attr('value');
                 checkbox_pais = 0;
+                txt_patron = $('#select_pais option:selected').text();
+                if(txt_patron == "-- Lista de países --" || txt_patron == "TODOS LOS PAISES"){
+                    txt_patron = "";
+                }
             }
-
-            if ($('#search_by').val() == 1){
-                txt_patron = $('#txt_filtro_num').val();
-            }else{
-                txt_patron = $('#txt_filtro_text').val();
-            }
-
+            
             txt_agregacion = $('#txt_agregacion').val();
 
             if(tabs_1 == "tab_exp"){
@@ -413,7 +417,10 @@ function()
                 key == 8 ||
                 key == 9 ||
                 key == 13 ||
-                (key >= 48 && key <= 57));
+                key == 46 ||
+                (key >= 37 && key <= 40) ||
+                (key >= 48 && key <= 57) ||
+                (key >= 96 && key <= 105));
         });
     });
 };
@@ -527,10 +534,10 @@ function grafico_1(data, standar){
                 $('#'+link_ul).append('<div id="'+div_name+'" class="graph text-center" ></div>');
 
                 if(num_ope == 1){
-                    $("#guia-grafico").text(" (Se muestra los productos con mayor exportación de miles de dólares.)");
+                    $("#guia-grafico").text(" (Se muestra los productos con mayor exportación de miles de dólares clasificados por su código.)");
                     graph_title = "Exportación miles de dólares FOB de "  + arrayTopFOB[i].nombre; 
                 }else{
-                    $("#guia-grafico").text(" (Se muestra los productos con mayor importación de miles de dólares.)");
+                    $("#guia-grafico").text(" (Se muestra los productos con mayor importación de miles de dólares clasificados por su código.)");
                     if(k == 0){
                         graph_title = "Importación miles de dólares FOB de "  + arrayTopFOB[i].nombre; 
                     }else{

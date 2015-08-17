@@ -33,13 +33,29 @@
                                         <input id="startDate" class="form-control" type="text" value="1990/01" >
                                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                     </div><!-- .input-group.margin-bottom-sm.date.datepickerStart -->
-                                </label>
+                                </label><br>
                                 <label>
                                     <span>Hasta</span>
                                     <div class="input-group margin-bottom-sm date datepickerEnd">
                                         <input id="endDate" class="form-control" type="text">
                                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                     </div><!-- .input-group.margin-bottom-sm.date.datepickerEnd -->
+                                </label><br>
+                                <label id="label_filtro">
+                                    <span id="filtrar_por">Filtrar por código</span>
+                                    <input id="txt_filtro_num"class="form-control" type="text" >
+                                    <input id="txt_filtro_text" class="form-control" type="hidden">
+                                    <br>
+                                </label>
+                                <label id="label_pais" hidden>
+                                    <span>Seleccione un país </span>
+                                    <select id="select_pais" class="selectpicker show-menu-arrow" data-width="100%" data-size="5">
+                                        <option value="0" selected>-- Lista de países --</option>
+                                    {% for pais in paises %}
+                                        <option value="{{pais.codigo}}">{{pais.pais}}</option>
+                                    {% endfor %}
+                                    </select>
+                                    <br><br>
                                 </label>
                                 <label>
                                     <span> Nivel de agregación</span>
@@ -47,12 +63,6 @@
                                     <br/>
                                     <span class="hidden">*Valores solo del 0 al 100</span>
                                 </label>
-                                <label>
-                                    <span id="filtrar_por">Filtrar por código</span>
-                                    <input id="txt_filtro_num"class="form-control" type="text" >
-                                    <input id="txt_filtro_text" class="form-control" type="hidden">
-                                </label>
-                                <br>
                                 <label id="pais">
                                     <div>
                                         <input id="checkbox" type='checkbox' name="checkbox">  Separar por país
