@@ -725,363 +725,331 @@ def insert_data_comercio(request):
     upload_success = False
     empty = False
     arreglo = []
-    path_upload_csv = '/home/patu/Downloads/ObservatorioCIEC-master/media/csv/'
+    path_dir = '/home/ciec/oese/media/csv/'
     user = request.user
     is_super_user = user.is_superuser
-    data_error = '##'
     coma = ','
     actualizar = False
     file_list = request.FILES.getlist('file')
     files_failed = []
+    error_find = []
 
-    try:
-        if is_super_user:
-            if request.method == 'POST':
-                upload_form = UploadFileForm(request.POST, request.FILES)
-                if 'file' in request.FILES:
-                    if upload_form.is_valid():
-                        file = upload_form.cleaned_data['file']
-                        choices = upload_form.cleaned_data['choices']
-                        if choices == '8' or choices == '9': 
-                            bandera = 1
+    
+    file_list = request.FILES.getlist('file')
+    user = request.user
+    is_super_user = user.is_superuser
+    if is_super_user:
+        if request.method == 'POST':
+            upload_form = UploadFileForm(request.POST, request.FILES)
+            if 'file' in request.FILES:
+                if upload_form.is_valid():
+                    choices = upload_form.cleaned_data['choices']
+                    if choices == '1':
+                        dbtable = 'comercio_cgce'
+                    elif choices == '2':
+                        dbtable = 'comercio_ciiu3'
+                    elif choices == '3':
+                        dbtable = 'comercio_cpc'
+                    elif choices == '4':
+                        dbtable = 'comercio_cuode'
+                    elif choices == '5':
+                        dbtable = 'comercio_nandina'
+                    elif choices == '6':
+                        dbtable = 'comercio_paises'
+                    elif choices == '7':
+                        dbtable = 'comercio_equivalencia'
+                    elif choices == '8':
+                        dbtable = 'comercio_export_nandina'
+                    else:
+                        dbtable = 'comercio_import_nandina'
+                    for afile in file_list:
+                        var_split = str(afile)
+                        extension = var_split.split('.',1)
+                        ext_val = extension[1]
+                        if ext_val == 'txt' or ext_val == 'csv':
+                            pass
                         else:
-                            bandera = 0
-                        for afile in file_list:
-                            var_split = str(afile)
-                            extension = var_split.split('.',1)
-                            ext_val = extension[1]
-                            if ext_val == 'xls' or ext_val == 'xlsx':
-                                pass
+                            return HttpResponseRedirect('/error-extension/')
+                    for afile in file_list:
+                        new_file_import = upload_csv_file(upload=afile)
+                        new_file_import.save()
+                    for afile in file_list:
+                        file_name = afile
+                        full_path_name = path_dir+str(file_name)
+                        with open(str(full_path_name),'rb') as csvfile:
+                            reader = csv.reader(csvfile)
+                            my_list = list(reader)
+                            if choices == '1':
+                                for i in range(1,len(my_list)):
+                                    codigo,descripcion = str(my_list[i]).split(';')
+                                    codigo_new,value = codigo.split('[')
+                                    value_coma,wcoma = value.split("'")
+                                    descripcion_new = descripcion.split("]")
+                                    try:
+                                        codigo_int = int(wcoma)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                                    try:
+                                        descripcion_str = str(descripcion_new[0])
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                            elif choices == '2':
+                                for i in range(1,len(my_list)):
+                                    codigo,descripcion = str(my_list[i]).split(';')
+                                    codigo_new,value = codigo.split('[')
+                                    value_coma,wcoma = value.split("'")
+                                    descripcion_new = descripcion.split("]")
+                                    try:
+                                        codigo_int = int(wcoma)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                                    try:
+                                        descripcion_str = str(descripcion_new[0])
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                            elif choices == '3':
+                                for i in range(1,len(my_list)):
+                                    codigo,descripcion = str(my_list[i]).split(';')
+                                    codigo_new,value = codigo.split('[')
+                                    value_coma,wcoma = value.split("'")
+                                    descripcion_new = descripcion.split("]")
+                                    try:
+                                        codigo_int = int(wcoma)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                                    try:
+                                        descripcion_str = str(descripcion_new[0])
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                            elif choices == '4':
+                                for i in range(1,len(my_list)):
+                                    codigo,descripcion = str(my_list[i]).split(';')
+                                    codigo_new,value = codigo.split('[')
+                                    value_coma,wcoma = value.split("'")
+                                    descripcion_new = descripcion.split("]")
+                                    try:
+                                        codigo_int = int(wcoma)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                                    try:
+                                        descripcion_str = str(descripcion_new[0])
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                            elif choices == '5':
+                                for i in range(1,len(my_list)):
+                                    subpartida,descripcion = str(my_list[i]).split(';')
+                                    codigo_new,value = subpartida.split('[')
+                                    value_coma,wcoma = value.split("'")
+                                    descripcion_new = descripcion.split("]")
+                                    try:
+                                        codigo_int = int(wcoma)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                                    try:
+                                        descripcion_str = str(descripcion_new[0])
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                            elif choices == '6':
+                                for i in range(1,len(my_list)):
+                                    codigo,pais = str(my_list[i]).split(';')
+                                    codigo_new,value = codigo.split('[')
+                                    value_coma,wcoma = value.split("'")
+                                    pais_new = pais.split("]")
+                                    try:
+                                        codigo_int = int(wcoma)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                                    try:
+                                        descripcion_str = str(pais_new[0])
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        break
+                            elif choices == '7':
+                                for i in range(1,len(my_list)):
+                                    nandina,cpc,cuode,cgce,sistema_armotizado,ciiu3,cuci3 = str(my_list[i]).split(';')
+                                    codigo_new,value = nandina.split('[')
+                                    value_coma,wcoma = value.split("'")
+                                    cuci3_new = cuci3.split("]")
+                                    try:
+                                        nandina_int = int(wcoma)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append(wcoma)
+                                        break
+                                    try:
+                                        cpc_int = int(cpc)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append(cpc)
+                                        break
+                                    try:
+                                        cuode_int = int(cuode)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append(cuode)
+                                        break
+                                    try:
+                                        cgce_int = int(cgce)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append(cgce)
+                                        break
+                                    try:
+                                        sistema_armotizado_int = int(sistema_armotizado)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append(sistema_armotizado)
+                                        break
+                                    try:
+                                        ciiu3_int = int(ciiu3)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append(ciiu3)
+                                        break
+                                    try:
+                                        descripcion_str = str(cuci3_new[0])
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append(cuci3_new[0])
+                                        break
+                            elif choices == '8':
+                                for i in range(1,len(my_list)):
+                                    ano,mes,pais,subpartida_nandina,peso,fob = str(my_list[i]).split(';')
+                                    ano_new,value = ano.split('[')
+                                    value_coma,wcoma = value.split("'")
+                                    fob_new = fob.split("]")
+                                    val1,val2 = fob_new[0].split("'")
+                                    try:
+                                        ano_int = int(wcoma)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('wcoma')
+                                        break
+                                    try:
+                                        mes_int = int(mes)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('mes')
+                                        break
+                                    try:
+                                        pais_int = int(pais)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('pais')
+                                        break
+                                    try:
+                                        subpartida_nandina_int = int(subpartida_nandina)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('subpartida_nandina')
+                                        break
+                                    try:
+                                        peso_float = str(peso)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('peso')
+                                        break
+                                    try:
+                                        fob_float = str(val2)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('val2')
+                                        break
                             else:
-                                return HttpResponseRedirect('/error-extension/')
-                        for afile in file_list:
-                            new_file_import = upload_csv_file(upload=afile)
-                            new_file_import.save()
-                        if(bandera):
-                            if choices == '8':
-                                # columnas: ano,mes,pais,subpartida_nandina,peso,fob
-                                for afile in file_list:
-                                    workbook = xlrd.open_workbook(path_upload_csv+str(afile))
-                                    worksheets = workbook.sheet_names()
-                                    for worksheet_name in worksheets:
-                                        current_worksheet = workbook.sheet_by_name(worksheet_name)
-                                        num_rows = current_worksheet.nrows -1
-                                        num_cells = current_worksheet.ncols - 1
-                                        curr_row = -1
-                                        while curr_row < num_rows:
-                                            curr_row +=1
-                                            row = current_worksheet.row(curr_row)
-                                            if curr_row == 0:
-                                                pass
-                                            else:
-                                                curr_cell = -1
-                                                while curr_cell < num_cells:
-                                                    curr_cell += 1
-                                                    cell_type = current_worksheet.cell_type(curr_row, curr_cell)
-                                                    cell_value = current_worksheet.cell_value(curr_row, curr_cell)
-                                                    arreglo.append(cell_value)
-                                                    if (len(arreglo) == 8):
-                                                        if choices == '8':
-                                                            get_subpartida_nandina = str(arreglo[3])
-                                                            new_subpartida_nandina = get_subpartida_nandina.split('.',1)
-                                                            try:
-                                                                get_peso = str(arreglo[5])
-                                                                new_peso = get_peso.split(',',1)
-                                                                if coma in new_peso[1]:
-                                                                    v2 = new_peso[1].split(',',1)
-                                                                    final_peso = new_peso[0]+v2[0]+v2[1]
-                                                                else:
-                                                                    final_peso = new_peso[0]+new_peso[1]
-                                                            except Exception, e:
-                                                                final_peso = str(arreglo[5])
-                                                            try:
-                                                                get_fob = str(arreglo[6])
-                                                                new_fob = get_fob.split(',',1)
-                                                                if coma in new_fob[1]:
-                                                                    v2 = new_fob[1].split(',',1)
-                                                                    final_fob = new_fob[0]+v2[0]+v2[1]
-                                                                else:
-                                                                    final_fob = new_fob[0]+new_fob[1]
-                                                            except Exception, e:
-                                                                final_fob = str(arreglo[6])
-                                                            try:
-                                                                ano=int(arreglo[0])
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            try:
-                                                                mes=int(arreglo[1])
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            try:
-                                                                pais=int(arreglo[2])
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            try:
-                                                                subpartida_nandina=int(new_subpartida_nandina[0])
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            try:
-                                                                peso=float(final_peso)
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            try:
-                                                                fob=float(final_fob)
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            for x in arreglo[:]:
-                                                                arreglo.remove(x)
-                                # Borramos los archivos que tienen mal formato.
-                                if len(files_failed) > 0:
-                                    for afile in files_failed:
-                                        os.remove(path_upload_csv+str(afile))
-                                if len(files_failed) == len(file_list):
-                                    return HttpResponseRedirect('/error/')
-                                else:
-                                    proc = subprocess.Popen("php /home/patu/Downloads/ObservatorioCIEC-master/load_files_export_comercio.php", shell=True, stdout=subprocess.PIPE)
-                                    alert = proc.communicate()
-                                    # Se realiza un update a la columna subpartida_nandina si es que el lenght es igual a 9
-                                    cursor = connection.cursor()
-                                    cursor.execute("UPDATE comercio_export_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
-                                    # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
-                                    cursor.execute("UPDATE comercio_export_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
-                                    cursor.close
-                                    upload_success = True
-                                    empty = False
-                                    # Borro los archivos restantes
-                                    for afile in file_list:
-                                        for afile_2 in files_failed:
-                                            if str(afile_2) == str(afile):
-                                                pass
-                                            else:
-                                                os.remove(path_upload_csv+str(afile))
-                            else:
-                                # columnas: ano,mes,pais,subpartida_nandina,peso,fob,cif
-                                for afile in file_list:
-                                    workbook = xlrd.open_workbook(path_upload_csv+str(afile))
-                                    worksheets = workbook.sheet_names()
-                                    for worksheet_name in worksheets:
-                                        current_worksheet = workbook.sheet_by_name(worksheet_name)
-                                        num_rows = current_worksheet.nrows -1
-                                        num_cells = current_worksheet.ncols - 1
-                                        curr_row = -1
-                                        while curr_row < num_rows:
-                                            curr_row +=1
-                                            row = current_worksheet.row(curr_row)
-                                            if curr_row == 0:
-                                                pass
-                                            else:
-                                                curr_cell = -1
-                                                while curr_cell < num_cells:
-                                                    curr_cell += 1
-                                                    cell_type = current_worksheet.cell_type(curr_row, curr_cell)
-                                                    cell_value = current_worksheet.cell_value(curr_row, curr_cell)
-                                                    arreglo.append(cell_value)
-                                                    if (len(arreglo) == 9):
-                                                        if choices == '9':
-                                                            get_subpartida_nandina = str(arreglo[3])
-                                                            new_subpartida_nandina = get_subpartida_nandina.split('.',1)
-                                                            try:
-                                                                get_peso = str(arreglo[5])
-                                                                new_peso = get_peso.split(',',1)
-                                                                if coma in new_peso[1]:
-                                                                    v2=new_peso[1].split(',',1)
-                                                                    final_peso = new_peso[0]+v2[0]+v2[1]
-                                                                else:
-                                                                    final_peso = new_peso[0]+new_peso[1]
-                                                            except Exception, e:
-                                                                final_peso = str(arreglo[5])
-                                                            try:
-                                                                get_fob = str(arreglo[6])
-                                                                new_fob = get_fob.split(',',1)
-                                                                if coma in new_fob[1]:
-                                                                    v2=new_fob[1].split(',',1)
-                                                                    final_fob = new_fob[0]+v2[0]+v2[1]
-                                                                else:
-                                                                    final_fob = new_fob[0]+new_fob[1]
-                                                            except Exception, e:
-                                                                final_fob = str(arreglo[6])
-                                                            try:
-                                                                get_cif = str(arreglo[7])
-                                                                new_cif = get_cif.split(',',1)
-                                                                final_cif = new_cif[0]+new_cif[1]
-                                                            except Exception, e:
-                                                                final_cif = str(arreglo[7])
-                                                            try:
-                                                                ano=int(arreglo[0])
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            try:
-                                                                mes=int(arreglo[1])
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            try:
-                                                                pais=int(arreglo[2])
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            try:
-                                                                subpartida_nandina=int(new_subpartida_nandina[0])
-                                                                break
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            try:
-                                                                peso=float(final_peso)
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            try:
-                                                                fob=float(final_fob)
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            try:
-                                                                cif=float(final_cif)
-                                                            except ValueError:
-                                                                files_failed.append(str(afile))
-                                                                break
-                                                            for x in arreglo[:]:
-                                                                arreglo.remove(x)
-                                # Borramos los archivos que tienen mal formato.
-                                if len(files_failed) > 0:
-                                    for afile in files_failed:
-                                        os.remove(path_upload_csv+str(afile))
-                                if len(files_failed) == len(file_list):
-                                    return HttpResponseRedirect('/error/')
-                                else:
-                                    proc = subprocess.Popen("php /home/patu/Downloads/ObservatorioCIEC-master/load_files_import_comercio.php", shell=True, stdout=subprocess.PIPE)
-                                    alert = proc.communicate()
-                                    cursor = connection.cursor()
-                                    cursor.execute("UPDATE comercio_import_nandina SET subpartida_nandina=concat('0',subpartida_nandina) WHERE LENGTH(subpartida_nandina)=9")
-                                    # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
-                                    cursor.execute("UPDATE comercio_import_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
-                                    cursor.close
-                                    upload_success = True
-                                    empty = False
-                                    # Borro los archivos restantes
-                                    for afile in file_list:
-                                        for afile_2 in files_failed:
-                                            if str(afile_2) == str(afile):
-                                                pass
-                                            else:
-                                                os.remove(path_upload_csv+str(afile))
-                        else:
-                            # Una vez que se sube el archivo, se procede a leerlo
-                            file_name = [ f for f in listdir(path_upload_csv) if isfile(join(path_upload_csv,f)) ]
-                            var_split = file_name[0]
-                            extension = var_split.split('.',1)
-                            ext_val = extension[1]
-                            if ext_val == 'xls' or ext_val == 'xlsx':
-                                workbook = xlrd.open_workbook(path_upload_csv+file_name[0])
-                                worksheets = workbook.sheet_names()
-                                for worksheet_name in worksheets:
-                                    current_worksheet = workbook.sheet_by_name(worksheet_name)
-                                    num_rows = current_worksheet.nrows -1
-                                    num_cells = current_worksheet.ncols - 1
-                                    curr_row = -1
-                                    while curr_row < num_rows:
-                                        curr_row +=1
-                                        row = current_worksheet.row(curr_row)
-                                        if curr_row == 0:
-                                            pass
-                                        else:
-                                            curr_cell = -1
-                                            while curr_cell < num_cells:
-                                                curr_cell += 1
-                                                cell_type = current_worksheet.cell_type(curr_row, curr_cell)
-                                                cell_value = current_worksheet.cell_value(curr_row, curr_cell)
-                                                arreglo.append(cell_value)
-                                                if (len(arreglo) == 2):
-                                                    new_codigo = str(arreglo[0])
-                                                    new_get_codigo = new_codigo.split('.',1)
-                                                    if choices == '1':
-                                                        new_data = CGCE(codigo=new_get_codigo[0],descripcion=arreglo[1])
-                                                        new_data.save()
-                                                        for x in arreglo[:]:
-                                                            arreglo.remove(x)
-                                                    elif choices == '2':
-                                                        new_data = CIIU3(codigo=new_get_codigo[0],descripcion=arreglo[1])
-                                                        new_data.save()
-                                                        for x in arreglo[:]:
-                                                            arreglo.remove(x)
-                                                    elif choices =='3':
-                                                        new_data = CPC(codigo=new_get_codigo[0],descripcion=arreglo[1])
-                                                        new_data.save()
-                                                        for x in arreglo[:]:
-                                                            arreglo.remove(x)
-                                                    elif choices == '4':
-                                                        new_data = CUODE(codigo=new_get_codigo[0],descripcion=arreglo[1])
-                                                        new_data.save()
-                                                        for x in arreglo[:]:
-                                                            arreglo.remove(x)
-                                                    elif choices == '5':
-                                                        if data_error in arreglo[1]:
-                                                            for x in arreglo[:]:
-                                                                arreglo.remove(x)
-                                                        else:
-                                                            new_data = NANDINA(subpartida=new_get_codigo[0],descripcion=arreglo[1])
-                                                            new_data.save()
-                                                            for x in arreglo[:]:
-                                                                arreglo.remove(x)
-                                                    elif choices == '6':
-                                                        new_data = Paises(codigo=new_get_codigo[0],pais=arreglo[1])
-                                                        new_data.save()
-                                                        for x in arreglo[:]:
-                                                            arreglo.remove(x)
-                                                elif (len(arreglo) == 7):
-                                                    if choices == '7':
-                                                        get_cpc = str(arreglo[1])
-                                                        new_get_cpc = get_cpc.split('.',1)
-                                                        get_cuode = str(arreglo[2])
-                                                        new_get_cuode = get_cuode.split('.',1)
-                                                        get_cgce = str(arreglo[3])
-                                                        new_get_cgce = get_cgce.split('.',1)
-                                                        get_sist_amorti = str(arreglo[4])
-                                                        new_get_sist_amorti = get_sist_amorti.split('.',1)
-                                                        get_ciiu3 = str(arreglo[5])
-                                                        new_get_ciiu3 = get_ciiu3.split('.',1)
-                                                        get_cuci3 = str(arreglo[6])
-                                                        new_get_cuci3 = get_cuci3.split('.',1)
-                                                        new_data = Equivalencia(nandina=new_get_codigo[0],cpc=new_get_cpc[0],cuode=new_get_cuode[0],cgce=new_get_cgce[0],sistema_armotizado=new_get_sist_amorti[0],ciiu3=new_get_ciiu3[0],cuci3=new_get_cuci3[0])
-                                                        new_data.save()
-                                                        for x in arreglo[:]:
-                                                            arreglo.remove(x)
-                                # Se hace un rm al archivo subido
-                                os.remove(path_upload_csv+file_name[0])
-                            else:
-                                os.remove(path_upload_csv+file_name[0])
-                                return HttpResponseRedirect('/error-extension/')
-                    upload_success = True
-                    empty = False
-                else:
-                    empty = True
-                    upload_success = False
+                                for i in range(1,len(my_list)):
+                                    ano,mes,pais,subpartida_nandina,peso,fob,cif = str(my_list[i]).split(';')
+                                    ano_new,value = ano.split('[')
+                                    value_coma,wcoma = value.split("'")
+                                    cif_new = cif.split("]")
+                                    val1,val2 = cif_new[0].split("'")
+                                    try:
+                                        ano_int = int(wcoma)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('wcoma')
+                                        break
+                                    try:
+                                        mes_int = int(mes)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('mes')
+                                        break
+                                    try:
+                                        pais_int = int(pais)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('pais')
+                                        break
+                                    try:
+                                        subpartida_nandina_int = int(subpartida_nandina)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('subpartida_nandina')
+                                        break
+                                    try:
+                                        peso_float = str(peso)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('peso')
+                                        break
+                                    try:
+                                        fob_float = str(fob)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('fob')
+                                        break
+                                    try:
+                                        descripcion_str = str(val2)
+                                    except ValueError:
+                                        files_failed.append(str(afile))
+                                        error_find.append('cif')
+                                        break
+                    
+                    # Borramos los archivos que tienen mal formato.
+                    print error_find
+                    if len(files_failed) > 0:
+                        for afile in files_failed:
+                            os.remove(path_dir+str(afile))
+                    if len(files_failed) == len(file_list):
+                        return HttpResponseRedirect('/error/')
+                    else:
+                        #Luego se corre el load_files.sh
+                        p = subprocess.Popen(['/home/ciec/oese/load_files_comercio',dbtable])
+                        alert = p.communicate()
+                        upload_success = True
+                        empty = False
+
+                        if choices == '8':
+                            cursor = connection.cursor()
+                            # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
+                            cursor.execute("UPDATE comercio_export_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                            cursor.close
+                            actualizar = True
+                        elif choices == '9':
+                            cursor = connection.cursor()
+                            # Se realiza un update para ingresar datos a la columna subpartida_nandina_key
+                            cursor.execute("UPDATE comercio_import_nandina SET subpartida_key=substr(subpartida_nandina,1,8)")
+                            cursor.close
+                            actualizar = True
             else:
-                upload_form = UploadFileForm()
+                empty = True
                 upload_success = False
         else:
-            return HttpResponseRedirect('/acceso_denegado/')
-    except Exception, e:
-        upload_success = False
-        try:
-            os.remove(path_upload_csv+file_name[0])
-        except Exception,e:
-            pass
-        if choices == '8':
-            cursor = connection.cursor()
-            cursor.execute("""DELETE FROM comercio_export_nandina WHERE subpartida_key=0""")
-        else:
-            cursor = connection.cursor()
-            cursor.execute("""DELETE FROM comercio_import_nandina WHERE subpartida_key=0""")
-        return HttpResponseRedirect('/error-subida/')
+            upload_form = UploadFileForm()
+            upload_success = False
+    else:
+        return HttpResponseRedirect('/acceso_denegado/')
 
     return render_to_response(template, {'files_failed': files_failed,'upload_form': upload_form, 'upload_success':upload_success, 'empty':empty, 'actualizar':actualizar}, context)
 
