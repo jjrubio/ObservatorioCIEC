@@ -28,6 +28,24 @@ $(document).ready(function() {
         }
     });
 
+    $('#standars').change(function(){
+        var value_init = $(this).val();
+        if (value_init == 5){
+            $('#lbel_agreg').hide();
+        }else{
+            $('#lbel_agreg').show();
+            $('#name_standar').empty();
+            $.getJSON('/ajax_name_standars/', {'standar_value' : value_init},
+            function(data){
+                $('#show_name').empty();
+                var str_data = data;
+                var show_standar = 'Nivel de agregación para '+str_data;
+                $('#show_name').append(show_standar);
+                $('#show_name').show();
+            });
+        }
+    });
+
     $.fn.datepicker.dates['es'] = {
         days: ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"],
         daysShort: ["Dom","Lun","Mar","Mié","Juv","Vie","Sáb","Dom"],

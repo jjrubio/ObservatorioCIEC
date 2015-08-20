@@ -1128,3 +1128,18 @@ def eliminar_comercio(request):
 
     message = json.dumps(flag, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
+
+def ajax_name_standars(request):
+    standar_value = request.GET['standar_value']
+
+    if standar_value == '1':
+        str_val = 'NANDINA'
+    elif standar_value == '2':
+        str_val = 'CGCE'
+    elif standar_value == '3':
+        str_val = 'CIIU3'
+    elif standar_value == '4':
+        str_val = 'CPC'
+
+    message = json.dumps(str_val, cls=PythonObjectEncoder)
+    return HttpResponse(message, content_type='application/json')   

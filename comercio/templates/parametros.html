@@ -18,6 +18,13 @@
                                         <option value="5">CUODE</option>
                                     </select>
                                 </label>
+                                <label id="lbel_agreg">
+                                    <span id="show_name" hidden></span>
+                                    <span id="name_standar"> Nivel de agregación para NANDINA</span>
+                                    <input id="txt_agregacion" type="text" name="agregacion" value="10">
+                                    <br/>
+                                    <span class="hidden">*Valores solo del 0 al 100</span>
+                                </label>
                                 <label>
                                     <span>Periodicidad</span>
                                     <select id="period" class="selectpicker" data-width="100%">
@@ -56,12 +63,6 @@
                                     {% endfor %}
                                     </select>
                                     <br><br>
-                                </label>
-                                <label>
-                                    <span> Nivel de agregación</span>
-                                    <input id="txt_agregacion" type="text" name="agregacion" value="10">
-                                    <br/>
-                                    <span class="hidden">*Valores solo del 0 al 100</span>
                                 </label>
                                 <label id="pais">
                                     <div>
