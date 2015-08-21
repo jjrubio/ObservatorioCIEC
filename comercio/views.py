@@ -1142,4 +1142,20 @@ def ajax_name_standars(request):
         str_val = 'CPC'
 
     message = json.dumps(str_val, cls=PythonObjectEncoder)
-    return HttpResponse(message, content_type='application/json')   
+    return HttpResponse(message, content_type='application/json')
+
+def ajax_level_standars(request):
+    standar_level = request.GET['standar_level']
+    values_permitted = []
+
+    if standar_level == '1':
+        values_permitted = [2,4,6,8,10]
+    elif standar_level == '2':
+        values_permitted = [1,2,3]
+    elif standar_level == '3':
+        values_permitted = [2,3,4]
+    elif standar_level == '4':
+        values_permitted = [1,2,3,4,5]
+
+    message = json.dumps(values_permitted, cls=PythonObjectEncoder)
+    return HttpResponse(message, content_type='application/json')

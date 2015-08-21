@@ -1,77 +1,84 @@
 {% load static from staticfiles %}
-                        <div class="tab-content">
-                            <div id="pane_2" class="tab-pane active">
-                                <label id="search">
-                                    <span id="search_by_label">Criterio de búsqueda</span>
-                                    <select id="search_by" class="selectpicker" data-width="100%">
-                                        <option value="1">Código/Subpartida</option>
-                                        <option value="2">Descripción</option>
-                                    </select>
-                                </label>
-                                <label>
-                                    <span>Estándar de codificación</span>
-                                    <select id="standars" class="selectpicker" data-width="100%">
-                                        <option value="1">NANDINA</option>
-                                        <option value="2">CGCE</option>
-                                        <option value="3">CIIU3</option>
-                                        <option value="4">CPC</option>
-                                        <option value="5">CUODE</option>
-                                    </select>
-                                </label>
-                                <label id="lbel_agreg">
-                                    <span id="show_name" hidden></span>
-                                    <span id="name_standar"> Nivel de agregación para NANDINA</span>
-                                    <input id="txt_agregacion" type="text" name="agregacion" value="10">
-                                    <br/>
-                                    <span class="hidden">*Valores solo del 0 al 100</span>
-                                </label>
-                                <label>
-                                    <span>Periodicidad</span>
-                                    <select id="period" class="selectpicker" data-width="100%">
-                                        <option value="1">Mensual</option>
-                                        <option value="2">Trimestral</option>
-                                        <option value="3">Semestral</option>
-                                        <option value="4">Anual</option>
-                                    </select>
-                                </label>
-                                <label>
-                                    <span>Desde</span>
-                                    <div class="input-group margin-bottom-sm date datepickerStart">
-                                        <input id="startDate" class="form-control" type="text" value="1990/01" >
-                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    </div><!-- .input-group.margin-bottom-sm.date.datepickerStart -->
-                                </label><br>
-                                <label>
-                                    <span>Hasta</span>
-                                    <div class="input-group margin-bottom-sm date datepickerEnd">
-                                        <input id="endDate" class="form-control" type="text">
-                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    </div><!-- .input-group.margin-bottom-sm.date.datepickerEnd -->
-                                </label><br>
-                                <label id="label_filtro">
-                                    <span id="filtrar_por">Filtrar por código</span>
-                                    <input id="txt_filtro_num"class="form-control" type="text" >
-                                    <input id="txt_filtro_text" class="form-control" type="hidden">
-                                    <br>
-                                </label>
-                                <label id="label_pais" hidden>
-                                    <span>Seleccione un país </span>
-                                    <select id="select_pais" class="selectpicker show-menu-arrow" data-width="100%" data-size="5">
-                                        <option value="0" selected>-- Lista de países --</option>
-                                    {% for pais in paises %}
-                                        <option value="{{pais.codigo}}">{{pais.pais}}</option>
-                                    {% endfor %}
-                                    </select>
-                                    <br><br>
-                                </label>
-                                <label id="pais">
-                                    <div>
-                                        <input id="checkbox" type='checkbox' name="checkbox">  Separar por país
-                                    </div>
-                                </label>
-                                <br>
-                                <label>
-                                    <input id="btn_search" class="btn btn-primary" type="button" value="BUSCAR">
-                                </label>
-                            </div><!-- .#pane_2.tab-pane.active -->
-                        </div><!-- .tab-content -->
+    <div class="tab-content">
+        <div id="pane_2" class="tab-pane active">
+            <label id="search">
+                <span id="search_by_label">Criterio de búsqueda</span>
+                <select id="search_by" class="selectpicker" data-width="100%">
+                    <option value="1">Código/Subpartida</option>
+                    <option value="2">Descripción</option>
+                </select>
+            </label>
+            <label>
+                <span>Estándar de codificación</span>
+                <select id="standars" class="selectpicker" data-width="100%">
+                    <option value="1">NANDINA</option>
+                    <option value="2">CGCE</option>
+                    <option value="3">CIIU3</option>
+                    <option value="4">CPC</option>
+                    <option value="5">CUODE</option>
+                </select>
+            </label>
+            <label id="lbel_agreg">
+                <span id="show_name" hidden></span>
+                <span id="name_standar"> Nivel de agregación para NANDINA</span>
+                <!-- <input id="txt_agregacion" type="text" name="agregacion" value="10"> -->
+                <select id="txt_agregacion" class="selectpicker my_select" data-width="100%">
+                    <option value="1">2</option>
+                    <option value="2">4</option>
+                    <option value="3">6</option>
+                    <option value="4">8</option>
+                    <option value="5">10</option>
+                </select>
+                <br/>
+                <span class="hidden">*Valores solo del 0 al 100</span>
+            </label>
+            <label>
+                <span>Periodicidad</span>
+                <select id="period" class="selectpicker" data-width="100%">
+                    <option value="1">Mensual</option>
+                    <option value="2">Trimestral</option>
+                    <option value="3">Semestral</option>
+                    <option value="4">Anual</option>
+                </select>
+            </label>
+            <label>
+                <span>Desde</span>
+                <div class="input-group margin-bottom-sm date datepickerStart">
+                    <input id="startDate" class="form-control" type="text" value="1990/01" >
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div><!-- .input-group.margin-bottom-sm.date.datepickerStart -->
+            </label><br>
+            <label>
+                <span>Hasta</span>
+                <div class="input-group margin-bottom-sm date datepickerEnd">
+                    <input id="endDate" class="form-control" type="text">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div><!-- .input-group.margin-bottom-sm.date.datepickerEnd -->
+            </label><br>
+            <label id="label_filtro">
+                <span id="filtrar_por">Filtrar por código</span>
+                <input id="txt_filtro_num"class="form-control" type="text" >
+                <input id="txt_filtro_text" class="form-control" type="hidden">
+                <br>
+            </label>
+            <label id="label_pais" hidden>
+                <span>Seleccione un país </span>
+                <select id="select_pais" class="selectpicker show-menu-arrow" data-width="100%" data-size="5">
+                    <option value="0" selected>-- Lista de países --</option>
+                {% for pais in paises %}
+                    <option value="{{pais.codigo}}">{{pais.pais}}</option>
+                {% endfor %}
+                </select>
+                <br><br>
+            </label>
+            <label id="pais">
+                <div>
+                    <input id="checkbox" type='checkbox' name="checkbox">  Separar por país
+                </div>
+            </label>
+            <br>
+            <label>
+                <input id="btn_search" class="btn btn-primary" type="button" value="BUSCAR">
+            </label>
+        </div><!-- .#pane_2.tab-pane.active -->
+    </div><!-- .tab-content -->

@@ -28,6 +28,7 @@ $(document).ready(function() {
         }
     });
 
+    $('.my_select').selectpicker();
     $('#standars').change(function(){
         var value_init = $(this).val();
         if (value_init == 5){
@@ -37,11 +38,18 @@ $(document).ready(function() {
             $('#name_standar').empty();
             $.getJSON('/ajax_name_standars/', {'standar_value' : value_init},
             function(data){
-                $('#show_name').empty();
                 var str_data = data;
                 var show_standar = 'Nivel de agregación para '+str_data;
+                $('#show_name').empty();
                 $('#show_name').append(show_standar);
                 $('#show_name').show();
+            });
+            $.getJSON('/ajax_level_standars/', {'standar_level' : value_init},
+            function(data){
+                $('#txt_agregacion').empty().selectpicker('refresh');
+                $.each(data, function(index, item){
+                    $('#txt_agregacion').append('<option>'+item+'</option>').selectpicker('refresh');
+                });
             });
         }
     });
