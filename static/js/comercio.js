@@ -155,10 +155,8 @@ $(document).ready(function() {
 
 
     $('#a-parametros').click( function(){
-        $('#parametros').removeClass('collapse');
-        $('#parametros').addClass('collapse in'); 
-        $('#resultados').removeClass('collapse in');
-        $('#resultados').addClass('collapse');     
+        $('#parametros').collapse('show');
+        $('#resultados').collapse('hide');     
     });
 
 
@@ -178,10 +176,8 @@ $(document).ready(function() {
         var txt_agregacion;
         var bandera;
 
-        $('#parametros').removeClass('collapse in');
-        $('#parametros').addClass('collapse'); 
-        $('#resultados').removeClass('collapse');
-        $('#resultados').addClass('collapse in');  
+        $('#parametros').collapse('hide');
+        $('#resultados').collapse('show');
 
         $("#loading").css("display","inline");
         $("#tables").hide();

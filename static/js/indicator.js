@@ -305,7 +305,7 @@ $("#btnExport").click(function(e){
         ,returnUri: true
         ,datatype: "table"
     });
-    $(this).attr('download', excel_filename_download+'.xlsx').attr('href', uri).attr('target', '_blank');
+    $(this).attr('download', 'OESE.xlsx').attr('href', uri).attr('target', '_blank');
 });
 
 function table(data){
