@@ -400,7 +400,8 @@ $(document).ready(function() {
                 trans = "importaciones";
             }
         }
-        $('#table_B').bootstrapTable({ data: data_B });
+        // $('#table_B').bootstrapTable({ data: data_B });
+        $('#table_B').bootstrapTable({ data: data_B, pageList: [5, 10, 25, 50, 100, len]});
 
         $("#btnExportTrans").click(function(e){
             var uri = $('#table_B').battatech_excelexport({
