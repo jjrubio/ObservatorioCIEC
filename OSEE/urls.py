@@ -63,5 +63,7 @@ urlpatterns = patterns('',
     url(r'^eliminar_comercio/', 'comercio.views.eliminar_comercio', name='eliminar_comercio'),
     url(r'^ajax_name_standars/', 'comercio.views.ajax_name_standars', name='ajax_name_standars'),
     url(r'^ajax_level_standars/', 'comercio.views.ajax_level_standars', name='ajax_level_standars'),
+    url(r'^codigos_estandares/', 'comercio.views.show_code_standars', name='show_code_standars'),
+    url(r'^filter_code_standar/', 'comercio.views.filter_code_standars', name='filter_code_standars'),
     url(r'^acerca-de/', 'home.views.about', name='acerca_de'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

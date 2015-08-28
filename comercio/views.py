@@ -1159,3 +1159,36 @@ def ajax_level_standars(request):
 
     message = json.dumps(values_permitted, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
+
+def show_code_standars(request):
+    template = 'show_code_standars.html'
+    return render_to_response(template, context_instance=RequestContext(request, locals()))
+
+def filter_code_standars(request):
+    standar_value = request.GET['standar_value']
+    standar_result = []
+
+    if standar_value == '1':
+        db_name = NANDINA
+    elif standar_value == '2':
+        db_name = CGCE
+    elif standar_value == '3':
+        db_name = CIIU3
+    elif standar_value == '4':
+        db_name = CPC
+    else:
+        db_name = CUODE
+
+    object_standar = db_name.objects.all()
+    
+    for standars in object_standar:
+        dict_standars = {}
+        if standar_value == '1':
+            dict_standars['codigo'] = standars.subpartida
+        else:
+            dict_standars['codigo'] = standars.codigo
+        dict_standars['descripcion'] = standars.descripcion
+        standar_result.append(dict_standars)
+
+    message = json.dumps(standar_result, cls=PythonObjectEncoder)
+    return HttpResponse(message, content_type='application/json')
