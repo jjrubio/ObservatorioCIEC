@@ -760,8 +760,12 @@ def insert_data_comercio(request):
                         dbtable = 'comercio_equivalencia'
                     elif choices == '8':
                         dbtable = 'comercio_export_nandina'
-                    else:
+                    elif choices == '9':
                         dbtable = 'comercio_import_nandina'
+                    elif choices == '10':
+                        dbtable = 'comercio_export_total'
+                    else:
+                        dbtable = 'comercio_import_total'
                     for afile in file_list:
                         var_split = str(afile)
                         extension = var_split.split('.',1)

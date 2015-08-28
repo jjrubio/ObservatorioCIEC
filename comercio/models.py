@@ -274,6 +274,34 @@ class Import_NANDINA(models.Model):
     def __unicode__(self):
         return self.subpartida_nandina
 
+class Export_Total(models.Model):
+    ano = models.PositiveSmallIntegerField()
+    mes = models.PositiveSmallIntegerField()
+    fob = models.DecimalField(decimal_places=2, max_digits=9)
+    peso = models.DecimalField(decimal_places=2, max_digits=10)
+
+    class Meta:
+        db_table = "comercio_export_total"
+        verbose_name = "importación total"
+        verbose_name_plural = 'Importaciones Totales'
+
+    def __unicode__(self):
+        return self.subpartida_nandina
+
+class Import_Total(models.Model):
+    ano = models.PositiveSmallIntegerField()
+    mes = models.PositiveSmallIntegerField()
+    fob = models.DecimalField(decimal_places=2, max_digits=9)
+    peso = models.DecimalField(decimal_places=2, max_digits=10)
+    cif = models.DecimalField(decimal_places=2, max_digits=10)
+
+    class Meta:
+        db_table = "comercio_import_total"
+        verbose_name = "importación total"
+        verbose_name_plural = 'Importaciones Totales'
+
+    def __unicode__(self):
+        return self.subpartida_nandina
 
 class upload_csv_file(models.Model):
     upload = models.FileField(upload_to='csv/')

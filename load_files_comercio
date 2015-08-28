@@ -22,8 +22,12 @@ do
         mysql -e "load data local infile '"$f"' into table $1 FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES (codigo,pais)"  -u$user -p$pass $db --local-infile
     elif [ "$1" == "comercio_export_nandina" ]; then
         mysql -e "load data local infile '"$f"' into table $1 FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES (ano,mes,pais,subpartida_nandina,peso,fob)"  -u$user -p$pass $db --local-infile
-    else
+    elif [ "$1" == "comercio_import_nandina" ]; then
         mysql -e "load data local infile '"$f"' into table $1 FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES (ano,mes,pais,subpartida_nandina,peso,fob,cif)"  -u$user -p$pass $db --local-infile
+    elif [ "$1" == "comercio_export_total" ]; then
+        mysql -e "load data local infile '"$f"' into table $1 FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES (ano,mes,fob,peso)"  -u$user -p$pass $db --local-infile
+    else
+        mysql -e "load data local infile '"$f"' into table $1 FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES (ano,mes,fob,cif,peso)"  -u$user -p$pass $db --local-infile
     fi
 done
 rm -f $FILES

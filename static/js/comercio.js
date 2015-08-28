@@ -128,7 +128,23 @@ $(document).ready(function() {
             $('#search').hide();
             $('#pais').hide();
             $('#label_filtro').hide();
+            $('#estandars_code').show();
+            $('#lbel_agreg').show();
             $('#label_pais').show();
+        }else if(activeTab == "tab_codsub"){
+            $('#search').show();
+            $('#estandars_code').show();
+            $('#lbel_agreg').show();
+            $('#label_filtro').show();
+            $('#pais').show();
+            $('#label_pais').hide();
+        }else{
+            $('#search').hide();
+            $('#estandars_code').hide();
+            $('#lbel_agreg').hide();
+            $('#label_filtro').hide();
+            $('#label_pais').hide();
+            $('#pais').hide();
         }
 
         $('#parametros').removeClass('collapse'); 
