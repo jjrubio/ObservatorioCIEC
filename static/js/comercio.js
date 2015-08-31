@@ -890,6 +890,7 @@ $('#btn_search_totales').click(function(){
         console.log(data);
         table_total(data, tipo, period);
         $('#export-import-totales').show();
+        $('#graph-totales').show();
         $("#loading").css("display","none");
     });
 });
@@ -961,4 +962,66 @@ function table_total(data, tipo, period){
         });
         $(this).attr('download', 'datos_de_'+trans+'.xls').attr('href', uri).attr('target', '_blank');
     });
+}
+
+function grafico_totales(data, tipo, period){
+    len = data.length;
+    // $('#graph-totales').perfectScrollbar('destroy');
+    $('#div_graph_comercio_totales').perfectScrollbar('destroy');
+    $('#div_graph_comercio_totales').empty();
+
+    if (len > 0){
+        Fechas = [];
+        FOBs = [];
+        CIFs = [];
+
+        div_name = "div_graph_comercio_totales";
+        if (tipo == 1){
+            graph_title = "EXPORTACIONES TOTALES FOB";
+            graph_subtitle = "(MILES DE DÓLARES)";
+            for(var i = 0; i <len; i++){
+                if (period == 4){
+                    FOBs.push(data[i][1]);
+                }else{
+                    FOBs.push(data[i][2]);
+                }
+            }
+        }else{
+            graph_title = "IMPORTACIONES TOTALES CIF/FOB";
+            graph_subtitle = "(MILES DE DÓLARES)";
+            for(var i = 0; i <len; i++){
+                if (period == 4){
+                    CIFs.push(data[i][3]);
+                }else{
+                    CIFs.push(data[i][4]);
+                }
+            }
+        }
+
+        for(var i = 0; i <len; i++){
+            Fechas.push(data[i][1]);
+        }
+
+        if (Fechas.length  <= 12){
+            graph_width = 900;
+        }else{
+            graph_width = Fechas.length * 75;
+        }
+
+        graph_valuesX = Fechas;
+
+        if(tipo == 1){
+            name_Yaxis = "FOB (Miles de Dólares)";
+            graph_valuesY = FOBs;
+        }else{
+            name_Yaxis = "CIF (Miles de Dólares)";
+            graph_valuesY = CIFs;
+        }
+
+        dibujar_grafico(div_name, graph_title, graph_subtitle, graph_width, graph_valuesX, name_Yaxis, graph_valuesY);
+        // $('#graph-totales').perfectScrollbar();
+        $('#div_graph_comercio_totales').perfectScrollbar();
+    }else{
+        $("#div_graph_comercio_totales").append('No se encontraron registros');
+    }
 }
