@@ -131,6 +131,8 @@ $(document).ready(function() {
             $('#estandars_code').show();
             $('#lbel_agreg').show();
             $('#label_pais').show();
+            $('#btn_search').show();
+            $('#btn_search_totales_lbel').hide();
         }else if(activeTab == "tab_codsub"){
             $('#search').show();
             $('#estandars_code').show();
@@ -138,6 +140,8 @@ $(document).ready(function() {
             $('#label_filtro').show();
             $('#pais').show();
             $('#label_pais').hide();
+            $('#btn_search').show();
+            $('#btn_search_totales_lbel').hide();
         }else{
             $('#search').hide();
             $('#estandars_code').hide();
@@ -145,6 +149,8 @@ $(document).ready(function() {
             $('#label_filtro').hide();
             $('#label_pais').hide();
             $('#pais').hide();
+            $('#btn_search').hide();
+            $('#btn_search_totales_lbel').show();
         }
 
         $('#parametros').removeClass('collapse'); 
@@ -155,12 +161,18 @@ $(document).ready(function() {
         $('#tables').hide();
         $('#graph').hide();
         $('#datos').show();
+        $('#export-import-totales').hide();
     });
 
 
     $('#myTabs_1 li a').click(function () {
         var id = $(this).attr('id');
         tabs_1 = id;
+        if (id == 'tab_exp'){
+            $('#totales').text('TOTALES FOB');
+        }else{
+            $('#totales').text('TOTALES CIF/FOB');
+        }
     });
 
 
