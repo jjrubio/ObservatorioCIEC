@@ -849,3 +849,104 @@ $('#btn-delete').click(function(){
         }
     });
 });
+
+$('#btn_search_totales').click(function(){
+    var period = $('#period option:selected').attr('value');
+    var desde = $('#startDate').val().split("/");
+    if(parseInt(desde[1]) < 10){
+        desde_mes = "/0"+(parseInt(desde[1])-1).toString();
+    }else{
+        desde_mes = "/"+(parseInt(desde[1])-1).toString();
+    }
+    var txt_desde = desde[0]+desde_mes;
+    var txt_hasta = $('#endDate').val();
+    if(tabs_1 == "tab_exp"){
+        tipo = 1; //EXPORTACIONES
+    }else{
+        tipo = 2; //IMPORTACIONES
+    }
+    $('#parametros').collapse('hide');
+    $('#resultados').collapse('show');
+
+    $("#loading").css("display","inline");
+    $("#tables").hide();
+    $('#graph').hide();
+    $('#export-import-totales').hide();
+
+    $.getJSON('/export_import_total/', {'period':period, 'txt_desde':txt_desde, 'txt_hasta':txt_hasta, 'tipo':tipo},
+    function(data){
+        console.log(data);
+        table_total(data, tipo, period);
+        $('#export-import-totales').show();
+        $("#loading").css("display","none");
+    });
+});
+
+function table_total(data, tipo, period){
+    $('#table_totales').bootstrapTable('destroy');
+    $('#table_totales thead tr').empty();
+    len = data.length;
+    var data_totales = [];
+    var valores = {}
+
+    if (tipo == 1){
+        $('#table_totales thead tr').append('<th id="fecha" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
+                                         '<th id="peso" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
+                                         '<th id="fob" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>');    
+        if (period == 4){
+            for(var i = 0; i <len; i++){
+                valores = {}
+                valores["fecha"] = data[i][0];
+                valores["peso"] = data[i][2];
+                valores["fob"] = data[i][1];
+                data_totales.push(valores);
+            }
+        }else{
+            for(var i = 0; i <len; i++){
+                valores = {}
+                valores["fecha"] = data[i][1];
+                valores["peso"] = data[i][3];
+                valores["fob"] = data[i][2];
+                data_totales.push(valores);
+            }
+        }
+        trans = "exportaciones_totales";
+    }else{
+        $('#table_totales thead tr').append('<th id="fecha_B" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>'+
+                                         '<th id="peso_B" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>'+
+                                         '<th id="fob_B" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>'+
+                                         '<th id="cif_B" data-field="cif" data-align="center" data-sortable="true">CIF (Miles de Dólares)</th>');
+        if (period == 4){
+            for(var i = 0; i <len; i++){
+                valores = {}
+                valores["fecha"] = data[i][0];
+                valores["peso"] = data[i][2];
+                valores["fob"] = data[i][1];
+                valores["cif"] = data[i][3];
+                data_totales.push(valores);
+            }
+        }else{
+            for(var i = 0; i <len; i++){
+                valores = {}
+                valores["fecha"] = data[i][1];
+                valores["peso"] = data[i][3];
+                valores["fob"] = data[i][2];
+                valores["cif"] = data[i][4];
+                data_totales.push(valores);
+            }
+        }
+        trans = "exportaciones_totales";
+    }
+
+    $('#table_totales').bootstrapTable({ data: data_totales });
+
+    $("#btnExportTransTotales").click(function(e){
+        var uri = $('#table_totales').battatech_excelexport({
+            containerid: "table_totales"
+            ,returnUri: true
+            ,datatype: "table"
+            ,worksheetName: "Observatorio-Comerio Exterior"
+        });
+        $(this).attr('download', 'datos_de_'+trans+'.xls').attr('href', uri).attr('target', '_blank');
+    });
+}

@@ -136,6 +136,23 @@
                                                         </div><!-- .col-lg-10 -->
                                                     </div><!-- #graph -->
                                                 </div><!-- #tables -->
+                                                <div id="export-import-totales" class="row" hidden>
+                                                    <div class="col-lg-1"></div><!-- .col-lg-1 -->
+                                                    <div class="col-lg-10">
+                                                        <b id="tipoTrans">DATOS DE EXPORTACIONES TOTALES</b>
+                                                        <table id="table_totales" data-height ="400" data-show-columns="true" data-search="true" data-show-toggle="true">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th id="fecha" data-field="fecha" data-align="center" data-sortable="true">Fecha</th>
+                                                                    <th id="peso" data-field="peso" data-align="center" data-sortable="true">Peso (Miles de Kilos)</th>
+                                                                    <th id="fob" data-field="fob" data-align="center" data-sortable="true">FOB (Miles de Dólares)</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                        <a id="btnExportTransTotales" class="pull-right">Exportar tabla a Excel <img src="{{STATIC_URL}}img/Excel-icon.png" alt="excel"></a>
+                                                    </div><!-- .col-lg-10 -->
+                                                    <div class="col-lg-1"></div><!-- .col-lg-1 -->
+                                                </div><!-- #export-import.row -->
                                             </div><!-- .panel-body.text-center -->
                                         </div><!-- #resultados.panel-collapse.collapse -->
                                     </div><!-- .panel.panel-default -->

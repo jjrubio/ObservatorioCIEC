@@ -1196,3 +1196,64 @@ def filter_code_standars(request):
 
     message = json.dumps(standar_result, cls=PythonObjectEncoder)
     return HttpResponse(message, content_type='application/json')
+
+def export_import_total(request):
+    cursor = connection.cursor()
+    period = request.GET['period']
+    txt_desde = request.GET['txt_desde'].encode('ascii','ignore').replace('/', '-')+'-01'
+    txt_hasta = request.GET['txt_hasta'].encode('ascii','ignore').replace('/', '-')+'-01'
+    tipo = request.GET['tipo']
+    bandera = 0
+    data_result = []
+
+    if tipo == '1':
+        db_table = 'comercio_export_total'
+        bandera = 0
+    else:
+        db_table = 'comercio_import_total'
+        bandera = 1
+
+    if period == '4':
+        ini_date = txt_desde[0:4]
+        fin_date = txt_hasta[0:4]
+    else:
+        ini_date = str(txt_desde)
+        fin_date = str(txt_hasta)
+
+    if bandera == 0:
+        if period == '1':
+            raw_body = ('''  SELECT id, ano as ANO, substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7) AS FECHA, SUM(fob) AS FOB, SUM(peso) AS PESO FROM  %s GROUP BY ANO, FECHA HAVING (FECHA>='%s') AND (FECHA<='%s') ''') %(db_table, ini_date, fin_date)
+        elif period == '2':
+            raw_body  = (''' SELECT id, ano as ANO, CONCAT(ANO,'-0',FLOOR(((MES-1)/3)+1)) AS FECHA, SUM(fob) AS FOB, SUM(peso) AS PESO FROM  %s GROUP BY ANO, FECHA HAVING (FECHA>='%s') AND (FECHA<='%s') ''') %(db_table, ini_date, fin_date)
+        elif period == '3':
+            raw_body  = (''' SELECT id, ano as ANO, CONCAT(ANO,'-0',FLOOR(((MES-1)/6)+1)) AS FECHA, SUM(fob) AS FOB, SUM(peso) AS PESO FROM  %s GROUP BY ANO, FECHA HAVING (FECHA>='%s') AND (FECHA<='%s') ''') %(db_table, ini_date, fin_date)
+        else:
+            raw_body  = (''' SELECT id, ano as ANO, SUM(fob) AS FOB, SUM(peso) AS PESO FROM %s GROUP BY ANO HAVING (ANO>=%s) AND (ANO<=%s) ''') %(db_table, ini_date, fin_date)
+    else:
+        if period == '1':
+            raw_body = ('''  SELECT id, ano as ANO, substr(ifnull(date(concat(ANO,'-0',MES,'-01')),date(concat(ANO,'-',MES,'-01'))),1,7) AS FECHA, SUM(fob) AS FOB, SUM(peso) AS PESO, SUM(cif) AS CIF FROM  %s GROUP BY ANO, FECHA HAVING (FECHA>='%s') AND (FECHA<='%s') ''') %(db_table, ini_date, fin_date)
+        elif period == '2':
+            raw_body  = (''' SELECT id, ano as ANO, CONCAT(ANO,'-0',FLOOR(((MES-1)/3)+1)) AS FECHA, SUM(fob) AS FOB, SUM(peso) AS PESO, SUM(cif) AS CIF FROM  %s GROUP BY ANO, FECHA HAVING (FECHA>='%s') AND (FECHA<='%s') ''') %(db_table, ini_date, fin_date)
+        elif period == '3':
+            raw_body  = (''' SELECT id, ano as ANO, CONCAT(ANO,'-0',FLOOR(((MES-1)/6)+1)) AS FECHA, SUM(fob) AS FOB, SUM(peso) AS PESO, SUM(cif) AS CIF FROM  %s GROUP BY ANO, FECHA HAVING (FECHA>='%s') AND (FECHA<='%s') ''') %(db_table, ini_date, fin_date)
+        else:
+            raw_body  = (''' SELECT id, ano as ANO, SUM(fob) AS FOB, SUM(peso) AS PESO, SUM(cif) AS CIF FROM %s GROUP BY ANO HAVING (ANO>=%s) AND (ANO<=%s) ''') %(db_table, ini_date, fin_date)
+        
+    cursor.execute(raw_body)
+    table_result = cursor.fetchall()
+    
+    # Validar por año
+    for data in table_result:
+        if bandera == 0:
+            if period == '4':
+                data_result.append([data[1], float(data[2]), float(data[3])])
+            else:
+                data_result.append([data[1], data[2], float(data[3]), float(data[4])])
+        else:
+            if period == '4':
+                data_result.append([data[1], float(data[2]), float(data[3]), float(data[4])])
+            else:
+                data_result.append([data[1], data[2], float(data[3]), float(data[4]), float(data[5])])
+
+    message = json.dumps(data_result, cls=PythonObjectEncoder)
+    return HttpResponse(message, content_type='application/json')
