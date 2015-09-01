@@ -89,3 +89,19 @@ label{
 #btn_update{
     margin-left: 9em;
 }
+
+#div_graph_comercio_totales{
+    position: relative;
+    height: 460px;
+    max-height: 460px;
+    overflow-x: auto; 
+    overflow-y:hidden; 
+}
+
+#graph_totales{
+    position: relative;
+    height: 460px;
+    max-height: 460px;
+    overflow-x: auto; 
+    overflow-y:hidden; 
+}

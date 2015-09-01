@@ -966,7 +966,6 @@ function table_total(data, tipo, period){
 
 function grafico_totales(data, tipo, period){
     len = data.length;
-    // $('#graph-totales').perfectScrollbar('destroy');
     $('#div_graph_comercio_totales').perfectScrollbar('destroy');
     $('#div_graph_comercio_totales').empty();
 
@@ -1019,7 +1018,6 @@ function grafico_totales(data, tipo, period){
         }
 
         dibujar_grafico(div_name, graph_title, graph_subtitle, graph_width, graph_valuesX, name_Yaxis, graph_valuesY);
-        // $('#graph-totales').perfectScrollbar();
         $('#div_graph_comercio_totales').perfectScrollbar();
     }else{
         $("#div_graph_comercio_totales").append('No se encontraron registros');
