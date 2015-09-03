@@ -266,7 +266,7 @@ $(document).ready(function() {
                 $('#graph').show();
 
                 if (option == 1 && checkbox_pais == 0 ){
-                    grafico_1(data, standar);
+                    grafico_1(data, standar, txt_agregacion);
                 }
 
                 if (option == 2 || (option == 1 && checkbox_pais == 1 ) ){
@@ -508,7 +508,7 @@ function OrdenarPorFOB(a, b){
 }
 
 
-function grafico_1(data, standar){
+function grafico_1(data, standar, txt_agregacion){
     total_productos = data[0][0].length;
     total_datos = data[1][0].length;
     tipo = tabs_1;
@@ -521,9 +521,12 @@ function grafico_1(data, standar){
     var arrayCodigoFOB = new Array();
 
     for(var i=0; i < total_productos; i++){
-        arrayCodigoFOB.push({codigo: data[0][0][i][0], nombre: data[0][0][i][1], fob: 0});
+        if (standar == 1){
+            arrayCodigoFOB.push({codigo: data[0][0][i][0], nombre: data[0][0][i][1], fob: 0, code_standar: (data[0][0][i][0]+'00').substr(0,txt_agregacion)});    
+        }else{
+            arrayCodigoFOB.push({codigo: data[0][0][i][0], nombre: data[0][0][i][1], fob: 0, code_standar: data[0][0][i][0].substr(0,txt_agregacion)});
+        }
     }
-
 
     for (var j=0; j<arrayCodigoFOB.length; j++) {
         for(var k=0; k < total_datos; k++){
@@ -554,7 +557,7 @@ function grafico_1(data, standar){
                     cif_sub = data[1][0][j][4];
                 }
 
-                if(arrayTopFOB[i].codigo == subpartida){
+                if(arrayTopFOB[i].code_standar == subpartida){
                     productoFechas.push(fecha_sub);
                     productoFOBs.push(fob_sub);
                     if(tipo == "tab_imp"){
