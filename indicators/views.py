@@ -764,11 +764,15 @@ def list_by_no_denied(request):
     desa = int(id_desagre)
     result  = []
     result_data = []
+    datos_int = []
 
     by_id_denied = Validation.objects.values_list('by_id_negado_id', flat=True).filter(by_id_id=desa)
 
     for i in range(0, len(by_id_denied)):
         result.append(int(by_id_denied[i]))
+
+    for i in range(0, len(datos)):
+        datos_int.append(int(datos[i]))
 
     if not result:
         for j in range(0, len(datos)):
@@ -776,15 +780,14 @@ def list_by_no_denied(request):
         result_data.append(desa)
         disin = Disintegration.objects.filter(id__in=result_data)
     else:
-        for i in range(0, len(result)):
-            for j in range(0, len(datos)):
-                if result[i] == int(datos[j]):
-                    result_data.append(int(datos[j]))
+        for i in range(0, len(datos_int)):
+            if datos_int[i] not in result:
+                result_data.append(datos_int[i])
         result_data.append(desa)
         
     disin = Disintegration.objects.filter(id__in=result_data)
     data = serializers.serialize('json', disin)
-    
+   
     return HttpResponse(data, content_type='application/json')
 
 
